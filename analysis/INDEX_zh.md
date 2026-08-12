@@ -1,5 +1,7 @@
 # Earth Studio WASM — 完整架构分析索引
 
+> [English](./INDEX.md) | 中文版
+
 对全部 1,316 个 Google 官方 Proto 文件的深度分析。
 包含 5 份分析报告，共计 6,048 行。
 
@@ -9,11 +11,11 @@
 
 | # | 报告 | 行数 | 领域 |
 |---|---|---|---|
-| 1 | geo-earth-analysis.md | 1,016 | Google Earth Studio 核心（159 个文件） |
-| 2 | maps-analysis.md | 1,641 | Google Maps 生态系统（344 个文件） |
-| 3 | logs-analysis.md | 1,005 | 事件日志与分析（182 个文件） |
-| 4 | geostore-analysis.md | 1,326 | 地理数据持久层（162 个文件） |
-| 5 | google-and-others-analysis.md | 1,060 | 标准类型 + 内部 API + 其他（约 300 个文件） |
+| 1 | [geo-earth-analysis_zh.md](./geo-earth-analysis_zh.md) | 1,016 | Google Earth Studio 核心（159 个文件） |
+| 2 | [maps-analysis_zh.md](./maps-analysis_zh.md) | 1,641 | Google Maps 生态系统（344 个文件） |
+| 3 | [logs-analysis_zh.md](./logs-analysis_zh.md) | 1,005 | 事件日志与分析（182 个文件） |
+| 4 | [geostore-analysis_zh.md](./geostore-analysis_zh.md) | 1,326 | 地理数据持久层（162 个文件） |
+| 5 | [google-and-others-analysis_zh.md](./google-and-others-analysis_zh.md) | 1,060 | 标准类型 + 内部 API + 其他（约 300 个文件） |
 
 ---
 
@@ -258,13 +260,13 @@ Google 内部的 `net/proto2/proto/descriptor.proto` 扩展了标准 protobuf �
 
 ## 快速导航
 
-- **Earth Studio 如何执行用户命令？** → [geo-earth-analysis.md](geo-earth-analysis.md) 第 1 节（Commands）
-- **地图要素如何存储？** → [geostore-analysis.md](geostore-analysis.md) 第 2 节（FeatureProto）
-- **地图瓦片如何渲染？** → [maps-analysis.md](maps-analysis.md) 第 2 节（Paint）
-- **路线如何计算？** → [maps-analysis.md](maps-analysis.md) 第 3 节（Pathfinder）
-- **用户操作如何记录日志？** → [logs-analysis.md](logs-analysis.md) 第 2 节（EarthEvent）
-- **账单系统如何工作？** → [google-and-others-analysis.md](google-and-others-analysis.md) Billing 节
-- **建筑如何设计？** → [google-and-others-analysis.md](google-and-others-analysis.md) Built Environment 节
+- **Earth Studio 如何执行用户命令？** → [geo-earth-analysis_zh.md](geo-earth-analysis_zh.md) 第 1 节（Commands）
+- **地图要素如何存储？** → [geostore-analysis_zh.md](geostore-analysis_zh.md) 第 2 节（FeatureProto）
+- **地图瓦片如何渲染？** → [maps-analysis_zh.md](maps-analysis_zh.md) 第 2 节（Paint）
+- **路线如何计算？** → [maps-analysis_zh.md](maps-analysis_zh.md) 第 3 节（Pathfinder）
+- **用户操作如何记录日志？** → [logs-analysis_zh.md](logs-analysis_zh.md) 第 2 节（EarthEvent）
+- **账单系统如何工作？** → [google-and-others-analysis_zh.md](google-and-others-analysis_zh.md) Billing 节
+- **建筑如何设计？** → [google-and-others-analysis_zh.md](google-and-others-analysis_zh.md) Built Environment 节
 
 ---
 

@@ -1,5 +1,7 @@
 # Earth Studio WASM - Complete Architecture Analysis Index
 
+> [中文版](./INDEX_zh.md) | English
+
 Deep analysis of all 1,316 Google official Proto files.
 5 analysis reports, 6,048 lines total.
 
