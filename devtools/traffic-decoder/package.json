@@ -1,0 +1,23 @@
+{
+  "name": "earth-traffic-decoder",
+  "version": "1.0.0",
+  "description": "CLI toolkit for decoding and analyzing HTTP traffic from earth.google.com/web/",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "tsx src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "@bufbuild/protobuf": "^2.2.3"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8",
+    "@types/node": "^22.9.0"
+  }
+}
