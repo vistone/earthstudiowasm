@@ -1,0 +1,48 @@
+{
+  "tile_coords": {
+    "x": 2,
+    "y": 3,
+    "zoom": 2
+  },
+  "style": "RoadmapSatellite",
+  "layer": "ndl",
+  "locale": "en-US",
+  "country": "US",
+  "fields": [
+    {
+      "field": 1,
+      "type": "bytes",
+      "value": "\n\u0006\b\u0002\u0010\u0003\u0018\u0002�\u0001\u0000",
+      "size": 11
+    },
+    {
+      "field": 2,
+      "type": "bytes",
+      "value": "\b\u0000\u0012\u0001m\u0018���\u0002\"\b\n\u0003ndl\u0012\u00011",
+      "size": 21
+    },
+    {
+      "field": 3,
+      "type": "bytes",
+      "value": "\u0012\u0005en-US\u001a\u0002US(\u0003b\u001b\bD\u0012\u0017\n\u0003set\u0012\u0010RoadmapSatellite",
+      "size": 42
+    },
+    {
+      "field": 4,
+      "type": "int",
+      "value": 1
+    },
+    {
+      "field": 6,
+      "type": "bytes",
+      "value": "(\u0001X\u0000�\u0002\u0001�\u0002\u0001�\u0002\u0004�\u0002\u0001�\u0003\u0001�\u0003\u0001�\u0005\u0001",
+      "size": 25
+    },
+    {
+      "field": 23,
+      "type": "bytes",
+      "value": "\u0004",
+      "size": 1
+    }
+  ]
+}

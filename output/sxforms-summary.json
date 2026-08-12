@@ -1,0 +1,19 @@
+{
+  "size": 588681,
+  "format": "StyleTransforms proto",
+  "transforms_defined_in_proto": 83,
+  "categories": [
+    "Search",
+    "Navigation",
+    "Transit",
+    "Travel",
+    "EV",
+    "3D",
+    "Tactile",
+    "Indoor",
+    "Area Busyness",
+    "Merchant",
+    "Photo Pin",
+    "Other"
+  ]
+}

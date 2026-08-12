@@ -1,0 +1,19 @@
+{
+  "size": 812,
+  "fields": [
+    {
+      "field": 1,
+      "name": "coords",
+      "type": "bytes",
+      "size": 809,
+      "hex8": "1500a04b451ac005"
+    }
+  ],
+  "tile_coords": {
+    "x": 2,
+    "y": 3,
+    "zoom": 2
+  },
+  "style": "RoadmapSatellite",
+  "note": "CORD-encoded vertex data. See maps/paint/proto/client-vector-tile.proto"
+}

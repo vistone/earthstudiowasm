@@ -1,0 +1,13 @@
+# Earth Studio 3D Terrain Tile (NodeData proto)
+# S2 node: 13, epoch: 1013
+# 4x4 ECEF transform (column-major):
+#   [-27357.76, 27357.76, -38689.72, 0.00]
+#   [-38689.72, -38689.72, 0.00, 0.00]
+#   [-27357.76, 27357.76, 38689.72, 0.00]
+#   [9472210.71, 354044.63, -3378738.28, 1.00]
+# Tile center (ECEF meters): 9472211, 354045, -3378738
+# 143 vertices (quantized int16), 1334 triangles, 256x256 JPEG texture
+# To reconstruct: ECEF_position = Matrix * local_vertex
+
+mtllib tile.mtl
+o TerrainTile
