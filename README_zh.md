@@ -388,6 +388,58 @@ google/internal/earth/*   ← 内部 API（依赖 geo/earth）
 
 ---
 
+## 文档地图
+
+本仓库包含按用途组织的完整文档体系：
+
+### 新手入门
+| 文档 | 说明 |
+|---|---|
+| [README_zh.md](./README_zh.md) | 项目概览、结构与快速入门 |
+| [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) | 一页速查卡，日常开发用 |
+
+### 架构与深度分析
+| 文档 | 中文 | 英文 | 行数 |
+|---|---|---|---|
+| **总索引** | [INDEX_zh.md](./analysis/INDEX_zh.md) | [INDEX.md](./analysis/INDEX.md) | 274 |
+| Earth Studio 核心 | [geo-earth-analysis_zh.md](./analysis/geo-earth-analysis_zh.md) | [EN](./analysis/geo-earth-analysis.md) | 1,016 |
+| Google Maps 生态 | [maps-analysis_zh.md](./analysis/maps-analysis_zh.md) | [EN](./analysis/maps-analysis.md) | 1,641 |
+| 事件日志系统 | [logs-analysis_zh.md](./analysis/logs-analysis_zh.md) | [EN](./analysis/logs-analysis.md) | 1,005 |
+| 地理数据存储 | [geostore-analysis_zh.md](./analysis/geostore-analysis_zh.md) | [EN](./analysis/geostore-analysis.md) | 1,326 |
+| 内部 API + 其余 | [google-and-others-analysis_zh.md](./analysis/google-and-others-analysis_zh.md) | [EN](./analysis/google-and-others-analysis.md) | 1,060 |
+
+### 能力与约束
+| 文档 | 中文 | 英文 |
+|---|---|---|
+| Proto 能/不能做什么 | [CAPABILITIES_zh.md](./CAPABILITIES_zh.md) | [CAPABILITIES.md](./CAPABILITIES.md) |
+
+### 开发规范
+| 文档 | 中文 | 英文 |
+|---|---|---|
+| 开发规范书 | [DEVELOPMENT_SPEC_zh.md](./DEVELOPMENT_SPEC_zh.md) | [DEVELOPMENT_SPEC.md](./DEVELOPMENT_SPEC.md) |
+
+### 依赖分析
+| 文档 | 说明 |
+|---|---|
+| [DEPENDENCY_MAP_zh.md](./DEPENDENCY_MAP_zh.md) | 依赖关系图纸（Mermaid 流程图）|
+| [DEPENDENCY_MAP.md](./DEPENDENCY_MAP.md) | 英文版 |
+| [DEPENDENCY_FILES.md](./DEPENDENCY_FILES.md) | 逐文件依赖清单 + Top 50 排行榜 |
+
+### 可交互图表
+| 文件 | 说明 |
+|---|---|
+| [diagrams/domain-deps.html](./diagrams/domain-deps.html) | 38 领域依赖全景图（可缩放、主题切换）|
+| [diagrams/topology-layers.html](./diagrams/topology-layers.html) | 8 层拓扑层级图 |
+| [diagrams/earth-core.html](./diagrams/earth-core.html) | geo/earth 核心内部依赖图 |
+
+### 自动化工具
+| 工具 | 用途 |
+|---|---|
+| [devtools/checks/check-all.sh](./devtools/checks/check-all.sh) | 12 项 Proto 合规检查器 |
+| [.github/workflows/proto-check.yml](./.github/workflows/proto-check.yml) | CI 自动拦截（每次 PR 触发）|
+
+---
+
 ## 许可证
 
 本项目包含 Google 专有 Protocol Buffer 定义。使用需遵守 Google 的相关条款和条件。

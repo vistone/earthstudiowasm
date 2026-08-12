@@ -11,11 +11,22 @@ Deep analysis of all 1,316 Google official Proto files.
 
 | # | Report | Lines | Domain |
 |---|---|---|---|
-| 1 | geo-earth-analysis.md | 1,016 | Google Earth Studio Core (159 files) |
-| 2 | maps-analysis.md | 1,641 | Google Maps Ecosystem (344 files) |
-| 3 | logs-analysis.md | 1,005 | Event Logging & Analytics (182 files) |
-| 4 | geostore-analysis.md | 1,326 | Geo Data Persistence Layer (162 files) |
-| 5 | google-and-others-analysis.md | 1,060 | Standard Types + Internal APIs + Others (~300 files) |
+| 1 | [geo-earth-analysis.md](./geo-earth-analysis.md) ([中文](./geo-earth-analysis_zh.md)) | 1,016 | Google Earth Studio Core (159 files) |
+| 2 | [maps-analysis.md](./maps-analysis.md) ([中文](./maps-analysis_zh.md)) | 1,641 | Google Maps Ecosystem (344 files) |
+| 3 | [logs-analysis.md](./logs-analysis.md) ([中文](./logs-analysis_zh.md)) | 1,005 | Event Logging & Analytics (182 files) |
+| 4 | [geostore-analysis.md](./geostore-analysis.md) ([中文](./geostore-analysis_zh.md)) | 1,326 | Geo Data Persistence Layer (162 files) |
+| 5 | [google-and-others-analysis.md](./google-and-others-analysis.md) ([中文](./google-and-others-analysis_zh.md)) | 1,060 | Standard Types + Internal APIs + Others (~300 files) |
+
+## Other Key Documents
+
+| Document | EN | ZH | Description |
+|---|---|---|---|
+| **Capabilities** | [CAPABILITIES.md](../CAPABILITIES.md) | [CAPABILITIES_zh.md](../CAPABILITIES_zh.md) | What protos can/cannot do, migration guide |
+| **Dev Spec** | [DEVELOPMENT_SPEC.md](../DEVELOPMENT_SPEC.md) | [DEVELOPMENT_SPEC_zh.md](../DEVELOPMENT_SPEC_zh.md) | Proto development rules |
+| **Dependency Map** | [DEPENDENCY_MAP.md](../DEPENDENCY_MAP.md) | [DEPENDENCY_MAP_zh.md](../DEPENDENCY_MAP_zh.md) | Mermaid dependency flowcharts |
+| **File Deps** | [DEPENDENCY_FILES.md](../DEPENDENCY_FILES.md) | - | Per-file import listing + Top 50 |
+| **Quick Ref** | [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) | - | One-page cheat sheet |
+| **Interactive** | [diagrams/](../diagrams/) | - | Zoomable HTML dependency diagrams |
 
 ---
 

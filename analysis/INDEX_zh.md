@@ -11,11 +11,22 @@
 
 | # | 报告 | 行数 | 领域 |
 |---|---|---|---|
-| 1 | [geo-earth-analysis_zh.md](./geo-earth-analysis_zh.md) | 1,016 | Google Earth Studio 核心（159 个文件） |
-| 2 | [maps-analysis_zh.md](./maps-analysis_zh.md) | 1,641 | Google Maps 生态系统（344 个文件） |
-| 3 | [logs-analysis_zh.md](./logs-analysis_zh.md) | 1,005 | 事件日志与分析（182 个文件） |
-| 4 | [geostore-analysis_zh.md](./geostore-analysis_zh.md) | 1,326 | 地理数据持久层（162 个文件） |
-| 5 | [google-and-others-analysis_zh.md](./google-and-others-analysis_zh.md) | 1,060 | 标准类型 + 内部 API + 其他（约 300 个文件） |
+| 1 | [geo-earth-analysis_zh.md](./geo-earth-analysis_zh.md) ([英文](./geo-earth-analysis.md)) | 1,016 | Google Earth Studio 核心（159 个文件）|
+| 2 | [maps-analysis_zh.md](./maps-analysis_zh.md) ([英文](./maps-analysis.md)) | 1,641 | Google Maps 生态系统（344 个文件）|
+| 3 | [logs-analysis_zh.md](./logs-analysis_zh.md) ([英文](./logs-analysis.md)) | 1,005 | 事件日志与分析（182 个文件）|
+| 4 | [geostore-analysis_zh.md](./geostore-analysis_zh.md) ([英文](./geostore-analysis.md)) | 1,326 | 地理数据持久层（162 个文件）|
+| 5 | [google-and-others-analysis_zh.md](./google-and-others-analysis_zh.md) ([英文](./google-and-others-analysis.md)) | 1,060 | 标准类型 + 内部 API + 其他（约 300 个文件）|
+
+## 其他重要文档
+
+| 文档 | 中文 | 英文 | 说明 |
+|---|---|---|---|
+| **能力分析** | [CAPABILITIES_zh.md](../CAPABILITIES_zh.md) | [CAPABILITIES.md](../CAPABILITIES.md) | Proto 能/不能做什么，迁移指南 |
+| **开发规范** | [DEVELOPMENT_SPEC_zh.md](../DEVELOPMENT_SPEC_zh.md) | [DEVELOPMENT_SPEC.md](../DEVELOPMENT_SPEC.md) | Proto 开发规则 |
+| **依赖图纸** | [DEPENDENCY_MAP_zh.md](../DEPENDENCY_MAP_zh.md) | [DEPENDENCY_MAP.md](../DEPENDENCY_MAP.md) | Mermaid 依赖流程图 |
+| **文件依赖** | - | [DEPENDENCY_FILES.md](../DEPENDENCY_FILES.md) | 逐文件 import 清单 + Top 50 |
+| **速查卡** | - | [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) | 一页速查 |
+| **交互图表** | - | [diagrams/](../diagrams/) | 可缩放 HTML 依赖图 |
 
 ---
 

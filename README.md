@@ -383,6 +383,58 @@ google/internal/earth/*   ← Internal APIs (depends on geo/earth)
 
 ---
 
+## Documentation Map
+
+This repository includes comprehensive documentation organized by purpose:
+
+### For Newcomers
+| Document | Description |
+|---|---|
+| [README.md](./README.md) | Project overview, structure, and quick start |
+| [QUICK_REFERENCE.md](./QUICK_REFERENCE.md) | One-page cheat sheet for daily development |
+
+### Architecture & Deep Analysis
+| Document | EN | ZH | Lines |
+|---|---|---|---|
+| **Master Index** | [INDEX.md](./analysis/INDEX.md) | [INDEX_zh.md](./analysis/INDEX_zh.md) | 274 |
+| Earth Studio Core | [geo-earth-analysis.md](./analysis/geo-earth-analysis.md) | [zh](./analysis/geo-earth-analysis_zh.md) | 1,016 |
+| Google Maps | [maps-analysis.md](./analysis/maps-analysis.md) | [zh](./analysis/maps-analysis_zh.md) | 1,641 |
+| Event Logging | [logs-analysis.md](./analysis/logs-analysis.md) | [zh](./analysis/logs-analysis_zh.md) | 1,005 |
+| Geo Data Storage | [geostore-analysis.md](./analysis/geostore-analysis.md) | [zh](./analysis/geostore-analysis_zh.md) | 1,326 |
+| Internal APIs + Others | [google-and-others-analysis.md](./analysis/google-and-others-analysis.md) | [zh](./analysis/google-and-others-analysis_zh.md) | 1,060 |
+
+### Capabilities & Constraints
+| Document | EN | ZH |
+|---|---|---|
+| What protos CAN/CANNOT do | [CAPABILITIES.md](./CAPABILITIES.md) | [CAPABILITIES_zh.md](./CAPABILITIES_zh.md) |
+
+### Development Standards
+| Document | EN | ZH |
+|---|---|---|
+| Development specification | [DEVELOPMENT_SPEC.md](./DEVELOPMENT_SPEC.md) | [DEVELOPMENT_SPEC_zh.md](./DEVELOPMENT_SPEC_zh.md) |
+
+### Dependency Analysis
+| Document | Description |
+|---|---|
+| [DEPENDENCY_MAP.md](./DEPENDENCY_MAP.md) | Full dependency diagrams (Mermaid flowcharts) |
+| [DEPENDENCY_MAP_zh.md](./DEPENDENCY_MAP_zh.md) | Chinese version |
+| [DEPENDENCY_FILES.md](./DEPENDENCY_FILES.md) | File-level dependency listing + Top 50 |
+
+### Interactive Diagrams
+| File | Description |
+|---|---|
+| [diagrams/domain-deps.html](./diagrams/domain-deps.html) | 38-domain dependency map (zoomable, theme toggle) |
+| [diagrams/topology-layers.html](./diagrams/topology-layers.html) | 8-layer topological hierarchy |
+| [diagrams/earth-core.html](./diagrams/earth-core.html) | geo/earth core internal dependencies |
+
+### Automated Tools
+| Tool | Purpose |
+|---|---|
+| [devtools/checks/check-all.sh](./devtools/checks/check-all.sh) | 12-item proto compliance checker |
+| [.github/workflows/proto-check.yml](./.github/workflows/proto-check.yml) | CI auto-check on every PR |
+
+---
+
 ## License
 
 This project contains Google proprietary protocol buffer definitions. Usage is subject to Google's terms and conditions.
