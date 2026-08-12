@@ -1,7 +1,5 @@
 syntax = "proto2";
 
-package location.country;
-
 import "google/api/inclusion.proto";
 import "net/proto2/bridge/proto/message_set.proto";
 import "storage/datapol/annotations/proto/semantic_annotations.proto";
