@@ -1,0 +1,36 @@
+name: Proto Compliance Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.proto"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**.proto"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Compliance Checker
+        run: |
+          chmod +x devtools/checks/check-all.sh
+          bash devtools/checks/check-all.sh
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Proto Compliance Report" >> $GITHUB_STEP_SUMMARY
+          echo "See checker output above for details." >> $GITHUB_STEP_SUMMARY
+          echo "| Rule | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| No circular deps | ✅ Required |" >> $GITHUB_STEP_SUMMARY
+          echo "| No required fields | 🚫 Blocking |" >> $GITHUB_STEP_SUMMARY
+          echo "| Enum first=0 | 🚫 Blocking |" >> $GITHUB_STEP_SUMMARY
+          echo "| Package present | 🚫 Blocking |" >> $GITHUB_STEP_SUMMARY
+          echo "| Lowercase filenames | 🚫 Blocking |" >> $GITHUB_STEP_SUMMARY
