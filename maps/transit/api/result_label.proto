@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package maps_transit.api;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_outer_classname = "ResultLabelProto";
+option java_package = "com.google.maps.transit.api";
+
+enum ResultLabel {
+    UNKNOWN = 0;
+    CHEAPEST = 2;
+    DISRUPTED_JOURNEYS = 3;
+    EARLIEST_ARRIVAL = 4;
+    FASTEST = 5;
+    INTERNAL_ONLY = 6;
+    LEAST_WALKING = 7;
+    MORE_BUS_ONLY = 8;
+    MORE_RAIL_ONLY = 9;
+    MORE_SUBWAY_ONLY = 10;
+    MORE_TRAM_ONLY = 11;
+    MOST_FREQUENT = 12;
+    OTHER_OPTIONS = 13;
+    PREVIOUSLY_CHOSEN = 14;
+    RECOMMENDED_ROUTE = 15;
+    SUGGESTED_FOR_YOU = 16;
+    SELECTED_ROUTE = 18;
+    MULTIMODAL_ROUTE = 19;
+    DIRECT_ROUTE = 20;
+}

@@ -1,0 +1,102 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "maps/paint/proto/feature-selector.proto";
+import "maps/paint/proto/fetchable-style-set.proto";
+import "maps/paint/proto/styler-description.proto";
+import "maps/paint/proto/texture.proto";
+import "maps/paint/styler/legend/font-properties.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_package = "com.google.maps.paint";
+
+message PaintResourceRequest {
+    repeated IconRequest icon_request = 1;
+    repeated StyleTableRequest style_table_request = 4;
+    repeated TextureRequest texture_request = 5;
+    repeated CommonStyleDataRequest common_style_data_request = 6;
+    repeated GltfBufferRequest gltf_buffer_request = 7;
+    repeated CubemapRequest cubemap_request = 8;
+    
+    reserved 2;
+    
+    reserved "font_request";
+}
+
+message IconRequest {
+    repeated string filename = 1;
+    optional string text = 4;
+    optional string font = 5;
+    optional string language = 14;
+    optional FontProperties.FontStyle font_style = 12 [default = STYLE_NORMAL];
+    optional FontProperties.FontWeight font_weight = 13 [default = WEIGHT_NORMAL];
+    optional int32 point_size = 6;
+    optional fixed32 text_color_argb = 7;
+    optional int32 text_anchor_x = 8;
+    optional int32 text_anchor_y = 9;
+    optional float scale_factor = 2 [default = 1];
+    repeated fixed32 highlight_color_rgb = 10;
+    repeated fixed32 color_filter_argb = 11;
+    
+    extensions 1000;
+}
+
+message PaintResource {
+    optional int32 status = 1;
+    optional float ttl_seconds = 2 [deprecated = true];
+    optional bytes data = 3 [ctype = CORD];
+}
+
+message PaintResourceList {
+    repeated PaintResource icon_image = 1;
+    repeated PaintResource style_table = 3;
+    repeated PaintResource texture = 4;
+    repeated PaintResource common_style_data = 5;
+    repeated PaintResource gltf_buffer = 6;
+    repeated PaintResource cubemap = 7;
+    
+    reserved 2;
+    
+    reserved "font";
+}
+
+message StyleTableRequest {
+    optional string config_set = 1;
+    optional int32 epoch = 2;
+    optional bool compact = 3;
+    optional FetchableStyleSet fetchable_set = 10 [default = FETCHABLE_STYLE_SET_STANDARD];
+    optional string experiment_name = 4;
+    repeated int32 experiment_id = 6;
+    optional string quickstyle_dir = 5 [deprecated = true];
+    optional bool exclude_inline_styles = 7;
+    optional StylerDescription.StylerType styler_type = 8;
+    optional StylerDescription.StylerLegendSubtype styler_legend_subtype = 11;
+    optional FeatureSelectorList third_party_style = 9;
+    
+    extensions 1000;
+}
+
+message CommonStyleDataRequest {
+    repeated int32 experiment_id = 2;
+    optional string quickstyle_dir = 3;
+    optional string version = 4;
+    optional StylerDescription.StylerLegendSubtype styler_legend_subtype = 5;
+    optional bool enable_client_applied_styling = 6;
+    
+    extensions 1000;
+}
+
+message GltfBufferRequest {
+    optional string asset_name = 1;
+    
+    extensions 1000;
+}
+
+message CubemapRequest {
+    optional string asset_name = 1;
+    
+    extensions 1000;
+}

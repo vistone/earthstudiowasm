@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "PaymentProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedPaymentOptions {
+    optional bool pay_mobile_nfc = 1;
+}

@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+enum PropertyValueStatus {
+    PROPERTY_VALUE_STATUS_UNSPECIFIED = 0;
+    HAS_NO_VALUE = 2;
+    HAS_UNKNOWN_VALUE = 4;
+}

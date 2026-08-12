@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ViewParametersProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message ViewSpace {
+    optional ReferenceFrame reference_frame = 1 [default = GLOBAL_SPACE];
+    enum ReferenceFrame {
+        UNKNOWN_SPACE = 0;
+        CAMERA_SPACE = 1;
+        GLOBAL_SPACE = 2;
+    }
+}
+
+message ViewParameters {
+    optional float yaw = 1;
+    optional float pitch = 2;
+    optional float fov_horizontal = 3;
+    optional float roll = 4;
+    optional ViewSpace space = 5;
+    
+    optional Projection projection = 6 [default = RECTILINEAR];
+    enum Projection {
+        UNKNOWN_PROJECTION = 0;
+        MERCATOR = 1;
+        TRANSVERSE_MERCATOR = 2;
+        CENTRAL_CYLINDRICAL = 3;
+        RECTILINEAR = 4;
+        TRANSVERSE_MERCATOR_RECTILINEAR_HYBRID = 5;
+        PANNINI = 6;
+    }
+}

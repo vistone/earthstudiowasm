@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geo.search.hotels;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSH";
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.hotels";
+
+message Histogram {
+    optional HistogramType type = 1;
+    enum HistogramType {
+        UNKNOWN_HISTOGRAM_TYPE = 0;
+        PRICE_HISTOGRAM = 1;
+    }
+    
+    repeated HistogramBar bar = 2;
+    message HistogramBar {
+        optional int32 height_percentage = 1;
+    }
+}

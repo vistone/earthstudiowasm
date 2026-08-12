@@ -1,0 +1,284 @@
+syntax = "proto2";
+
+package geo_serving_proto.scalableattributes;
+
+import "geo/serving/proto/text/annotated_text.proto";
+import "geo/serving/proto/url/image_url_set.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/geo/production/antiscraping/proto/limited_response_annotations.proto";
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "webserver/shared/gws/eval/gws_eval_proto_options.proto";
+import "webserver/shared/maps/logging/visibility.proto";
+
+option objc_class_prefix = "GSPSA";
+option java_multiple_files = true;
+option java_outer_classname = "ScalableAttributeProto";
+option java_package = "com.google.geo.serving.proto.scalableattributes";
+
+message ScalableAttributeContainer {
+    optional maps_frontend.Visibility visibility = 5 [deprecated = true];
+    repeated ScalableAttribute alert_attribute = 4;
+    repeated ScalableAttribute summary_attribute = 1;
+    repeated ScalableAttributeGroup attribute_group = 2;
+    repeated ScalableAttribute answer_attribute = 3;
+    repeated ScalableAttributeGroup non_default_display_attribute_group = 6;
+}
+
+message ScalableAttributeGroup {
+    optional string id = 1;
+    optional string localized_display_name = 2;
+    repeated ScalableAttribute attribute = 3;
+    optional IconContainer icon = 4;
+    optional string review_filter_id = 5;
+}
+
+message ScalableAttribute {
+    optional maps_frontend.Visibility visibility = 8;
+    optional string id = 1;
+    optional string localized_display_name = 2;
+    optional Value value = 3;
+    optional DisplayStyle display_style = 4;
+    optional IconContainer icon = 5;
+    optional bool is_context_relevant = 6;
+    optional string annotation = 7;
+    repeated AttributeCitation citations = 9;
+}
+
+message AttributeCitation {
+    optional AttributeCitationType type = 1;
+}
+
+message AttributeCitationType {
+    optional RiddlerCitationData riddler_data = 1;
+    optional MerchantEditCitationData merchant_edit_data = 2;
+}
+
+message RiddlerCitationData {
+    optional int32 num_total_answers = 1;
+    optional int32 percentage_corraborating_answers = 2;
+}
+
+message MerchantEditCitationData {
+    optional geo_serving_proto.text.AnnotatedText text = 1;
+}
+
+message Value {
+    optional ValueType value_type = 1;
+    repeated ValueContainer value_container = 2 [deprecated = true];
+    
+    oneof value {
+        BooleanValue boolean_value = 3;
+        EnumValue unique_enum_value = 4;
+        RepeatedEnumValue repeated_enum_value = 5;
+    }
+}
+
+message RepeatedEnumValue {
+    oneof value {
+        HasNoValue has_no_value = 1;
+        Values values = 2;
+    }
+    
+    message HasNoValue {
+        optional string localized_negative_text = 3;
+    }
+    
+    message Values {
+        optional EnumValueList positive = 1;
+        optional EnumValueList negative = 2;
+    }
+}
+
+message EnumValueList {
+    repeated EnumValue enum_value = 1;
+    optional DisplayStyle display_style = 2;
+    optional IconContainer icon = 3;
+}
+
+message BooleanValue {
+    optional bool value = 1;
+    optional string localized_display_value = 2;
+    optional string localized_short_text = 3;
+    optional string localized_standalone_text = 4;
+    optional ValueJustification justification = 5;
+}
+
+message EnumValue {
+    optional string mid = 1;
+    optional double numeric_value = 2;
+    optional string localized_short_text = 3;
+    optional string localized_standalone_text = 4;
+    optional ValueJustification justification = 5;
+}
+
+message ValueJustification {
+    optional int32 number_review = 1;
+    optional int32 percentage_review = 2;
+}
+
+message ValueContainer {
+    optional string localized_display_value = 2;
+    
+    oneof value {
+        bool bool_value = 1;
+    }
+}
+
+message IconContainer {
+    oneof icon {
+        IconResource icon_resource = 1;
+        string icon_url = 2 [deprecated = true];
+        geo_serving_proto.url.ImageUrlSet icon_url_set = 3;
+    }
+    
+    enum IconResource {
+        UNSPECIFIED_ICON_RESOURCE = 0;
+        DEFAULT_CHECKMARK = 1;
+        NEGATIVE = 2;
+        AC_UNIT = 3;
+        ACCESSIBLE = 4;
+        AIRPORT_SHUTTLE = 5;
+        ALL_INCLUSIVE = 6;
+        BEACH_ACCESS = 7;
+        BUSINESS_CENTER = 8;
+        CHILD_FRIENDLY = 9;
+        FITNESS_CENTER = 10;
+        FREE_BREAKFAST = 11;
+        GOLF_COURSE = 12;
+        HOT_TUB = 13;
+        KITCHEN = 14;
+        LOCAL_BAR = 15;
+        LOCAL_LAUNDRY_SERVICE = 16;
+        PETS = 17;
+        POOL = 18;
+        RESTAURANT = 19;
+        ROOM_SERVICE = 20;
+        SPA = 21;
+        SMOKE_FREE = 22;
+        WIFI = 23;
+        REQUIRES_RESERVATIONS = 24;
+        FACE_MASK = 25;
+        TEMPERATURE_CHECK = 26;
+        PHYSICAL_DISTANCE = 27;
+        SAFETY_DIVIDER = 28;
+        PRODUCT_QUANTITY_LIMIT = 29;
+        SANITIZES_BETWEEN_CUSTOMERS = 30;
+        ONLINE_SERVICES = 31;
+        OUTDOOR_SERVICES = 32;
+        CURBSIDE_PICKUP = 33;
+        DELIVERY = 34;
+        TURNAROUND_TIME = 35;
+        APPOINTMENT = 36;
+        ATTACH_MONEY = 37;
+        CAMPING = 38;
+        ELECTRICAL_SERVICES = 39;
+        HIKING = 40;
+        LOCAL_DRINK = 41;
+        MONEY_OFF = 42;
+        OUTDOOR_GRILL = 43;
+        SHOWER = 44;
+        SPORTS_BASEBALL = 45;
+        SPORTS_BASKETBALL = 46;
+        TABLE_RESTAURANT = 47;
+        TOYS = 48;
+        VALVE = 49;
+        WATER_DROP = 50;
+        WC = 51;
+        LOCAL_CAR_WASH = 52;
+        AIR = 53;
+        SHOPPING_BAG = 54;
+        LOCAL_ATM = 55;
+        PROPANE_TANK = 56;
+        NFC = 57;
+        VACUUM = 58;
+        CREDIT_CARD = 59;
+        LOCAL_PHARMACY = 60;
+        LOCAL_PARKING = 61;
+        BAKERY_DINING = 62;
+        LOCAL_FLORIST = 63;
+        SPORTS_VOLLEYBALL = 64;
+        LOCAL_GAS_STATION = 65;
+        GROCERY = 67;
+        PET_SUPPLIES = 68;
+        DENTISTRY = 69;
+        EMERGENCY = 70;
+        CLEAR_NIGHT = 71;
+        DECK = 72;
+        CARD_MEMBERSHIP = 73;
+        CHILD_CARE = 74;
+        VISIBILITY = 75;
+        VIDEOCAM = 76;
+        RADIOLOGY = 77;
+        ECO = 78;
+        CHURCH = 79;
+        LOCAL_CAFE = 80;
+        THEATERS = 81;
+        OFFLINE_DINO = 82;
+        TOUR = 83;
+        LOCAL_DINING = 84;
+        LOCAL_SHIPPING = 85;
+        APARTMENT = 86;
+        MAN_4 = 87;
+        MODE_COOL = 88;
+        LAUNDRY = 89;
+        SPORTS_GOLF = 90;
+        WEEKEND = 91;
+        ELEVATOR = 92;
+        EV_CHARGER = 93;
+        TOYS_AND_GAMES = 94;
+        HANDYMAN = 95;
+        PEDAL_BIKE = 96;
+        NATURE_PEOPLE = 97;
+        GARAGE = 98;
+        PAYMENT_LOGO = 99;
+        VERIFIED_USER = 100;
+        CAMPAIGN = 101;
+        BACK_HAND = 102;
+        MUSIC_NOTE = 103;
+        LOYALTY = 104;
+        DIRECTIONS_CAR = 105;
+        CONFIRMATION_NUMBER = 106;
+        ATTRACTIONS = 107;
+        BOOK_ONLINE = 108;
+        APPAREL = 109;
+        WOMAN = 110;
+        MAN = 111;
+        WATER = 112;
+        LOCK = 113;
+        CELEBRATION = 114;
+        WAVES = 115;
+        VIDEOGAME_ASSET = 116;
+        QUICK_REORDER = 117;
+        MEDICATION = 118;
+        CLEANING = 119;
+        CLEANING_BUCKET = 120;
+        SOUND_DETECTION_DOG_BARKING = 121;
+        CHAIR = 122;
+        BLENDER = 123;
+        LUGGAGE = 124;
+        FAMILY_RESTROOM = 125;
+        DIRECTIONS_BUS = 126;
+        PHOTO_CAMERA = 127;
+        NO_CELL = 128;
+        MUSEUM = 129;
+        HOTEL = 130;
+        LIQUOR = 131;
+        SPORTS_BAR = 132;
+        CAKE = 133;
+        WINE_BAR = 134;
+    }
+}
+
+enum ValueType {
+    UNSPECIFIED_VALUE_TYPE = 0;
+    BOOLEAN_VALUE = 1;
+    UNIQUE_ENUM_VALUE = 2;
+    REPEATED_ENUM_VALUE = 3;
+}
+
+enum DisplayStyle {
+    UNSPECIFIED_DISPLAY_STYLE = 0;
+    NEGATIVE_VALUE = 1;
+}

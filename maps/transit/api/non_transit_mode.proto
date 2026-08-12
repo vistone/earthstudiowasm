@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package maps_transit.api;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GMTA";
+option java_outer_classname = "NonTransitModeProto";
+option java_package = "com.google.maps.transit.api";
+
+message NonTransitMode {
+    enum Mode {
+        UNSPECIFIED_NON_TRANSIT_MODE = 0;
+        WALK = 1;
+        DRIVE = 2;
+        OFFLINE_TAXI = 3;
+        TWO_WHEELER = 4;
+        ONLINE_TAXI = 5;
+        BICYCLE = 6;
+        DOCKLESS_BIKESHARING = 7;
+        DOCKED_BIKESHARING = 8;
+    }
+}

@@ -1,0 +1,69 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+import "cityblock/streetsmart/business_discovery/tools/nerf/pano_selection_result.proto";
+import "google/type/latlng.proto";
+
+option java_multiple_files = true;
+
+message KartoPanoSelectionResult {
+    repeated PanoRun selection_results = 1;
+    message PanoRun {
+        optional string selected_run_id = 1;
+        optional cityblock.streetsmart.biz.RunSelectionMethod run_selection_method = 2;
+        repeated string pano_keys = 8;
+        
+        repeated UsableUnstitchedPanoKeys usable_unstitched_pano_keys = 10;
+        message UsableUnstitchedPanoKeys {
+            optional string stitched_pano_key = 1;
+            repeated string unstitched_pano_keys = 2;
+        }
+        
+        optional string best_published_pano_key = 6;
+        optional double median_distance_to_storefront_m = 9;
+        optional StorefrontSurfaces storefront_surfaces = 11;
+        
+        reserved 3, 4, 5, 7;
+    }
+    
+    reserved 2, 3, 4, 5, 6;
+    
+    message StorefrontSurfaces {
+        repeated cityblock.streetsmart.biz.StorefrontSurface surfaces = 1;
+    }
+}
+
+message GeminiPanoCluster {
+    optional string place_id = 1;
+    optional google.type.LatLng lat_lng = 2;
+    repeated GeminiPanoData pano_cluster = 3;
+}
+
+message GeminiPanoData {
+    optional string pano_key = 1;
+    optional string place_id = 2;
+    optional google.type.LatLng lat_lng = 3;
+    
+    optional LocalFrameData local_frame = 7;
+    message LocalFrameData {
+        optional EnuPoint enu_point = 1;
+        message EnuPoint {
+            optional float x = 1;
+            optional float y = 2;
+            optional float z = 3;
+        }
+        
+        optional double enu_angle_radians = 2;
+        optional double heading_degree = 3;
+    }
+    
+    optional float distance_from_poi_meters = 4;
+    
+    optional ImageData image_data = 5;
+    message ImageData {
+        optional bytes thumbnail_pano_image = 1;
+    }
+    
+    optional cityblock.streetsmart.biz.StorefrontSurface storefront = 6;
+}

@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "TakedownProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message Takedown {
+    optional string report_a_problem_url = 1;
+    
+    optional TakedownStatus takedown_status = 2 [default = AVAILABLE];
+    enum TakedownStatus {
+        UNKNOWN_STATUS = 0;
+        AVAILABLE = 1;
+        SV_REMOVED = 2;
+    }
+}

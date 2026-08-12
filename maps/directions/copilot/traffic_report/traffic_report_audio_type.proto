@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package maps_directions.copilot;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TrafficReportAudioTypeProto";
+option java_package = "com.google.maps.directions.copilot.proto";
+
+enum AudioType {
+    AUDIO_TYPE_UNSPECIFIED = 0;
+    AUDIO_TYPE_PRE_FLIGHT = 1;
+    AUDIO_TYPE_TROUBLE_AHEAD = 2;
+    AUDIO_TYPE_DYNAMIC_REROUTE = 3;
+}

@@ -1,0 +1,73 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/transit/api/vehicle_attributes.proto";
+import "logs/proto/maps/transit/fare/fare.proto";
+import "maps/transit/api/time.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TransitProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedTransitFareSet {
+    repeated maps_transit.LoggedFareProto fare = 1;
+    optional int32 num_steps = 2 [default = 1];
+    optional int32 preferred_fare = 3 [default = 0];
+}
+
+message LoggedTransitAgency {
+    optional string name = 1;
+    optional string id = 2;
+    optional logs_maps.FeatureIdProto feature_id = 9;
+    optional string url = 3;
+    optional string fare_url = 4;
+    optional string phone = 5;
+    optional string deep_link_url = 6;
+    optional string deep_link_name = 7;
+    
+    reserved 8;
+}
+
+message LoggedTransitLine {
+    optional int32 vehicle_type = 1;
+    optional string vehicle_category_name = 21;
+    optional string line_long_name = 4;
+    optional string capitalized_vehicle_name = 20;
+    repeated string headsign = 16;
+    repeated string direction = 17;
+    repeated LoggedTransitAgency transit_agency = 15;
+    optional string url = 6;
+    optional int32 experiment_id = 9;
+    optional string data_source_description = 10;
+    optional bool show_data_source_info = 14;
+    optional bool data_source_is_internal = 12;
+    optional logs_maps.FeatureIdProto feature_id = 19;
+    
+    reserved 2, 3, 11;
+}
+
+message LoggedTransitTrip {
+    optional int32 headway_seconds = 1;
+    optional int32 num_transit_stops = 2;
+    optional bool must_phone = 3;
+    optional int32 expected_waiting_time_seconds = 4;
+    optional bytes vehicle_token = 13;
+    optional bool is_auto_extended = 7;
+    optional int32 average_leg_periodicity_seconds = 8;
+    optional bool prefer_periodicity = 10;
+    optional bytes filtered_departures_query_token = 9;
+    optional int64 last_trip_update_utc_secs = 11;
+    optional uint64 line_and_pois_fprint = 12;
+    optional maps_transit.api.LoggedVehicleAttributes vehicle_attributes = 14;
+    repeated maps_transit.api.DayOfWeek runs_on_days_of_week = 15 [packed = true];
+}
+
+message LoggedOutputTime {
+    optional int64 utc_seconds = 1;
+    optional string time_zone = 2;
+    optional bool estimated_from_frequency = 3 [default = false];
+    optional int64 realtime_utc_seconds = 4;
+}

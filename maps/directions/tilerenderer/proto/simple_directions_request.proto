@@ -1,0 +1,26 @@
+syntax = "editions";
+
+package maps_directions_tilerenderer;
+
+import "geo/serving/proto/directions/travel_mode.proto";
+import "maps/tactile/api/shared/directions/directions-client-stats.proto";
+import "maps/tactile/api/shared/feature-id.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMMDT";
+option java_multiple_files = true;
+option java_package = "com.google.maps.directions.tilerenderer.proto";
+
+message SimpleDirectionsRequest {
+    repeated Waypoint waypoint = 1;
+    message Waypoint {
+        oneof location {
+            maps_tactile.shared.FeatureId feature_id = 1;
+            maps_tactile.shared.LatLng lat_lng = 2;
+        }
+    }
+    
+    optional geo_serving_proto.directions.TravelMode travel_mode = 2;
+    optional maps_tactile.shared.directions.DirectionsClientStats directions_client_stats = 3;
+}

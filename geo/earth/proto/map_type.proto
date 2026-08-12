@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package earth.document;
+
+import "geo/earth/proto/storage_restrictions.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.core.document";
+
+enum MapType {
+    MAP_UNKNOWN = 0;
+    MAP_EARTH = 1;
+    MAP_EARTH_DESIGN = 2;
+}

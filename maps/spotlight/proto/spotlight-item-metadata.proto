@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package maps_spotlight;
+
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GMSL";
+option java_multiple_files = true;
+option java_outer_classname = "DummyIdentifiableMetadata";
+option java_package = "com.google.maps.spotlight";
+
+message SpotlightItemMetadata {
+    optional ItemType item_type = 1;
+    enum ItemType {
+        option features = enum_type: CLOSED
+        ;
+        SPOTLIGHT_POI = 1;
+    }
+    
+    extend .proto2.bridge.MessageSet {
+        optional SpotlightItemMetadata message_set_extension = 33605231;
+    }
+}

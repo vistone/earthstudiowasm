@@ -1,0 +1,56 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "LabelPlacementOptionsProto";
+option java_package = "com.google.maps.paint";
+
+message LabelPlacementOptions {
+    optional PlacementMode placement_mode = 2 [default = PLACEMENT_GREEDY];
+    enum PlacementMode {
+        PLACEMENT_GREEDY = 1;
+        PLACEMENT_PASSTHROUGH = 2 [deprecated = true];
+        PLACEMENT_PASSTHROUGH_POIS = 3;
+        PLACEMENT_NONE = 4;
+    }
+    
+    optional PassthroughPOIsOptions passthrough_pois_options = 18;
+    message PassthroughPOIsOptions {
+        optional int32 start_zoom = 1;
+        optional bool perform_label_filtering = 2;
+    }
+    
+    optional bool attach_arrows_to_roads = 3;
+    optional bool perform_partial_zoom_placement = 6;
+    
+    optional PartialZoomPlacementRate partial_zoom_placement_rate = 17;
+    enum PartialZoomPlacementRate {
+        PARTIAL_ZOOM_PLACEMENT_RATE_DEFAULT = 0;
+        PARTIAL_ZOOM_PLACEMENT_RATE_EIGHTH_ZOOM = 1;
+    }
+    
+    optional RoadLabelSpacing road_label_spacing = 7;
+    enum RoadLabelSpacing {
+        DEFAULT_SPACING = 0;
+        DENSE_SPACING = 1;
+        SPARSE_SPACING = 2;
+    }
+    
+    optional bool allow_standalone_placement = 8;
+    optional bool include_alternate_point_positions = 9;
+    optional int32 legacy_attach_labels_to_roads_from_zoom = 10 [default = -1];
+    optional int32 min_zoom_adjustment_point_label = 11 [deprecated = true];
+    optional int32 min_zoom_adjustment_line_label = 12 [deprecated = true];
+    optional string load_alternate_labels_for_experiment = 13;
+    optional bool show_transit_line_icons_on_stations = 15;
+    optional double additional_road_label_spacing_scale = 16 [default = 1];
+    optional bool enable_zoom_consistency_for_line_labels = 19;
+    optional bool enable_even_more_consistent_line_labels = 22;
+    optional bool wrap_text = 20 [default = true];
+    optional bool disable_zoom_consistency_for_road_shields = 21 [deprecated = true];
+    optional bool skip_label_anchor_tile_containment_check = 1000 [deprecated = true];
+}

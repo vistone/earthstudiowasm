@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package pathfinder.crp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message HighwayRampFixupConfig {
+    optional uint32 max_detour_length_meters = 1;
+    
+    reserved 2, 3;
+}

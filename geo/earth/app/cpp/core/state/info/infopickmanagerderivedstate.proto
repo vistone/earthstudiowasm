@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Infopickmanagerderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derived";
+
+message InfoPickManagerDerivedState {
+    optional bool street_view_active = 3;
+    optional bool is_balloon_or_card_open = 6;
+    optional bool is_timelapse_expanded = 7 [default = false];
+    optional bool is_search_open = 8 [default = false];
+    optional bool is_editing_feature = 9 [default = false];
+}

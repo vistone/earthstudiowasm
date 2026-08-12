@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package geo_serving_proto.openhours;
+
+import "geo/serving/proto/openhours/hours_interval.proto";
+import "geo/serving/proto/openhours/open_status.proto";
+import "geo/serving/proto/openhours/special_hours_message.proto";
+import "google/type/date.proto";
+import "google/type/dayofweek.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPOPH";
+option java_multiple_files = true;
+option java_outer_classname = "DayHoursProto";
+option java_package = "com.google.geo.serving.proto.openhours";
+
+message DayHours {
+    optional string day_name = 1;
+    optional .google.type.DayOfWeek day = 2;
+    optional .google.type.Date date = 3;
+    repeated HoursInterval hours_intervals = 4;
+    optional bool is_exceptional_open_hours = 5;
+    optional OpenStatus open_status = 6;
+    optional SpecialHoursMessage special_hours_message = 7;
+}

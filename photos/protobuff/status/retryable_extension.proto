@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package photos.protobuff.status;
+
+import "net/proto2/proto/descriptor.proto";
+
+option objc_class_prefix = "PHTS";
+option java_package = "com.google.photos.protobuff.status.proto1api";
+
+extend .proto2.EnumValueOptions {
+    optional bool retryable = 74355511;
+}

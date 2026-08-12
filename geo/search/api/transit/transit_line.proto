@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package geo.search.transit;
+
+import "geo/search/api/transit/transit_symbol.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.transit";
+
+message TransitLineGroup {
+    repeated TransitLine lines = 1;
+    message TransitLine {
+        repeated TransitSymbol line_snippets = 1;
+    }
+}

@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message PointCurvatureProto {
+    optional float start_point_fraction = 1;
+    
+    oneof curvature_value {
+        float radians_per_meter = 2;
+        CurvatureStatus curvature_status = 3;
+    }
+    
+    enum CurvatureStatus {
+        CURVATURE_UNSPECIFIED = 0;
+        CURVATURE_UNKNOWN = 1;
+    }
+}
+
+message CurvatureProto {
+    repeated PointCurvatureProto point_curvature = 1;
+}

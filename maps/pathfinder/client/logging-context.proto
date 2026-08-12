@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "frameworks/testing/rpcreplay/processors/rpc_replay_field_option.proto";
+import "maps/pathfinder/client/request-source.proto";
+import "maps/pathfinder/replay/proto/replay_metadata.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "LoggingContextProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message LoggingContext {
+    optional string extended_session_id = 1;
+    optional fixed64 session_id = 3;
+    optional string software_version = 4;
+    optional string client_version = 5;
+    optional string platform_id = 6;
+    optional string application_name = 7;
+    optional string referrer_name = 8;
+    repeated int32 experiment_ids = 9 [packed = true];
+    optional int32 trip_version = 12;
+    optional int32 traffic_version = 13;
+    optional int64 project_number = 14;
+    optional bool third_party = 15;
+    optional bool logging_enabled = 16;
+    optional RequestSource request_source = 17;
+    optional .pathfinder.replay.ReplayMetadata replay_metadata = 18;
+    optional string customization_id = 19;
+    optional string request_id = 20;
+    
+    reserved 2, 10, 11;
+}
+
+message ResponseLoggingContext {
+    optional string extended_session_id = 1;
+    optional string request_id = 2 [deprecated = true];
+}

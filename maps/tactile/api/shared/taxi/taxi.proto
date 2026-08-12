@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package maps_tactile.shared.taxi;
+
+import "maps/tactile/api/shared/directions/fare.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHT";
+option java_multiple_files = true;
+option java_outer_classname = "TaxiProto";
+option java_package = "com.google.maps.tactile.shared.taxi";
+
+message FareBreakdown {
+    repeated FareGroup fare_group = 1;
+    message FareGroup {
+        repeated maps_tactile.shared.directions.Fare fare_item = 1;
+    }
+}

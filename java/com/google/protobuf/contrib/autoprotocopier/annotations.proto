@@ -1,0 +1,32 @@
+syntax = "editions";
+
+package protobuf.contrib.autoprotocopier;
+
+import "net/proto2/proto/descriptor.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "PCAPC";
+option java_package = "com.google.protobuf.contrib.autoprotocopier";
+
+extend .proto2.MessageOptions {
+    optional string copy_to_message = 57403232 [deprecated = true];
+    optional string copy_from_message = 57399169 [deprecated = true];
+    optional bool binary_compatible = 188784167;
+    optional bool message_proto3_default_primitives_copy_to_unset = 308862542;
+}
+
+extend .proto2.OneofOptions {
+    optional bool copy_as_oneof_block = 159547527 [default = false];
+    optional bool do_not_copy_oneof = 57345819 [default = true, deprecated = true];
+    optional string copy_oneof_name = 159066370;
+}
+
+extend .proto2.FieldOptions {
+    optional string copy_field_path = 57345500;
+    optional bool do_not_copy = 57407453;
+    optional bool span_repeated_field_path = 148127012;
+    optional string serialized_message = 61854538;
+    optional bool proto3_default_primitives_copy_to_unset = 138798524;
+    optional string coerce_with_other_field_type = 181926742;
+}

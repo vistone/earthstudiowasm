@@ -1,0 +1,43 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.copilot;
+
+import "maps/directions/copilot/traffic_report/traffic_report_audio_type.proto";
+import "maps/directions/copilot/traffic_report/traffic_report_icon.proto";
+import "maps/directions/copilot/traffic_report/traffic_report_prompt_type.proto";
+import "maps/roadtraffic/proto/incidents_root_cause.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedTrafficReport {
+    optional LoggedOneLiner one_liner = 14;
+    optional LoggedPrompt prompt = 7;
+    repeated LoggedAudio audio = 10;
+}
+
+message LoggedAudio {
+    optional bool expected_contains_inflection = 1;
+    optional maps_directions.copilot.AudioType audio_type = 2 [default = AUDIO_TYPE_UNSPECIFIED];
+}
+
+message LoggedPrompt {
+    optional bool with_road_closure = 1;
+    optional bool with_unavoidable_closure = 2;
+    optional maps_roadtraffic.IncidentRootCause.Cause closure_cause = 3 [default = UNKNOWN];
+    optional bool expected_contains_inflection = 4;
+    optional maps_directions.copilot.PromptType prompt_type = 5 [default = PROMPT_TYPE_UNSPECIFIED];
+}
+
+message LoggedOneLiner {
+    repeated LoggedTrafficReportPiece title = 1;
+    repeated LoggedTrafficReportPiece short_title = 2;
+    repeated LoggedTrafficReportPiece subtitle = 4;
+    optional maps_directions.copilot.TrafficReportIcon icon = 3;
+    optional bool with_road_closure = 5;
+    optional bool with_unavoidable_closure = 6;
+    optional maps_roadtraffic.IncidentRootCause.Cause closure_cause = 7 [default = UNKNOWN];
+    optional bool expected_contains_inflection = 8;
+}
+
+message LoggedTrafficReportPiece {
+    optional string text = 3;
+}

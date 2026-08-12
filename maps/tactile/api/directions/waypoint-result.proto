@@ -1,0 +1,55 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/tactile/api/directions/query-correction.proto";
+import "maps/tactile/api/directions/waypoint-location.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "WaypointResultProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message WaypointResult {
+    optional WaypointLocation waypoint = 1;
+    repeated WaypointLocation alternative_waypoint = 2;
+    
+    optional Status status = 3;
+    enum Status {
+        WAYPOINT_FOUND = 0;
+        WAYPOINT_FOUND_WITH_REFINEMENTS = 1;
+        WAYPOINT_REFINEMENTS = 2;
+        WAYPOINT_NOT_FOUND = 3;
+        WAYPOINT_FROM_REQUEST_DEPRECATED = 4;
+    }
+    
+    optional string routable_waypoint_token = 4;
+    optional string original_query = 5;
+    optional QueryCorrection suggested_correction = 6;
+    optional bool is_chain_or_categorical_query = 7;
+    
+    optional Weather weather = 8 [deprecated = true];
+    message Weather {
+        optional string condition = 1;
+        optional string image_url = 2;
+        optional float temperature_in_fahrenheit = 3;
+        
+        optional Scale scale = 4 [default = UNKNOWN_SCALE];
+        enum Scale {
+            UNKNOWN_SCALE = 0;
+            FAHRENHEIT = 1;
+            CELSIUS = 2;
+        }
+    }
+    
+    optional ChargingStationMatchingStatus charging_station_matching_status = 9;
+    enum ChargingStationMatchingStatus {
+        UNKNOWN_CHARGING_STATION_MATCHING_STATUS = 0;
+        MATCH_FOUND = 1;
+        MATCH_NOT_FOUND = 2;
+    }
+    
+    optional bool is_safe_for_personalization_storage = 10;
+}

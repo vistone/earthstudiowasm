@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "StatisticsProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message Statistics {
+    optional int64 view_count = 1;
+}

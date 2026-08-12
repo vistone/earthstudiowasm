@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option go_package = "businesshours";
+option java_package = "com.google.repository.docchart.extraction";
+
+message BusinessHours {
+    repeated group Interval = 1 {
+        required int32 start = 2;
+        required int32 end = 3;
+    }
+    
+    required int32 dayopen = 4;
+    
+    enum Days {
+        MON = 1;
+        TUE = 2;
+        WED = 4;
+        THU = 8;
+        FRI = 16;
+        SAT = 32;
+        SUN = 64;
+    }
+}

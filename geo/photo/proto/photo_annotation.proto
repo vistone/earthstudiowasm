@@ -1,0 +1,34 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/image_key.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoAnnotationProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message NormalizedImagePoint {
+    optional float x = 1;
+    optional float y = 2;
+    optional float distance_from_camera = 3;
+}
+
+message PhotoAnnotationObjectId {
+    optional ImageKey image_key = 1;
+}
+
+message AnnotationIconUrls {
+    optional string icon_url = 1;
+}
+
+message PhotoAnnotation {
+    optional PhotoAnnotationObjectId object_id = 1;
+    optional NormalizedImagePoint point = 2;
+    optional AnnotationIconUrls urls = 4;
+    optional string category_icon_url = 3 [deprecated = true];
+}

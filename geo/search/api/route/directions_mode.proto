@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package geo.search.route;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.route";
+
+message DirectionsMode {
+    optional TravelMode travel_mode = 1;
+    enum TravelMode {
+        option features = enum_type: CLOSED
+        ;
+        DRIVE = 0;
+        BICYCLE = 1;
+        WALK = 2;
+        TWO_WHEELER = 9;
+        TRANSIT = 3;
+        FLY = 4;
+        MIXED = 6;
+        UNKNOWN = 7;
+        TAXI = 8;
+    }
+    
+    optional bool available = 2;
+    optional bool selected = 3;
+}

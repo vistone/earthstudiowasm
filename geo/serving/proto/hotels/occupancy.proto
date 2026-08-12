@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geo_serving_proto.hotels;
+
+import "geo/serving/proto/hotels/occupancy_type.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPH";
+option java_multiple_files = true;
+option java_outer_classname = "OccupancyProto";
+option java_package = "com.google.geo.serving.proto.hotels";
+
+message Occupancy {
+    optional int32 adults = 1;
+    
+    repeated Child children = 2;
+    message Child {
+        optional int32 age_years = 1;
+    }
+    
+    optional OccupancyType type = 4;
+    
+    reserved 3;
+}

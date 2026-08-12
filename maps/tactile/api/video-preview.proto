@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "VideoPreviewProto";
+option java_package = "com.google.maps.tactile";
+
+message VideoPreview {
+    optional int64 duration_ms = 1;
+    repeated VideoStream video_stream = 2;
+    optional string cid = 3;
+}
+
+message VideoStream {
+    optional Protocol protocol = 5;
+    enum Protocol {
+        UNKNOWN_PROTOCOL = 0;
+        PROGRESSIVE = 1;
+        DASH = 2;
+        HLS = 3;
+    }
+    
+    optional int32 format_id = 1;
+    optional int32 width = 2;
+    optional int32 height = 3;
+    optional string url = 4;
+}

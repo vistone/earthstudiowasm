@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package earth.core.drawingmode;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "DrawingModeProto";
+option java_package = "com.google.android.apps.earth.drawingmode";
+
+message ProtoRequiresAtLeastOneMessageInFileDrawingMode {
+    
+}
+
+enum DrawingMode {
+    DRAWING_MODE_UNKNOWN = 0;
+    DRAWING_MODE_SELECTION = 1;
+    DRAWING_MODE_LINESTRING = 2;
+    DRAWING_MODE_POINT = 3;
+    DRAWING_MODE_BRUSH = 4;
+}

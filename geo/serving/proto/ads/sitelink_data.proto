@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package geo_serving_proto.ads;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPADS";
+option java_multiple_files = true;
+option java_outer_classname = "SitelinkDataProto";
+option java_package = "com.google.geo.serving.proto.ads";
+
+message SitelinkData {
+    repeated Sitelink sitelink = 1;
+    message Sitelink {
+        optional string headline = 1;
+        optional string description = 2;
+        optional string redirect_url = 3;
+        optional string thumbnail_url = 4;
+        optional string call_to_action_text = 5;
+        optional string visible_url = 6;
+    }
+}

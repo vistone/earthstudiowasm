@@ -1,0 +1,35 @@
+syntax = "proto2";
+
+package jspb;
+
+import "net/proto2/proto/descriptor.proto";
+
+option cc_enable_arenas = true;
+option go_package = "google.golang.org/apps/jspb";
+option java_package = "com.google.apps.jspb";
+
+enum JsType {
+    INT52 = 0;
+    NUMBER = 1;
+    STRING = 2;
+    GBIGINT = 3;
+}
+
+extend .proto2.FieldOptions {
+    optional bool ignore = 17702;
+    optional JsType jstype = 17703;
+    optional bool use_broken_java_unsigned_serialization_behavior = 17705 [deprecated = true];
+    optional bool allow_broken_java_unsigned_deserialization_behavior = 17706 [deprecated = true];
+    optional bool deprecated_use_binary_values_for_any = 448127177;
+}
+
+extend .proto2.MessageOptions {
+    optional string message_id = 17701 [deprecated = true];
+    optional bool generate_xid = 78050980;
+}
+
+extend .proto2.FileOptions {
+    optional string js_namespace = 17702 [deprecated = true];
+    optional bool generate_legacy_nullable_accessors = 448127176;
+    optional bool generate_binary_format_methods_on_message = 448127179 [default = true];
+}

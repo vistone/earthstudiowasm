@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message UserProto {
+    optional bytes encrypted_gaia_id = 1;
+    optional string encryption_key_name = 2;
+    optional int32 keystore_config_id = 6 [default = 0x117dc];
+    optional string username = 3;
+    
+    reserved 4, 5;
+    
+    extend .proto2.FieldOptions {
+        optional int32 encryption_key_name_field = 209473639;
+        optional int32 keystore_config_id_field = 313857734;
+    }
+}

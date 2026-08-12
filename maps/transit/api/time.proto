@@ -1,0 +1,119 @@
+syntax = "proto2";
+
+package maps_transit.api;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "TimeProto";
+option java_package = "com.google.maps.transit.api";
+
+message SimpleDuration {
+    optional int32 seconds = 1;
+}
+
+message Duration {
+    optional TimeSource source = 1;
+    optional TimeStatus status = 2;
+    optional SimpleDuration expected = 3;
+    optional SimpleDuration scheduled = 4;
+}
+
+message SimpleDurationRange {
+    optional SimpleDuration low = 1;
+    optional SimpleDuration high = 2;
+    optional SimpleDuration approx = 3;
+}
+
+message DurationRange {
+    optional TimeSource source = 1;
+    optional TimeStatus status = 2;
+    optional SimpleDurationRange expected = 3;
+    optional SimpleDurationRange scheduled = 4;
+}
+
+message SimpleTime {
+    optional int64 utc_seconds = 1;
+    optional string time_zone = 2;
+}
+
+message Time {
+    optional TimeSource source = 1;
+    optional TimeStatus status = 2;
+    optional SimpleTime expected = 3;
+    optional SimpleTime scheduled = 4;
+}
+
+message SimpleTimeRange {
+    optional SimpleTime low = 1;
+    optional SimpleTime high = 2;
+    optional SimpleTime approx = 3;
+}
+
+message TimeRange {
+    optional TimeSource source = 1;
+    optional TimeStatus status = 2;
+    optional SimpleTimeRange expected = 3;
+    optional SimpleTimeRange scheduled = 4;
+}
+
+message SimpleDeparture {
+    oneof departure {
+        TimedDeparture timed_departure = 1;
+        IntervalDeparture interval_departure = 2;
+    }
+    
+    message TimedDeparture {
+        optional SimpleTime time = 1;
+        optional bool time_is_identifier = 2 [default = false];
+    }
+    
+    message IntervalDeparture {
+        optional SimpleDuration periodicity = 1;
+        optional SimpleTime earliest = 2;
+        optional SimpleTime latest = 3;
+    }
+}
+
+message Departure {
+    optional TimeSource source = 1;
+    optional TimeStatus status = 2;
+    optional SimpleDeparture expected = 3;
+    optional SimpleDeparture scheduled = 4;
+    optional SimpleDurationRange historical_deviation_interval = 6 [deprecated = true];
+    
+    reserved 5;
+}
+
+enum TimeSource {
+    SOURCE_UNKNOWN = 0;
+    SOURCE_STATIC = 1;
+    SOURCE_REALTIME = 2;
+    SOURCE_STATIC_AND_REALTIME = 3;
+}
+
+enum TimeStatus {
+    STATUS_UNKNOWN = 0;
+    STATUS_NO_SCHEDULE = 1;
+    STATUS_PER_SCHEDULE = 2;
+    STATUS_MINOR_DIFFERENCE = 3;
+    STATUS_MAJOR_DIFFERENCE = 4;
+}
+
+enum AlertsAvailability {
+    ALERTS_AVAILABILITY_UNKNOWN = 0;
+    ALERTS_RELIABLE = 1;
+    ALERTS_CONFIGURED = 2;
+    ALERTS_UNAVAILABLE = 3;
+}
+
+enum DayOfWeek {
+    DAY_OF_WEEK_UNKNOWN = 0;
+    DAY_OF_WEEK_SUNDAY = 1;
+    DAY_OF_WEEK_MONDAY = 2;
+    DAY_OF_WEEK_TUESDAY = 3;
+    DAY_OF_WEEK_WEDNESDAY = 4;
+    DAY_OF_WEEK_THURSDAY = 5;
+    DAY_OF_WEEK_FRIDAY = 6;
+    DAY_OF_WEEK_SATURDAY = 7;
+}

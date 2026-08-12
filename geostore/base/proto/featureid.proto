@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message FeatureIdProto {
+    required fixed64 cell_id = 1;
+    required fixed64 fprint = 2;
+    optional .proto2.bridge.MessageSet temporary_data = 3;
+    
+    extend .proto2.bridge.MessageSet {
+        optional FeatureIdProto message_set_extension = 13258261;
+    }
+}
+
+extend .proto2.FieldOptions {
+    optional bool crawl_feature_id = 27021333;
+    optional bool strong_reference = 34597257;
+    optional bool has_back_reference = 81429090;
+}

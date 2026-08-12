@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/location.proto";
+import "geostore/base/proto/featureid.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoByLatLngQueryProto";
+option java_package = "com.google.geo.photo";
+
+message PhotoByLatLngQuery {
+    optional LatLng center = 1;
+    optional double radius = 2;
+    optional Level level = 3 [deprecated = true];
+    repeated geostore.FeatureIdProto preferred_route = 4 [deprecated = true];
+    optional LatLng look_at_point = 5;
+    optional string tag = 6;
+}

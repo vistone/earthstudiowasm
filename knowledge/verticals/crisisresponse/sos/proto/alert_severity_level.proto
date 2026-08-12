@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package knowledge.verticals.crisisresponse.sos.proto;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_outer_classname = "AlertSeverityLevelProto";
+option java_package = "com.google.knowledge.verticals.crisisresponse.sos.proto";
+
+enum AlertSeverityLevel {
+    ALERT_SEVERITY_UNKNOWN = 0;
+    INFORMATIONAL = 1;
+    WARNING = 2;
+    IMPORTANT = 3;
+    LARGE_SCALE_EVENT = 4;
+}

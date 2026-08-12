@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message RightsLevelWrapper {
+    optional RightsLevel rights_level = 1;
+}
+
+enum RightsLevel {
+    UNKNOWN_RIGHTS = 0;
+    GT_RIGHTS = 5;
+    FULL_RIGHTS = 10;
+}

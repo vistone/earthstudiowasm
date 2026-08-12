@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package maps_tactile.shared.placepreview;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPP";
+option java_multiple_files = true;
+option java_outer_classname = "CostOptionsProto";
+option java_package = "com.google.maps.tactile.shared.placepreview";
+
+message CostOptions {
+    optional bool allow_price_ranges = 1;
+}

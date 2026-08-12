@@ -1,0 +1,27 @@
+syntax = "editions";
+
+package geo_serving_proto.address;
+
+import "geo/serving/proto/address/address_components.proto";
+import "geo/serving/proto/address/formatted_address_type.proto";
+import "geo/serving/proto/address/open_location_code.proto";
+import "geo/serving/proto/text/annotated_text.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPADR";
+option java_multiple_files = true;
+option java_outer_classname = "AddressProto";
+option java_package = "com.google.geo.serving.proto.address";
+
+message Address {
+    repeated FormattedAddress formatted_addresses = 1;
+    message FormattedAddress {
+        optional FormattedAddressType type = 1;
+        repeated geo_serving_proto.text.AnnotatedText address_lines = 2;
+    }
+    
+    optional AddressComponents address_components = 2;
+    optional OpenLocationCode open_location_code = 3;
+}

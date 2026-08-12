@@ -1,0 +1,96 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message RankSignalProto {
+    optional Signal type = 1 [default = SIGNAL_UNKNOWN];
+    enum Signal {
+        SIGNAL_UNKNOWN = 0;
+        SIGNAL_LENGTH = 1001;
+        SIGNAL_AREA = 1002;
+        SIGNAL_ADDRESS = 1003 [deprecated = true];
+        SIGNAL_LISTING = 1004 [deprecated = true];
+        SIGNAL_ROAD_PRIORITY = 1005;
+        SIGNAL_POI_COUNT = 1006 [deprecated = true];
+        SIGNAL_WEBSCORE = 1007;
+        SIGNAL_PATHRADIUS_LENGTH_METERS = 1008 [deprecated = true];
+        SIGNAL_PATHRADIUS_LENGTH_SEGMENTS = 1009 [deprecated = true];
+        SIGNAL_PATHRADIUS_POPULARITY = 1010 [deprecated = true];
+        SIGNAL_PEAK_ELEVATION_PROMINENCE = 1011;
+        SIGNAL_ROAD_SEGMENT_COUNT = 1012;
+        SIGNAL_POI_SCORE = 1013;
+        SIGNAL_ATTRACTIONS_SCORE = 1014;
+        SIGNAL_HAND_RANKED_LOCALITY_PROMINENCE = 1015;
+        SIGNAL_POPULATION = 1;
+        SIGNAL_GDP = 2;
+        SIGNAL_EUROPA_CLASS = 2000;
+        SIGNAL_RMF_SOURCE_RANK = 2100 [deprecated = true];
+        SIGNAL_MDS_SOURCE_RANK = 2200 [deprecated = true];
+        SIGNAL_MULTINET_SOURCE_RANK = 2300 [deprecated = true];
+        SIGNAL_LOCALXML_MANUAL_RANK = 2400 [deprecated = true];
+        SIGNAL_TRANSIT_LINE = 2500 [deprecated = true];
+        SIGNAL_TRANSIT_TRAIN_DEPARTURE_COUNT = 2501;
+        SIGNAL_TRANSIT_METRO_DEPARTURE_COUNT = 2502;
+        SIGNAL_TRANSIT_BUS_DEPARTURE_COUNT = 2503;
+        SIGNAL_TRANSIT_OTHER_DEPARTURE_COUNT = 2504;
+        SIGNAL_TRANSIT_TRAIN_LINE_COUNT = 2510;
+        SIGNAL_TRANSIT_METRO_LINE_COUNT = 2511;
+        SIGNAL_TRANSIT_BUS_LINE_COUNT = 2512;
+        SIGNAL_TRANSIT_OTHER_LINE_COUNT = 2513;
+        SIGNAL_TRANSIT_STATION_LOCAL_RANK = 2514;
+        SIGNAL_TRANSIT_STATION_GLOBAL_RANK = 2515;
+        SIGNAL_ORION_LEVEL = 2600;
+        SIGNAL_GEOCENTRE_ADDRESS_RANK = 2700 [deprecated = true];
+        SIGNAL_GOOGLE_3DWAREHOUSE_RANK = 2800 [deprecated = true];
+        SIGNAL_SKENERGY_CATEGORY = 2900;
+        SIGNAL_GOOGLE_GEOWIKI_USER_RANK = 3000 [deprecated = true];
+        SIGNAL_WIKIPEDIA_ARTICLES = 3100;
+        SIGNAL_WIKIPEDIA_ARTICLES_IN_OFFICIAL_LANGUAGE = 3101 [deprecated = true];
+        SIGNAL_KML_PLACEMARKS = 3102;
+        SIGNAL_KML_SOURCES = 3103;
+        SIGNAL_PANORAMIO_USERS = 3104 [deprecated = true];
+        SIGNAL_GOOGLE_MAPSHOP_USERS = 3105;
+        SIGNAL_GOOGLE_LOCALSEARCH_DIRECTORY_INFOS = 3106 [deprecated = true];
+        SIGNAL_GOOGLE_MAPS_NAVBOOST_CLICKS = 3107 [deprecated = true];
+        SIGNAL_GOOGLE_MAPS_NAVBOOST_CLICKTHROUGH_RATE = 3108 [deprecated = true];
+        SIGNAL_GOOGLE_RBL_CLICKS = 3109;
+        SIGNAL_GOOGLE_RBL_CLICK_FRACTION = 3110;
+        SIGNAL_GOOGLE_AUTHORITYPAGE_PAGERANK = 3111 [deprecated = true];
+        SIGNAL_GOOGLE_AUTHORITYPAGE_PAGERANK_CONFIDENCE = 3112;
+        SIGNAL_GOOGLE_REVIEWS = 3113;
+        SIGNAL_GOOGLE_WEB_QUERYVOL = 3114;
+        SIGNAL_GOOGLE_WEBPAGE_REFERENCE_DOMAINS = 3115 [deprecated = true];
+        SIGNAL_GOOGLE_LISTING_IMPRESSIONS = 3116;
+        SIGNAL_GOOGLE_INFOWINDOW_VIEWS = 3117;
+        SIGNAL_GOOGLE_DIRECTION_REQUESTS = 3118;
+        SIGNAL_GOOGLE_HOMEPAGE_CLICKS = 3119;
+        SIGNAL_GOOGLE_CHAIN_STORES = 3120;
+        SIGNAL_FLICKR_USERS = 3122 [deprecated = true];
+        SIGNAL_GOOGLE_LEANBACK_TOURS = 3123;
+        SIGNAL_GOOGLE_LOCALSEARCH_PLACERANK = 3200;
+        SIGNAL_WIKIPEDIA_WIKI_SCORE = 3300;
+        SIGNAL_ZENRIN_CITY_CATEGORY = 3400 [deprecated = true];
+        SIGNAL_ZENRIN_BUILDING_CLASS = 3401 [deprecated = true];
+        SIGNAL_ZENRIN_PEAK_CLASS = 3402 [deprecated = true];
+        SIGNAL_PLACE_INSIGHTS_LANDMARK = 3500;
+        SIGNAL_PLACE_INSIGHTS_POPULARITY = 3501;
+        SIGNAL_PLACE_INSIGHTS_PROMINENCE = 3502;
+        SIGNAL_PLACE_INSIGHTS_APPROACHABILITY = 3503;
+        SIGNAL_PLACE_INSIGHTS_TOTAL_ROAD_SEGMENT_USAGE = 3504;
+    }
+    
+    optional float rank = 2;
+    optional float raw_scalar = 4;
+    optional string raw_string = 5;
+    optional FieldMetadataProto metadata = 500;
+    
+    reserved 3;
+}

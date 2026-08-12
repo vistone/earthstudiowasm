@@ -1,0 +1,71 @@
+syntax = "proto2";
+
+package logs.vms.databack;
+
+import "google/protobuf/wrappers.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.logging.geo.vms.databack";
+
+message LaneElementDetail {
+    optional ElementType lane_type = 1;
+    enum ElementType {
+        UNKNOWN_ELEMENT_TYPE = 0;
+        PHYSICAL_LANE_ELEMENT = 2;
+        LANE_STRIPE_ELEMENT = 33;
+        LINEAR_STRUCTURE_ELEMENT = 35;
+    }
+    
+    optional BodyFrameCoordinateSequence line_of_extrusion = 2;
+    optional google.protobuf.FloatValue average_element_width_meters = 3;
+    
+    oneof element_type {
+        LaneStripeElementDetail lane_stripe_element_detail = 4;
+    }
+}
+
+message BodyFrameCoordinateSequence {
+    repeated google.protobuf.FloatValue deprecated_x_meters = 1 [deprecated = true];
+    repeated google.protobuf.FloatValue deprecated_y_meters = 2 [deprecated = true];
+    repeated google.protobuf.FloatValue deprecated_z_meters = 3 [deprecated = true];
+    repeated float x_meters = 5 [packed = true];
+    repeated float y_meters = 6 [packed = true];
+    repeated float z_meters = 7 [packed = true];
+    repeated double y_variances = 4 [packed = true];
+}
+
+message LaneStripeElementDetail {
+    optional LaneElementLogicalColor logical_color = 1;
+    enum LaneElementLogicalColor {
+        UNKNOWN_COLOR = 0;
+        WHITE_COLOR = 1;
+        YELLOW_COLOR = 2;
+        BLUE_COLOR = 3;
+        RED_COLOR = 4;
+        GREEN_COLOR = 5;
+        ORANGE_COLOR = 6;
+    }
+    
+    optional LaneStripePattern pattern = 2;
+    enum LaneStripePattern {
+        UNKNOWN_PATTERN = 0;
+        SINGLE_LINE_SOLID_PATTERN = 17;
+        SINGLE_LINE_DASHED_PATTERN = 18;
+        DOUBLE_LINE_SOLID_PATTERN = 33;
+        DOUBLE_LINE_DASHED_PATTERN = 34;
+        DOUBLE_LINE_SOLID_LEFT_DASHED_RIGHT_PATTERN = 35;
+        DOUBLE_LINE_SOLID_RIGHT_DASHED_LEFT_PATTERN = 36;
+    }
+    
+    repeated LaneStripeMaterial materials = 3 [packed = true];
+    enum LaneStripeMaterial {
+        UNKNOWN_MATERIAL = 0;
+        PAINT_STRIPE = 1;
+        ROUND_DOT = 2;
+        SQUARE_DOT = 3;
+    }
+    
+    optional google.protobuf.FloatValue dash_length_meters = 4;
+    optional google.protobuf.FloatValue dash_ratio = 5;
+}

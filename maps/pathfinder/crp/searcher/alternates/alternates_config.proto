@@ -1,0 +1,37 @@
+syntax = "editions";
+
+package pathfinder.crp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message AlternatesConfig {
+    optional double max_detour_stretch_factor = 8;
+    optional double max_sharing_factor = 9;
+    optional double min_local_optimality_factor = 10;
+    optional bool check_plateau_dominance = 11;
+    optional bool check_plateau_sibling_pair = 14;
+    
+    optional ViaPlateauPathPriorityConfig via_plateau_path_priority_config = 13;
+    message ViaPlateauPathPriorityConfig {
+        optional int32 path_duration_weight = 1;
+        optional int32 sharing_duration_weight = 2;
+        optional int32 prefix_sharing_cost_weight = 3;
+        optional int32 plateau_duration_weight = 4;
+    }
+    
+    repeated ConfigByOptTripDuration configs_by_opt_trip_duration = 12;
+    message ConfigByOptTripDuration {
+        optional int32 max_trip_duration_minutes = 4;
+        optional double max_stretch_factor = 2;
+        
+        repeated PartitionMarkingConfig partition_marking_configs = 3;
+        message PartitionMarkingConfig {
+            optional int32 max_duration_minutes = 1;
+            optional int32 partition_level = 2;
+        }
+        
+        reserved 1;
+    }
+    
+    reserved 1 to 7;
+}

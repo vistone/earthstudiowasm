@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package maps_rdp_logs;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedDecorationConfig {
+    optional string domain = 1;
+    optional string name = 2;
+    repeated LoggedPolylineDecorationDescriptionDependency polyline_description = 3 [deprecated = true];
+    repeated LoggedSummaryDecorationDescriptionDependency summary_description = 4;
+    repeated string reserved_decoration_names = 5;
+}
+
+message LoggedPolylineDecorationDescriptionDependency {
+    optional string name = 1;
+}
+
+message LoggedSummaryDecorationDescriptionDependency {
+    optional string name = 1;
+}

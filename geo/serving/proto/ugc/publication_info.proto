@@ -1,0 +1,66 @@
+syntax = "editions";
+
+package geo_serving_proto.ugc;
+
+import "geo/serving/proto/link/link.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPUGC";
+option java_multiple_files = true;
+option java_outer_classname = "PublicationInfoProto";
+option java_package = "com.google.geo.serving.proto.ugc";
+
+message PublicationInfo {
+    oneof moderation_status_info {
+        PreparingInfo preparing_info = 6;
+        FailedToStartInfo failed_to_start_info = 7;
+        PendingInfo pending_info = 8;
+        DeniedInfo denied_info = 9;
+        ApprovedInfo approved_info = 10;
+    }
+    
+    reserved 1 to 5;
+    
+    message PreparingInfo {
+        optional string label_text = 1;
+        optional string summary = 2;
+    }
+    
+    message FailedToStartInfo {
+        optional string label_text = 1;
+        optional string summary = 2;
+        optional string detailed_explanation = 3;
+    }
+    
+    message PendingInfo {
+        optional string label_text = 1;
+        optional string summary = 2;
+        optional string detailed_explanation = 3;
+    }
+    
+    message DeniedInfo {
+        optional string label_text = 1;
+        optional string summary = 2;
+        optional string detailed_explanation = 3;
+        
+        optional DeniedReason reason = 7;
+        enum DeniedReason {
+            option features = enum_type: CLOSED
+            ;
+            UNKNOWN_DENIED_REASON = 0;
+            VIOLATION = 1;
+        }
+        
+        optional geo_serving_proto.link.Link moderation_status_link = 5;
+        optional geo_serving_proto.link.Link help_center_link = 6;
+        
+        reserved 4;
+    }
+    
+    message ApprovedInfo {
+        optional string label_text = 1;
+    }
+}

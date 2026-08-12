@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message ElevationModelProto {
+    required int32 data_level = 1;
+    required int32 data_maxlevel = 2;
+    optional bool partial_child_data_available = 3;
+    optional bool full_child_data_available = 4;
+    optional int32 blend_order = 5;
+    optional .proto2.bridge.MessageSet elevation_data = 6;
+}

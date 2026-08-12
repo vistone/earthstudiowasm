@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/peak.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message ElevationProto {
+    optional double average_elevation_meters = 1;
+    optional PeakProto peak = 3;
+    
+    reserved 2;
+}

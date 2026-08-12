@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package geo_serving_proto.place;
+
+import "frameworks/client/data/data_annotation.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPC";
+option java_multiple_files = true;
+option java_outer_classname = "PlaceIdsProto";
+option java_package = "com.google.geo.serving.proto.place";
+
+message PlaceIdentifier {
+    optional string feature_id = 1;
+    optional string docid = 2;
+    optional bytes synthetic_id = 3;
+    optional string location_mid = 4;
+    optional string place_id = 5;
+    optional string unobfuscated_gmb_listing_id = 6;
+    optional string madison_id = 7;
+    optional string hotel_id = 8;
+    optional string gls_provider_key = 9;
+}

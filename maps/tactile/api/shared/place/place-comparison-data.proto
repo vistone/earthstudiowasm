@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package maps_tactile.shared.place;
+
+import "logs/proto/visual_element/place_comparison_data.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPL";
+option java_multiple_files = true;
+option java_outer_classname = "PlaceComparisonDataProto";
+option java_package = "com.google.maps.tactile.shared.place";
+
+message PlaceComparisonData {
+    optional PlaceComparisonAttributes comparison_attributes = 1;
+    message PlaceComparisonAttributes {
+        optional string ved = 2;
+        optional int32 ve_type = 3 [default = 0x1b6e2];
+        optional .logs.PlaceComparisonData place_comparison_metadata = 4;
+        
+        repeated PlaceComparisonAttribute comparison_attribute = 1;
+        message PlaceComparisonAttribute {
+            oneof content {
+                IconWithLabelAttribute icon_with_label = 1;
+            }
+            
+            message IconWithLabelAttribute {
+                optional bool treat_as_present = 1;
+                optional UrlSet icon_url = 2;
+                optional string label = 3;
+                optional string accessibility_label = 4;
+            }
+            
+            message UrlSet {
+                optional string light_mode_url = 1;
+                optional string dark_mode_url = 2;
+            }
+        }
+    }
+    
+    optional BadgeInfo comparison_badge_info = 2;
+    message BadgeInfo {
+        optional int32 badge_type = 1;
+    }
+}

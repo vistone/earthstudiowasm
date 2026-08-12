@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message LogicalBorderProto {
+    repeated FeatureIdProto border_segment = 1;
+    
+    optional LogicalBorderStatus status = 2 [default = STATUS_UNSPECIFIED];
+    enum LogicalBorderStatus {
+        STATUS_UNSPECIFIED = 0;
+        STATUS_NORMAL = 1;
+        STATUS_DISPUTED = 2;
+    }
+}

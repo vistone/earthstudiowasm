@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/property_value_status_enum.proto";
+import "geostore/edit/feature_property_id.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message PropertyValueStatusProto {
+    optional FeaturePropertyIdProto property_id = 1;
+    optional PropertyValueStatus value_status = 2;
+}

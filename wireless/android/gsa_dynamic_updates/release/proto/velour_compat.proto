@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package velour;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "VelourCompatProto";
+option java_package = "com.google.velour";
+
+message ApiCompatInfo {
+    optional string api_name = 1;
+    repeated int32 compatible_sdks = 2;
+}
+
+message VelourCompatInfo {
+    repeated ApiCompatInfo api_compats = 1;
+}

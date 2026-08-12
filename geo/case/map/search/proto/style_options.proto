@@ -1,0 +1,21 @@
+syntax = "editions";
+
+package geo.casemap.search;
+
+import "geo/case/map/search/proto/photo_pin_size.proto";
+import "geo/case/map/search/proto/pin_style.proto";
+
+option features = enum_type: CLOSED
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.casemap.search.proto";
+
+message StyleOptions {
+    optional PinStyle pin_style = 1;
+    optional PhotoPinSize photo_pin_size = 4 [default = PHOTO_PIN_SIZE_LARGE];
+    
+    oneof transparency_options {
+        bool make_icon_transparent = 2;
+        bool make_transparent_photo_pin = 3;
+    }
+}

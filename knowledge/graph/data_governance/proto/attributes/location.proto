@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package ke.governance;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LocationAttributes {
+    enum RegionType {
+        UNKNOWN = 0;
+        FRONTEND_REGION_CODE = 1;
+        TRUSTED_LOCATION_VIEW_REGION_CODE = 2;
+    }
+}
+
+message TypedRegions {
+    repeated string regions = 1;
+    LocationAttributes.RegionType region_type = 2;
+}

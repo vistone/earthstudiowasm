@@ -1,0 +1,104 @@
+syntax = "editions";
+
+package maps_versatile;
+
+import "geostore/base/proto/accesspoint.proto";
+import "geostore/base/proto/building.proto";
+import "geostore/base/proto/datasourceprovider.proto";
+import "geostore/base/proto/establishment.proto";
+import "geostore/base/proto/feature.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/openinghours.proto";
+import "geostore/base/proto/point.proto";
+import "geostore/base/proto/rect.proto";
+import "geostore/base/proto/relation.proto";
+import "geostore/base/proto/timezone.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/versatile/proto/data-bound-value.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option java_package = "com.google.maps.versatile";
+
+message VectorFeatureProto {
+    optional geostore.FeatureIdProto feature_id = 1;
+    optional string mid = 33;
+    optional geostore.FeatureProto.TypeCategory type = 2;
+    repeated geostore.DataSourceProvider.Provider provider = 6 [features = ];
+    optional string country_code = 7;
+    repeated string unioned_country_code = 21;
+    optional float rank = 3;
+    optional geostore.RectProto preferred_viewport = 4;
+    repeated FeatureNameProto name = 5;
+    optional geostore.EstablishmentProto.TypeCategory establishment_type = 8 [default = TYPE_UNDEFINED, deprecated = true];
+    repeated geostore.RelationProto related_feature = 9;
+    optional geostore.BuildingProto building = 16;
+    optional IndoorLevelMetadata level = 17;
+    optional string localization_policy_id = 18;
+    optional geostore.PointProto center = 19;
+    optional fixed64 route_fprint = 20;
+    optional geostore.OpeningHoursProto opening_hours = 23;
+    optional geostore.TimezoneProto timezone = 25;
+    optional FeatureDebugInfo debug_info = 24 [deprecated = true];
+    repeated FeatureDebugInfo feature_debug_info = 31;
+    repeated fixed64 station_fprint = 26;
+    optional ElectricVehicleChargingStationMetadata ev_charging_station = 27;
+    repeated AnnotationAttribute annotation_attributes = 32;
+    repeated AnnotationAttribute target_annotation_attributes = 34;
+    optional fixed64 num_contained_establishments = 29 [deprecated = true];
+    repeated geostore.AccessPointProto access_points = 35;
+    optional bool has_service_areas = 37;
+    
+    reserved 22, 28, 30, 36;
+}
+
+message FeatureNameProto {
+    repeated FeatureNameTranslation translation = 1;
+    optional .proto2.bridge.MessageSet temp_data = 3;
+    optional DataBoundValue.DataBindingKey data_binding_key = 4;
+    
+    reserved 2;
+    
+    reserved "preferred_translation_index";
+}
+
+message FeatureNameTranslation {
+    optional string text = 1;
+    optional string language = 2;
+}
+
+message IndoorLevelMetadata {
+    optional float number = 1 [default = 0];
+    repeated geostore.FeatureIdProto building = 2;
+    optional int32 abbreviated_name_index = 3;
+}
+
+message FeatureDebugInfo {
+    repeated geostore.FeatureIdProto combined_feature_id = 1 [deprecated = true];
+    optional geostore.FeatureIdProto combined_original_id = 2;
+    optional geostore.FeatureIdProto cartographic_original_id = 3;
+    optional geostore.FeatureIdProto geopolitical_original_id = 4;
+    
+    extend .proto2.bridge.MessageSet {
+        optional FeatureDebugInfo message_set_extension = 340743196;
+    }
+}
+
+message ElectricVehicleChargingStationMetadata {
+    repeated ElectricVehicleChargingPort port = 1;
+    message ElectricVehicleChargingPort {
+        optional int32 connector_type = 1;
+        optional float power_kw = 2;
+    }
+}
+
+message AnnotationAttribute {
+    optional int32 namespace_id = 1;
+    optional int32 attribute_id = 2;
+    repeated fixed32 experiment_id = 3 [features = repeated_field_encoding: PACKED
+    ];
+}

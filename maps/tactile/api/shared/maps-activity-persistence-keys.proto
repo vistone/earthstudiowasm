@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "MapsActivityPersistenceKeysProto";
+option java_package = "com.google.maps.tactile";
+
+message PersistenceKeys {
+    optional string place_visit_user_edits = 1 [deprecated = true];
+    optional string aliased_locations = 2 [deprecated = true];
+    optional string focus_contacts = 3 [deprecated = true];
+    optional string reviews = 4 [deprecated = true];
+    optional string todo_photo_places_denylist = 5 [deprecated = true];
+    optional string user_modified_locations = 6 [deprecated = true];
+    optional string web_and_app_activity = 7 [deprecated = true];
+    optional string offerings = 8 [deprecated = true];
+    optional string commute_parameters = 10 [deprecated = true];
+    optional string frequent_trips = 11 [deprecated = true];
+    optional string place_qa_questions = 12 [deprecated = true];
+    optional string place_qa_answers = 13 [deprecated = true];
+    optional bytes public_user_preferences = 14 [deprecated = true];
+    optional string local_preferences = 15 [deprecated = true];
+    optional string local_personalization_list = 16;
+    
+    repeated OpaqueToken opaque_token = 17;
+    message OpaqueToken {
+        optional bytes content = 1;
+    }
+    
+    reserved 9;
+}

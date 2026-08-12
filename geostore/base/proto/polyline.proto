@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/point.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message PolyLineProto {
+    repeated PointProto vertex = 1;
+    optional FieldMetadataProto metadata = 500;
+    optional .proto2.bridge.MessageSet temporary_data = 15;
+}

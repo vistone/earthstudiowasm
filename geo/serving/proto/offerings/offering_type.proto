@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geo_serving_proto.offerings;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPOF";
+option java_multiple_files = true;
+option java_outer_classname = "OfferingProto";
+option java_package = "com.google.geo.serving.proto.offerings";
+
+enum OfferingType {
+    UNKNOWN_OFFERING_TYPE = 0;
+    DISH = 1;
+    PRODUCT_CATEGORY = 2;
+    ACTIVITY = 3;
+    DEAL = 4;
+    FUSED_TOPIC = 5;
+    ASPECT = 6;
+}

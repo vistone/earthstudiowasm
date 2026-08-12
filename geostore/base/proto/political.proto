@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message PoliticalProto {
+    optional int64 population = 1 [deprecated = true];
+    optional FeatureIdProto capital = 2 [deprecated = true];
+    optional double gross_domestic_product_usd_millions = 3 [deprecated = true];
+    optional float literacy_percent = 4 [deprecated = true];
+    repeated FeatureIdProto claim = 5;
+}

@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package google.geo.earth.operations;
+
+import "google/protobuf/timestamp.proto";
+import "java/com/google/geo/earth/operations/proto/client_supplied_data.proto";
+import "java/com/google/geo/earth/operations/proto/operation_progress.proto";
+import "java/com/google/geo/earth/operations/proto/operation_type.proto";
+
+option java_outer_classname = "OperationMetadataOuterClass";
+option java_package = "com.google.geo.earth.operations";
+
+message OperationMetadata {
+    optional OperationType operation_type = 1;
+    optional protobuf.Timestamp start_time = 8;
+    optional protobuf.Timestamp end_time = 4;
+    optional OperationProgress operation_progress = 6;
+    optional string map_id = 7 [features = ];
+    optional ClientSuppliedData client_supplied_data = 9;
+    
+    reserved 2, 3, 5;
+}

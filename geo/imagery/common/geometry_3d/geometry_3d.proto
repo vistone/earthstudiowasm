@@ -1,0 +1,50 @@
+syntax = "editions";
+
+package geo_imagery_common;
+
+import "geo/imagery/common/geometry_3d/gltf_model.proto";
+import "geo/imagery/common/geometry_3d/transformation.proto";
+import "google/protobuf/empty.proto";
+import "java/com/google/apps/jspb/jspb_generate_object_format.proto";
+import "third_party/protobuf/cpp_features.proto";
+import "third_party/redwood/infrastructure/proto/linear_algebra.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+
+message PolygonProto {
+    optional float height = 3;
+    
+    oneof polygon_type {
+        int32 num_vertices = 1;
+        IrregularPolygonProto irregular_polygon = 2;
+    }
+}
+
+message IrregularPolygonProto {
+    repeated .redwood.Vector2Proto vertices = 1;
+}
+
+message Geometry3DProto {
+    optional AffineTransformationProto base_t_shape = 6;
+    
+    oneof shape {
+        .google.protobuf.Empty point = 8;
+        .google.protobuf.Empty cube = 1;
+        .google.protobuf.Empty cylinder = 2;
+        .google.protobuf.Empty sphere = 3;
+        .google.protobuf.Empty square = 9;
+        PolygonProto polygon = 4;
+        .google.protobuf.Empty circle = 5;
+        .google.protobuf.Empty simple_roof = 10;
+        .google.protobuf.Empty pyramid = 11;
+        GltfModelProto gltf_model = 7;
+    }
+}
+
+message Geometry3DSetProto {
+    optional string label = 1;
+    repeated Geometry3DProto geometry_3d = 2;
+    optional RigidTransformationProto ecef_t_base = 3;
+}

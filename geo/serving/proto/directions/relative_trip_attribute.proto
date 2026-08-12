@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPD";
+option java_multiple_files = true;
+option java_outer_classname = "RelativeTripAttributeProto";
+option java_package = "com.google.geo.serving.proto.directions";
+
+enum RelativeTripAttribute {
+    UNKNOWN_RELATIVE_TRIP_ATTRIBUTE = 0;
+    SHORTEST_DURATION = 1;
+    CHEAPEST = 2;
+    FEWEST_TRANSIT_TRANSFERS = 3;
+    LEAST_CROWDED_SHARED_VEHICLES = 4;
+}

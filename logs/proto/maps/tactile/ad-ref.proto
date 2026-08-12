@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package logs_tactile;
+
+import "geo/serving/proto/ads/ad_type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGST";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.tactile";
+
+message LoggedAdRef {
+    optional int32 ads_response_id = 1;
+    optional int32 text_ad_index = 2;
+    optional int32 text_ad_location_index = 3;
+    optional geo_serving_proto.ads.AdType ad_type = 4;
+}

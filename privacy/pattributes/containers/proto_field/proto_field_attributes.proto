@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package pattributes;
+
+import "privacy/pattributes/containers/proto_field/proto_field_upload_justification.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.pattributes.proto";
+
+message ProtoFieldAttributes {
+    optional ProtoFieldUploadJustification upload_justification = 161;
+}

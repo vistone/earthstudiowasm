@@ -1,0 +1,45 @@
+syntax = "editions";
+
+package geo_serving_proto.link;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPLI";
+option java_multiple_files = true;
+option java_outer_classname = "LinkProto";
+option java_package = "com.google.geo.serving.proto.link";
+
+message Link {
+    optional string ved = 4;
+    optional int32 client_de_type = 9;
+    optional string url = 1;
+    optional string app_clip_url = 11;
+    optional string help_context = 6;
+    
+    optional OpenHint open_hint = 7;
+    enum OpenHint {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_OPEN_HINT = 0;
+        EMBEDDED = 1;
+        EXTERNAL = 2;
+        POPUP = 3;
+        DEPRECATED_UNIVERSAL_APP_POPUP_FALLBACK = 4 [deprecated = true];
+        NATIVE_APP = 5;
+        APP_CLIP = 6;
+    }
+    
+    repeated OpenHint fallback_open_hint = 12;
+    
+    optional UrlMutation dark_theme_query_param = 8;
+    message UrlMutation {
+        optional string query_param_name = 1;
+        optional string query_param_value = 2;
+    }
+    
+    reserved 2, 3, 5;
+}

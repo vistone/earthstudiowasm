@@ -1,0 +1,47 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "maps/tactile/api/search-restrict-enums.proto";
+import "maps/tactile/api/shared/hotels/hotel-booking-options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "SearchRestrictParamsProto";
+option java_package = "com.google.maps.tactile";
+
+message SearchTimeRestrictParams {
+    optional TimeType time_type = 1 [default = ANY_TIME];
+    optional uint64 restrict_time = 2 [default = 0, deprecated = true];
+}
+
+message VacationRentalsRestrictParams {
+    repeated AllowedVacationRentalAmenity amenity = 1;
+    optional int32 min_bedrooms = 2;
+    optional int32 min_bathrooms = 3;
+}
+
+message SearchRestrictParams {
+    repeated AllowedPriceLevel price_level = 1;
+    optional SearchTimeRestrictParams opening_hours = 2;
+    repeated AllowedStars star_class = 4;
+    optional string zagat_list_id = 7;
+    optional bool zagat_rated = 18;
+    optional AllowedStars minimum_star_rating = 8;
+    optional HotelBookingOptions hotel_booking_options = 9;
+    repeated string cuisine_gcid = 12;
+    optional int32 distance_in_meters = 13;
+    optional int32 min_hotel_price = 14;
+    optional int32 max_hotel_price = 15;
+    optional bool hotel_deals_only = 19;
+    optional bool hotel_google_one_only = 22;
+    optional bool hotel_covid19_responder_policy_only = 25;
+    optional bool experimental_enable_on_map_ratings = 16;
+    repeated AllowedHotelAmenity hotel_amenity = 20;
+    optional AllowedPropertyType property_type = 21;
+    optional VacationRentalsRestrictParams vacation_rentals = 23;
+    optional string location_container_mid = 24;
+    
+    reserved 3, 5, 6, 10, 11, 17;
+}

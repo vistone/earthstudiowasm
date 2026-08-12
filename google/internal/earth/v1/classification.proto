@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.classification;
+
+import "google/type/color.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ClassificationProto";
+option java_package = "com.google.internal.earth.v1.classification";
+
+message ListClassificationSystemsRequest {
+    
+}
+
+message ListClassificationSystemsResponse {
+    repeated ClassificationSystem classification_systems = 1;
+}
+
+message ListClassificationSystemClassesRequest {
+    optional string system_id = 1;
+}
+
+message ListClassificationSystemClassesResponse {
+    repeated ClassificationSystemClass classes = 1;
+}
+
+message ClassificationSystem {
+    optional string system_id = 1;
+    optional string display_name = 2;
+}
+
+message ClassificationSystemClass {
+    optional string class_id = 1;
+    optional string code = 2;
+    optional string display_name = 3;
+    optional type.Color color = 4;
+}

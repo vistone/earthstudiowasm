@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geo_moderation;
+
+import "geo/contentflows/proto/content_reference.proto";
+import "geo/moderation/service/proto/contributed_content_piece_reference.proto";
+import "geo/moderation/service/proto/contributor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.geo.moderation.proto1api";
+
+message AnnotationTarget {
+    oneof target {
+        geo_content_flows.ContentReferenceProto content_reference = 4;
+        ContributedContentPieceReference contributed_content_piece_reference = 1 [deprecated = true];
+        Contributor contributor = 3;
+    }
+    
+    reserved 2;
+}

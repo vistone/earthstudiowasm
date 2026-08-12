@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package maps_roadtraffic;
+
+option java_package = "com.google.roadtraffic.proto";
+
+message PathEncodingRequestParameters {
+    optional bool encode_full_path = 1 [default = false, deprecated = true];
+}

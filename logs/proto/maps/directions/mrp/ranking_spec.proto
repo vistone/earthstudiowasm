@@ -1,0 +1,50 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/proto/maps/directions/mrp/annotator_spec.proto";
+import "logs/proto/maps/directions/mrp/cost_function_spec.proto";
+import "logs/proto/maps/directions/mrp/ranking_rule.proto";
+import "logs/proto/maps/directions/mrp/relevance_model.proto";
+import "logs/proto/maps/pathfinder/client/experiments.proto";
+import "logs/proto/maps/pathfinder/client/find-path-input.proto";
+import "maps/roadtraffic/proto/travel_mode.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedRankingSpecProto {
+    optional LoggedAnnotatorTreeSpecProto pre_cull_annotators = 1;
+    repeated LoggedSelectorSpecProto selectors = 2;
+    optional bool ensure_consistent_selection_ignoring_penalties = 12;
+    optional LoggedRelevanceModelProto relevance_model = 3;
+    optional double min_similarity_score = 4;
+    optional int32 num_to_retain = 5;
+    optional LoggedAnnotatorTreeSpecProto post_cull_annotators = 6;
+    optional bool include_all_candidates = 7;
+    optional pathfinder.client.LoggedRequeryInput requery_input = 8;
+    
+    optional LoggedQueryFlavor query_flavor = 10;
+    enum LoggedQueryFlavor {
+        UNKNOWN_QUERY_FLAVOR = 0;
+        INDEPENDENT_FLAVOR = 1;
+        UPDATE_FLAVOR = 2;
+        UPDATE_OR_BETTER_FLAVOR = 3;
+        REROUTE_FLAVOR = 4;
+        UPDATE_INITIAL_NOT_VIABLE_FLAVOR = 5;
+    }
+    
+    repeated LoggedAnnotatorSpecProto pre_cull_annotator_specs = 13;
+    repeated LoggedAnnotatorSpecProto post_cull_annotator_specs = 14;
+    
+    optional LoggedCustomizationTripPropertiesSpecProto customization_trip_properties = 15;
+    message LoggedCustomizationTripPropertiesSpecProto {
+        repeated string qualified_names = 1;
+        map<string, string> replacement_to_original_qualified_names = 2;
+    }
+    
+    optional maps_roadtraffic.TravelMode standard_traversal_model = 16 [default = TRAVEL_MODE_UNSPECIFIED];
+    optional bool enable_risk_averse_routing = 17 [default = false];
+    optional bool force_trigger_risk_averse_routing = 18 [default = false, deprecated = true];
+    optional pathfinder.client.LoggedExperimentalParameters.RiskAverseRoutingVersion risk_averse_routing_version = 19;
+    optional bool use_rule_based_ranking_strategy = 21 [deprecated = true];
+    optional LoggedRankingRuleProto ranking_rule = 22;
+}

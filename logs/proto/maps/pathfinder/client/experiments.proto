@@ -1,0 +1,430 @@
+syntax = "editions";
+
+package logs.proto.maps.pathfinder.client;
+
+import "google/protobuf/empty.proto";
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/roadtraffic/proto/traffic_model_type.proto";
+import "maps/pathfinder/client/experiments.proto";
+import "maps/pathfinder/crp/shared_server/route_attributes.proto";
+import "maps/pathfinder/shared/config/crp_dynamic_config.proto";
+import "maps/pathfinder/shared/proto/alternates_method.proto";
+import "maps/pathfinder/shared/proto/route_type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_outer_classname = "ExperimentsProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedExperimentalParameters {
+    optional bool internal_dogfood = 1 [default = false];
+    optional int32 transit_routing_strategy = 3 [default = 0];
+    optional bool block_transfer_merge_step = 4 [default = false];
+    optional bool reroute_default_accept = 25 [default = false];
+    optional bool force_legacy_dynamic_reroute_prompt = 29 [default = false, deprecated = true];
+    optional int32 transit_path_api = 32 [default = 0];
+    optional int32 transit_connection_api = 33 [default = 0];
+    optional bool suppress_obvious_name_changes = 42 [default = false];
+    optional bool use_precomputed_walking_maneuvers = 44 [default = false, deprecated = true];
+    optional bool enable_counted_turns_for_nav = 48 [default = false];
+    optional bool override_turn_obviousness = 49 [default = false];
+    optional bool enable_presorted_step_cues = 51 [default = false, deprecated = true];
+    optional string outdoor_landmark_countries = 52 [deprecated = true];
+    optional bool use_experimental_penalties = 55 [default = false];
+    optional bool use_distinct_exit_step_cue_types = 60 [default = false];
+    optional bool disable_dynamic_turn_speeds = 61;
+    optional int32 better_eta_min_improvement_seconds = 62 [deprecated = true];
+    optional LoggedEtaAdjustment eta_adjustment = 63;
+    optional int32 taxi_result_ranking = 64 [default = 0];
+    optional bool force_non_toll_alternate = 66;
+    optional bool enable_avoid_unprotected_turns = 68 [deprecated = true];
+    
+    optional LoggedAlternatesRankingStrategy ranking_strategy = 69 [default = DEFAULT_BEST_PATH];
+    enum LoggedAlternatesRankingStrategy {
+        DEFAULT_BEST_PATH = 0;
+        SHORTEST_DISTANCE = 1;
+        TARGET_DISTANCE = 2;
+    }
+    
+    optional bool taxi_disable_product_time_restrictions = 70 [default = false];
+    
+    optional LoggedSlownessPenaltyType route_with_slowness_penalties = 79;
+    enum LoggedSlownessPenaltyType {
+        SLOWNESS_PENALTIES_NONE = 0;
+        SLOWNESS_PENALTIES_ABSOLUTE_SPEED_V1 = 1;
+        SLOWNESS_PENALTIES_ABSOLUTE_SPEED_V2 = 2;
+        SLOWNESS_PENALTIES_ABSOLUTE_SPEED_V3 = 3;
+        SLOWNESS_PENALTIES_DIFF_FROM_FREEFLOW_V1 = 4;
+        SLOWNESS_PENALTIES_DIFF_FROM_FREEFLOW_V2 = 5;
+        SLOWNESS_PENALTIES_DIFF_FROM_FREEFLOW_V3 = 6;
+    }
+    
+    repeated int32 transit_long_distance_strategy = 102;
+    optional int32 max_dynacore_1_state_reach_limit = 74 [default = 0];
+    optional bool enable_dynamic_penalties = 75;
+    optional int32 target_distance_meters = 81;
+    optional double max_dynacore_similarity_threshold = 83 [default = 0, deprecated = true];
+    optional bool disable_static_alternate_min_improvement_seconds = 84 [default = false, deprecated = true];
+    optional bool output_path_costs = 85 [default = false];
+    optional bool send_polylines_for_traffic_reports = 89 [default = false];
+    optional bool enable_precomputed_alternates = 90 [default = false, deprecated = true];
+    optional bool use_crp = 91 [default = false];
+    optional bool use_fallback_for_crp = 92 [default = true];
+    optional bool only_dynamic_route = 98 [default = false];
+    optional string study_census_tag = 99;
+    optional bool enable_transit_avoid_vehicle_rail = 100 [default = false];
+    optional bool annotate_paths_with_segment_properties = 103 [default = false];
+    optional bool forward_request_to_new_pathserver = 109 [default = false];
+    optional bool force_disable_traffic_for_path = 111 [default = false];
+    
+    optional LoggedHistoricalDeviationsIntervalType vehicle_departure_time_deviations_interval_type = 112;
+    enum LoggedHistoricalDeviationsIntervalType {
+        HISTORICAL_DEVIATIONS_UNKNOWN = 0;
+        HISTORICAL_DEVIATIONS_FAKE_FOR_TESTING = 1;
+        HISTORICAL_DEVIATIONS_EXTRA_SMALL = 2;
+        HISTORICAL_DEVIATIONS_SMALL = 3;
+        HISTORICAL_DEVIATIONS_MEDIUM = 4;
+        HISTORICAL_DEVIATIONS_LARGE = 5;
+        HISTORICAL_DEVIATIONS_EXTRA_LARGE = 6;
+    }
+    
+    optional bool annotate_paths_with_search_properties = 113 [default = false];
+    optional bool output_traffic_data_server_log_data = 114 [default = false];
+    optional bool enable_atomic_crosswalks = 119;
+    optional bool force_mrp_consumer_core = 123 [default = false];
+    optional bool is_tactile_desktop = 149 [default = false];
+    optional bool force_mrp = 124 [default = false];
+    optional bool force_unprocessable_by_mrp = 133 [default = false];
+    optional bool allow_mrp_local_timezone = 144 [default = false, deprecated = true];
+    optional bool allow_mrp_arrival_time_anchoring = 145 [default = false];
+    optional bool allow_mrp_one_to_one_walking = 156 [default = false];
+    optional int32 num_checked_important_stations_near_source_or_target = 128 [default = -1];
+    optional bool enable_restricted_zones = 130 [default = false];
+    optional bool enable_crp_dynamic_closures = 132 [default = false];
+    optional bool enable_crp_alternates = 160;
+    optional bool use_crp_reference_trip = 244;
+    optional bool enable_fuel_consumption_annotation = 134;
+    optional bool enable_igmm_multiple_bikesharing_providers = 140;
+    optional string blended_personalized_ranking_config_id = 141;
+    optional bool use_crp_global_shards = 143 [default = false];
+    optional bool compute_better_route_prompt_threshold_from_rate_card = 146 [default = false];
+    optional bool use_crp_global_americas_shard = 151 [default = false];
+    optional bool use_crp_global_apac_shard = 152 [default = false];
+    optional bool use_crp_global_emea_shard = 153 [default = false];
+    
+    optional LoggedTravelTimeExternalityExperiment travel_time_externality_experiment = 154;
+    enum LoggedTravelTimeExternalityExperiment {
+        NO_EXTERNALITY_EXPERIMENT = 0;
+        MEASUREMENT_EXPERIMENT = 1;
+    }
+    
+    optional bool ignore_search_method_penalties = 155 [default = false];
+    optional bool enable_mrp_hints = 157 [default = false];
+    optional bool force_disable_mrp_hints = 161 [default = false];
+    optional bool force_enable_mrp_hints = 162 [default = false];
+    optional bool enable_hov_etas = 184 [default = false];
+    optional bool enable_hov_routing_and_etas = 185 [default = false];
+    optional bool enable_risk_averse_routing = 202 [default = false];
+    optional bool force_trigger_risk_averse_routing = 203 [default = false];
+    
+    optional RiskAverseRoutingVersion risk_averse_routing_version = 204;
+    enum RiskAverseRoutingVersion {
+        RISK_AVERSE_ROUTING_VERSION_UNSPECIFIED = 0;
+        RISK_AVERSE_ROUTING_VERSION_REFERENCE_ROUTE = 1 [deprecated = true];
+        RISK_AVERSE_ROUTING_VERSION_PRIMARY_CH_ROUTE = 2;
+    }
+    
+    optional ExperimentGroup experiment_group = 237;
+    enum ExperimentGroup {
+        EXPERIMENT_GROUP_UNSPECIFIED = 0;
+        EXPERIMENT_GROUP_CONTROL = 1;
+        EXPERIMENT_GROUP_TEST = 2;
+    }
+    
+    optional bool enable_rule_based_ranking = 252 [deprecated = true];
+    
+    enum LoggedTrafficRoutingStrategy {
+        TRAFFIC_ROUTING_DEFAULT = 0;
+        TRAFFIC_ROUTING_PLAIN_ALTERNATES = 1;
+        DEPRECATED_TRAFFIC_ROUTING_RUSH_HOUR_ALTERNATES = 2;
+        TRAFFIC_ROUTING_DYNACORE = 3;
+        DEPRECATED_TRAFFIC_ROUTING_DYNACORE_V2 = 4;
+        DEPRECATED_TRAFFIC_ROUTING_DYNACORE_V1_DROP = 5;
+        DEPRECATED_TRAFFIC_ROUTING_DYNACORE_V1_NO_DROP = 6;
+        DEPRECATED_TRAFFIC_ROUTING_DYNACORE_V1 = 7;
+    }
+    
+    enum LoggedTransitApiState {
+        BACKEND_DECIDES = 0;
+        FORCE_ENABLE = 1;
+        FORCE_DISABLE = 2;
+    }
+    
+    enum LoggedTaxiResultRanking {
+        TAXI_DEFAULT_RANKING = 0;
+        TAXI_DOWNRANK_CARPOOL_RESULTS = 3;
+    }
+}
+
+message LoggedExperimentTripSetLogData {
+    optional bool personal_route_counterfactual = 4 [default = false, deprecated = true];
+    optional int32 rank_of_dynacore_route = 6;
+    repeated LoggedTripLogData trip_log_data = 7;
+    optional LoggedCrpLogData crp_log_data = 10;
+    optional LoggedFindPathLatency latencies = 11;
+    optional uint64 request_timestamp_s = 12;
+    optional uint64 mapfacts_timestamp_s = 13;
+    
+    optional RiskAverseRoutingStatus risk_averse_routing_status = 16;
+    enum RiskAverseRoutingStatus {
+        RISK_AVERSE_ROUTING_STATUS_UNKNOWN = 0;
+        RISK_AVERSE_ROUTING_STATUS_NOT_TRIGGERED = 1;
+        RISK_AVERSE_ROUTING_STATUS_PRIMARY_TRIP_UNMODIFIED = 2;
+        RISK_AVERSE_ROUTING_STATUS_PRIMARY_TRIP_MODIFIED = 3;
+    }
+    
+    optional string ranking_rule = 18;
+}
+
+message LoggedFindPathLatency {
+    optional int32 total_latency_ms = 1;
+    optional int32 describer_latency_ms = 2;
+}
+
+message LoggedCrpStatus {
+    optional int32 code = 1;
+    optional string space = 2;
+    optional string message = 3;
+    optional int32 canonical_code = 6;
+    
+    optional LoggedCrpStatusType type = 7;
+    enum LoggedCrpStatusType {
+        NONE = 0;
+        ROUTE_NOT_FOUND = 1;
+        SLOW = 2;
+        ENDPOINT_FAILED = 3;
+        DESCRIBER_FAILED = 4 [deprecated = true];
+        CRP_GRAPH_MISMATCH = 5;
+        INPUT_INVALID = 6;
+        OTHER = 7;
+        HAS_ACTIVE_TIMEBASED_RESTRICTION = 8 [deprecated = true];
+        AVOID_HIGHWAYS = 9 [deprecated = true];
+        AVOID_FERRIES = 10 [deprecated = true];
+        AVOID_TOLLS = 11 [deprecated = true];
+        AVOID_LICENSE_PLATE_RESTRICTIONS = 12 [deprecated = true];
+        INPUT_HAS_DYNAMIC_CLOSURE = 13 [deprecated = true];
+        TOO_MANY_WAY_POINTS = 14;
+        ENDPOINT_FRACTION_INVALID = 16;
+        RPC_TO_CRP_FAILED = 17;
+        UNEXPECTED_PGRAPH_INCONSISTENCY = 18;
+        CRP_RETURNED_UNKNOWN_ENDPOINT = 19;
+        QUERY_NOT_SENT_UNKNOWN_OPTION = 20;
+        QUERY_NOT_SENT_AVOID_HIGHWAYS = 21 [deprecated = true];
+        QUERY_NOT_SENT_AVOID_TOLLS = 22 [deprecated = true];
+        QUERY_NOT_SENT_AVOID_FERRIES = 23 [deprecated = true];
+        QUERY_NOT_SENT_ALLOW_INDOOR = 24;
+        QUERY_NOT_SENT_AVOID_LICENSE_PLATE_RESTRICTIONS = 25;
+        QUERY_NOT_SENT_AVOID_INACCESSIBLE = 26;
+        QUERY_NOT_SENT_PREFER_INDOOR_WALKING = 27;
+        QUERY_NOT_SENT_PREFER_TAXI_LANES = 28 [deprecated = true];
+        QUERY_NOT_SENT_USE_ENERGY_CONSCIOUS_ROUTING = 29;
+        QUERY_NOT_SENT_USE_FUEL_CONSUMPTION_ROUTING = 30;
+        QUERY_NOT_SENT_IS_API_REQUEST = 32;
+        QUERY_NOT_SENT_IS_ENTERPRISE_API_REQUEST = 33 [deprecated = true];
+        QUERY_NOT_SENT_INTERNAL_TRAFFIC_MODEL = 34;
+        QUERY_NOT_SENT_USE_TRAFFIC = 35;
+        QUERY_NOT_SENT_IS_INTERNAL_REQUEST = 36;
+        QUERY_NOT_SENT_IS_TRUSTED_PARTNER_REQUEST = 37;
+        QUERY_NOT_SENT_USE_DISTANCE_COST = 38;
+        QUERY_NOT_SENT_INTERNAL_MODIFIED_RESTRICTIONS = 39;
+        QUERY_NOT_SENT_TWO_WHEELER = 40;
+        QUERY_NOT_SENT_OTHER_NON_DRIVE = 41;
+        QUERY_NOT_SENT_WAYPOINTS_NOT_COVERED = 42;
+        QUERY_NOT_SENT_INTERNAL_ERROR = 43 [deprecated = true];
+        QUERY_NOT_SENT_SHARDS_USE_TOO_MANY_BOOLEAN_OPTIONS = 44 [deprecated = true];
+        QUERY_NOT_SENT_UNALLOWED_CONDITIONAL_COST_MODIFIERS = 48 [deprecated = true];
+        OK_RPC_WITH_SIDE_CHANNEL_FAILURE_NOTE = 45;
+        OK_RPC_WITH_EMPTY_PATH = 46;
+        QUERY_WITH_DEPARTURE_TIME = 47 [deprecated = true];
+        CRP_BACKUP_SEARCH_SUCCEEDED = 49;
+        IS_FALLBACK_TO_CH = 50;
+        QUERY_NOT_SENT_USE_CRP_FALSE = 51;
+        NO_ENDPOINTS_FOUND = 52;
+        DYNAMIC_ROUTING_DISABLED = 53;
+        QUERY_NOT_SENT_WRONG_TRAVEL_MODE_FOR_TWO_WHEELER_SHARDS = 54;
+    }
+}
+
+message LoggedHeuristicPostprocessorData {
+    repeated .pathfinder.HeuristicPostprocessorData.Repair.RepairType triggered_repairs = 1 [deprecated = true];
+    
+    repeated LoggedHeuristicRepair applied_repairs = 2;
+    message LoggedHeuristicRepair {
+        optional .pathfinder.HeuristicPostprocessorData.Repair.RepairType repair_type = 1 [default = UNKNOWN_REPAIR];
+        optional float removed_length_meters = 3;
+        optional float added_length_meters = 4;
+        optional logs_maps.FeatureIdProto added_from_segment = 5;
+        optional logs_maps.FeatureIdProto added_to_segment = 6;
+        optional logs_maps.FeatureIdProto removed_from_segment = 7;
+        optional logs_maps.FeatureIdProto removed_to_segment = 8;
+    }
+    
+    repeated LoggedHeuristicRepair shadow_repairs = 3;
+}
+
+message LoggedCrpCounterfactualData {
+    optional ChurnAnalytics churn_analytics = 1;
+    message ChurnAnalytics {
+        optional bool route_churned = 1;
+    }
+    
+    repeated Path factual_paths = 2;
+    message Path {
+        optional float source_fraction = 1;
+        optional float target_fraction = 2;
+        repeated logs_maps.FeatureIdProto segments = 3 [deprecated = true];
+        repeated SegmentData segment_data = 4;
+        optional int32 cost = 5;
+        optional int32 predicted_cost = 8;
+        optional int32 distance_meters = 6;
+        optional int32 duration_seconds = 7;
+        optional int32 predicted_duration_seconds = 9;
+    }
+    
+    repeated Path counterfactual_paths = 3;
+    
+    message SegmentData {
+        optional int32 traversal_turn_cost = 1;
+        optional logs_maps.FeatureIdProto segment_id = 2;
+    }
+}
+
+message LoggedCrpAnalyticsData {
+    optional LoggedCrpCounterfactualData counterfactual_data = 1;
+}
+
+message LoggedCostDataSource {
+    optional string path = 1;
+    
+    oneof metadata {
+        google.protobuf.Empty dumper_closures_snapshot = 2;
+        google.protobuf.Empty cost_generator = 3;
+    }
+}
+
+message LoggedHighwayRampFixupLog {
+    repeated LoggedRepairLog applied_repairs = 1;
+    message LoggedRepairLog {
+        optional float removed_length_meters = 1;
+        optional float added_length_meters = 2;
+        repeated logs_maps.FeatureIdProto removed_segments = 3;
+        repeated logs_maps.FeatureIdProto added_segments = 4;
+    }
+    
+    repeated LoggedRepairLog shadow_repairs = 2;
+    optional .pathfinder.RouteType route_type = 3 [deprecated = true];
+    optional .pathfinder.AlternatesMethod alternates_method = 4;
+    optional .pathfinder.crp.RouteAttributes route_attributes = 5;
+}
+
+message LoggedCrpLogData {
+    optional LoggedCrpAnalyticsData analytics_data = 28;
+    optional int32 crp_latency = 1 [default = -1];
+    optional int32 dynacore_latency = 2 [default = -1];
+    optional bool crp_succeeded = 3 [default = false, deprecated = true];
+    repeated LoggedCrpStatus crp_output_status = 4;
+    repeated LoggedCrpStatus crp_input_status = 5;
+    optional int32 shadow_node_num = 6;
+    optional int32 crp_dijkstra_run_ms = 7;
+    optional int32 crp_dijkstra_state_settled = 8;
+    optional uint64 mapfacts_timestamp_s = 9;
+    optional string graph_version = 32;
+    optional int32 num_hints_accepted = 11;
+    optional int32 num_hints_rejected = 12;
+    optional int32 hint_loading_latency_ms = 13;
+    optional int32 initial_search_duration_ms = 14;
+    optional int32 num_edges_seen_initial_search = 15;
+    optional int32 num_nodes_visited_initial_search = 16;
+    optional int32 num_nodes_settled_initial_search = 17;
+    optional int32 num_hints_visited_initial_search = 18 [deprecated = true];
+    optional int32 num_hints_settled_initial_search = 19 [deprecated = true];
+    optional int32 num_restrictions_in_route = 20;
+    optional int32 num_h1_partitions_with_hints = 21;
+    optional int32 num_h1_partitions_with_hints_encountered = 22 [deprecated = true];
+    optional bool opt_l2_route_included = 24;
+    optional LoggedHeuristicPostprocessorData heuristic_postprocessor_data = 27;
+    repeated LoggedCostDataSource provenance = 31;
+    optional bool no_crp_result_in_tripset_unknown_reasons = 33;
+    optional .pathfinder.crp.CrpDynamicConfig crp_dynamic_config = 34;
+    repeated LoggedHighwayRampFixupLog highway_ramp_fixup_logs = 35;
+}
+
+message LoggedTripLogData {
+    optional LoggedSearchMethod search_method = 1;
+    enum LoggedSearchMethod {
+        NONE = 0;
+        CH = 1;
+        DYNACORE = 2;
+        REQUERY = 3;
+        CRP = 4;
+    }
+    
+    optional bool is_alternate = 2;
+    optional double ch_similarity_score = 7;
+    optional double dynacore_similarity_score = 3;
+    optional bool is_non_toll_alternate = 4;
+    optional LoggedPathCosts path_costs = 5;
+    optional bool is_precomputed_alternate = 6;
+    optional bool route_contains_dynamic_penalties = 8;
+    optional double roadtraffic_traffic_coverage = 9;
+    optional double roadtraffic_traffic_duration_seconds = 10;
+    optional double cost_with_traffic_seconds = 11;
+    optional uint64 tds_mapfacts_timestamp_s = 15;
+    optional double alternates_ranker_score = 12;
+    optional float debug_route_dynamic_penalties_seconds = 13;
+    optional double total_path_search_duration_seconds = 16;
+    optional int32 num_routed_through_hints = 17;
+    optional bool debug_crp_ch_reference_trips_significant_diff = 18;
+}
+
+message LoggedEtaAdjustment {
+    optional double multiplier = 1;
+    optional int32 min_absolute_delta_seconds = 2;
+    optional int32 max_absolute_delta_seconds = 3;
+}
+
+message LoggedPathCost {
+    optional int32 start_offset_meters = 1;
+    optional int32 end_offset_meters = 2;
+    
+    repeated LoggedCost cost = 3;
+    message LoggedCost {
+        optional LoggedCostType cost_type = 1;
+        enum LoggedCostType {
+            UNKNOWN = 0;
+            STATIC_SEGMENT_DURATION = 1;
+            STATIC_TURN_DURATION = 2;
+            STATIC_SEGMENT_PENALTY = 3;
+            STATIC_TURN_PENALTY = 4;
+            DYNAMIC_SEGMENT_PENALTY = 5;
+            DYNAMIC_TURN_PENALTY = 6;
+        }
+        
+        optional float value_seconds = 2;
+    }
+}
+
+message LoggedSpeedInfo {
+    optional int32 speed_kph = 1;
+    optional int32 max_speed_kph = 2;
+    optional roadtraffic.proto.LoggedTrafficModelType traffic_model_type = 3;
+    optional int32 offset_m = 4;
+}
+
+message LoggedPathCosts {
+    repeated LoggedPathCost path_cost = 1;
+    repeated LoggedSpeedInfo speed_info = 2;
+}

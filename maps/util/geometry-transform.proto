@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package maps_util;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMU";
+
+message Transform3D {
+    repeated double scale = 1 [packed = true];
+    repeated double rotation = 2 [packed = true];
+    repeated double translation = 3 [packed = true];
+}

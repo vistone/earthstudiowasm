@@ -1,0 +1,98 @@
+syntax = "proto2";
+
+package protomesh;
+
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.knowledge.graph.protomesh";
+
+message SchemaAnnotation {
+    optional string id = 1;
+    optional string name = 21;
+    optional string pred = 22;
+    optional string key = 23;
+    optional string mid = 11;
+    optional string base = 16;
+    optional string type = 2;
+    optional string expected_type = 7;
+    optional string description = 8;
+    optional string custom = 10;
+    optional string custom_proto = 38;
+    optional string rank = 14;
+    optional string mediator_type = 30;
+    optional string ordinal = 31;
+    optional string splice = 15;
+    optional string blob = 17;
+    repeated SchemaAnnotation legacy = 19;
+    optional bool proto_only = 20;
+    optional bool cotype = 32;
+    optional string text_lang = 33;
+    optional bool suppress_triplification = 34;
+    optional bool suppress_protofication = 35;
+    optional string namespace_pred = 36;
+    optional bool blob_value = 37;
+    optional string text_lang_field = 40;
+    optional string pred_enum_field = 43;
+    optional string pq_expression = 45;
+    optional string extend_type = 46;
+    optional bool create_default_value_triple = 47;
+    optional string internal_full_proto_name = 24;
+    optional string internal_protofier_function = 25;
+    optional int32 internal_line = 27;
+    repeated string internal_extended_by = 39;
+    optional bool internal_custom_proto_primitive = 42;
+    
+    reserved 4, 5, 41;
+    
+    reserved "master_property", "reverse_property", "message_set_target";
+}
+
+message StagingProto {
+    optional double double_value = 1;
+    optional float float_value = 2;
+    optional int64 int64_value = 3;
+    optional uint64 uint64_value = 4;
+    optional int32 int32_value = 5;
+    optional fixed64 fixed64_value = 6;
+    optional fixed32 fixed32_value = 7;
+    optional bool bool_value = 8;
+    optional string string_value = 9;
+    optional bytes bytes_value = 12;
+    optional uint32 uint32_value = 13;
+    optional sfixed32 sfixed32_value = 15;
+    optional sfixed64 sfixed64_value = 16;
+    optional sint32 sint32_value = 17;
+    optional sint64 sint64_value = 18;
+    
+    extensions 10000 to max;
+}
+
+message Text {
+    optional string value = 1;
+    optional string lang = 2;
+    
+    extend StagingProto {
+        optional Text text_extension = 10000;
+    }
+}
+
+extend .proto2.FileOptions {
+    optional SchemaAnnotation file = 68120272;
+}
+
+extend .proto2.MessageOptions {
+    optional SchemaAnnotation message = 68120272;
+}
+
+extend .proto2.FieldOptions {
+    optional SchemaAnnotation field = 68120272;
+}
+
+extend .proto2.EnumOptions {
+    optional SchemaAnnotation enumeration = 68120272;
+}
+
+extend .proto2.EnumValueOptions {
+    optional SchemaAnnotation enumeration_value = 68120272;
+}

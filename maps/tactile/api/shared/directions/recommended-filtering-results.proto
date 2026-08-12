@@ -1,0 +1,97 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "geo/serving/proto/directions/relative_trip_attribute.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "RecommendedFilteringResultsProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message RecommendedFilteringResults {
+    repeated TripGroupingRecommendation trip_grouping_recommendation = 1;
+    message TripGroupingRecommendation {
+        oneof grouping_recommendation {
+            TripComparisonGrouping trip_comparison = 1;
+            TravelModeCentricGrouping travel_mode_centric = 2;
+        }
+        
+        message TripReference {
+            optional string trip_id = 2;
+            
+            reserved 1;
+        }
+        
+        message RelativeTripComparison {
+            optional TripReference trip_reference = 1;
+            repeated geo_serving_proto.directions.RelativeTripAttribute relative_attribute = 2 [packed = true];
+        }
+        
+        message TripGroup {
+            repeated TripReference trip_reference = 1;
+            
+            optional GroupingReason grouping_reason = 2;
+            enum GroupingReason {
+                UNKNOWN_GROUPING_REASON = 0;
+                TRAVEL_MODE = 1;
+                PRIMARY_TRAVEL_MODE = 2;
+                ALTERNATE_TRAVEL_MODE = 3;
+                ALGORITHMIC = 4;
+            }
+            
+            repeated GroupRankingReason ranking_reason = 3 [packed = true];
+            enum GroupRankingReason {
+                UNKNOWN_GROUP_RANKING_REASON = 0;
+                RECOMMENDED_GROUP = 1;
+                INFERRED_USER_PREFERENCE = 2;
+                EXPLICIT_USER_PREFERENCE = 3;
+                FASTEST = 4;
+                EXPLICIT_TRAVEL_MODE_INTENT = 5;
+                MODE_NUDGE = 6;
+            }
+            
+            optional ModeNudge mode_nudge = 4;
+            message ModeNudge {
+                optional ModeNudgeRationale mode_nudge_rationale = 1;
+                enum ModeNudgeRationale {
+                    UNKNOWN_MODE_NUDGE_RATIONALE = 0;
+                    SAVE_TIME = 1;
+                    PARKING_DIFFICULT = 2;
+                    REASONABLE_ALTERNATIVE = 3;
+                    PROMOTION = 4;
+                }
+            }
+            
+            repeated RelativeTripComparison relative_trip_comparison = 5;
+            
+            optional TripGroupDisplayInfo display_info = 6;
+            message TripGroupDisplayInfo {
+                optional string name = 1;
+            }
+        }
+        
+        message TripComparisonGrouping {
+            repeated TripGroup comparison_group = 1;
+            repeated RelativeTripComparison relative_trip_comparison = 2;
+        }
+        
+        message TravelModeCentricGrouping {
+            repeated TripGroup group = 2;
+            optional bool requested_mode_shift_was_ineligible = 4;
+            repeated RelativeTripComparison relative_trip_comparison = 3;
+        }
+    }
+    
+    optional int32 best_trip_grouping_recommendation_index = 2;
+    
+    optional TripPreviewRecommendation trip_preview_recommendation = 3;
+    message TripPreviewRecommendation {
+        optional string trip_id = 2;
+        
+        reserved 1;
+    }
+}

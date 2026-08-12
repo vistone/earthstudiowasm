@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/polygon.proto";
+import "geostore/base/proto/region_specific_name.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message GeopoliticalProto {
+    repeated RegionSpecificNameProto region_specific_name = 1;
+    optional string conveys_attribution_to = 2;
+    
+    repeated RegionalPolygonComposingClaimsProto regional_polygon_composing_claims = 3;
+    message RegionalPolygonComposingClaimsProto {
+        optional string region_code = 1;
+        repeated FeatureIdProto region_included_claims = 2;
+        repeated FeatureIdProto region_excluded_claims = 3;
+    }
+    
+    repeated RegionalPolygonAdjustmentProto regional_polygon_adjustment = 4;
+    message RegionalPolygonAdjustmentProto {
+        optional string region_code = 1;
+        optional PolygonProto polygon_to_add = 2;
+        optional PolygonProto polygon_to_subtract = 3;
+    }
+}

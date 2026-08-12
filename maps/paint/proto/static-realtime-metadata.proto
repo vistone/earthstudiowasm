@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package maps_paint;
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "StaticRealtimeMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message OnMapOpeningHours {
+    repeated int32 start_minutes = 3;
+    repeated int32 end_minutes = 4;
+    optional string place_timezone_id = 2;
+    
+    reserved 1;
+}
+
+message StaticRealtimeMetadata {
+    optional OnMapOpeningHours opening_hours = 1;
+}

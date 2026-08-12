@@ -1,0 +1,74 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/rect.proto";
+import "geostore/base/proto/segment.proto";
+import "maps/pathfinder/client/building-level.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.maps.pathfinder.client";
+
+message PolylineCodecOptions {
+    optional bool omit = 1;
+    optional float tolerance_meters = 2;
+    optional geostore.RectProto viewport = 3;
+    optional bool include_altitudes = 4;
+    optional EncodedPolyline.AltitudeMeasurementModel altitude_model = 9 [default = EGM_96];
+    
+    optional AltitudePrecision altitude_precision = 10 [default = E0];
+    enum AltitudePrecision {
+        UNSPECIFIED = 0;
+        E0 = 1;
+        E1 = 2;
+    }
+    
+    optional bool include_annotations = 6;
+    
+    repeated AnnotationOption annotation_option = 7 [deprecated = true];
+    enum AnnotationOption {
+        ANNOTATE_ELEVATION_TYPE = 0;
+        ANNOTATE_BUILDING_LEVEL = 1;
+        ANNOTATE_ON_RIGHT = 2;
+        ANNOTATE_PRIORITY = 3;
+        ANNOTATE_SEGMENT_ID = 4;
+        ANNOTATE_SPEED_LIMIT = 5;
+        ANNOTATE_LOW_QUALITY_SPEED_LIMIT = 6;
+    }
+    
+    optional Precision precision = 5 [default = E7, deprecated = true];
+    enum Precision {
+        E5 = 0;
+        E7 = 1;
+        E3 = 2;
+    }
+    
+    optional int32 soft_vertex_limit = 8;
+}
+
+message PolylineAnnotation {
+    optional int32 index = 1 [default = 0];
+    optional geostore.SegmentProto.ElevationCategory elevation_type = 2 [default = ELEVATION_NORMAL];
+    optional BuildingLevel building_level = 3;
+    optional bool on_right = 4 [default = true];
+    optional geostore.SegmentProto.Priority priority = 5;
+    optional geostore.FeatureIdProto segment_id = 6;
+    optional int32 speed_limit_kph = 7;
+    optional int32 low_quality_speed_limit_kph = 8 [default = -1];
+}
+
+message EncodedPolyline {
+    required PolylineCodecOptions options = 1;
+    optional bytes data = 2;
+    optional bytes altitudes = 3;
+    
+    optional AltitudeMeasurementModel altitude_measurement_model = 5;
+    enum AltitudeMeasurementModel {
+        ALTITUDE_MEASUREMENT_MODEL_UNDEFINED = 0;
+        WGS_84 = 1;
+        EGM_96 = 2;
+    }
+    
+    repeated PolylineAnnotation annotation = 4 [deprecated = true];
+}

@@ -1,0 +1,67 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit_realtime.service_alerts.ui;
+
+import "logs/proto/maps/shared/url.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedText {
+    optional string text = 1;
+    optional string language = 2;
+}
+
+message LoggedAlert {
+    optional LoggedResource affected_resource = 1;
+    enum LoggedResource {
+        CURRENT_STATION = 1;
+        CURRENT_LINE = 2;
+        CURRENT_AGENCY = 3;
+        CURRENT_TRIP = 7;
+        CURRENT_TRIPSET = 8;
+        NAMED_STATION = 4;
+        NAMED_LINE = 5;
+        NAMED_AGENCY = 6;
+    }
+    
+    optional LoggedEffect effect = 2;
+    enum LoggedEffect {
+        NO_SERVICE = 1;
+        REDUCED_SERVICE = 2;
+        SIGNIFICANT_DELAYS = 3;
+        DETOUR = 4;
+        ADDITIONAL_SERVICE = 5;
+        MODIFIED_SERVICE = 6;
+        OTHER = 7;
+        UNKNOWN = 8;
+        STOP_MOVED = 9;
+        NO_EFFECT = 10;
+        ACCESSIBILITY_ISSUE = 11;
+    }
+    
+    repeated LoggedText additional_text = 3;
+    repeated LoggedText full_description = 10;
+    repeated logs_maps_shared.LoggedUrlProto more_info_url = 4;
+    optional bool is_displayed_to_internal_only = 5 [default = false];
+    
+    optional LoggedCause cause = 7 [default = UNKNOWN_CAUSE];
+    enum LoggedCause {
+        UNKNOWN_CAUSE = 1;
+        OTHER_CAUSE = 2;
+        TECHNICAL_PROBLEM = 3;
+        STRIKE = 4;
+        DEMONSTRATION = 5;
+        ACCIDENT = 6;
+        HOLIDAY = 7;
+        WEATHER = 8;
+        MAINTENANCE = 9;
+        CONSTRUCTION = 10;
+        POLICE_ACTIVITY = 11;
+        MEDICAL_EMERGENCY = 12;
+    }
+    
+    optional uint64 start_time = 8;
+    optional uint64 end_time = 9;
+    optional double importance_score = 11;
+    
+    reserved 6;
+}

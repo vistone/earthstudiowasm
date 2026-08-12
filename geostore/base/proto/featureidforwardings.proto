@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/featureidlist.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message FeatureIdForwardingsProto {
+    optional FeatureIdProto forwarded_id = 1;
+    optional FeatureIdProto duplicate_of = 2;
+    optional FeatureIdProto transitively_duplicate_of = 3;
+    optional FeatureIdListProto replaced_by = 4 [deprecated = true];
+    repeated FeatureIdProto inactive_duplicate = 5;
+}

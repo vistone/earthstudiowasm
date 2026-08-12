@@ -1,0 +1,49 @@
+syntax = "editions";
+
+package maps_shared.geom;
+
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMGEOM";
+option java_multiple_files = true;
+option java_outer_classname = "GeomProto";
+option java_package = "com.google.maps.geom.proto1api";
+
+message Camera {
+    optional Location location = 1;
+    optional Rotation rotation = 2;
+    optional Size screen_size = 3;
+    optional float field_of_view_y = 4;
+    optional MapsCameraViewportDiffFromExperiment maps_camera_viewport_diff_from_experiment = 5;
+    optional LookAhead look_ahead = 6;
+    optional int32 original_zoom = 100;
+}
+
+message MapsCameraViewportDiffFromExperiment {
+    
+}
+
+message Location {
+    optional double longitude = 2;
+    optional double latitude = 3;
+    optional double altitude = 1;
+}
+
+message Rotation {
+    optional float heading = 1;
+    optional float tilt = 2;
+    optional float roll = 3;
+}
+
+message Size {
+    optional int32 width = 1;
+    optional int32 height = 2;
+}
+
+message LookAhead {
+    optional float x = 1;
+    optional float y = 2;
+}

@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geo_serving_proto.openhours;
+
+import "java/com/google/apps/jspb/jspb.proto";
+
+option objc_class_prefix = "GSPOPH";
+option java_multiple_files = true;
+option java_outer_classname = "OpenStatusProto";
+option java_package = "com.google.geo.serving.proto.openhours";
+
+enum OpenStatus {
+    UNKNOWN_OPEN_STATUS = 0;
+    OPEN = 1;
+    CLOSED = 2;
+}

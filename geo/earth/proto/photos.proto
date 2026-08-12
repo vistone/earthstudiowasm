@@ -1,0 +1,37 @@
+syntax = "editions";
+
+package earth_photos;
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.photos";
+
+message ThumbnailPhotos {
+    repeated ThumbnailImage thumbnail_images = 1;
+}
+
+message ThumbnailImage {
+    optional string url = 1;
+    optional string large_url = 11 [deprecated = true];
+    optional string really_large_url = 12 [deprecated = true];
+    optional int32 width = 2;
+    optional int32 height = 3;
+    optional string mid = 4;
+    optional string fid = 5;
+    optional double lat = 6;
+    optional double lng = 7;
+    optional string id = 8;
+    optional int32 frontend = 9;
+    optional int32 format = 10;
+}
+
+message KmlBalloon {
+    optional int32 width = 1;
+    optional int32 height = 2;
+}
+
+message LegacyMessage {
+    optional int32 old_layer = 1;
+    optional int32 new_layer = 2;
+}

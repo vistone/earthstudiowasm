@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package logs_maps_shared;
+
+import "logs/eventid/eventid.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "LodgingPricingInformationProto";
+option java_package = "com.google.common.logging.maps";
+
+message LoggedPrice {
+    optional int32 price = 1;
+    optional EventIdMessage hps_event_id = 2;
+}
+
+message LodgingPricingInformation {
+    optional LoggedPrice search_result_price_displayed = 1;
+    optional LoggedPrice map_price_displayed = 2;
+    optional LoggedPrice preview_price_displayed = 3;
+    optional LoggedPrice placesheet_price_displayed = 4;
+    optional LoggedPrice searchless_map_organic_price_displayed = 5;
+}

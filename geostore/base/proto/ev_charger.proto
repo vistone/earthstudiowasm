@@ -1,0 +1,45 @@
+syntax = "editions";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "google/api/inclusion.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+
+message EvChargerProto {
+    repeated OperatorUidProto uid = 1;
+    message OperatorUidProto {
+        optional string operator_id = 1;
+        optional string uid = 2;
+    }
+    
+    optional string evse_id = 2;
+    
+    repeated ConnectorProto connectors = 3;
+    message ConnectorProto {
+        optional ConnectorType type = 2;
+        enum ConnectorType {
+            CONNECTOR_TYPE_UNSPECIFIED = 0;
+            J_1772 = 2;
+            MENNEKES = 3;
+            CHADEMO = 4;
+            CCS_COMBO_1 = 5;
+            CCS_COMBO_2 = 6;
+            GB_T = 10;
+            WALL_OUTLET = 11;
+            LECCS = 12;
+            TYPE_6 = 13;
+            NACS = 14;
+            TYPE_3C = 15;
+            TYPE_3A = 16;
+            IEC_60309_1_PHASE = 17;
+            IEC_60309_3_PHASE = 18;
+        }
+        
+        optional double max_power_kw = 3;
+        optional double max_current_amps = 4;
+        optional double max_voltage_volts = 5;
+    }
+    
+    optional FeatureIdProto ev_station = 4;
+}

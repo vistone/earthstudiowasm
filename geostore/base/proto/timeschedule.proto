@@ -1,0 +1,131 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "geostore/base/proto/options.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message TimeEndpointProto {
+    optional int32 second = 1 [default = 0];
+    optional int32 minute = 2 [default = 0];
+    optional int32 hour = 3 [default = 0];
+    optional int32 day = 4 [default = 0];
+    
+    optional DayType day_type = 5 [default = DAY_OF_WEEK];
+    enum DayType {
+        DAY_OF_WEEK = 0;
+        DAY_OF_MONTH = 1;
+        DAY_OF_YEAR = 2;
+    }
+    
+    optional int32 week = 6 [default = 0];
+    
+    optional WeekType week_type = 7 [default = WEEK_OF_MONTH];
+    enum WeekType {
+        WEEK_OF_MONTH = 0;
+        WEEK_OF_YEAR = 1;
+    }
+    
+    optional MonthOfYear month = 8 [default = JANUARY];
+    enum MonthOfYear {
+        JANUARY = 1;
+        FEBRUARY = 2;
+        MARCH = 3;
+        APRIL = 4;
+        MAY = 5;
+        JUNE = 6;
+        JULY = 7;
+        AUGUST = 8;
+        SEPTEMBER = 9;
+        OCTOBER = 10;
+        NOVEMBER = 11;
+        DECEMBER = 12;
+        NEXT_JANUARY = 13;
+    }
+    
+    optional int32 year = 9 [default = 0];
+    
+    enum DayOfWeek {
+        SUNDAY = 0;
+        MONDAY = 1;
+        TUESDAY = 2;
+        WEDNESDAY = 3;
+        THURSDAY = 4;
+        FRIDAY = 5;
+        SATURDAY = 6;
+        NEXT_SUNDAY = 7;
+    }
+}
+
+message TimeIntervalProto {
+    optional IntervalType type = 1;
+    enum IntervalType {
+        TYPE_OCCASION = 1;
+        TYPE_RANGE = 2;
+    }
+    
+    optional bool inverted = 2;
+    
+    optional OccasionCategory occasion = 3;
+    enum OccasionCategory {
+        OCCASION_SEASON = 1;
+        OCCASION_SEASON_WINTER = 257;
+        OCCASION_SEASON_SUMMER = 258;
+        OCCASION_DAYS = 2;
+        OCCASION_DAYS_SCHOOL = 513;
+        OCCASION_DAYS_HOLIDAY = 514;
+        OCCASION_DAYS_PRE_HOLIDAY = 515;
+        OCCASION_HOURS = 3;
+        OCCASION_HOURS_PEAK = 769;
+        OCCASION_HOURS_SCHOOL = 770;
+        OCCASION_HOURS_MARKET = 771;
+        OCCASION_HOURS_BUSINESS = 772;
+        OCCASION_HOURS_DUSK_TO_DAWN = 773;
+        OCCASION_HOURS_HIGH_TIDE = 774;
+        OCCASION_CONDITIONS = 4;
+        OCCASION_CONDITIONS_HIGH_WATER = 1025;
+        OCCASION_CONDITIONS_ADVERSE = 1026;
+        OCCASION_CONDITIONS_ADVERSE_RAIN = 262657;
+        OCCASION_CONDITIONS_ADVERSE_WET = 262658;
+        OCCASION_CONDITIONS_ADVERSE_FOG = 262659;
+        OCCASION_CONDITIONS_WINTERY = 1027;
+        OCCASION_CONDITIONS_WINTERY_AVALANCHE = 262913;
+        OCCASION_CONDITIONS_WINTERY_SNOW = 262914;
+        OCCASION_CONDITIONS_WINTERY_ICE = 262915;
+        OCCASION_CONDITIONS_EVENT = 1028;
+        OCCASION_CONDITIONS_POLLUTION = 1029;
+        OCCASION_CONDITIONS_LOW_WATER = 1030;
+        OCCASION_UNDEFINED = 5;
+        OCCASION_UNDEFINED_REGULAR = 1281;
+        OCCASION_UNDEFINED_SELDOM = 1282;
+    }
+    
+    optional TimeEndpointProto begin = 6;
+    optional TimeEndpointProto end = 7;
+    
+    reserved 4, 5;
+}
+
+message TimeComponentProto {
+    repeated TimeIntervalProto interval = 1;
+    
+    optional ComponentType component_type = 2 [default = COMPONENT_TYPE_POSITIVE];
+    enum ComponentType {
+        COMPONENT_TYPE_POSITIVE = 0;
+        COMPONENT_TYPE_MISSING_DATA = 1;
+    }
+}
+
+message TimeScheduleProto {
+    repeated TimeComponentProto component = 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional TimeScheduleProto message_set_extension = 15256124;
+    }
+}

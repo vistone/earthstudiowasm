@@ -1,0 +1,60 @@
+syntax = "proto2";
+
+package geo_content_flows;
+
+import "google/api/field_behavior.proto";
+import "identity/identifiers/proto/namespaced_identifier.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AuthorProto";
+option java_package = "com.google.geo.contentflows.proto1api";
+
+message Author {
+    optional AuthorType type = 1;
+    enum AuthorType {
+        UNKNOWN = 0;
+        HUMAN_AUTHOR = 1;
+        UGC_CONTRIBUTOR = 17;
+        MERCHANT = 18;
+        GOOGLE_OPERATOR = 19;
+        ZWIEBACK_USER = 20;
+        ANONYMOUS = 21;
+        UGC_3P_CONTRIBUTOR = 22;
+        SOCIAL_MEDIA_USER = 23;
+        ALGORITHM = 3;
+    }
+    
+    optional identity_identifiers.NamespacedIdProto namespaced_id_proto = 7;
+    
+    oneof id {
+        int64 gaia = 2;
+        uint64 zwieback_id = 3;
+        AlgorithmId algorithm_id = 4;
+        string namespaced_id = 5;
+        string anonymous_id = 6;
+    }
+    
+    message AlgorithmId {
+        optional string id = 1;
+    }
+}
+
+message AuthorMetadata {
+    oneof metadata {
+        MerchantMetadata merchant = 1;
+        DeveloperMetadata developer = 2;
+    }
+    
+    message MerchantMetadata {
+        optional string encrypted_real_gaia_id = 2;
+        optional string encrypted_namespaced_id = 3;
+        
+        reserved 1;
+    }
+    
+    message DeveloperMetadata {
+        optional string developer_id = 1;
+        optional string application_name = 2;
+    }
+}

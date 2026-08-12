@@ -1,0 +1,21 @@
+syntax = "editions";
+
+package geo_serving_proto.attribution;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPATT";
+option java_multiple_files = true;
+option java_outer_classname = "UserCaptionMetadataProto";
+option java_package = "com.google.geo.serving.proto.attribution";
+
+message UserCaptionMetadata {
+    optional int32 de_type = 1 [default = 0x19fa6];
+    optional string ved = 2;
+    
+    reserved 3, 4;
+}

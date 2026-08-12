@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "InputTimeProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedInputTime {
+    optional int64 time = 1;
+    
+    optional LoggedTimeInterpretation interpretation = 2 [default = LOCAL_TIMEZONE];
+    enum LoggedTimeInterpretation {
+        UTC = 1;
+        LOCAL_TIMEZONE = 2;
+    }
+}

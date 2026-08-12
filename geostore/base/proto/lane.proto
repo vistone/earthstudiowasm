@@ -1,0 +1,170 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/googlesql/public/proto/type_annotation.proto";
+import "geostore/base/proto/traffic_flow_adjustment.proto";
+import "geostore/base/proto/curvature.proto";
+import "geostore/base/proto/curve_connection.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/lane_marker.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/property_value_status_enum.proto";
+import "geostore/base/proto/restriction.proto";
+import "geostore/base/proto/stable_id_options.proto";
+import "geostore/base/proto/track.proto";
+import "geostore/base/proto/version_token_options.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message FlowLineProto {
+    optional TrackProto track = 1;
+    optional CurvatureProto curvature = 2;
+}
+
+message LaneProto {
+    required int32 lane_number = 1;
+    optional uint64 lane_id = 17;
+    optional bool shared = 2 [default = false];
+    
+    optional TypeCategory type = 3;
+    enum TypeCategory {
+        TYPE_UNKNOWN = 1;
+        TYPE_NORMAL = 2;
+        TYPE_PASSING = 3;
+        TYPE_LEFT_TURN = 4;
+        TYPE_LEFT_TURN_OFF = 65;
+        TYPE_LEFT_TURN_ON_OFF = 66;
+        TYPE_RIGHT_TURN = 5;
+        TYPE_RIGHT_TURN_OFF = 81;
+        TYPE_RIGHT_TURN_ON_OFF = 82;
+        TYPE_BICYCLE = 6;
+        TYPE_PARKING = 7;
+        TYPE_PARKING_IMPLIED = 113;
+        TYPE_PARKING_MARKED = 114;
+        TYPE_EXIT_ENTRANCE = 8;
+        TYPE_EXIT_LANE = 129;
+        TYPE_ENTRANCE_LANE = 130;
+        TYPE_PEDESTRIAN = 9;
+        TYPE_SIDEWALK_SHOULDER = 10;
+        TYPE_VEHICLE_SHOULDER = 11;
+        TYPE_OFFSET = 12;
+        TYPE_THIN_SHOULDER = 193;
+        TYPE_MEDIAN = 194;
+        TYPE_PAINTED_MEDIAN = 3105;
+        TYPE_OUTLINED_MEDIAN = 49681;
+        TYPE_HASHED_MEDIAN = 49682;
+        TYPE_PHYSICAL_MEDIAN = 3106;
+        TYPE_REVERSIBLE = 208;
+    }
+    
+    optional bool sometimes_drivable_shoulder = 22;
+    
+    optional LaneDividerCrossingCategory lane_divider_crossing = 4;
+    enum LaneDividerCrossingCategory {
+        CROSSING_ALLOWED = 1;
+        CROSSING_DISALLOWED = 2;
+        CROSSING_LEGALLY_DISALLOWED = 33;
+        CROSSING_PHYSICALLY_IMPOSSIBLE = 34;
+    }
+    
+    optional LaneDividerCrossingCategory outer_lane_divider_crossing = 23;
+    optional float width = 5;
+    optional float distance_to_next_lane = 6;
+    repeated RestrictionProto restriction = 7;
+    
+    repeated LaneConnection lane_connection = 8;
+    message LaneConnection {
+        optional FeatureIdProto segment = 1;
+        optional uint64 lane_connection_id = 10;
+        optional int32 lane_number = 2;
+        optional uint64 lane_id = 9;
+        optional FlowLineProto flow = 3;
+        optional CurveConnectionProto curve = 6;
+        repeated BoundingMarkerProto bounding_marker = 4;
+        optional string connection_token = 5;
+        optional bool primary_connection = 7;
+        optional bool yield_to_other_connections = 8;
+    }
+    
+    optional float lane_follows_segment_begin_fraction = 9;
+    optional float lane_follows_segment_end_fraction = 10;
+    
+    optional SurfaceCategory surface = 11;
+    enum SurfaceCategory {
+        SURFACE_UNKNOWN = 0;
+        SURFACE_PAVED = 1;
+        SURFACE_ASPHALT = 17;
+        SURFACE_CONCRETE = 18;
+        SURFACE_CHIPSEAL = 19;
+        SURFACE_BRICK = 20;
+        SURFACE_SETT = 21;
+        SURFACE_COBBLESTONE = 22;
+        SURFACE_UNPAVED = 2;
+        SURFACE_GRAVEL = 33;
+        SURFACE_DIRT = 34;
+        SURFACE_SAND = 35;
+    }
+    
+    optional FieldMetadataProto metadata = 500;
+    optional FlowLineProto flow = 12;
+    repeated FeatureIdProto stop_line = 13;
+    repeated BoundingMarkerProto bounding_marker = 14;
+    
+    optional ConjoinedLaneCategory conjoined_category = 15;
+    enum ConjoinedLaneCategory {
+        CONJOINED_NONE = 0;
+        CONJOINED_SPLIT_LEFT = 1;
+        CONJOINED_SPLIT_MIDDLE = 2;
+        CONJOINED_SPLIT_RIGHT = 3;
+        CONJOINED_MERGE_LEFT = 4;
+        CONJOINED_MERGE_MIDDLE = 5;
+        CONJOINED_MERGE_RIGHT = 6;
+    }
+    
+    repeated TollPayment toll_payments = 18;
+    message TollPayment {
+        optional Method method = 1;
+        enum Method {
+            METHOD_UNSPECIFIED = 0;
+            CASH = 1;
+            CREDIT_CARD = 2;
+            CHECK = 3;
+            ELECTRONIC = 4;
+        }
+    }
+    
+    repeated TrafficFlowAdjustment traffic_flow_adjustments = 20;
+    optional string lane_token = 16;
+    
+    reserved 19, 21;
+}
+
+message BoundingMarkerProto {
+    optional uint64 bounding_marker_id = 11;
+    
+    optional BoundingSide side = 2;
+    enum BoundingSide {
+        UNKNOWN = 0;
+        LEFT = 1;
+        RIGHT = 2;
+    }
+    
+    optional double marker_adjacency_begin_fraction = 3;
+    optional double marker_adjacency_end_fraction = 4;
+    optional double flowline_adjacency_begin_fraction = 5;
+    optional double flowline_adjacency_end_fraction = 6;
+    optional string bounding_marker_token = 7;
+    
+    oneof bounding_marker_oneof {
+        PropertyValueStatus bounding_marker_status = 8;
+        FeatureIdProto bounding_marker = 1;
+        LaneMarkerProto bounding_marker_pattern = 9;
+    }
+}

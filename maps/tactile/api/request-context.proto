@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "gws/mothership/mothership_options.proto";
+import "gws/shared/protos/geolocation_context.proto";
+import "gws/shared/protos/language_context.proto";
+import "gws/shared/protos/user_ip_context.proto";
+import "gws/shared/protos/web_parameters_request_context.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "webserver/shared/gws/experiments/proto/client_data_header.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "RequestContextProto";
+option java_package = "com.google.maps.tactile";
+
+message RequestContext {
+    optional .gws.UserIpContext user_ip_context = 1;
+    optional .gws.LanguageContext language_context = 2;
+    optional .gws.WebParametersRequestContext web_parameters_context = 3;
+    optional .gws.GeolocationContext geolocation_context = 5;
+    optional webserver.gws.ClientDataHeader experiment_context = 6;
+    
+    reserved 4;
+}

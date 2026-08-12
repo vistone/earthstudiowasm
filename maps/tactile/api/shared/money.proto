@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "MoneyProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message Money {
+    optional string currency_code = 1;
+    optional int64 units = 2;
+    optional int32 nanos = 3;
+}

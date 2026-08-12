@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "geostore/base/proto/point.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "CategoricalSearchMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message CategoricalSearchMetadata {
+    optional float score = 1;
+    optional bool is_top_result = 2;
+    optional geostore.PointProto location = 3;
+    
+    optional Imagery imagery = 4;
+    message Imagery {
+        optional string image_url = 1;
+        optional string image_key_id = 2;
+    }
+    
+    optional PhotoPinType photo_pin_type = 5;
+    enum PhotoPinType {
+        UNKNOWN_PHOTO_PIN_TYPE = 0;
+        LOCAL_RECENT_PHOTO_PIN = 1;
+        MAPS_VISUAL_SEARCH_PHOTO_PIN = 2;
+        GWS_SEARCH_PHOTO_PIN = 3;
+        GENERAL_CATEGORICAL_SEARCH_PHOTO_PIN = 4;
+    }
+    
+    optional string xuikit_command_data_store_key = 6;
+    optional string local_query_intent_params_token = 7;
+    
+    extend .proto2.bridge.MessageSet {
+        optional CategoricalSearchMetadata message_set_extension = 253079038;
+    }
+}

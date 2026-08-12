@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package logs.proto.maps.autonomous;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedAssistedDrivingInfo {
+    optional LoggedDatasetInfo dataset_info = 1;
+    message LoggedDatasetInfo {
+        optional string dataset_id = 1;
+        optional string provider_id = 2;
+    }
+}

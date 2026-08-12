@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package logs;
+
+import "google/api/inclusion.proto";
+import "logs/proto/visual_element/graft.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_outer_classname = "DataElementProto";
+option java_package = "com.google.common.logging";
+
+message DataElement {
+    optional VisualElementTreeRef reference = 1;
+}

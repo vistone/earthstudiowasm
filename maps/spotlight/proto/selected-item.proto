@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package maps_spotlight;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/point.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMSL";
+option java_multiple_files = true;
+option java_outer_classname = "SelectedItemProto";
+option java_package = "com.google.maps.spotlight";
+
+message SelectedItem {
+    optional geostore.FeatureIdProto feature_id = 1;
+    optional string fallback_query = 2;
+    optional geostore.PointProto location = 3;
+}

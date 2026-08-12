@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "logs/proto/maps/mobile/navigation_session_events.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "PromotedPlaceNavigationLoggingMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message PromotedPlaceNavigationLoggingMetadata {
+    optional string feature_id = 1;
+    optional bool is_counterfactual = 2;
+    optional string ad_viewed_url = 3;
+    optional string ad_clicked_url = 4;
+    optional logs_gmm.navigation.NavigationAdEvent.AdType ad_type = 5;
+    optional int32 max_nav_log_impression_count = 6;
+    optional int32 ad_log_impression_duration_threshold_millis = 7;
+    optional string business_name = 8;
+}

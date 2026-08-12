@@ -1,0 +1,82 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/timeschedule.proto";
+import "geostore/base/proto/vehicle_attribute_filter.proto";
+import "geostore/base/proto/vehicle_type.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message SpeedProto {
+    optional float speed = 1;
+    
+    optional Unit unit = 2;
+    enum Unit {
+        UNIT_UNKNOWN = 0;
+        MILES_PER_HOUR = 1;
+        KILOMETERS_PER_HOUR = 2;
+    }
+}
+
+message VariableSpeedProto {
+    optional SpeedProto fallback_speed = 1;
+}
+
+message UnlimitedSpeedProto {
+    
+}
+
+message SpeedLimitProto {
+    optional SpeedLimitCategory category = 3;
+    enum SpeedLimitCategory {
+        SPEED_LIMIT_CATEGORY_UNKNOWN = 0;
+        NONE = 1;
+        SCHOOL = 2;
+        CONSTRUCTION = 3;
+        STATUTORY = 4;
+    }
+    
+    repeated RoadConditionalProto condition = 4;
+    
+    optional SpeedLimitSourceType source_type = 8;
+    enum SpeedLimitSourceType {
+        SPEED_LIMIT_SOURCE_TYPE_UNKNOWN = 0;
+        EXPLICIT = 1;
+        IMPLICIT = 2;
+        IMPLICIT_FROM_SIGN = 33;
+    }
+    
+    oneof speed_value {
+        SpeedProto speed_with_unit = 5;
+        VariableSpeedProto variable_speed = 6;
+        UnlimitedSpeedProto unlimited_speed = 7;
+    }
+    
+    reserved 1, 2;
+}
+
+message RoadConditionalProto {
+    optional TimeScheduleProto time_schedule = 1;
+    repeated VehicleTypes.VehicleType vehicle_type = 2;
+    optional VehicleAttributeFilterProto vehicle_attribute = 4;
+    
+    reserved 3;
+}
+
+message AppliedSpeedLimitProto {
+    optional SpeedLimitProto speed_limit = 1;
+    
+    optional SpeedLimitTrustLevel trust_level = 2;
+    enum SpeedLimitTrustLevel {
+        SPEED_LIMIT_TRUST_LEVEL_UNKNOWN = 0;
+        LOW_QUALITY = 1;
+        HIGH_QUALITY = 2;
+        EXACT = 3;
+    }
+}

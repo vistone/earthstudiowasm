@@ -1,0 +1,123 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/directions/mrp/annotation_version.proto";
+import "logs/proto/maps/directions/mrp/annotations.proto";
+import "logs/proto/maps/directions/mrp/cost_function_spec.proto";
+import "logs/proto/maps/directions/mrp/measure.proto";
+import "logs/proto/maps/directions/mrp/offline/annotations.proto";
+import "logs/proto/maps/directions/mrp/properties.proto";
+import "logs/proto/maps/directions/mrp/trip_result_status.proto";
+import "logs/proto/maps/pathfinder/client/experiments.proto";
+import "logs/proto/maps/pathfinder/client/trip.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedTripProto {
+    optional int32 trip_index = 1;
+    optional int32 generator_index = 2;
+    repeated LoggedPathProto paths = 3;
+    optional LoggedTripAnnotationsProto annotations = 4;
+    optional LoggedTripPropertiesProto properties = 5;
+    repeated LoggedCostProto costs = 6;
+    repeated LoggedSelectedTripInfoProto selected_trip_info = 7;
+    optional double overall_relevance = 8;
+    optional string label = 9;
+    
+    optional LoggedCounterfactual counterfactual = 10 [deprecated = true];
+    message LoggedCounterfactual {
+        optional LoggedType type = 1;
+        enum LoggedType {
+            UNKNOWN_TYPE = 0;
+            REFERENCE = 2;
+            RISK_AVERSE = 3;
+        }
+    }
+    
+    optional bool is_counterfactual = 27;
+    optional bool is_reconstructed_from_requery_token = 13;
+    optional bool route_contains_dynamic_closure = 15;
+    optional double route_distance_on_dynamic_closures_meters = 25;
+    optional pathfinder.client.LoggedTripLogData trip_log_data = 11;
+    optional LoggedTripResultStatus trip_result_status = 17;
+    optional bool is_reference_trip = 18;
+    optional bool is_risk_averse_trip = 26;
+    optional string trip_id = 19;
+    
+    repeated LoggedDuplicateTripInfo duplicate_trip_infos = 20;
+    message LoggedDuplicateTripInfo {
+        optional int32 generator_index = 1;
+        optional LoggedCounterfactual counterfactual = 2 [deprecated = true];
+        optional bool is_counterfactual = 6;
+        optional bool is_reference_trip = 7;
+        optional bool is_risk_averse_trip = 8;
+        optional string label = 3;
+    }
+    
+    repeated LoggedAnnotationVersion customization_annotation_versions = 22;
+    
+    extensions 20000 to max;
+    
+    reserved 31, 32;
+}
+
+message LoggedPathProto {
+    optional int32 path_index = 1;
+    repeated pathfinder.client.LoggedSnappedWaypoint snapped_waypoint = 2;
+    optional bool includes_lat_lngs = 4;
+    optional bool includes_elapsed_time = 5;
+    repeated LoggedTraversedSegmentProto segments = 6;
+    optional LoggedGeneratorData generator_data = 7;
+    optional LoggedPathAnnotationsProto annotations = 9;
+    optional LoggedPathMeasureProto measures = 13;
+    repeated LoggedPathLabel label_compared_to_tripset = 19;
+    
+    extensions 20000 to max;
+}
+
+message LoggedGeneratorData {
+    oneof details {
+        LoggedPathserver pathserver = 1;
+    }
+    
+    message LoggedPathserver {
+        optional int32 cost = 1;
+    }
+}
+
+message LoggedTraversedSegmentProto {
+    optional int32 segment_index = 1;
+    optional logs_maps.FeatureIdProto feature_id = 2;
+    repeated LoggedVertexProto vertices = 3;
+    optional offline.AnnotationsProto offline_annotations = 4;
+}
+
+message LoggedVertexProto {
+    optional LoggedVertexAnnotationsProto annotations = 6;
+    
+    extensions 20000 to max;
+    
+    reserved 1, 3, 4, 5, 7;
+}
+
+message LoggedPathLabel {
+    optional Type type = 1;
+    enum Type {
+        TYPE_UNKNOWN = 0;
+        TYPE_TOLLS_YES = 1;
+        TYPE_TOLLS_NO = 2;
+        TYPE_TRAFFIC_CONGESTION_MORE = 3;
+        TYPE_TRAFFIC_CONGESTION_LESS = 4;
+        TYPE_LESS_FUEL_CONSUMPTION = 5;
+        TYPE_FASTEST = 6;
+        TYPE_MORE_BIKE_LANES = 7;
+        TYPE_LESS_HIGHWAYS = 8;
+        TYPE_LESS_STEEP_HILLS = 9;
+        TYPE_LESS_TURNS = 10;
+        TYPE_BEST = 11;
+    }
+    
+    optional string text = 2;
+    optional bool needs_icon = 3;
+}

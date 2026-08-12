@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Bottomsheetderivedstate";
+option java_package = "com.google.geo.earth.app.common.state.derivedstate";
+
+message BottomSheetDerivedState {
+    optional bool is_search_open = 2 [default = false];
+    optional bool is_immersive_mode_active = 3;
+    optional bool is_in_street_view_pano = 5;
+    optional bool is_street_view_ui_collapsed = 15;
+    optional bool is_search_panel_suppressed_sui = 6;
+    optional bool is_time_machine_enabled = 9;
+    optional bool is_time_machine_expanded_sui = 10;
+    optional bool is_timelapse_enabled = 11;
+    optional bool is_timelapse_expanded_sui = 12;
+    optional document.protos.BalloonStyle.DisplayMode balloon_display_mode = 14;
+    optional bool is_data_layer_table_visible = 16;
+}

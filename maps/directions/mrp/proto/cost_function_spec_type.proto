@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package maps.mrp.cost_function_spec;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+enum Type {
+    UNKNOWN_COST_FUNCTION_TYPE = 0;
+    TIME = 1;
+    DISTANCE = 2;
+    RATE_CARD_PLUS_TOLL = 4;
+    ASSISTED_DRIVING = 6;
+    REQUERY_SIMILARITY = 8;
+    AVOID_TOLLS = 9;
+    RELATIVE = 10;
+    ROUTE_CHANGE = 11;
+    AVOID_HIGHWAYS = 12;
+    FAKE = 13;
+    TIME_FUEL = 15;
+    AVOID_FERRIES = 18;
+    CUSTOMIZATION_CONFIG = 27;
+    RISK_AVERSE = 28;
+    TARGET_DISTANCE = 29;
+}

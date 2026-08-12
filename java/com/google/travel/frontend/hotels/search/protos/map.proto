@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package boq.travelfrontendhotelssearch.protos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "travel/frontend/common/proto/image.proto";
+import "webutil/html/types/proto/html.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.travel.frontend.hotels.search.protos";
+
+message StaticMap {
+    optional string label = 1;
+    optional travel.frontend.common.proto.Image image = 2;
+    optional string map_url = 3 [deprecated = true];
+    optional webutil.html.types.SafeUrlProto tactile_url = 5;
+    optional bool tactile_url_is_deep_link = 6;
+    optional string aria_label = 4;
+}

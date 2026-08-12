@@ -1,0 +1,519 @@
+syntax = "editions";
+
+package earth.document.protos;
+
+import "frameworks/testing/rpcreplay/processors/rpc_replay_field_option.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+import "geo/earth/proto/contentcreation/content_editing_mutations.proto";
+import "geo/earth/proto/contentcreation/data_import_errors.proto";
+import "geo/earth/proto/documentnamespace.proto";
+import "geo/earth/proto/map_type.proto";
+import "google/longrunning/operations.proto";
+import "google/protobuf/timestamp.proto";
+import "google/type/datetime.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.core.document";
+
+message ErrorWrapper {
+    optional MessageSet message_set = 10;
+}
+
+message MessageSet {
+    repeated Item item = 1 [features = message_encoding: DELIMITED
+    ];
+    message Item {
+        optional int32 type_id = 2 [features = field_presence: LEGACY_REQUIRED
+        ];
+        optional bytes message = 3 [features = field_presence: LEGACY_REQUIRED
+        ];
+    }
+}
+
+message CreateMapRequest {
+    optional string map_title = 1;
+    optional string map_description = 2;
+    optional string drive_folder_id = 3;
+    optional DocumentNamespace document_namespace = 4 [default = DOCUMENT_NAMESPACE_EARTH];
+    optional MapType type = 5 [default = MAP_EARTH];
+    optional ModelVersion model_version = 6 [default = MODEL_VERSION_V1];
+}
+
+message CreateMapResponse {
+    optional string map_id = 1;
+    optional string resource_key = 2;
+    optional DocumentNamespace document_namespace = 3;
+    optional MapType type = 5 [default = MAP_EARTH];
+    optional ModelVersion model_version = 6 [default = MODEL_VERSION_V1];
+}
+
+message RequestOptions {
+    optional MediaDisplayResourcePlaceholders media_display_resource_placeholders = 1;
+    
+    optional DataReadConsistency data_read_consistency = 2 [default = DATA_READ_CONSISTENCY_STALE];
+    enum DataReadConsistency {
+        DATA_READ_CONSISTENCY_UNKNOWN = 0;
+        DATA_READ_CONSISTENCY_STALE = 1;
+        DATA_READ_CONSISTENCY_CURRENT = 2;
+    }
+    
+    optional RecordingOptions recording_options = 3;
+}
+
+message RecordingOptions {
+    optional bool should_update_last_access_time = 1 [default = true];
+    optional bool should_update_view_count = 2 [default = true];
+}
+
+message MediaDisplayResourcePlaceholders {
+    optional bool use_size_placeholders = 1;
+}
+
+message GetMapDataRequest {
+    optional string map_id = 1;
+    optional int64 if_modified_since_timestamp_milliseconds = 2;
+    optional RequestOptions request_options = 3;
+    optional string resource_key = 4;
+    optional DocumentNamespace document_namespace = 5 [default = DOCUMENT_NAMESPACE_EARTH];
+    optional ModelVersion maximum_supported_model_version = 6 [default = MODEL_VERSION_V1];
+}
+
+message GetMapDataResponse {
+    optional Document document = 1;
+    optional int64 last_modified_timestamp_milliseconds = 2;
+    optional AccessInfo access_info = 3;
+    optional bool model_version_downgraded = 5;
+    optional ModelVersion downgraded_from_model_version = 6;
+    
+    reserved 4;
+}
+
+message AuthorizationInfo {
+    repeated Role user_role = 1 [features = repeated_field_encoding: EXPANDED
+    ];
+    enum Role {
+        UNKNOWN_ROLE = 0;
+        PEEKER = 1;
+        READER = 2;
+        WRITER = 3;
+        OWNER = 4;
+        APPENDER = 5;
+        COMMENTER = 6;
+        EXECUTER = 7;
+        RESPONDER = 8;
+        MODERATOR = 9;
+        ORGANIZER = 10;
+        FILE_ORGANIZER = 11;
+    }
+    
+    optional AuthorizationInfoMetadata metadata = 2;
+}
+
+message AuthorizationInfoMetadata {
+    optional bool downgraded_to_reader_due_to_model_incompatibility = 1;
+}
+
+message AccessInfo {
+    optional AuthorizationInfo authorization_info = 1;
+    optional bool is_public = 2;
+    optional bool is_listed = 3;
+    optional string resource_key = 4;
+    optional bool can_download = 5;
+    optional DocumentNamespace document_namespace = 6;
+}
+
+message MutateMapRequest {
+    optional string map_id = 1;
+    optional string resource_key = 5;
+    optional DocumentNamespace document_namespace = 6 [default = DOCUMENT_NAMESPACE_EARTH];
+    optional ModelVersion model_version = 8;
+    
+    oneof MutationSetType {
+        DataMutationSet data_mutation_set = 2;
+        MetadataMutationSet metadata_mutation_set = 3;
+    }
+    
+    reserved 4, 7;
+}
+
+message MutateMapResponse {
+    reserved 1;
+}
+
+message DeleteMapRequest {
+    optional string map_id = 1;
+    optional string resource_key = 2;
+    optional DocumentNamespace document_namespace = 3 [default = DOCUMENT_NAMESPACE_EARTH];
+}
+
+message DeleteMapResponse {
+    
+}
+
+message RequestAccessRequest {
+    optional string map_id = 1;
+    optional string email_message = 2;
+}
+
+message RequestAccessResponse {
+    
+}
+
+message CopyMapRequest {
+    optional string from_map_id = 1;
+    optional string title = 2;
+    optional bool keep_acl = 3;
+    optional string resource_key = 4;
+    optional DocumentNamespace document_namespace = 5 [default = DOCUMENT_NAMESPACE_EARTH];
+    optional bool convert_mymaps_to_earth = 6;
+}
+
+message CopyMapResponse {
+    optional string map_id = 1;
+    optional string resource_key = 2;
+    optional DocumentNamespace document_namespace = 3;
+}
+
+message LastModifiedTimeFilter {
+    optional google.type.DateTime start_date = 1;
+    optional google.type.DateTime end_date = 2;
+}
+
+message PersonFilter {
+    optional string token = 1;
+}
+
+message MapListItemFilterOptions {
+    optional MapType map_type_filter = 1;
+    optional LastModifiedTimeFilter last_modified_time_filter = 2;
+    optional PersonFilter person_filter = 3;
+    
+    optional LogicOperator logic_operator = 4;
+    enum LogicOperator {
+        LOGIC_OPERATOR_UNSPECIFIED = 0;
+        AND = 1;
+    }
+}
+
+message GetUserMapListRequest {
+    optional FilterType filter_type = 1 [default = ALL_MAPS];
+    enum FilterType {
+        UNKNOWN_FILTER_TYPE = 0;
+        ALL_MAPS = 1;
+        MAPS_OWNED_BY_USER = 2;
+        MAPS_NOT_OWNED_BY_USER = 3;
+        MAPS_SHARED_WITH_USER = 4;
+        MAPS_VISITED_BY_USER = 5;
+        MAPS_STARRED_BY_USER = 6;
+    }
+    
+    optional string continuation_token = 2;
+    optional int32 items_per_request = 3 [default = 100];
+    
+    optional SortKey sort_key = 4 [default = LAST_ACCESSED_BY_USER_TIME];
+    enum SortKey {
+        UNKNOWN_SORT_KEY = 0;
+        LAST_ACCESSED_BY_USER_TIME = 1;
+        LAST_ACCESSED_OR_STARRED_BY_USER_TIME = 2;
+        LAST_MODIFIED_TIME = 3;
+        LAST_MODIFIED_BY_USER_TIME = 4;
+        TITLE = 5;
+        SHARE_TIME = 6;
+    }
+    
+    optional bool sort_ascending = 5;
+    optional MapListItemFilterOptions filter_options = 6;
+}
+
+message GetUserMapListResponse {
+    repeated MapListItem item = 1;
+    optional string continuation_token = 2;
+}
+
+message MapListItem {
+    optional string id = 1;
+    optional string title = 2;
+    optional string description = 3;
+    optional int64 created_time_millis = 4;
+    optional int64 last_modified_time_millis = 5;
+    optional int64 last_modified_by_me_time_millis = 6;
+    optional int64 last_access_time_millis = 7;
+    optional int64 share_time_millis = 8;
+    optional bool is_starred = 9;
+    optional bool is_link_shared = 10;
+    optional bool can_edit = 11;
+    optional bool can_delete = 12;
+    
+    optional SharingType sharing_type = 13 [default = UNKNOWN_SHARING_TYPE];
+    enum SharingType {
+        UNKNOWN_SHARING_TYPE = 0;
+        OWNED_BY_USER = 1;
+        SHARED_WITH_USER = 2;
+        LINK_SHARED = 3;
+    }
+    
+    optional string thumbnail_url_template = 14;
+    optional OwnerProfile owner_profile = 15;
+    optional bool is_explicitly_shared = 16;
+    optional bool can_download = 17;
+    optional MapType type = 18;
+    optional int64 consumed_quota_bytes = 19;
+}
+
+message GetImageDataRequest {
+    oneof GetImageDataRequestType {
+        string image_url = 1;
+        string upload_token = 2;
+    }
+}
+
+message GetImageDataResponse {
+    optional bytes image_data = 1;
+}
+
+message HostedImage {
+    oneof HostedImageType {
+        string url = 1;
+        bytes image_data = 2;
+        string upload_token = 3;
+    }
+}
+
+message CreateHostedAssetRequest {
+    optional string map_id = 1;
+    optional string mime_type = 2;
+    optional string resource_key = 3;
+    
+    optional Options options = 6;
+    message Options {
+        optional string parent_feature_id = 1;
+        optional string title = 2;
+        
+        oneof options {
+            ThreeDOptions model_options = 3;
+        }
+    }
+    
+    oneof asset_source {
+        string upload_token = 4;
+        string drive_file_id = 5;
+    }
+    
+    message ThreeDOptions {
+        optional LatLng position = 1;
+    }
+}
+
+message CreateHostedAssetResponse {
+    optional Feature feature = 2;
+    optional string parent_feature_id = 3;
+}
+
+message CreateHostedImageRequest {
+    optional string map_id = 1;
+    optional HostedImage hosted_image = 2;
+    optional string feature_id = 4;
+    optional RequestOptions request_options = 5;
+    optional string resource_key = 6;
+    optional DocumentNamespace document_namespace = 7 [default = DOCUMENT_NAMESPACE_EARTH];
+}
+
+message CreateHostedImageResponse {
+    optional Media media = 1;
+}
+
+message GetUserRequest {
+    
+}
+
+message SetMapAccessControlRequest {
+    optional string map_id = 1;
+    optional PublicAccessControl public_access_control = 2;
+    optional string resource_key = 3;
+    optional DocumentNamespace document_namespace = 4 [default = DOCUMENT_NAMESPACE_EARTH];
+}
+
+message SetMapAccessControlResponse {
+    
+}
+
+message GetMapAccessControlRequest {
+    optional string map_id = 1;
+    optional string resource_key = 2;
+    optional DocumentNamespace document_namespace = 3 [default = DOCUMENT_NAMESPACE_EARTH];
+}
+
+message GetMapAccessControlResponse {
+    optional PublicAccessControl public_access_control = 1;
+}
+
+message CreatePreparedDatasetRequest {
+    oneof SourceDatasetType {
+        string upload_token = 1;
+        string drive_file_id = 2;
+    }
+}
+
+message CreatePreparedDatasetResponse {
+    optional PreparedDataset dataset = 1;
+    repeated DatasetCapabilities capabilities = 2;
+}
+
+message PreparedDataset {
+    optional string token = 1;
+    optional int64 dataset_size = 3;
+}
+
+message PreviewDatasetRequest {
+    
+}
+
+message PreviewDatasetResponse {
+    
+}
+
+message ImportDatasetRequest {
+    optional string map_id = 1;
+    optional string resource_key = 2;
+    optional DocumentNamespace document_namespace = 3 [default = DOCUMENT_NAMESPACE_EARTH];
+    optional PreparedDataset dataset = 4;
+    optional bool create_new_folder = 7;
+    optional bool parse_styles = 8;
+    optional DocumentRenaming allow_document_renaming = 9 [default = DOCUMENT_RENAMING_ALLOW];
+    
+    optional ResponseFormat response_format = 10 [default = FULL_DATA];
+    enum ResponseFormat {
+        RESPONSE_FORMAT_UNSPECIFIED = 0;
+        FULL_DATA = 1;
+        MUTATION_TIMESTAMPS_ONLY = 2;
+    }
+    
+    optional string idempotency_resource_id = 11;
+    
+    oneof DestinationType {
+        ContentRoot content_root = 5;
+        string folder_id = 6;
+    }
+}
+
+message ImportDatasetResponse {
+    repeated Feature imported_feature = 1;
+    optional FeatureIdToFeatureStyleMap imported_styles = 2;
+    map<string, Column> column = 3;
+    repeated string imported_column = 4;
+    optional FeatureErrorList document_errors = 5;
+    map<string, FeatureErrorList> feature_errors = 6;
+    optional int32 number_of_features_dropped_due_to_max_reached = 9;
+    repeated UnsupportedElement unsupported_elements = 10;
+    map<string, int64> style_error_reference_map = 11;
+    map<string, int64> schema_error_reference_map = 12;
+    optional string map_title = 13;
+    optional string map_description = 14;
+    optional string earth_pro_version = 15;
+    optional MutationTimestamps mutation_timestamps = 16;
+    
+    reserved 7, 8;
+}
+
+message MutationTimestamps {
+    repeated google.protobuf.Timestamp timestamps = 1;
+}
+
+message FeatureIdToFeatureStyleMap {
+    repeated FeatureStyle feature_styles = 1;
+    map<string, int32> feature_style_mapping = 2;
+}
+
+message ValidateDocumentAssetUploadRequest {
+    optional string map_id = 1;
+    optional DocumentAssetValidationType validation_type = 2;
+}
+
+message ValidateDocumentAssetUploadResponse {
+    optional DocumentAssetValidationResult validation_result = 1;
+}
+
+message ImportDatasetAsyncRequest {
+    optional ImportDatasetRequest request = 1;
+    optional int32 retry = 2;
+    optional string display_name = 3;
+}
+
+message ImportDatasetAsyncResponse {
+    optional google.longrunning.Operation operation = 1;
+}
+
+message GetMapMutationSetAtTimestampRequest {
+    optional string map_id = 1;
+    optional google.protobuf.Timestamp timestamp = 2;
+}
+
+message GetMapMutationSetAtTimestampResponse {
+    optional DataMutationSet data_mutation_set = 1;
+}
+
+message AssetToCopy {
+    oneof asset_data_source {
+        string earth_data_layer_identifier = 2;
+        string three_d_asset_mutation_token = 3;
+    }
+}
+
+message CopyDocumentAssetRequest {
+    optional string source_map_id = 1;
+    optional string destination_map_id = 2;
+    optional AssetToCopy asset_to_copy = 3;
+}
+
+message CopyDocumentAssetResponse {
+    optional AssetToCopy copied_asset = 1;
+    optional bool asset_was_updated = 2;
+}
+
+enum PublicAccessControl {
+    PUBLICACCESSCONTROL_UNKNOWN = 0;
+    PUBLICACCESSCONTROL_PRIVATE = 1;
+    PUBLICACCESSCONTROL_PUBLIC_READ = 2;
+    PUBLICACCESSCONTROL_PUBLIC_READ_UNLISTED = 3;
+    PUBLICACCESSCONTROL_PUBLIC_READWRITE = 4;
+    PUBLICACCESSCONTROL_PUBLIC_READWRITE_UNLISTED = 5;
+}
+
+enum DatasetCapabilities {
+    DATASET_CAPABILITY_UNKNOWN = 0;
+    DATASET_CAPABILITY_HAS_EXPLICIT_TITLES = 1;
+    DATASET_CAPABILITY_HAS_EXPLICIT_DESCRIPTIONS = 2;
+    DATASET_CAPABILITY_HAS_EXPLICIT_GEOMETRIES = 3;
+}
+
+enum DocumentRenaming {
+    DOCUMENT_RENAMING_UNKNOWN = 0;
+    DOCUMENT_RENAMING_ALLOW = 1;
+    DOCUMENT_RENAMING_DISALLOW = 2;
+}
+
+enum ContentRoot {
+    CONTENT_ROOT_UNKNOWN = 0;
+    CONTENT_ROOT_MAP = 1;
+}
+
+enum DocumentAssetValidationType {
+    DOCUMENT_ASSET_VALIDATION_TYPE_UNKNOWN = 0;
+    DOCUMENT_ASSET_VALIDATION_TYPE_USER_LAYER = 1;
+}
+
+enum DocumentAssetValidationResult {
+    DOCUMENT_ASSET_VALIDATION_RESULT_UNKNOWN = 0;
+    DOCUMENT_ASSET_VALIDATION_RESULT_SUCCESS = 1;
+    DOCUMENT_ASSET_VALIDATION_RESULT_FAIL_NOT_OWNER = 2;
+    DOCUMENT_ASSET_VALIDATION_RESULT_FAIL_IN_SHARED_DRIVE = 3;
+    DOCUMENT_ASSET_VALIDATION_RESULT_FAIL_OWNER_EMPTY = 5;
+    DOCUMENT_ASSET_VALIDATION_RESULT_FAIL_NOT_WRITER = 6;
+}

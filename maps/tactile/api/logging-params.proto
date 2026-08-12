@@ -1,0 +1,63 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "logs/proto/maps/mobile/server_version_metadata.proto";
+import "logs/proto/searchbox/searchbox_stats.proto";
+import "logs/proto/visual_element/click_tracking_cgi.proto";
+import "logs/proto/visual_element/ui_state_enum.proto";
+import "logs/proto/visual_element/user_action_enum.proto";
+import "logs/proto/visual_element/visual_element_lite.proto";
+import "maps/tactile/api/shared/layer/map-layer-type.proto";
+import "maps/tactile/api/shared/logging-common.proto";
+import "maps/tactile/api/shared/savedplaces/saved-places-client-id.proto";
+import "maps/tactile/api/shared/serialized-data-reference.proto";
+import "maps/tactile/api/shared/webmaps-enums.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "LoggingParamsProto";
+option java_package = "com.google.maps.tactile";
+
+message LoggingParams {
+    optional string event_id = 17;
+    optional string logical_parent_id = 9;
+    optional string ei = 1;
+    optional string ved = 2;
+    optional logs.ClickTrackingCGI click_tracking = 4;
+    optional logs.UIState ve_ui_state = 19;
+    optional int32 type_id = 15;
+    optional logs.UserAction user_action = 12;
+    repeated logs.UserAction other_user_actions = 18;
+    optional logs.CardinalDirection cardinal_direction = 13;
+    repeated logs.VisualElementLiteProto client_ve_tree = 8;
+    optional bool disable_logging = 20;
+    optional bool quantize_locations = 22;
+    optional bool is_prefetch = 3;
+    optional bool is_internal_batch_request_for_external_users = 21;
+    optional string gs_l = 5;
+    optional string oq = 6;
+    optional logs_proto_searchbox.SearchboxStats searchbox_stats = 11;
+    optional GeoProduct product_id = 7;
+    optional string api_referer = 10;
+    optional SerializedDataReference data_reference = 14;
+    optional bool also_logged_in_testing_log = 23;
+    optional EventExtraLoggingData extra_logging_data = 24;
+    optional bool is_auto_refresh = 26;
+    optional logs_gmm.ServerVersionMetadata server_version_metadata = 27;
+    optional maps_tactile.shared.savedplaces.SavedPlacesClientId saved_places_client_id = 28;
+    optional MapLayerState map_layer_state = 29;
+    
+    reserved 16, 25;
+}
+
+message EventExtraLoggingData {
+    optional string notification_metadata = 1;
+    optional maps_tactile.shared.PwaSurface maps_pwa_surface = 2;
+}
+
+message MapLayerState {
+    repeated maps_tactile.shared.layer.MapLayerType active_layer = 1;
+}

@@ -1,0 +1,155 @@
+syntax = "proto2";
+
+package maps_tactile.shared.passiveassist;
+
+import "geo/serving/proto/intents/action_intent.proto";
+import "maps/tactile/api/shared/feature-id.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPA";
+option java_multiple_files = true;
+option java_outer_classname = "PassiveassistProto";
+option java_package = "com.google.maps.tactile.shared.passiveassist";
+
+message UiSurface {
+    optional string surface_id = 19;
+}
+
+message ContentMask {
+    optional bool include_ambient_crisis_collection = 64;
+    optional bool include_area_questions_and_answers = 43;
+    optional bool include_best_of_lists = 28;
+    optional bool include_covid_layer_stats = 65;
+    optional bool include_discovery_map_highlights_set = 35;
+    optional bool include_driving_destinations = 13;
+    optional bool include_editorial_lists = 26;
+    optional bool include_everyday_trips = 48;
+    optional bool include_explore_activities = 1;
+    optional bool include_explore_area_summary = 2;
+    optional bool include_explore_user_area_summary = 50;
+    optional bool include_explore_categories = 3;
+    optional bool include_explore_celebration_content = 55;
+    optional bool include_explore_deals = 60;
+    optional bool include_explore_facts = 4;
+    optional bool include_explore_intents = 5;
+    optional bool include_explore_local_stream = 59;
+    optional bool include_explore_photos = 6;
+    optional bool include_explore_tab_serverside_experiments = 49 [deprecated = true];
+    optional bool include_general_public_lists = 40;
+    optional bool include_geo_verticals = 16;
+    optional bool include_informal_transit_summary = 57;
+    optional bool include_known_places = 22;
+    optional bool include_people_follow_recommendations = 62 [deprecated = true];
+    optional bool include_tourist_places = 37;
+    optional bool include_major_event_card_collection = 15 [deprecated = true];
+    optional bool include_major_event_explore_cards = 31;
+    optional bool include_major_event_explore_prominent_cards = 32;
+    optional bool include_major_event_driving_cards = 33;
+    optional bool include_major_event_transit_cards = 34;
+    optional bool include_major_event_ambient_collection = 12;
+    optional bool include_nearby_experiences = 27 [deprecated = true];
+    optional bool include_nearby_hotels = 36;
+    optional bool include_nearby_place_sets = 20;
+    optional bool include_nearby_stations = 7;
+    optional bool include_nearby_transit_lines = 70;
+    optional bool include_pinned_public_lists = 39;
+    optional bool include_pinned_transit_lines = 73;
+    optional bool include_popular_areas_carousel = 45;
+    optional bool include_popular_areas_preview = 41 [deprecated = true];
+    optional bool include_recent_history_items = 19;
+    optional bool include_search_zero_suggest_ads = 51;
+    optional bool include_directions_history_items = 30;
+    optional bool include_important_venue_lists = 61;
+    optional bool include_recommended_places = 21;
+    optional bool include_personal_interest_places = 54;
+    optional bool include_scenic_walks = 56 [deprecated = true];
+    optional bool include_traffic_report = 9;
+    optional bool include_transit_alerts = 10;
+    optional bool include_transit_destinations = 14;
+    optional bool include_transit_schematic_maps = 11;
+    optional bool include_transportation_query_suggestions = 68;
+    optional bool include_upcoming_personal_events = 67;
+    optional bool include_video_lists = 42;
+    optional bool include_visual_explore_elements = 29;
+    optional bool include_personalized_history_items = 58;
+    optional bool include_history_item_bundles = 78;
+    optional bool include_explore_discoverable_lists = 80;
+    optional bool include_personal_action_content = 63;
+    optional bool include_weather_widget = 66 [deprecated = true];
+    optional bool include_explore_experimental_content = 23;
+    optional bool include_traffic_experimental_content = 24;
+    optional bool include_transit_experimental_content = 25;
+    optional bool include_chain_businesses_query_suggestions = 69;
+    optional bool include_enroute_history_items = 71;
+    optional bool include_weather_conditions = 76;
+    optional bool include_personalized_directions_history_items = 74;
+    optional bool include_route_search_history_items = 82;
+    optional bool include_at_a_place_details = 72;
+    optional bool include_top_maps_elements_output = 81;
+    optional bool include_merchant_info = 75;
+    optional bool include_far_from_frequent_locations_notification_details = 77;
+    optional bool include_meal_time_place_set = 79;
+    optional bool include_predicted_destinations = 8 [deprecated = true];
+    optional bool test_only_include_all_content_types = 38;
+    
+    reserved 17, 18, 44, 46, 47, 52, 53;
+}
+
+message CelebrationExploreCardData {
+    optional string title = 1;
+    optional string id = 4;
+    optional int32 duration_millis = 5;
+    
+    optional Theme card_theme = 2;
+    message Theme {
+        optional fixed32 text_color = 1;
+        optional string background_image_url = 2;
+        optional string lottie_animation_url = 3;
+        optional string image_accessibility_text = 4;
+        optional string annimation_accessibility_text = 5;
+        
+        optional Layout layout = 6;
+        enum Layout {
+            UNKNOWN_LAYOUT = 0;
+            START_ALIGNED_TEXT = 1;
+            CENTERED_TEXT = 2;
+        }
+    }
+    
+    optional Theme card_night_theme = 6;
+    
+    repeated QuerySuggestion query_suggestion = 3;
+    message QuerySuggestion {
+        optional string display_name = 1;
+        optional string accessibility_text = 4;
+        optional string query = 2;
+        optional string video_id = 3;
+        optional FeatureId feature_id = 5;
+        optional string external_url = 6;
+        optional string internal_url = 7;
+        optional geo_serving_proto.intents.ActionIntent action_intent = 8;
+        optional bool force_magnifying_glass_icon = 9;
+    }
+}
+
+message PrefetchContext {
+    optional PrefetchType prefetch_type = 1;
+    optional ContentMask content_mask = 2;
+}
+
+message PrefetchOptions {
+    repeated PrefetchContext prefetch_context = 1;
+}
+
+enum Status {
+    UNKNOWN_STATUS = 0;
+    SUCCESS = 1;
+    FAILURE = 2;
+    UNIMPLEMENTED = 3;
+}
+
+enum PrefetchType {
+    UNKNOWN_PREFETCH_TYPE = 0;
+    PROVIDED_CONTEXT = 1;
+    OTHER_CONTEXTS = 2;
+}

@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "DirectionsPolylineProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message CompactPolyline {
+    repeated sint32 latitude_e7_diff = 1 [packed = true];
+    repeated sint32 longitude_e7_diff = 2 [packed = true];
+    repeated sint32 altitude_dm_diff = 5 [packed = true];
+    
+    reserved 3, 4;
+}

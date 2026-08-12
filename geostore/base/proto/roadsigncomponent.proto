@@ -1,0 +1,86 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/name.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/routedirection.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message RoadSignComponentProto {
+    optional int32 major_position = 1;
+    optional int32 minor_position = 2;
+    
+    optional RoadSignSemanticType semantic_type = 9;
+    enum RoadSignSemanticType {
+        ROAD_SIGN_SEMANTIC_TYPE_UNSPECIFIED = 0;
+        PRIORITY = 1;
+        PRIORITY_STOP = 17;
+        PRIORITY_STOP_AHEAD = 273;
+        PRIORITY_YIELD = 18;
+        PRIORITY_YIELD_AHEAD = 289;
+        SPEED_LIMIT = 2;
+        SPEED_LIMIT_START = 33;
+        SPEED_LIMIT_START_MAX = 529;
+        SPEED_LIMIT_START_MIN = 530;
+        SPEED_LIMIT_START_SCHOOL = 531;
+        SPEED_LIMIT_START_ZONE = 532;
+        SPEED_LIMIT_START_ADVISORY = 533;
+        SPEED_LIMIT_START_AHEAD = 534;
+        SPEED_LIMIT_END = 34;
+        SPEED_LIMIT_END_MAX = 545;
+        SPEED_LIMIT_END_MIN = 546;
+        SPEED_LIMIT_END_SCHOOL = 547;
+        SPEED_LIMIT_END_ZONE = 548;
+        RESTRICTION = 3;
+        RESTRICTION_TURN = 49;
+        RESTRICTION_TURN_NO_RIGHT = 785;
+        RESTRICTION_TURN_NO_LEFT = 786;
+        RESTRICTION_TURN_NO_U = 787;
+        RESTRICTION_TURN_NO_THRU = 788;
+        RESTRICTION_MOVEMENT = 50;
+        RESTRICTION_MOVEMENT_PASSING = 801;
+        RESTRICTION_ACCESS = 51;
+        RESTRICTION_ACCESS_NO_ENTRY = 817;
+        WARNING = 4;
+        WARNING_CROSSING = 65;
+        WARNING_CROSSING_CHILDREN = 1042;
+        WARNING_CROSSING_PEDESTRIAN = 1043;
+        WARNING_CROSSING_RAILROAD = 1044;
+        WARNING_CROSSING_SCHOOL = 1045;
+        WARNING_ROAD_WORK = 66;
+        INFO = 5;
+        INFO_BOUNDARY = 81;
+        INFO_BOUNDARY_BUILT_UP_AREA = 1297;
+        INFO_BOUNDARY_BUILT_UP_AREA_START = 20753;
+        INFO_BOUNDARY_BUILT_UP_AREA_END = 20754;
+        INFO_BOUNDARY_RESIDENTIAL = 1298;
+        INFO_BOUNDARY_RESIDENTIAL_START = 20769;
+        INFO_BOUNDARY_RESIDENTIAL_END = 20770;
+        INFO_TRANSIT = 82;
+        AUXILIARY = 6;
+        AUXILIARY_ANIMAL = 97;
+        AUXILIARY_DIRECTION = 98;
+        AUXILIARY_DISTANCE = 99;
+        AUXILIARY_TIME = 100;
+        AUXILIARY_WEATHER = 101;
+        AUXILIARY_WEIGHT = 102;
+        AUXILIARY_VEHICLE = 103;
+    }
+    
+    optional NameProto text = 4;
+    optional FeatureIdProto feature_id = 6;
+    optional int32 feature_type = 7;
+    optional RouteDirection route_direction = 8 [default = DIRECTION_NONE];
+    
+    reserved 3, 5;
+    
+    enum TypeCategory {
+        TYPE_TEXT = 1;
+    }
+}

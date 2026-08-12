@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.billing;
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.billing";
+
+message Limit {
+    optional LimitType limit_type = 1 [deprecated = true];
+    optional int64 int_limit_value = 2 [deprecated = true];
+    
+    oneof limit_value {
+        UserAssetMaxStorageBytes user_asset_max_storage_bytes = 3;
+        UserAssetMaxFileSizeBytes user_asset_max_file_size_bytes = 4;
+        OnDemandEvaluationMaxSiteSize on_demand_evaluation_max_site_size = 5;
+        ClassificationLayerMaxSiteSize classification_layer_max_site_size = 6;
+        ChangeDetectionMaxSiteSize change_detection_max_site_size = 7;
+    }
+}
+
+message UserAssetMaxStorageBytes {
+    optional int64 bytes_limit = 1;
+}
+
+message UserAssetMaxFileSizeBytes {
+    optional int64 bytes_limit = 1;
+}
+
+message OnDemandEvaluationMaxSiteSize {
+    optional int64 acres_limit = 1;
+}
+
+message ClassificationLayerMaxSiteSize {
+    optional int64 km2_limit = 1;
+}
+
+message ChangeDetectionMaxSiteSize {
+    optional int64 acres_limit = 1;
+}
+
+enum LimitType {
+    option deprecated = true;
+    LIMIT_TYPE_UNSPECIFIED = 0;
+    LIMIT_TYPE_USER_ASSET_MAX_STORAGE_MB = 1;
+    LIMIT_TYPE_USER_ASSET_MAX_FILE_SIZE_MB = 2;
+}

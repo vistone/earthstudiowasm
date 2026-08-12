@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+import "google/type/latlng.proto";
+import "third_party/redwood/infrastructure/proto/linear_algebra.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "BoundingBoxProto";
+option java_package = "com.google.geo.imagery.karto.proto";
+
+message BoundingBox {
+    optional google.type.LatLng lo = 1;
+    optional google.type.LatLng hi = 2;
+    optional double height_meters = 3;
+}
+
+message BoundingBoxOverride {
+    option deprecated = true;
+    optional google.type.LatLng northeast_point = 1;
+    optional google.type.LatLng southwest_point = 2;
+    optional float height = 3;
+}
+
+message OrientedBoundingBox {
+    optional .redwood.TransformationProto ecef_t_anchor = 1;
+    optional .redwood.Vector3Proto scale = 2;
+}

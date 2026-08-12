@@ -1,0 +1,181 @@
+syntax = "editions";
+
+package logs_tactile;
+
+import "geo/serving/proto/directions/engine_type.proto";
+import "logs/proto/maps/shared/logged-geom.proto";
+import "logs/proto/maps/tactile/annotations.proto";
+import "logs/proto/maps/tactile/directions-client-stats.proto";
+import "logs/proto/maps/tactile/geometry.proto";
+import "logs/proto/searchbox/searchbox_stats.proto";
+import "maps/tactile/api/directions-common.proto";
+import "maps/tactile/api/directions-request.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.tactile";
+
+message LoggedDirectionsRequest {
+    repeated WaypointQuery waypoint = 1;
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 2 [default = MIXED];
+    optional logs_maps_shared.geom.Camera input_camera = 3;
+    optional int32 trip_index = 4;
+    optional maps_tactile.directions.Options.DetailLevel detail_level = 5 [default = STEPS, deprecated = true];
+    optional DirectionsOptions options = 6;
+    optional maps_tactile.directions.Distance.Units distance_units = 7;
+    repeated ViaPoint via_point = 8;
+    optional UpdateRouteParams update_route_params = 9;
+    repeated DirectionsWaypointSearchboxStats directions_waypoint_searchbox_stats = 10;
+    optional LoggedDirectionsClientStats directions_client_stats = 11;
+}
+
+message TravelModeOptions {
+    optional maps_tactile.shared.directions.TravelMode preferred_travel_mode = 1 [default = MIXED];
+    optional maps_tactile.directions.TravelModeOptions.Filtering filtering = 2 [default = BLENDED];
+    optional maps_tactile.directions.TravelModeOptions.BlendedFilteringOptions blended_filtering_options = 6;
+    optional maps_tactile.directions.TravelModeOptions.RecommendedFilteringOptions recommended_filtering_options = 8;
+    optional bool enable_fly = 3 [default = true];
+    optional bool enable_taxi = 4;
+    optional bool enable_two_wheeler = 7;
+    optional bool enable_bikesharing = 5;
+}
+
+message DirectionsOptions {
+    optional TransitOptions transit_options = 1;
+    optional DrivingOptions driving_options = 2;
+    optional BikesharingOptions bikesharing_options = 13;
+    optional TaxiOptions taxi_options = 12;
+    optional bool allow_flights_in_mixed_mode = 3 [default = true, deprecated = true];
+    optional bool attempt_cache_write = 4 [default = true, deprecated = true];
+    optional maps_tactile.directions.Options.DetailLevel detail_level = 5 [default = STEPS];
+    optional TravelModeOptions travel_mode_options = 6;
+    optional bool avoid_ferries = 7;
+    optional bool want_lane_guidance = 8 [default = false];
+    optional AnchoredTime time = 9;
+    optional bool enable_trip_groups = 10 [default = false];
+    optional TripConsistencyInput trip_consistency_input = 11 [deprecated = true];
+    optional bool is_route_preview = 14;
+}
+
+message TrafficReportOptions {
+    optional bool enable_visual_traffic_report = 1 [default = false];
+    optional bool enable_traffic_report_prompts = 2 [default = false];
+}
+
+message DrivingOptions {
+    optional bool avoid_highways = 1;
+    optional bool avoid_tolls = 2;
+    optional maps_tactile.shared.directions.TrafficRoutingStrategy traffic_routing_strategy = 3 [default = IGNORE_TRAFFIC];
+    optional TrafficReportOptions traffic_report_options = 4;
+    optional bool prefer_truck_routes = 5;
+    optional VehicleTypeOptions vehicle_type_options = 6;
+}
+
+message TransitOptions {
+    optional maps_tactile.shared.directions.TransitTimeAnchoring time_anchoring = 1 [deprecated = true];
+    optional maps_tactile.shared.directions.TimezoneInterpretation timezone_interpretation = 2 [default = UTC, deprecated = true];
+    optional int64 time = 3 [deprecated = true];
+    
+    optional VehicleType preferred_type = 4 [default = NO_PREFERENCE, deprecated = true];
+    enum VehicleType {
+        option features = enum_type: CLOSED
+        ;
+        NO_PREFERENCE = 0;
+        BUS = 1;
+        SUBWAY = 2;
+        TRAIN = 3;
+        TRAM = 4;
+        PREFER_RAIL = 5;
+    }
+    
+    optional maps_tactile.shared.directions.TransitScoringPreference scoring_preference = 5 [default = TRANSIT_BEST];
+    repeated maps_tactile.shared.directions.VehicleTypePreference preferred_vehicle = 6 [deprecated = true];
+    repeated maps_tactile.directions.TransitOptions.TransitVehicleTypePreference vehicle_preference = 10;
+    optional maps_tactile.shared.directions.TransitTripAggregation aggregation = 8 [default = SERVER_DEFINED];
+    
+    optional MultimodalOptions multimodal_options = 9;
+    message MultimodalOptions {
+        optional MultimodalTripTypes requested_multimodal_trips = 1;
+        message MultimodalTripTypes {
+            optional bool car_and_transit = 1;
+            optional bool rickshaw_and_transit = 2;
+            optional bool two_wheeler_and_transit = 3;
+            optional bool ridesharing_and_transit = 4;
+            optional bool bicycle_and_transit = 5;
+        }
+    }
+}
+
+message BikesharingOptions {
+    optional RequestedResultTypes requested_result_types = 1;
+    message RequestedResultTypes {
+        optional bool include_dockless_bikesharing = 1;
+        optional bool include_docked_bikesharing = 2;
+    }
+}
+
+message TaxiOptions {
+    optional RequestedResultTypes requested_result_types = 1;
+    message RequestedResultTypes {
+        optional bool include_regular_ridesharing = 1;
+        optional bool include_long_distance_ridesharing = 2;
+        optional bool include_offline_auto_rickshaw = 3;
+    }
+}
+
+message ViaPoint {
+    optional int32 after_waypoint = 1;
+    optional LatLng position = 2;
+    optional string segment_feature_id = 3;
+    optional float segment_interpolation = 4;
+}
+
+message WaypointQuery {
+    optional string query = 1;
+    optional string feature_id = 2;
+    optional LatLng position = 3;
+    optional maps_tactile.directions.WaypointQuery.EntityType entity_type = 8 [default = ENTITY_TYPE_DEFAULT];
+    optional maps_tactile.directions.WaypointQuery.QueryType query_type = 5 [default = QUERY_TYPE_FEATURE];
+    optional BuildingLevel level = 6;
+    
+    reserved 7;
+}
+
+message BuildingLevel {
+    optional float level_number = 1;
+    optional string feature_id = 2;
+}
+
+message UpdateRouteParams {
+    optional maps_tactile.UpdateRouteParams.UpdateType update_type = 1 [default = UNKNOWN];
+}
+
+message DirectionsSuggestionContext {
+    repeated WaypointQuery waypoint = 1;
+    optional int32 suggested_waypoint_index = 2;
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 3;
+}
+
+message AnchoredTime {
+    optional maps_tactile.shared.directions.TimeAnchoring anchoring = 1 [default = DEPARTURE];
+    optional maps_tactile.shared.directions.TimezoneInterpretation timezone_interpretation = 2 [default = UTC];
+    optional int64 time = 3;
+}
+
+message TripConsistencyInput {
+    optional bool is_familiar = 1;
+}
+
+message DirectionsWaypointSearchboxStats {
+    optional int32 waypoint_index = 1;
+    optional bool did_trigger_search = 3 [default = false];
+    optional logs_proto_searchbox.SearchboxStats searchbox_stats = 2;
+}
+
+message VehicleTypeOptions {
+    optional geo_serving_proto.directions.EngineType engine_type = 6;
+}

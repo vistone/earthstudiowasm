@@ -1,0 +1,166 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "geostore/base/proto/feature.proto";
+import "maps/paint/proto/legendary/legendary.proto";
+import "maps/paint/styler/color-modifying-styler.proto";
+import "maps/versatile/proto/rendering-category.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureSelectorProto";
+option java_package = "com.google.maps.paint";
+
+message CustomStylerDescription {
+    optional StylerType type = 1;
+    enum StylerType {
+        STYLER_UNSPECIFIED = 0;
+        STYLER_TEXT_SCALE = 1;
+        STYLER_VISIBILITY = 2;
+        STYLER_COLOR_MODIFYING = 3;
+        STYLER_DASH_PATTERN_MODIFYING = 4;
+        STYLER_WIDTH = 5;
+        STYLER_API_KEY_ZOOM = 6;
+    }
+    
+    repeated Parameter param = 2 [deprecated = true];
+    message Parameter {
+        option deprecated = true;
+        optional string key = 1;
+        optional string value = 2;
+    }
+    
+    optional TextScaleOption text_scale_option = 3;
+    message TextScaleOption {
+        optional float scale = 1;
+    }
+    
+    optional WidthOption width_option = 4;
+    message WidthOption {
+        optional float width = 1;
+    }
+    
+    optional DashPatternOption dash_pattern_option = 5;
+    message DashPatternOption {
+        repeated float dash = 1 [packed = true];
+    }
+    
+    optional VisibilityOption visibility_option = 6;
+    message VisibilityOption {
+        optional State state = 1;
+        enum State {
+            UNKNOWN = 0;
+            ON = 1;
+            OFF = 2;
+            SIMPLIFIED = 3;
+        }
+    }
+    
+    optional KeyZoomOption key_zoom_option = 7;
+    message KeyZoomOption {
+        optional int32 zoom = 1;
+    }
+    
+    optional ColorModifyingOption color_modifying_option = 8;
+    message ColorModifyingOption {
+        repeated ColorTransform transform = 1;
+        optional CategoricalPOIIconColorModifyingOption categorical_icon_color_modifying_option = 2;
+    }
+    
+    message CategoricalPOIIconColorModifyingOption {
+        repeated ColorTransform container_color_modifying_option = 1;
+        repeated ColorTransform outline_color_modifying_option = 2;
+        repeated ColorTransform pictogram_color_modifying_option = 3;
+    }
+}
+
+message FeatureSelector {
+    optional FeatureTypeCategory feature_type = 1 [default = TYPE_ALL];
+    enum FeatureTypeCategory {
+        TYPE_ALL = 0;
+        TYPE_ADMINISTRATIVE = 1;
+        TYPE_COUNTRY = 17;
+        TYPE_INTERNATIONAL_DISPUTED_BORDER = 273;
+        TYPE_TREATY_OR_PROVISIONAL_INTERNATIONAL_BORDER = 274;
+        TYPE_BORDER_ADMINISTRATIVE = 275;
+        TYPE_ADMINISTRATIVE_AREA1 = 18;
+        TYPE_LOCALITY = 19;
+        TYPE_NEIGHBORHOOD = 20;
+        TYPE_LAND_PARCEL = 21;
+        TYPE_POI = 2;
+        TYPE_BUSINESS = 33;
+        TYPE_SHOPPING = 529;
+        TYPE_FOOD_AND_DRINK = 530;
+        TYPE_GAS_STATION = 531;
+        TYPE_CAR_RENTAL = 532;
+        TYPE_LODGING = 533;
+        TYPE_GOVERNMENT = 34;
+        TYPE_SCHOOL = 35;
+        TYPE_MEDICAL = 36;
+        TYPE_ATTRACTION = 37;
+        TYPE_PLACE_OF_WORSHIP = 38;
+        TYPE_SPORTS_COMPLEX = 39;
+        TYPE_PARK = 40;
+        TYPE_ROAD = 3;
+        TYPE_HIGHWAY = 49;
+        TYPE_CONTROLLED_ACCESS_HIGHWAY = 785;
+        TYPE_ARTERIAL_ROAD = 50;
+        TYPE_LOCAL_ROAD = 51;
+        TYPE_LOCAL_DRIVABLE_ROAD = 817;
+        TYPE_TRAIL = 818;
+        TYPE_LANE = 52;
+        TYPE_TRANSIT = 4;
+        TYPE_TRANSIT_LINE = 65;
+        TYPE_RAIL_LINE = 1041;
+        TYPE_FERRY_LINE = 1042;
+        TYPE_TRANSIT_LAYER_LINE = 1043;
+        TYPE_TRANSIT_STATION = 66;
+        TYPE_RAIL_STATION = 1057;
+        TYPE_BUS_STOP = 1058;
+        TYPE_AIRPORT = 1059;
+        TYPE_FERRY_TERMINAL = 1060;
+        TYPE_LANDSCAPE = 5;
+        TYPE_MAN_MADE_STRUCTURE = 81;
+        TYPE_BUILDING = 1297;
+        TYPE_BUILT_UP_AREA = 1298;
+        TYPE_AREA_OF_INTEREST = 1299;
+        TYPE_NATURAL_FEATURE = 82;
+        TYPE_LANDCOVER = 1313;
+        TYPE_TERRAIN = 1314;
+        TYPE_WATER = 6;
+    }
+    
+    repeated CustomStyleFeatureTag feature_type_list = 10 [packed = true];
+    
+    optional RenderedElementType element_type = 2 [default = ELEMENT_ALL];
+    enum RenderedElementType {
+        ELEMENT_ALL = 1;
+        ELEMENT_GEOMETRY = 2;
+        ELEMENT_GEOMETRY_STROKE = 33;
+        ELEMENT_GEOMETRY_FILL = 34;
+        ELEMENT_LABEL = 3;
+        ELEMENT_LABEL_ICON = 49;
+        ELEMENT_LABEL_ICON_OUTLINE = 785;
+        ELEMENT_LABEL_ICON_CONTAINER = 786;
+        ELEMENT_LABEL_ICON_PICTOGRAM = 787;
+        ELEMENT_LABEL_TEXT = 50;
+        ELEMENT_LABEL_TEXT_STROKE = 801;
+        ELEMENT_LABEL_TEXT_FILL = 802;
+    }
+    
+    optional string country_code = 3;
+    repeated CustomStylerDescription custom_styler = 9;
+    optional geostore.FeatureProto.TypeCategory oyster_type = 6 [default = TYPE_ANY];
+    optional maps_versatile.RenderingCategory rendering_category = 8 [default = TYPE_ANY];
+    
+    reserved 4, 7;
+    
+    reserved "styler", "establishment_type";
+}
+
+message FeatureSelectorList {
+    repeated FeatureSelector selector = 1;
+}

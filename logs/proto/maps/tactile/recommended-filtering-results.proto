@@ -1,0 +1,54 @@
+syntax = "proto2";
+
+package logs_tactile;
+
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "maps/tactile/api/shared/directions/recommended-filtering-results.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.tactile";
+
+message LoggedRecommendedFilteringResults {
+    repeated TripGroupingRecommendation trip_grouping_recommendation = 1;
+    message TripGroupingRecommendation {
+        oneof grouping_recommendation {
+            TripComparisonGrouping trip_comparison = 1;
+            TravelModeCentricGrouping travel_mode_centric = 2;
+        }
+        
+        message TripReference {
+            optional int32 trip_index = 1;
+        }
+        
+        message TripGroup {
+            repeated TripReference trip_reference = 1;
+            optional maps_tactile.shared.directions.RecommendedFilteringResults.TripGroupingRecommendation.TripGroup.GroupingReason grouping_reason = 2;
+            repeated maps_tactile.shared.directions.RecommendedFilteringResults.TripGroupingRecommendation.TripGroup.GroupRankingReason ranking_reason = 3 [packed = true];
+            optional maps_tactile.shared.directions.TravelMode group_travel_mode = 4;
+            
+            optional ModeNudge mode_nudge = 5;
+            message ModeNudge {
+                optional maps_tactile.shared.directions.RecommendedFilteringResults.TripGroupingRecommendation.TripGroup.ModeNudge.ModeNudgeRationale mode_nudge_rationale = 1;
+            }
+        }
+        
+        message TripComparisonGrouping {
+            repeated TripGroup comparison_group = 1;
+        }
+        
+        message TravelModeCentricGrouping {
+            repeated TripGroup group = 1;
+            optional maps_tactile.shared.directions.TravelMode primary_travel_mode = 2;
+            optional bool requested_mode_shift_was_ineligible = 3;
+        }
+    }
+    
+    optional int32 best_trip_grouping_recommendation_index = 2;
+    
+    optional TripPreviewRecommendation trip_preview_recommendation = 3;
+    message TripPreviewRecommendation {
+        optional int32 trip_index = 1;
+    }
+}

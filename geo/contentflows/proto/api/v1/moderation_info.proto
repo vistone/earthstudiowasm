@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geo_contentflows;
+
+import "geo/moderation/service/proto/transparency_metadata.proto";
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ModerationInfoProto";
+option java_package = "com.google.geo.contentflows.proto1api";
+
+message ModerationInformation {
+    optional ModerationStatus moderation_status = 1;
+    enum ModerationStatus {
+        UNKNOWN_MODERATION_STATUS = 0;
+        PENDING = 1;
+        APPROVED = 2;
+        REJECTED = 3;
+    }
+    
+    optional google.protobuf.Timestamp moderation_time = 2;
+    optional geo_moderation.TransparencyMetadata transparency_metadata = 3;
+    repeated string associated_field_keys = 4;
+}

@@ -1,0 +1,392 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.layers;
+
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+import "geo/earth/proto/contentcreation/content_editing_requests.proto";
+import "geo/earth/proto/contentcreation/data_import_errors.proto";
+import "google/internal/earth/v1/shared.proto";
+import "google/longrunning/operations.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "wireless/android/privacy/annotations/proto/collection_basis_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.layers";
+
+message ListDataLayersRequestWrapper {
+    optional ClientMetadata client_metadata = 1 [deprecated = true];
+    optional ListDataLayersRequest request = 2;
+}
+
+message ListDataLayersRequest {
+    optional int32 page_size = 2;
+    optional string page_token = 3;
+    optional DataLayerView view = 4;
+    optional string search_query = 5;
+}
+
+message ListDataLayersResponse {
+    repeated LayerGroup layer_groups = 2;
+    repeated string global_layer_ids = 3;
+    
+    reserved 1;
+}
+
+message LayerGroup {
+    optional string group_title = 1;
+    repeated DataLayer layers = 5;
+    optional string next_page_token = 3;
+    optional string layer_group_id = 4;
+    
+    reserved 2;
+}
+
+message GetDataLayerRequestWrapper {
+    optional ClientMetadata client_metadata = 1;
+    optional GetDataLayerRequest request = 2;
+}
+
+message GetDataLayerRequest {
+    optional string id = 2;
+    optional DataLayerView view = 4;
+    optional string map_id = 6;
+    optional int64 last_modified_timestamp_millis = 7;
+    
+    oneof layer_options {
+        VectorLayerOptions vector_layer_options = 3;
+        ClassificationLayerOptions classification_layer_options = 5;
+    }
+    
+    reserved 1;
+}
+
+message VectorLayerOptions {
+    map<string, FilterSet> filters_by_key = 1;
+    repeated string exposed_attribute_keys = 2;
+    optional bool include_attribute_stats = 3;
+    repeated VectorAppliedStyleRules applied_styles = 4;
+    
+    reserved 7;
+}
+
+message VectorAppliedStyleRules {
+    optional string attribute_key = 1;
+    optional AppliedStyleRules style_rules = 2;
+    
+    optional Type type = 3;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        TYPE_POINT = 1;
+        TYPE_LINE = 2;
+        TYPE_POLYGON = 3;
+        TYPE_LABEL = 4;
+    }
+}
+
+message ClassificationLayerOptions {
+    optional int32 year = 1;
+    repeated ClassDefinition class_definition = 2;
+    optional string inconclusive_color_rgb = 3;
+    optional .earth.document.protos.Geometry classification_area = 4;
+}
+
+message ClassDefinition {
+    optional string color_rgb = 1;
+    repeated LatitudeLongitude sample_points = 2;
+}
+
+message GetDataLayerResponse {
+    optional DataLayer data_layer = 1;
+}
+
+message GetFeatureDetailsRequestWrapper {
+    optional ClientMetadata client_metadata = 1;
+    optional GetFeatureDetailsRequest request = 2;
+}
+
+message GetFeatureDetailsRequest {
+    optional string feature_id = 3;
+    
+    oneof layer_identifier {
+        string data_layer_id = 1;
+        string tile_key = 2;
+    }
+}
+
+message GetFeatureDetailsResponse {
+    map<string, FeatureAttributeValue> attribute = 1;
+    repeated ProcessedFeatureAttribute processed_attribute = 2;
+}
+
+message GetFeaturesInViewportRequestWrapper {
+    optional ClientMetadata client_metadata = 1;
+    optional GetFeaturesInViewportRequest request = 2;
+}
+
+message GetFeaturesInViewportRequest {
+    optional Viewport viewport = 3;
+    optional int32 max_lod = 4;
+    optional int32 page_size = 5;
+    optional string page_token = 6;
+    
+    oneof layer_identifier {
+        string data_layer_id = 1;
+        string tile_key = 2;
+    }
+    
+    oneof layer_options {
+        VectorLayerOptions vector_layer_options = 7;
+    }
+}
+
+message GetFeaturesInViewportResponse {
+    repeated Feature features = 1;
+    optional string next_page_token = 3;
+    
+    reserved 2;
+}
+
+message Feature {
+    optional string feature_id = 3;
+    map<string, FeatureAttributeValue> attribute = 2;
+    repeated ProcessedFeatureAttribute processed_attribute = 1;
+}
+
+message ProcessedFeatureAttribute {
+    optional string name = 1;
+    optional string localized_name = 2;
+    optional string localized_value = 3;
+    
+    optional AttributeType type = 5;
+    enum AttributeType {
+        ATTR_TYPE_UNSPECIFIED = 0;
+        ATTR_TYPE_STRING = 1;
+        ATTR_TYPE_ENUM = 2;
+        ATTR_TYPE_NUMBER = 3;
+        ATTR_TYPE_DATETIME_USEC = 4;
+        ATTR_TYPE_BOOLEAN = 5;
+        ATTR_TYPE_LAT_LNG = 6;
+        ATTR_TYPE_DISTANCE_M = 7;
+        ATTR_TYPE_AREA_SQ_M = 8;
+        ATTR_TYPE_POWER_W = 9;
+        ATTR_TYPE_VOLTAGE_V = 10;
+        ATTR_TYPE_MARKDOWN = 11;
+        ATTR_TYPE_IMAGE = 12;
+    }
+}
+
+message FeatureAttributeValue {
+    oneof feature_attribute_value_type {
+        int64 integer_value = 1;
+        bool boolean_value = 2;
+        double double_value = 3;
+        string string_value = 4;
+        int64 date_time_usec_value = 5;
+    }
+}
+
+message CreateOnDemandLayerRequest {
+    optional string map_id = 1;
+    repeated Site sites = 2;
+    optional string idempotency_resource_id = 7;
+    
+    oneof inputs {
+        ElevationContourInputs elevation_contour_inputs = 3;
+        SlopeInputs slope_inputs = 4;
+        CutAndFillInputs cut_and_fill_inputs = 5;
+        AspectInputs aspect_inputs = 6;
+        ChangeDetectionInputs change_detection_inputs = 8;
+    }
+}
+
+message Site {
+    optional bytes s2_polygon = 1;
+}
+
+message ElevationContourInputs {
+    optional double interval_m = 1;
+}
+
+message SlopeInputs {
+    optional double resolution_m = 1;
+}
+
+message CutAndFillInputs {
+    optional double target_elevation_m = 1;
+    optional bool automatically_minimize_net_volume = 2;
+}
+
+message AspectInputs {
+    optional double resolution_m = 1;
+}
+
+message ChangeDetectionInputs {
+    optional int32 year1 = 1;
+    optional int32 year2 = 2;
+}
+
+message CreateOnDemandLayerResponse {
+    optional .earth.document.protos.Feature layer_feature = 2;
+    optional string parent_feature_id = 3;
+    
+    reserved 1;
+}
+
+message CreateOnDemandLayerAsyncRequest {
+    optional CreateOnDemandLayerRequest request = 1;
+}
+
+message CreateOnDemandLayerAsyncResponse {
+    optional longrunning.Operation operation = 1;
+}
+
+message ImportDatasetToLayerRequest {
+    optional string map_id = 1;
+    optional .earth.document.protos.PreparedDataset dataset = 2;
+    optional bool parse_styles = 3;
+}
+
+message ImportDatasetToLayerResponse {
+    optional longrunning.Operation import_operation = 1;
+}
+
+message CreateDocumentAssetAndAddLayerFeatureRequest {
+    option deprecated = true;
+    optional string map_id = 1;
+    optional string document_asset_id = 2;
+    optional bool parse_styles = 4;
+    optional int64 quota_bytes = 5;
+    optional string dataset_title = 6;
+    
+    optional DatasetFormat dataset_format = 9;
+    enum DatasetFormat {
+        DATASET_FORMAT_UNSPECIFIED = 0;
+        DATASET_FORMAT_KML = 1;
+        DATASET_FORMAT_GEOJSON = 2;
+        DATASET_FORMAT_SHAPEFILE = 3;
+    }
+    
+    optional string idempotency_resource_id = 10;
+    
+    oneof dataset_source {
+        string blob_id = 7;
+        string drive_file_id = 8;
+    }
+    
+    reserved 3;
+}
+
+message LayerProcessingDetails {
+    optional int32 num_features_with_errors = 1;
+    repeated LayerFeatureErrorSummary feature_error_summaries = 2;
+}
+
+message LayerFeatureErrorSummary {
+    repeated .earth.document.protos.FeatureError sample_errors = 1;
+    optional int64 total_error_count = 2;
+}
+
+message CreateDocumentAssetAndAddLayerFeatureResponse {
+    optional .earth.document.protos.Feature layer_feature = 2;
+    optional string parent_feature_id = 3;
+    optional LayerProcessingDetails layer_processing_details = 4;
+    optional string earth_pro_version = 5;
+    
+    reserved 1;
+}
+
+message CreateSpatialOperationLayerRequest {
+    optional string map_id = 1;
+    optional string parent_feature_id = 2;
+    
+    oneof inputs {
+        ClipInputs clip_inputs = 3;
+    }
+}
+
+message ClipInputs {
+    repeated GeometricFilter geometric_filters = 1;
+    optional InheritedDataLayerOptions inherited_data_layer_options = 2;
+}
+
+message InheritedDataLayerOptions {
+    optional string feature_title = 1;
+    optional .earth.document.protos.EarthDataLayer earth_data_layer = 2;
+}
+
+message CreateSpatialOperationLayerResponse {
+    optional .earth.document.protos.Feature layer_feature = 1;
+    optional string parent_feature_id = 2;
+}
+
+message UserImportedLayer {
+    optional DatasetFormat dataset_format = 3;
+    optional string dataset_title = 4;
+    optional bool parse_styles = 5;
+    optional DmsLayerMetadata.AttributeConfig attribute_config = 6;
+    
+    oneof dataset_source {
+        string blob_id = 1;
+        string drive_file_id = 2;
+    }
+}
+
+message OnDemandLayer {
+    
+}
+
+message SpatialOperationLayer {
+    
+}
+
+message GeminiGeneratedLayer {
+    optional DatasetFormat dataset_format = 2;
+    optional string dataset_title = 3;
+    optional DmsLayerMetadata.AttributeConfig attribute_config = 4;
+    
+    oneof source {
+        string cns_path = 5;
+    }
+    
+    reserved 1;
+}
+
+message Quota {
+    optional int64 quota_bytes = 1;
+}
+
+message CreateDocumentAssetLayerRequest {
+    optional string map_id = 1;
+    optional Quota quota_consumption = 6;
+    optional string idempotency_resource_id = 7;
+    optional bool add_feature = 8;
+    
+    oneof asset_layer_type {
+        UserImportedLayer user_imported_layer = 2;
+        OnDemandLayer on_demand_layer = 3;
+        SpatialOperationLayer spatial_operation_layer = 4;
+        GeminiGeneratedLayer gemini_generated_layer = 5;
+    }
+}
+
+message CreateDocumentAssetLayerResponse {
+    optional .earth.document.protos.Feature layer_feature = 1;
+    optional string parent_feature_id = 3;
+    optional LayerProcessingDetails layer_processing_details = 4;
+    optional string earth_pro_version = 5;
+}
+
+enum DataLayerView {
+    DATA_LAYER_VIEW_UNSPECIFIED = 0;
+    DATA_LAYER_VIEW_BASIC = 2;
+    DATA_LAYER_VIEW_FULL = 3;
+}
+
+enum DatasetFormat {
+    DATASET_FORMAT_UNSPECIFIED = 0;
+    DATASET_FORMAT_KML = 1;
+    DATASET_FORMAT_GEOJSON = 2;
+    DATASET_FORMAT_SHAPEFILE = 3;
+}

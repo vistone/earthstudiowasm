@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "frameworks/client/data/data_annotation.proto";
+import "geo/serving/proto/photos/image_frontend_type.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "webserver/shared/gws/eval/gws_eval_proto_options.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "ImageKeyProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message ImageKey {
+    optional ImageFrontendType frontend = 1;
+    optional string id = 2;
+}

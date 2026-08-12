@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package google.geo.type;
+
+import "google/api/field_behavior.proto";
+import "google/api/inclusion.proto";
+import "google/type/latlng.proto";
+
+option objc_class_prefix = "GGTP";
+option go_package = "google.golang.org/genproto/googleapis/geo/type/viewport;viewport";
+option java_multiple_files = true;
+option java_outer_classname = "ViewportProto";
+option java_package = "com.google.geo.type";
+
+message Viewport {
+    google.type.LatLng low = 1;
+    google.type.LatLng high = 2;
+}

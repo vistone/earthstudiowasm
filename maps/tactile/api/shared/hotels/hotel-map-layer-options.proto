@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "HotelMapLayerOptionsProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message HotelMapLayerOptions {
+    optional AdditionalHotelResultsMode additional_hotel_results_mode = 1;
+    enum AdditionalHotelResultsMode {
+        UNKNOWN_ADDITIONAL_HOTEL_RESULTS_MODE = 0;
+        DISABLE_ADDITIONAL_HOTEL_RESULTS = 1;
+        ALLOW_ADDITIONAL_HOTEL_RESULTS_UNLESS_SORTING = 2;
+        ALLOW_ADDITIONAL_HOTEL_RESULTS = 3;
+    }
+    
+    optional bool enable_paint_request_template = 2;
+}

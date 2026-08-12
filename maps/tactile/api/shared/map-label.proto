@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "MapLabelProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message MapLabel {
+    optional string label_title = 4;
+    optional string label_subtitle = 1;
+    optional string search_result_legend_style_id = 2 [deprecated = true];
+    
+    optional LegendStyleData default_legend_style_data = 5;
+    message LegendStyleData {
+        optional string base_search_result_style_name = 1 [deprecated = true];
+        optional string legend_feature_country_code = 2 [deprecated = true];
+        optional int32 legend_named_style_icon_id = 3;
+        optional int32 legend_named_style_text_title_id = 4;
+        optional int32 legend_named_style_text_subtitle_id = 5;
+        optional int32 legend_named_style_label_layout_id = 6;
+    }
+    
+    optional LegendStyleData search_legend_style_data = 3;
+    optional LegendStyleData promoted_search_legend_style_data = 6;
+}

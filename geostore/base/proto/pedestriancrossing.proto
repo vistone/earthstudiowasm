@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/restriction.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message PedestrianCrossingProto {
+    optional CrossingType crossing_type = 1 [default = CROSSABLE];
+    enum CrossingType {
+        UNKNOWN = 0;
+        CROSSABLE = 1;
+        UNMARKED_CROSSING = 17;
+        MARKED_CROSSING = 18;
+        UNCROSSABLE = 2;
+    }
+    
+    repeated RestrictionProto restriction = 2;
+    optional float offset = 3;
+    optional float width = 4;
+    optional bool cross_anywhere = 5;
+    optional double angle_degrees = 6;
+}

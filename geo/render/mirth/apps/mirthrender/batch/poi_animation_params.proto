@@ -1,0 +1,67 @@
+syntax = "proto2";
+
+package mirth_apps_mirthrender;
+
+message PoiAnimationParams {
+    optional LookAtMode lookat_mode = 1;
+    enum LookAtMode {
+        UNKNOWN = 0;
+        FIXED_TILT = 1;
+        VARIABLE_TILT = 2;
+        SMART_TILT = 3;
+    }
+    
+    optional bool fixed_tilt_use_max_range = 36;
+    optional double lookat_altitude_fraction = 2;
+    optional double tilt = 3;
+    optional double fov_y = 4;
+    optional double radius_scale = 5;
+    optional double altitude_scale = 6;
+    optional double range_scale = 7;
+    optional double transition_radius_scale = 52;
+    optional bool secondary_orbit = 8;
+    optional bool ternary_orbit = 9;
+    optional double secondary_lookat_altitude_fraction = 10;
+    optional double secondary_tilt = 11;
+    optional double secondary_fov_y = 12;
+    optional double secondary_radius_scale = 13;
+    optional double secondary_altitude_scale = 14;
+    optional double secondary_range_scale = 15;
+    optional double secondary_transition_radius_scale = 53;
+    optional double heading_bias = 16;
+    optional double transition_heading_bias = 54;
+    optional double orbit_rotations = 17;
+    optional double orbit_duration_sec = 18;
+    optional bool ease = 19;
+    optional double ease_duration_sec = 20;
+    optional double filter_3d_fraction = 21;
+    optional bool filter_visibility = 39;
+    optional bool store_imagery_dates = 50;
+    optional bool filter_imagery_capture_date = 49;
+    optional double filter_elevation_range_meters = 51;
+    optional bool adjust_for_visibility = 26;
+    optional double allowable_occluded_orbit_fraction = 25;
+    optional double required_visible_orbit_start_fraction = 37;
+    optional double minimum_adjusted_tilt = 27;
+    optional double maximum_heading_adjustment_degrees = 38;
+    optional double collision_buffer_height_meters = 23;
+    optional bool create_placemarks = 28;
+    optional bool create_placemark_names = 29;
+    optional string placemark_icon_url = 30;
+    optional double placemark_altitude = 31;
+    optional double placemark_altitude_radius_fraction = 40;
+    optional bool placemark_extrude = 32;
+    optional string placemark_line_color = 33;
+    optional double placemark_line_width = 34;
+    optional bool create_textbox = 35;
+    optional bool create_polygons = 41;
+    optional double polygon_altitude = 42;
+    optional bool polygon_fill = 43;
+    optional string polygon_fill_color = 44;
+    optional bool polygon_outline = 45;
+    optional string polygon_outline_color = 46;
+    optional double polygon_outline_width = 47;
+    optional bool polygon_draw_occluded = 48;
+    
+    reserved 22, 24;
+}

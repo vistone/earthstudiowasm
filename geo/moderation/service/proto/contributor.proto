@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package geo_moderation;
+
+import "geo/contentflows/proto/author.proto";
+import "geostore/base/proto/datasourceprovider.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.geo.moderation.proto1api";
+
+message Contributor {
+    optional geo_content_flows.Author author = 7;
+    optional geostore.DataSourceProvider.Provider provider = 3;
+    optional string data_set = 4;
+    optional geo_content_flows.AuthorMetadata author_metadata = 8;
+    
+    reserved 1, 2, 5, 6;
+}

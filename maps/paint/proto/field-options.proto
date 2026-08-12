@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "net/proto2/proto/descriptor.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "FieldOptionsProto";
+option java_package = "com.google.maps.paint";
+
+extend .proto2.FieldOptions {
+    optional bool internal_only = 57492523;
+}

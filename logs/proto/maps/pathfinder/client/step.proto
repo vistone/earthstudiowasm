@@ -1,0 +1,316 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/directions/customization/config/decorations/summary_decoration.proto";
+import "logs/proto/maps/pathfinder/client/building-level.proto";
+import "logs/proto/maps/pathfinder/client/polyline-codec.proto";
+import "logs/proto/maps/pathfinder/client/transit.proto";
+import "logs/proto/maps/shared/geometry_e7.proto";
+import "logs/proto/maps/transit/realtime/proto/service_alerts_ui.proto";
+import "maps/roadtraffic/proto/trafficproperty.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "StepProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedMonetaryCost {
+    optional double amount = 1;
+    optional string currency = 2;
+    optional int32 num_legs = 3 [default = 1];
+}
+
+message LoggedCyclingSummary {
+    repeated LoggedRoadType road_type = 1;
+    message LoggedRoadType {
+        optional LoggedType type = 1;
+        enum LoggedType {
+            UNKNOWN_TYPE = 0;
+            TYPE_SEPARATE_BIKE = 1;
+            TYPE_BIKE = 2;
+            TYPE_SHARED_USE_PATH = 10;
+            TYPE_MINOR = 4;
+            TYPE_MAIN = 5;
+            TYPE_PEDESTRIAN = 6;
+            TYPE_HIGHWAY = 7;
+            TYPE_STAIRWAY = 9;
+            TYPE_SHARED = 3;
+            TYPE_UNPAVED = 8;
+        }
+        
+        optional float percentage = 2;
+        optional int32 count = 3;
+    }
+    
+    optional maps_roadtraffic.TrafficProperty.DelayCategory driving_traffic_delay = 2;
+}
+
+message LoggedElevationProfile {
+    optional LoggedElevationDescription elevation_description = 1;
+    enum LoggedElevationDescription {
+        UNKNOWN_ELEVATION_DESCRIPTION = 0;
+        FLAT = 8;
+        MOSTLY_FLAT = 1;
+        GENTLE_HILL = 10;
+        GENTLE_HILLS = 9;
+        MODERATE_HILL = 5;
+        MODERATE_HILLS = 2;
+        STEEP_HILL = 6;
+        STEEP_HILLS = 3;
+        VERY_STEEP_HILL = 7;
+        VERY_STEEP_HILLS = 4;
+    }
+    
+    optional int32 ascent_meters = 2;
+    optional int32 descent_meters = 3;
+}
+
+message LoggedStepCueComponent {
+    optional LoggedType type = 1 [default = TYPE_UNKNOWN];
+    enum LoggedType {
+        TYPE_ROAD_NAME = 0;
+        TYPE_ROAD_SHIELD = 44;
+        TYPE_EXIT_NAME_NUMBER = 1;
+        TYPE_EXIT_NAME = 35;
+        TYPE_EXIT_NUMBER = 36;
+        TYPE_INTERCHANGE_NAME = 37;
+        TYPE_INTERCHANGE_NUMBER = 38;
+        TYPE_SIGN_CONNECTS_DIRECTLY = 2;
+        TYPE_SIGN_CONNECTS_INDIRECTLY = 3;
+        TYPE_TRANSIT_LINE = 4;
+        TYPE_TRANSIT_ALTERNATE_LINE = 33;
+        TYPE_TRANSIT_TRIP = 5;
+        TYPE_TRANSIT_HEADSIGN = 6;
+        TYPE_TRANSIT_EXPRESS_TYPE = 28;
+        TYPE_TRANSIT_STOP_CODE = 7;
+        TYPE_TRANSIT_STOP_NAME = 8;
+        TYPE_TRANSIT_CONTINUES_AS_CONNECTION = 9;
+        TYPE_TRANSIT_SILENTLY_CONTINUES_AS_CONNECTION = 27;
+        TYPE_TRANSIT_STOP_SERVICE_ALERT = 10;
+        TYPE_TRANSIT_STEP_SERVICE_ALERT = 11;
+        TYPE_TRANSIT_STEP_CANCELLED = 20;
+        TYPE_TRANSIT_STOP_ENTRANCE_NAME = 12;
+        TYPE_TRANSIT_STOP_ID = 13;
+        TYPE_TRANSIT_STATION_FEATURE_ID = 32;
+        TYPE_TRANSIT_STOP_DEPARTURE_TIME = 14;
+        TYPE_TRANSIT_STOP_ARRIVAL_TIME = 15;
+        TYPE_TRANSIT_STOP_LOCATION = 16;
+        TYPE_TRANSIT_STOP_PLATFORM = 30;
+        TYPE_TRANSIT_STOP_PLATFORM_SIGNAGE = 39;
+        TYPE_TRANSIT_STOP_ICON = 42;
+        TYPE_TRANSIT_BASE_FARE = 17;
+        TYPE_TRANSIT_SURCHARGE = 18;
+        TYPE_TRANSIT_SIGNPOST = 19;
+        TYPE_TRANSIT_PATHWAY_VISIBILITY = 29;
+        TYPE_TRANSIT_PATHWAY_MODE = 43;
+        TYPE_TRANSIT_WHEELCHAIR_ACCESSIBILITY = 31;
+        TYPE_TRANSIT_ALTERNATE_STOP_DEPARTURE_TIME = 34;
+        TYPE_TRANSIT_ALIGHTING_IS_NOT_POSSIBLE = 40;
+        TYPE_TRANSIT_BOARDING_IS_NOT_POSSIBLE = 41;
+        TYPE_UNKNOWN = -1;
+    }
+    
+    optional string name = 2;
+    optional string full_name = 5;
+    optional string spoken_name = 20;
+    optional string language = 6;
+    optional LoggedTransitLine transit_line = 4;
+    optional string country = 7;
+    repeated maps_transit_realtime.service_alerts.ui.LoggedAlert service_alert = 8;
+    optional LoggedTransitTrip transit_trip = 9;
+    
+    optional LoggedExitDescriptionType exit_description_type = 10 [default = DESCRIPTION_EXIT];
+    enum LoggedExitDescriptionType {
+        DESCRIPTION_EXIT = 0;
+        DESCRIPTION_JUNCTION = 1;
+    }
+    
+    optional LoggedOutputTime time = 13;
+    optional logs_maps_shared.PointE7 point = 14;
+    optional LoggedTransitFareSet fare_set = 15;
+    
+    optional LoggedTransitPathwayVisibility transit_pathway_visibility = 16;
+    enum LoggedTransitPathwayVisibility {
+        VISIBLE = 0;
+        INVISIBLE_IN_SUMMARY = 1;
+        INVISIBLE = 2;
+    }
+    
+    optional LoggedTransitPathwayMode transit_pathway_mode = 21;
+    enum LoggedTransitPathwayMode {
+        PATHWAY_MODE_UNKNOWN = 0;
+        WALKWAY = 1;
+        STAIRS = 2;
+        MOVING_SIDEWALK = 3;
+        ESCALATOR = 4;
+        ELEVATOR = 5;
+        FARE_GATE = 6;
+        EXIT_GATE = 7;
+    }
+    
+    optional LoggedTransitWheelchairAccessibility transit_wheelchair_accessibility = 17 [default = ACCESSIBILITY_UNKNOWN];
+    enum LoggedTransitWheelchairAccessibility {
+        ACCESSIBILITY_UNKNOWN = 0;
+        ACCESSIBILITY_FALSE = 1;
+        ACCESSIBILITY_TRUE = 2;
+    }
+    
+    optional logs_maps.FeatureIdProto feature_id = 18;
+    optional bool is_exit = 19;
+}
+
+message LoggedStepCue {
+    optional LoggedType type = 1 [default = TYPE_UNKNOWN];
+    enum LoggedType {
+        TYPE_ROAD = 1;
+        TYPE_ROAD_TO = 17;
+        TYPE_ROAD_TOWARD = 18;
+        TYPE_ROAD_FOLLOW = 19;
+        TYPE_ROAD_FROM = 20;
+        TYPE_ROAD_AT = 21;
+        TYPE_ROAD_SIGN = 2;
+        TYPE_TRANSIT = 3;
+        TYPE_TRANSIT_DEPARTURE_STOP = 4;
+        TYPE_TRANSIT_ARRIVAL_STOP = 5;
+        TYPE_TRANSIT_BEFORE_ARRIVAL_STOP = 6;
+        TYPE_ROAD_INTERSECTION = 7;
+        TYPE_TRANSIT_BLOCK_TRANSFER = 9;
+        TYPE_UNKNOWN = 268435455;
+    }
+    
+    repeated LoggedStepCueComponent component = 2;
+    
+    optional LoggedPriority priority = 3 [default = UNKNOWN_PRIORITY];
+    enum LoggedPriority {
+        UNKNOWN_PRIORITY = 0;
+        PRIMARY = 1;
+        SECONDARY = 2;
+    }
+}
+
+message LoggedStep {
+    optional LoggedManeuverType type = 24 [default = MANEUVER_UNKNOWN];
+    enum LoggedManeuverType {
+        MANEUVER_UNKNOWN = 0;
+        DEPART = 1;
+        NAME_CHANGE = 2;
+        STRAIGHT = 12;
+        LANE_CHANGE = 29;
+        TURN = 3;
+        COUNTED_TURN = 16;
+        UTURN = 4;
+        ON_RAMP = 5;
+        OFF_RAMP = 6;
+        FORK = 7;
+        MERGE = 8;
+        FERRY = 13;
+        FERRY_TRAIN = 14;
+        EASTER_EGG = 15;
+        ROUNDABOUT_ENTER = 9;
+        ROUNDABOUT_EXIT = 10;
+        ROUNDABOUT_ENTER_AND_EXIT = 11;
+        PEDESTRIAN_WALKWAY = 17;
+        PEDESTRIAN_CROSSING = 18;
+        PEDESTRIAN_OVERPASS_UNDERPASS = 19;
+        PEDESTRIAN_STATION_PATH = 20;
+        PEDESTRIAN_ACCESS_PATH = 21;
+        SIMPLE_PATH = 23;
+        PEDESTRIAN_STAIRWAY = 24;
+        PEDESTRIAN_ELEVATOR = 25;
+        PEDESTRIAN_ESCALATOR = 26;
+        PEDESTRIAN_SLOPEWAY = 27;
+        PEDESTRIAN_LEVEL_CHANGE = 28;
+        DESTINATION = 30;
+        ERROR = 22;
+    }
+    
+    optional LoggedTurnType turn_type = 25 [default = TURN_UNKNOWN];
+    enum LoggedTurnType {
+        TURN_UNKNOWN = 0;
+        TURN_SLIGHT = 1;
+        TURN_NORMAL = 2;
+        TURN_SHARP = 3;
+        TURN_KEEP = 4;
+        TURN_UTURN = 5;
+        TURN_STRAIGHT = 6;
+        TURN_MERGE = 7;
+        TURN_FORK = 8;
+    }
+    
+    optional LoggedTurnSide turn_side = 26 [default = SIDE_UNSPECIFIED];
+    enum LoggedTurnSide {
+        SIDE_LEFT = 1;
+        SIDE_RIGHT = 2;
+        SIDE_UNSPECIFIED = 3;
+    }
+    
+    optional LoggedHeadingType heading_type = 27 [default = HEADING_UNKNOWN];
+    enum LoggedHeadingType {
+        HEADING_UNKNOWN = 0;
+        NORTH = 1;
+        NORTH_EAST = 2;
+        EAST = 3;
+        SOUTH_EAST = 4;
+        SOUTH = 5;
+        SOUTH_WEST = 6;
+        WEST = 7;
+        NORTH_WEST = 8;
+    }
+    
+    optional int32 maneuver_turn_count = 30;
+    optional int32 roundabout_turn_angle = 29;
+    optional bool on_right = 34 [default = true];
+    optional bool names_valid_for_entire_step = 35 [default = true];
+    optional string text = 1;
+    optional string short_text = 16;
+    optional string spoken_text = 32;
+    optional int32 polyline_index = 28;
+    optional LoggedEncodedPolylineWithData encoded_polyline = 6;
+    optional bool synthetic_polyline = 23;
+    optional int32 distance_meters = 3 [default = 0];
+    optional int32 time_seconds = 4 [default = 0];
+    optional LoggedMonetaryCost fare = 10;
+    
+    repeated LoggedDistanceUnitsChange local_distance_units_change = 36;
+    message LoggedDistanceUnitsChange {
+        optional int32 step_offset_meters = 1;
+        
+        optional LoggedDistanceUnits units = 2;
+        enum LoggedDistanceUnits {
+            DISTANCE_UNITS_UNKNOWN = 0;
+            KILOMETERS = 1;
+            MILES_FEET = 2;
+            MILES_YARDS = 3;
+        }
+    }
+    
+    repeated logs_maps.FeatureIdProto segment_id = 11;
+    repeated int32 static_segment_duration_seconds = 37;
+    repeated int32 static_turn_duration_seconds = 38;
+    repeated LoggedStepCue step_cue = 12;
+    optional bool highway_interchange = 17;
+    optional LoggedBuildingLevel building_level = 18;
+    optional int32 searcher_cost = 39 [default = -1];
+    repeated float railroad_crossing_occurrence_meters = 40 [deprecated = true];
+    
+    repeated LoggedRouteFixture route_fixture = 41;
+    message LoggedRouteFixture {
+        optional LoggedRouteFixtureType type = 1;
+        enum LoggedRouteFixtureType {
+            UNKNOWN = 0;
+            RAILROAD_CROSSING = 1;
+            TRAFFIC_LIGHT = 2;
+            STOP_SIGN = 3;
+        }
+        
+        optional float offset_meters = 2;
+    }
+    
+    optional LoggedCyclingSummary cycling_summary = 42;
+    optional LoggedElevationProfile elevation_profile = 43;
+    repeated maps_rdp_logs.LoggedSummaryDecoration summary_decoration = 44;
+    
+    reserved 20000 to max;
+}

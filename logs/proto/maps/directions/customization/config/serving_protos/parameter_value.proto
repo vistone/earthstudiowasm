@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package maps_directions_customization_logs_serving_protos;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedParameterValue {
+    oneof value_type {
+        bool boolean_value = 1;
+        string enumeration_value = 2;
+        int64 int_value = 3;
+    }
+}

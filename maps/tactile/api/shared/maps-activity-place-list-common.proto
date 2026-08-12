@@ -1,0 +1,59 @@
+syntax = "proto2";
+
+package maps_tactile.shared.placelist;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPL";
+option java_multiple_files = true;
+option java_outer_classname = "MapsActivityPlaceListCommonProto";
+option java_package = "com.google.maps.tactile.shared.placelist";
+
+message PlaceListDescriptor {
+    optional PlaceListType type = 1;
+    optional string list_id = 2;
+    optional string list_url = 3;
+}
+
+enum PlaceListType {
+    UNKNOWN_PLACE_LIST_TYPE = 0;
+    FAVORITES = 1;
+    WANT_TO_GO = 2;
+    TRAVEL_PLANS = 6;
+    WISHLIST = 7;
+    JUST_SAVE = 8;
+    CUSTOM = 3;
+    STARRED = 4;
+    UNIVERSAL_SAVES_LIST = 5;
+}
+
+enum SharingState {
+    UNKNOWN_SHARING_STATE = 0;
+    PRIVATE = 1;
+    SHARED = 2;
+    PUBLISHED = 3;
+    GROUP = 4;
+}
+
+enum StatusCode {
+    UNKNOWN_STATUS_CODE = 0;
+    OK = 1;
+    INVALID_ARGUMENT = 2;
+    NOT_FOUND = 3;
+    PERMISSION_DENIED = 4;
+    UNAVAILABLE = 5;
+    UNAUTHENTICATED = 6;
+}
+
+enum JustificationType {
+    UNKNOWN_JUSTIFICATION_TYPE = 0;
+    JUSTIFICATION_TYPE_NOT_SET = 1;
+    JUSTIFICATION_TYPE_DESCRIPTION_SNIPPET = 2;
+    JUSTIFICATION_TYPE_VIEW_COUNT = 3;
+    JUSTIFICATION_TYPE_LOCAL_GUIDE = 4;
+    JUSTIFICATION_TYPE_PLACE_COUNT = 5;
+    JUSTIFICATION_TYPE_RECENTLY_EDITED = 6;
+    JUSTIFICATION_TYPE_NOTE_COUNT = 7;
+}

@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+package earth.layers;
+
+import "geo/earth/proto/mapstyle.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.layers";
+
+message FeatureCategoryInfo {
+    optional int32 code = 1;
+    optional string name = 2;
+    repeated FeatureCategoryInfo subcategories = 3;
+}
+
+message FeatureCategories {
+    optional FeatureCategoryInfo root = 1;
+}
+
+message BasemapStyleInfo {
+    optional string name = 1;
+    optional string description = 2;
+    optional bool selected = 3 [default = false];
+    optional MapStyle.Imagery imagery = 4;
+}
+
+message BasemapStyles {
+    repeated BasemapStyleInfo styles = 1;
+}
+
+message BaseLayerStyleInfo {
+    optional string name = 1;
+    optional string description = 2;
+    optional bool selected = 3 [default = false];
+    optional bool editable = 4 [default = false];
+    optional string thumbnail_id = 5;
+    repeated uint32 categories = 6;
+    optional string id = 7;
+}
+
+message BaseLayerStyles {
+    repeated BaseLayerStyleInfo styles = 1;
+    optional FeatureCategoryInfo categories = 2;
+}
+
+message GridlinesStyle {
+    optional GridlinesLayer selected_layer = 1;
+    enum GridlinesLayer {
+        NONE = 0;
+        LAT_LON = 1;
+    }
+}

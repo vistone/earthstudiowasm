@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "maps/tactile/api/shared/directions/monetary-cost-range.proto";
+import "maps/tactile/api/shared/directions/monetary-cost.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "FareProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message Fare {
+    optional SurchargeType surcharge_type = 2;
+    enum SurchargeType {
+        NO_SURCHARGE = 0;
+        NON_RESERVED_SEAT = 1;
+        RESERVED_SEAT = 2;
+        FIRST_CLASS_SEAT = 3;
+        SUITE_CLASS_SEAT = 9;
+        SLEEPER_SEAT = 4;
+        EXPRESS_TICKET = 5;
+        STANDING_SEAT = 8;
+        DISCOUNTED_EXPRESS_TICKET = 6;
+        OTHER_TICKET = 7;
+    }
+    
+    optional string name = 3;
+    optional MonetaryCost cost = 4 [deprecated = true];
+    optional FareType fare_type = 5;
+    optional MonetaryCostRange cost_range = 6;
+    
+    reserved 1;
+}

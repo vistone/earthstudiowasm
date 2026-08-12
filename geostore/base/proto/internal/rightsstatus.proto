@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/rightslevel.proto";
+import "geostore/edit/feature_property_id.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message FieldWithRightsProto {
+    optional FeaturePropertyIdProto feature_property_id = 4;
+    optional RightsLevel min_rights_level = 3 [default = UNKNOWN_RIGHTS];
+    optional int32 field_type = 1 [default = 0];
+    optional string attribute_id = 2 [deprecated = true];
+}
+
+message RightsStatusProto {
+    repeated FieldWithRightsProto field_with_rights = 1;
+}

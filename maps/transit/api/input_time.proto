@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package maps_transit.api;
+
+import "frameworks/testing/rpcreplay/processors/rpc_replay_field_option.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "InputTimeProto";
+option java_package = "com.google.maps.transit.api";
+
+message InputTime {
+    optional int64 time = 1 [default = 0];
+    
+    optional TimeInterpretation interpretation = 2 [default = LOCAL_TIMEZONE];
+    enum TimeInterpretation {
+        UTC = 1;
+        LOCAL_TIMEZONE = 2;
+    }
+}

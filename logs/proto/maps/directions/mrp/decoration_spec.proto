@@ -1,0 +1,9 @@
+syntax = "editions";
+
+package logs.proto.maps.directions.mrp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedDecorationSpecProto {
+    optional bool needs_decoration = 1;
+}

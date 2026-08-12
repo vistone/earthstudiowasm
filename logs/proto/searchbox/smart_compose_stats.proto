@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package logs_proto_searchbox;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "SmartComposeStatsProtos";
+option java_package = "com.google.common.logging.searchbox";
+
+message SmartComposeStats {
+    optional bool enabled = 1;
+    optional int32 shown_count = 2;
+    optional int32 accepted_count = 3;
+    optional int32 characters_accepted = 4;
+    optional int32 shown_length = 5;
+    
+    repeated AcceptMethod accept_methods = 6;
+    enum AcceptMethod {
+        ACCEPT_METHOD_UNSPECIFIED = 0;
+        TAP = 1;
+        SWIPE = 2;
+        GBOARD_SWIPE = 3;
+        ACCESSIBILITY_ACTION = 4;
+    }
+    
+    repeated int32 impressed_index = 7;
+    repeated int32 accepted_at_index = 8;
+}

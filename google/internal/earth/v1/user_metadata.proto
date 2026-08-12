@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.user_metadata;
+
+import "google/internal/earth/v1/shared.proto";
+import "google/internal/earth/v1/survey_metadata.proto";
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "wireless/android/privacy/annotations/proto/collection_basis_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.earth.v1.service.usermetadata";
+
+message GetUserMetadataRequest {
+    optional ClientMetadata client_metadata = 1 [deprecated = true];
+}
+
+message UpdateUserMetadataRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional UserMetadataUpdate user_metadata_update = 2;
+}
+
+message UserMetadataUpdate {
+    optional survey_metadata.SurveyEvent survey_event = 1;
+}
+
+message UserMetadata {
+    repeated survey_metadata.SurveyMetadata survey_metadata = 1;
+    optional protobuf.Timestamp first_known_login_timestamp = 2;
+}

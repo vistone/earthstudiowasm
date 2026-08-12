@@ -1,0 +1,137 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/transit/api/input_time.proto";
+import "logs/proto/maps/transit/api/personalization.proto";
+import "logs/proto/maps/transit/api/routing_signals.proto";
+import "logs/proto/maps/transit/tripfinder/common/cost_model.proto";
+import "maps/transit/api/fare.proto";
+import "maps/transit/api/non_transit_mode.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TransitOptionsProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedTransitOptions {
+    optional int32 max_non_transit_meters = 1 [default = -1];
+    
+    repeated LoggedBooleanOption boolean_option = 2 [packed = true];
+    enum LoggedBooleanOption {
+        DISALLOW_AIRPLANE = 1;
+        AVOID_VEHICLE_TRAIN = 3;
+        AVOID_VEHICLE_TRAM = 4;
+        AVOID_VEHICLE_BUS = 5;
+        AVOID_VEHICLE_SUBWAY = 6;
+        AVOID_VEHICLE_FERRY = 21;
+        AVOID_VEHICLE_RAIL = 30;
+        AVOID_VEHICLE_OTHER = 7;
+        DISALLOW_VEHICLE_TRAIN = 15;
+        DISALLOW_VEHICLE_TRAM = 16;
+        DISALLOW_VEHICLE_BUS = 17;
+        DISALLOW_VEHICLE_SUBWAY = 18;
+        DISALLOW_VEHICLE_FERRY = 19;
+        DISALLOW_VEHICLE_OTHER = 20;
+        LIMIT_WALKING_RADIUS = 9;
+        AVOID_TRANSFERS = 10;
+        MORE_DIVERSITY = 11;
+        DISABLE_REALTIME = 12;
+        SUPPRESS_PURE_NON_TRANSIT_RESULTS = 13;
+        SUPPRESS_INCOMPLETE_COVERAGE_RESULTS = 14;
+        DISABLE_DETAILED_WALKING = 22;
+        PREFER_ACCESSIBLE = 23;
+        PREFER_CHEAPER = 27;
+        SUPPORTS_UNTIMED_TRANSIT_RESULTS = 29;
+        DISABLE_METRO_SHARDS = 31;
+        FORCE_LONG_DISTANCE_WALKING = 32;
+        FORCE_METRO_LAUNCHED = 33;
+    }
+    
+    optional bool prefer_earliest_arrival = 23;
+    optional bool want_fares = 7 [default = true];
+    
+    optional LoggedTimeAnchoring time_anchoring = 4 [default = DEPARTURE_TIME];
+    enum LoggedTimeAnchoring {
+        DEPARTURE_TIME = 0;
+        ARRIVAL_TIME = 1;
+        LAST_AVAILABLE = 2;
+        CALENDAR_DEPARTURE_TIME = 4;
+        CALENDAR_ARRIVAL_TIME = 5;
+        OVERVIEW = 6;
+        OVERVIEW_NOW = 3;
+    }
+    
+    optional LoggedInputTime time = 5;
+    optional LoggedPersonalizedOptions personalized_options = 6;
+    
+    optional LoggedRequestedEntities requested_entities = 8;
+    message LoggedRequestedEntities {
+        repeated logs_maps.FeatureIdProto requested_lines = 1;
+        repeated logs_maps.FeatureIdProto requested_agencies = 2;
+        
+        repeated LoggedGtfsAgencyId requested_agencies_by_gtfs_id = 3;
+        message LoggedGtfsAgencyId {
+            optional string feed_name = 1;
+            optional string agency_id = 2;
+        }
+    }
+    
+    repeated .maps_transit.api.FareType fare_type_preference = 9;
+    
+    optional LoggedStationSelectionMethod station_selection_method = 10;
+    enum LoggedStationSelectionMethod {
+        DEFAULT_STATION_SELECTION_METHOD = 0;
+        INVALID_STATION_SELECTION_METHOD = -1;
+        PERSONALIZED_STATIONS = 1;
+        ALL_RADIUS_CANDIDATES = 8;
+        DEFAULT_WALKING_WITH_TRIANGLE_SEQUENCE_DRIVING_SLOW_ALT = 41;
+        DEFAULT_WALKING_WITH_PREFER_TRAINS_DRIVING = 42;
+        OVERCOMPUTED_HULK_DRIVING_FOR_DEBUGGING = 55;
+    }
+    
+    optional LoggedNonTransitOptions non_transit_options = 11;
+    message LoggedNonTransitOptions {
+        repeated .maps_transit.api.NonTransitMode.Mode requested_modes = 1;
+        repeated .maps_transit.api.NonTransitMode.Mode supported_modes = 5;
+        optional LoggedNonTransitLegOptions first_leg = 2;
+        optional LoggedNonTransitLegOptions last_leg = 3;
+        optional bool show_multimodal_results_in_group_at_end = 4;
+        optional bool enable_multimodal_mode_swapping = 7;
+        optional bool force_crowflight_walking = 8;
+    }
+    
+    optional bool include_all_confidential_feeds = 12;
+    optional LoggedCostModelProto cost_model_overrides = 15;
+    optional LoggedRoutingSignals routing_signals = 16;
+    
+    optional LoggedLongDistanceOptions long_distance_options = 17;
+    message LoggedLongDistanceOptions {
+        optional LoggedTimeHorizon time_horizon = 1;
+        enum LoggedTimeHorizon {
+            TIME_HORIZON_UNSPECIFIED = 0;
+            TIME_HORIZON_ONE_DAY = 1;
+        }
+        
+        optional bool mix_in_cheaper_trips = 2;
+    }
+    
+    optional bool include_attributable_alerts = 18;
+    
+    optional LoggedTransitApi transit_api = 19;
+    enum LoggedTransitApi {
+        TRANSIT_API_UNSPECIFIED = 0;
+        TRANSIT_PATH_API = 1;
+        TRANSIT_CONNECTION_API = 2;
+        TRANSIT_PATH_AND_CONNECTION_API = 3;
+    }
+    
+    optional bool want_cancelled_trips = 20;
+    optional bool include_ugc_alerts = 21;
+    
+    message LoggedNonTransitLegOptions {
+        repeated .maps_transit.api.NonTransitMode.Mode avoid_modes = 1;
+        repeated .maps_transit.api.NonTransitMode.Mode disallow_modes = 2;
+    }
+}

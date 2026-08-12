@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "maps/tactile/api/shared/date-time.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "ItineraryProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message Itinerary {
+    optional Date check_in = 1;
+    optional Date check_out = 2;
+    optional int32 itinerary_type = 6;
+    
+    oneof source {
+        int32 client_source = 3;
+        int32 backend_source = 4;
+        bool user_requested = 5;
+    }
+}

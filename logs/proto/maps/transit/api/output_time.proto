@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "OutputTimeProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedOutputTime {
+    optional int64 utc_seconds = 1;
+    optional string time_zone = 2;
+    optional bool estimated_from_frequency = 3 [default = false];
+    optional int64 realtime_utc_seconds = 4;
+}

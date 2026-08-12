@@ -1,0 +1,218 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/proto/maps/directions/customization/active_affordance.proto";
+import "logs/proto/maps/pathfinder/client/describer-options.proto";
+import "logs/proto/maps/pathfinder/client/mrp-vehicle-info.proto";
+import "maps/directions/tolls/proto/client_id.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedAnnotatorSpecProto {
+    optional LoggedType type = 1;
+    enum LoggedType {
+        UNKNOWN_ANNOTATOR_TYPE = 0;
+        LAT_LNGS = 1;
+        DISPLAY_DISTANCE = 40;
+        STATIC_TRAVEL_TIME = 3;
+        DEPRECATED_ROAD_TRAFFIC_TRAVEL_TIME = 4 [deprecated = true];
+        TRAFFIC_AWARE_TRAVEL_TIME = 23;
+        DESCRIPTION = 5;
+        INCIDENTS = 6;
+        TRAFFIC_REPORT = 7;
+        ELECTRIC_VEHICLE = 8;
+        SEGMENT_PROPERTIES = 9;
+        TOLL_COST = 10;
+        ASSISTED_DRIVING = 11;
+        MOST_ACCURATE_TRAVEL_TIME = 12;
+        FAKE_TOLL_COST = 13;
+        FAKE_ASSISTED_DRIVING = 14;
+        MANEUVERS = 16;
+        RELEVANT_RESTRICTIONS = 17;
+        ACTIVE_RESTRICTIONS = 18;
+        SEARCH_PROPERTIES = 19;
+        FAKE_DESCRIPTION = 20;
+        COMPLIANCE = 21;
+        TEST_VALUE = 22;
+        REQUERY = 24;
+        MODE_AVAILABILITY = 25;
+        FUEL_CONSUMPTION = 27;
+        RESTRICTED_ZONES = 28;
+        FAKE_REQUERY = 30;
+        AFFORDANCES = 31 [deprecated = true];
+        RELEVANT_AFFORDANCES = 32;
+        ACTIVE_AFFORDANCES = 33;
+        TRAVEL_TIME_EXTERNALITY = 34;
+        CUSTOMIZATION_CONFIG_SEGMENT_PROPERTIES = 35;
+        VOICE_GUIDANCE = 36 [deprecated = true];
+        GUIDANCE = 38;
+        RISK_AVERSE_TRIGGER = 37;
+        ROUTE_DECORATION = 39;
+    }
+    
+    optional LoggedImportance importance = 11;
+    enum LoggedImportance {
+        UNKNOWN_IMPORTANCE = 0;
+        REQUIRED = 1;
+        OPTIONAL = 2;
+    }
+    
+    optional string label = 2;
+    optional int64 deadline_milliseconds = 27;
+    optional bool dynamic_route_around_traffic = 29;
+    
+    oneof details {
+        LoggedRoadTrafficParametersProto road_traffic_parameters = 3;
+        LoggedDescriptionParametersProto description_parameters = 4;
+        LoggedElectricVehicleAnnotatorParametersProto electric_vehicle_parameters = 5;
+        LoggedTollCostAnnotatorParametersProto toll_cost_parameters = 6;
+        LoggedFakeTollCostAnnotatorParametersProto fake_toll_cost_parameters = 7;
+        LoggedFakeAssistedDrivingAnnotatorParametersProto fake_assisted_driving_parameters = 8;
+        LoggedAssistedDrivingAnnotatorParametersProto assisted_driving_parameters = 9;
+        LoggedComplianceParametersProto compliance_parameters = 10;
+        LoggedTestValueAnnotatorParametersProto test_value_parameters = 12;
+        LoggedTrafficReportParametersProto traffic_report_parameters = 13;
+        LoggedRequeryParametersProto requery_parameters = 14;
+        LoggedModeAvailabilityParametersProto mode_availability_parameters = 15;
+        LoggedFuelConsumptionParametersProto fuel_consumption_parameters = 30;
+        LoggedAffordanceAnnotatorParametersProto affordance_parameters = 32;
+        LoggedTravelTimeExternalityParametersProto travel_time_externality_parameters = 34 [deprecated = true];
+        LoggedLatLngsAnnotatorParametersProto lat_lngs_parameters = 35;
+        LoggedStaticTravelTimeAnnotatorParametersProto static_travel_time_parameters = 36;
+        LoggedCustomizationConfigSegmentPropertiesParametersProto customization_config_segment_properties_parameters = 37;
+        LoggedMostAccurateTravelTimeAnnotatorParametersProto most_accurate_travel_time_parameters = 38;
+        LoggedVoiceGuidanceAnnotatorParametersProto voice_guidance_parameters = 39 [deprecated = true];
+        LoggedGuidanceAnnotatorParametersProto guidance_parameters = 42;
+        LoggedActiveRestrictionAnnotatorParametersProto active_restriction_parameters = 40;
+        LoggedRiskAverseTriggerAnnotatorParametersProto risk_averse_trigger_parameters = 41;
+        LoggedRouteDecorationAnnotatorParametersProto route_decoration_parameters = 43;
+        LoggedDisplayDistanceAnnotatorParametersProto display_distance_parameters = 44;
+    }
+    
+    reserved 26, 28;
+}
+
+message LoggedRoadTrafficParametersProto {
+    
+}
+
+message LoggedDescriptionParametersProto {
+    optional pathfinder.client.LoggedDescriberOptionsProto describer_options = 9;
+}
+
+message LoggedRequeryParametersProto {
+    
+}
+
+message LoggedElectricVehicleAnnotatorParametersProto {
+    
+}
+
+message LoggedTollCostAnnotatorParametersProto {
+    optional maps_tolls.ClientId originator = 2;
+}
+
+message LoggedFakeTollCostAnnotatorParametersProto {
+    
+}
+
+message LoggedFakeAssistedDrivingAnnotatorParametersProto {
+    
+}
+
+message LoggedAssistedDrivingAnnotatorParametersProto {
+    
+}
+
+message LoggedComplianceParametersProto {
+    
+}
+
+message LoggedTestValueAnnotatorParametersProto {
+    
+}
+
+message LoggedTrafficReportParametersProto {
+    
+}
+
+message LoggedModeAvailabilityParametersProto {
+    
+}
+
+message LoggedFuelConsumptionParametersProto {
+    
+}
+
+message LoggedTravelTimeExternalityParametersProto {
+    optional LoggedModelType model_type = 1;
+    enum LoggedModelType {
+        NONE = 0;
+        CONSTANT_PENALTY_FOR_SET_OF_SEGMENTS = 1;
+    }
+}
+
+message LoggedLatLngsAnnotatorParametersProto {
+    optional bool populate_core_segment_length = 1;
+    optional bool populate_core_segment_length_for_decorations = 2;
+}
+
+message LoggedStaticTravelTimeAnnotatorParametersProto {
+    optional bool populate_core_segment_duration = 1;
+}
+
+message LoggedAffordanceAnnotatorParametersProto {
+    optional pathfinder.client.LoggedMRPVehicleInfo mrp_vehicle_info = 1;
+    repeated maps_directions_customization_logs.LoggedActiveAffordanceDataset.Dataset dataset = 2 [deprecated = true];
+    repeated maps_directions_customization_logs.LoggedDatasetInfo dataset_info = 3;
+}
+
+message LoggedCustomizationConfigSegmentPropertiesParametersProto {
+    
+}
+
+message LoggedMostAccurateTravelTimeAnnotatorParametersProto {
+    optional bool populate_core_segment_duration = 2;
+    optional bool use_traffic_speeds = 3;
+    optional bool use_static_speeds = 4;
+    
+    reserved 1;
+}
+
+message LoggedVoiceGuidanceAnnotatorParametersProto {
+    option deprecated = true;
+}
+
+message LoggedGuidanceAnnotatorParametersProto {
+    
+}
+
+message LoggedActiveRestrictionAnnotatorParametersProto {
+    
+}
+
+message LoggedAnnotatorTreeSpecProto {
+    optional LoggedType type = 1;
+    enum LoggedType {
+        UNKNOWN_ANNOTATOR_TREE_SPEC_TYPE = 0;
+        PRIMITIVE = 1;
+        SERIES = 2;
+        PARALLEL = 3;
+    }
+    
+    optional LoggedAnnotatorTreeSpecProto annotator_spec = 2;
+    repeated LoggedAnnotatorTreeSpecProto sub_specs = 3;
+    optional string name = 4;
+}
+
+message LoggedRiskAverseTriggerAnnotatorParametersProto {
+    optional bool force_trigger = 1;
+}
+
+message LoggedRouteDecorationAnnotatorParametersProto {
+    
+}
+
+message LoggedDisplayDistanceAnnotatorParametersProto {
+    
+}

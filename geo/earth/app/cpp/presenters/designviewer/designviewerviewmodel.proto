@@ -1,0 +1,53 @@
+syntax = "editions";
+
+package earth.designviewer;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/protos/design_actions.proto";
+import "geo/earth/app/cpp/core/protos/design_manager.proto";
+import "geo/earth/app/cpp/presenters/designdetails/designdetailsviewmodel.proto";
+import "google/internal/earth/v1/builtenv/built_environment.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.designviewer";
+
+message DesignViewerViewModelState {
+    optional string selected_design_id = 1;
+    repeated design.DesignResult designs = 2;
+    optional .earth.designdetails.NewBuildMetrics new_build_metrics = 5;
+    optional .earth.designdetails.SolarMetrics solar_metrics = 16;
+    map<string, .earth.designdetails.NewBuildInputs> new_build_inputs = 6;
+    map<string, .earth.designdetails.SolarInputs> solar_inputs = 7;
+    optional bool is_builtenv_enabled = 10;
+    optional design.Query query = 11;
+    map<string, ToplineMetrics> topline_metrics = 12;
+    
+    optional DesignViewState designs_view_state = 13;
+    enum DesignViewState {
+        option features = enum_type: CLOSED
+        ;
+        STATUS_UNSPECIFIED = 0;
+        STATUS_PENDING = 1;
+        STATUS_SUCCESS = 2;
+        STATUS_FAILURE = 3;
+    }
+    
+    optional string design_viewer_learn_more_url = 14;
+    optional string design_onboarding_learn_more_url = 21;
+    optional bool show_design_onboarding_info = 22;
+    optional .earth.designdetails.SelectedProgramTable selected_program_table = 15;
+    optional bool show_design_details_loading_state = 17;
+    optional string selected_design_generation_input_id = 18;
+    optional google.internal.earth.v1.builtenv.Design.DesignType design_type = 19;
+    optional string deep_link_path = 20;
+}
+
+message ToplineMetrics {
+    oneof topline_metrics {
+        design.NewBuildToplineMetrics new_build_topline_metrics = 1;
+        design.SolarToplineMetrics solar_topline_metrics = 2;
+    }
+}

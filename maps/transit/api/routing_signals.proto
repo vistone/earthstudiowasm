@@ -1,0 +1,56 @@
+syntax = "proto2";
+
+package maps_transit.api;
+
+import "maps/transit/api/transit_entity_description.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTA";
+option java_multiple_files = true;
+option java_outer_classname = "PersonalPreferencesProto";
+option java_package = "com.google.maps.transit.api";
+
+message RoutingSignals {
+    optional TransitVehiclePreferences transit_preferences = 1;
+    message TransitVehiclePreferences {
+        optional double bus = 1;
+        optional double ferry = 2;
+        optional double rail = 3;
+        optional double subway = 4;
+        optional double train = 5;
+        optional double tram = 6;
+    }
+    
+    optional NonTransitModePreferences non_transit_preferences = 2;
+    message NonTransitModePreferences {
+        optional double walking = 1;
+        optional double driving = 2;
+        optional double offline_taxi = 3;
+        optional double online_taxi = 4;
+        optional double cycling = 5;
+        optional double two_wheeler = 6;
+    }
+    
+    optional double vehicle_preferences_penalty_factor = 3 [default = 0.5];
+    
+    repeated EntityPreference entity_preferences = 4;
+    message EntityPreference {
+        optional PreferenceWeight weight = 3;
+        
+        oneof entity {
+            TransitEntityDescription entity_description = 1;
+            int32 regionalized_mode_id = 5;
+        }
+        
+        reserved 2;
+    }
+    
+    enum PreferenceWeight {
+        PREFERENCE_UNKNOWN = 0;
+        PREFERENCE_DISALLOW = 1;
+        PREFERENCE_AVOID = 2;
+        PREFERENCE_WEAK = 3;
+        PREFERENCE_STRONG = 4;
+        PREFERENCE_STRICT = 5;
+    }
+}

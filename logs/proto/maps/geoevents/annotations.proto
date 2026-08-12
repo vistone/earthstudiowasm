@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package logs_geoevents;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+extend .proto2.FieldOptions {
+    optional int32 expiration_date = 278623147;
+    optional string owners = 280205939;
+    optional int32 copy_to_geoevents_till = 282923984;
+}
+
+extend .proto2.ExtensionRangeOptions {
+    repeated string owner = 480866314;
+    optional string generation_end_date = 481119999;
+    optional int32 ttl_days = 481923576 [deprecated = true];
+}

@@ -1,0 +1,13 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Appthemederivedstate";
+option java_package = "com.google.geo.earth.app.common.state.derivedstate";
+
+message AppThemeDerivedState {
+    optional int32 focused_document_key = 1 [default = -1];
+}

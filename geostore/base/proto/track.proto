@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/pose.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message TrackProto {
+    optional int32 index = 1;
+    repeated PoseProto pose = 2;
+    
+    reserved 3;
+}

@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package maps_paint;
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "MajorEventMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message MajorEventMetadata {
+    optional FeatureId associated_feature_id = 2;
+    message FeatureId {
+        optional fixed64 cell_id = 1;
+        optional fixed64 fprint = 2;
+    }
+    
+    optional TapTarget tap_target = 3 [default = PLACE_SHEET];
+    enum TapTarget {
+        UNKNOWN_TAP_TARGET = 0;
+        EVENT_SHEET = 1;
+        PLACE_SHEET = 2;
+    }
+    
+    reserved 1;
+}

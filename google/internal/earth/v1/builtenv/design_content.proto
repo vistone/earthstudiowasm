@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "google/internal/earth/v1/builtenv/built_entity.proto";
+import "google/internal/earth/v1/builtenv/design_content_id_map.proto";
+import "google/internal/earth/v1/builtenv/design_view_preset.proto";
+import "google/internal/earth/v1/builtenv/metrics.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message DesignContent {
+    optional string design_id = 1;
+    
+    optional DesignState state = 2;
+    enum DesignState {
+        DESIGN_STATE_UNSPECIFIED = 0;
+        DESIGN_STATE_SUCCEEDED = 1;
+        DESIGN_STATE_FAILED = 2;
+        DESIGN_STATE_RUNNING = 3;
+    }
+    
+    repeated BuiltEntity built_entities = 3;
+    optional SummarizedMetrics summarized_metrics = 4;
+    optional int32 design_iteration_key = 5;
+    optional DesignContentIdMap design_content_id_map = 7;
+    repeated ViewPresetConfig available_view_presets = 8;
+    optional bool is_eligible_for_editing = 6 [deprecated = true];
+}

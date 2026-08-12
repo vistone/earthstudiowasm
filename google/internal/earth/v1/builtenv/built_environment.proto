@@ -1,0 +1,275 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "geo/enterprise/platform/proto/ares_type_annotations.proto";
+import "google/internal/earth/v1/builtenv/building_configuration.proto";
+import "google/internal/earth/v1/builtenv/building_far_range.proto";
+import "google/internal/earth/v1/builtenv/design_content.proto";
+import "google/internal/earth/v1/builtenv/edit_design_inputs.proto";
+import "google/internal/earth/v1/builtenv/new_build_run_inputs.proto";
+import "google/internal/earth/v1/builtenv/solar_run_inputs.proto";
+import "google/internal/earth/v1/shared.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+import "google/rpc/status.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message CreateDesignGenerationInputRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional DesignGenerationInput design_generation_input = 3;
+    optional string copy_from_design_generation_input_id = 4;
+    
+    reserved 2;
+}
+
+message GenerateDesignsRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional string design_generation_input_id = 3;
+}
+
+message GenerateDesignsResponse {
+    optional DesignGenerationInput design_generation_input = 1;
+}
+
+message GetDesignGenerationInputRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional string design_generation_input_id = 3;
+}
+
+message DeleteDesignGenerationInputRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional string design_generation_input_id = 3;
+}
+
+message UpdateDesignGenerationInputRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional DesignGenerationInput design_generation_input = 2;
+    optional protobuf.FieldMask update_mask = 3;
+}
+
+message ListDesignGenerationInputsRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional string filter = 3;
+    optional int32 page_size = 4;
+    optional string page_token = 5;
+}
+
+message ListDesignGenerationInputsResponse {
+    repeated DesignGenerationInput design_generation_inputs = 1;
+    optional string next_page_token = 2;
+    optional float frontend_polling_interval_seconds = 3;
+}
+
+message ListBuildingTemplatesRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional string filter = 3;
+    optional int32 page_size = 4;
+    optional string page_token = 5;
+}
+
+message ListBuildingTemplatesResponse {
+    repeated BuildingTemplate default_building_templates = 1;
+    repeated BuildingTemplate building_templates = 2;
+    optional string next_page_token = 3;
+    repeated EstimatedBuildingTemplateFarRange building_template_far_ranges = 4;
+}
+
+message DesignGenerationInput {
+    optional string map_id = 1;
+    optional string design_generation_input_id = 2;
+    optional protobuf.Timestamp create_time = 3;
+    optional protobuf.Timestamp update_time = 4;
+    
+    optional DesignGenerationState design_generation_state = 5;
+    enum DesignGenerationState {
+        DESIGN_GENERATION_STATE_UNSPECIFIED = 0;
+        RUNNING = 1;
+        SUCCEEDED = 2;
+        FAILED = 3;
+        DRAFT = 4;
+    }
+    
+    optional rpc.Status design_generation_status = 6;
+    optional CommonRunInputs common_run_inputs = 7;
+    optional SolarRunInputs solar_run_inputs = 8;
+    optional NewBuildRunInputs new_build_run_inputs = 10;
+    optional EditDesignInputs edit_design_inputs = 9;
+    optional string etag = 11;
+    optional bool created_by_me = 12;
+    optional protobuf.Timestamp generate_time = 13;
+}
+
+message CommonRunInputs {
+    optional string currency_code = 1;
+    repeated Parcel parcel = 2;
+}
+
+message Parcel {
+    optional string parcel_id = 1;
+    optional string name = 2;
+    optional bytes s2_encoding = 3;
+}
+
+message ListDesignsRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional string filter = 3;
+    optional int32 page_size = 4;
+    optional string page_token = 5;
+    optional string order_by = 6;
+}
+
+message Design {
+    optional string map_id = 1;
+    optional DesignContent content = 2;
+    repeated DownloadableFile downloadable_files = 3;
+    optional DownloadableFile thumbnail_file = 4;
+    optional string design_generation_input_id = 5;
+    optional string name = 6;
+    optional bool saved = 7;
+    optional protobuf.Timestamp create_time = 8;
+    optional protobuf.Timestamp update_time = 9;
+    
+    optional DesignType design_type = 10;
+    enum DesignType {
+        DESIGN_TYPE_UNSPECIFIED = 0;
+        DESIGN_TYPE_SOLAR = 1;
+        DESIGN_TYPE_NEW_BUILD = 2;
+    }
+    
+    repeated DesignTag design_tags = 11 [packed = true];
+    enum DesignTag {
+        DESIGN_TAG_UNSPECIFIED = 0;
+        BEST_OVERALL_DESIGN = 1;
+    }
+}
+
+message DownloadableFile {
+    optional FileType file_type = 1;
+    enum FileType {
+        FILE_TYPE_UNSPECIFIED = 0;
+        FINANCIAL_MODEL = 2;
+        RHINO = 3;
+        AUTOCAD_DXF = 4;
+        THREE_D_BUILDINGS_IMAGE = 5;
+        PARTI_DIAGRAM_IMAGE = 6;
+        DEFAULT_IMAGE = 7;
+    }
+    
+    optional string encoded_download_token = 2;
+    optional string file_extension = 3;
+}
+
+message ListDesignsResponse {
+    repeated Design designs = 1;
+    optional string next_page_token = 2;
+}
+
+message GetDesignRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional string design_id = 3;
+    optional DesignViewEnumeration design_view_enumeration = 4;
+}
+
+message DeleteDesignRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional string design_id = 3;
+}
+
+message UpdateDesignRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional Design design = 2;
+    optional protobuf.FieldMask update_mask = 3;
+}
+
+message ExportToEarthMapRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string source_map_id = 2;
+    repeated string source_design_ids = 3 [deprecated = true];
+    
+    repeated SourceDesign source_designs = 5;
+    message SourceDesign {
+        optional string design_id = 1;
+        optional string design_name = 2;
+    }
+    
+    optional string target_earth_map_id = 4;
+}
+
+message ExportToEarthMapResponse {
+    optional string map_id = 1;
+    repeated string feature_ids = 2;
+}
+
+message QuotaAccountId {
+    optional TypeId type_id = 1;
+    enum TypeId {
+        TYPE_ID_UNSPECIFIED = 0;
+        DESIGN_GENERATED = 1;
+    }
+    
+    optional int64 gcp_project_number = 2;
+}
+
+message BatchGetUserQuotasRequest {
+    optional ClientMetadata client_metadata = 1;
+    repeated QuotaAccountId.TypeId type_ids = 2 [packed = true];
+    repeated int64 gcp_project_numbers = 3 [packed = true];
+    optional bool exclude_quota_without_license = 4;
+}
+
+message UserQuota {
+    optional QuotaAccountId quota_account_id = 1;
+    optional bool insufficient_new_build_quota = 2;
+    optional bool insufficient_solar_quota = 3;
+    optional int64 total_allowed_amount = 4;
+    optional int64 total_used_amount = 6;
+    optional int64 total_remaining_amount = 7;
+}
+
+message BatchGetUserQuotasResponse {
+    repeated UserQuota user_quotas = 1;
+}
+
+message GetZoningRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional Parcel parcel = 3;
+}
+
+message GetZoningResponse {
+    optional string zone_code = 1;
+    optional string zone_name = 2;
+    optional string zone_type = 3;
+    optional string zone_sub_type = 4;
+    optional string zone_link = 5;
+    optional NewBuildRunInputs.ZoningInputs.ZoningRules zoning_rules = 6;
+}
+
+message CopyDesignGenerationInputRequest {
+    optional ClientMetadata client_metadata = 1;
+    optional string map_id = 2;
+    optional string design_generation_input_id = 3;
+}
+
+enum DesignViewEnumeration {
+    DESIGN_VIEW_ENUMERATION_UNSPECIFIED = 0;
+    DESIGN_VIEW_SUMMARY = 1;
+    DESIGN_VIEW_FULL_DESIGN = 2;
+    DESIGN_VIEW_PRESET_SOLAR_ENERGY_POTENTIAL = 3;
+    DESIGN_VIEW_PRESET_NEW_BUILD_BY_USE_TYPE = 4;
+    DESIGN_VIEW_PRESET_NEW_BUILD_BY_APARTMENT_TYPE = 5;
+    DESIGN_VIEW_PRESET_NEW_BUILD_SOLAR_ENERGY_POTENTIAL = 6;
+    DESIGN_VIEW_PRESET_NEW_BUILD_SUNLIGHT_HOURS = 7;
+}

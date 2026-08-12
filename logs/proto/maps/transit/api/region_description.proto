@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "RegionDescriptionProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedRegionDescription {
+    optional string country_code = 1;
+    optional string metro = 2;
+    optional fixed64 metro_id = 4;
+    optional LoggedMetroTier metro_tier = 3;
+    optional bool city_of_focus = 5;
+}
+
+enum LoggedMetroTier {
+    METRO_TIER_UNKNOWN = 0;
+    METRO_TIER_1 = 1;
+    METRO_TIER_2 = 2;
+    METRO_TIER_3 = 3;
+}

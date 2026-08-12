@@ -1,0 +1,36 @@
+syntax = "editions";
+
+package maps_directions_customization_logs;
+
+import "logs/proto/maps/directions/customization/config/parameter_gate.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedTripPropertyConfig {
+    optional string domain = 1;
+    optional string name = 2;
+    optional LoggedTripPropertyType property_type = 3;
+    repeated LoggedAnnotationDependency annotation_dependencies = 4;
+    optional LoggedParameterGate parameter_gate = 5 [deprecated = true];
+    repeated LoggedFunctionParameterDependency function_parameter_dependencies = 6;
+    repeated LoggedParameterGate parameter_gates = 7;
+}
+
+message LoggedAnnotationDependency {
+    optional string name = 1;
+    optional bool is_required = 2;
+}
+
+message LoggedFunctionParameterDependency {
+    optional string name = 1;
+}
+
+enum LoggedTripPropertyType {
+    option features = enum_type: CLOSED
+    ;
+    TRIP_PROPERTY_TYPE_UNSPECIFIED = 0;
+    TRIP_PROPERTY_TYPE_COST_AFFECTING = 1;
+    TRIP_PROPERTY_TYPE_PASSABILITY = 2;
+}

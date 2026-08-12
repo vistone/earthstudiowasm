@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package maps_directions_customization_logs_serving_protos;
+
+import "maps/directions/customization/config/serving_protos/passability.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedCustomizationPassabilityProperties {
+    map<string, maps_directions_customization.Passability> properties = 1;
+}

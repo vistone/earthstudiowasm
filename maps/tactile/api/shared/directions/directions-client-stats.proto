@@ -1,0 +1,72 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "DirectionsClientStatsProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message DirectionsClientStats {
+    optional DirectionsClient directions_client = 1;
+    enum DirectionsClient {
+        UNKNOWN_DIRECTIONS_CLIENT = 0;
+        ONE_DIRECTION_CLIENT = 1;
+        TWO_DIRECTION_CLIENT = 2;
+        TWO_DIRECTION_TABS_CLIENT = 10;
+        GMM_NAVIGATION_CLIENT = 11;
+        GMM_MISC_CLIENT = 8;
+        WEAR_MAPS_CLIENT = 3;
+        NAVIGATION_SDK = 4;
+        MAPS_SDK = 5;
+        ANDROID_AUTO_EMBEDDED = 6;
+        NAV_GO = 7;
+        PASSIVE_ASSIST = 9;
+        LOCAL_UNIVERSAL = 12;
+        MAPS_TACTILE = 13;
+        MAPS_COMPANION = 14;
+        MAPS_LITE = 15;
+        GOOGLE_EARTH = 16;
+        GMM_COMMUTE_NOTIFICATION = 17;
+        MAPS_EMBED_API = 18;
+        UNKNOWN_MAPS_FE_DIRECTIONS_COMMON_CLIENT = 19;
+    }
+    
+    optional DirectionsContext directions_context = 2;
+    enum DirectionsContext {
+        UNKNOWN_DIRECTIONS_CONTEXT = 0;
+        DEBUG_CONTEXT = 1;
+        EXPLICIT_DIRECTIONS_QUERY = 2;
+        IMPLICIT_PLACESHEET_DIRECTIONS_PREFETCH = 3;
+        ACTIVE_NAVIGATION = 4;
+        ACTIVE_NAVIGATION_UPDATE = 23;
+        FREE_NAVIGATION = 5;
+        JOURNEY_SHARING = 6;
+        MODE_ALTERNATES = 7;
+        BIKESHARING_ALTERNATES = 8;
+        SAVED_TRANSIT_ROUTES = 9;
+        TRANSPORTATION_TAB_PREDICTED_DESTINATIONS = 10;
+        EXPLICIT_DIRECTIONS_QUERY_REFRESH = 11;
+        DIRECTIONS_TURN_BY_TURN_UPGRADE = 12;
+        EXPLICIT_SEARCH_QUERY = 13;
+        SEARCH_ALONG_ROUTE = 35;
+        EXPLICIT_EXTERNAL_DIRECTIONS_INTENT = 14;
+        EXPLICIT_EXTERNAL_DIRECTIONS_INVOCATION = 20;
+        ROUTE_PREVIEW = 15;
+        TRAFFIC_HUB = 16;
+        DIRECTIONS_WIDGET = 17;
+        IMPLICIT_MIXED_QUERY_UPGRADE = 18;
+        LIVE_TRIPS = 21;
+        TRIP_DETAILS_TRANSIT_REFRESH = 22;
+        TRANSIT_CONNECTION_BOARD = 24;
+        UNKNOWN_CONTEXT_GMM_BEFORE_TWO_DIRECTION = 36;
+        SEARCH_RESULT_DIRECTIONS_V2 = 38;
+        PAINT_TILES_FOR_LOCAL_TOP_ADS = 41;
+        EV_RANGE_INSIGHTS = 44;
+        GEOPOLITICAL_PAGE = 45;
+        SEARCH_ROUTE_PREVIEWS = 46;
+        SEARCH_WEEKEND_IDEAS = 47;
+    }
+}

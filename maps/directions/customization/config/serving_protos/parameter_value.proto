@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package maps_directions_customization;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message ParameterValue {
+    oneof value_type {
+        bool boolean_value = 1;
+        string enumeration_value = 2;
+        int64 int_value = 3;
+    }
+}

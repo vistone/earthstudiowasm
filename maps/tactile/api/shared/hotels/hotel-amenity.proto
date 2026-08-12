@@ -1,0 +1,83 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "HotelAmenityProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message HotelAmenity {
+    optional string localized_display_name = 3;
+    optional bool present = 4;
+    
+    optional HotelAmenityType type = 5 [default = UNKNOWN_AMENITY_TYPE];
+    enum HotelAmenityType {
+        UNKNOWN_AMENITY_TYPE = 0;
+        AFFILIATED_GOLF_COURSE = 1;
+        AIR_CONDITIONED = 2;
+        AIRPORT_SHUTTLE = 3;
+        ALL_INCLUSIVE_AVAILABLE = 4;
+        BALCONY = 23;
+        BAR_OR_LOUNGE = 5;
+        BEACH_ACCESS = 6;
+        BREAKFAST = 10;
+        BUSINESS_CENTER = 7;
+        CHILD_FRIENDLY = 8;
+        CRIB = 24;
+        ELEVATOR = 25;
+        FIRE_PLACE = 26;
+        FITNESS_CENTER = 9;
+        HEATING = 27;
+        HOT_TUB = 12;
+        IRONING_BOARD = 28;
+        KITCHEN_AVAILABILITY = 13;
+        LAUNDRY_SERVICE = 14;
+        MICROWAVE = 29;
+        ONSEN = 35;
+        OUTDOOR_GRILL = 30;
+        OVEN_STOVE = 31;
+        PARKING = 15;
+        PATIO = 32;
+        PETS_ALLOWED = 16;
+        RESTAURANT = 17;
+        ROOM_SERVICE = 18;
+        SMOKE_FREE_PROPERTY = 19;
+        SPA = 20;
+        SWIMMING_POOL = 21;
+        TV = 33;
+        WASHER_DRYER = 34;
+        WHEELCHAIR_ACCESSIBLE = 11;
+        WIFI = 22;
+    }
+    
+    optional Qualifier qualifier = 6;
+    enum Qualifier {
+        UNKNOWN_QUALIFIER = 0;
+        DEFAULT = 1;
+        FREE = 2;
+        PAID = 3;
+        UNDEFINED_COST = 4;
+        INDOOR = 5;
+        OUTDOOR = 6;
+        INDOOR_AND_OUTDOOR = 7;
+        UNDEFINED_LOCATION = 8;
+        ALL_ROOMS = 9;
+        SOME_ROOMS = 10;
+        UNDEFINED_ROOMS = 11;
+    }
+    
+    repeated HotelTier hotel_tier = 7;
+    message HotelTier {
+        optional Type type = 1;
+        enum Type {
+            UNKNOWN_TYPE = 0;
+            FEATURED = 1;
+            STANDARD = 2;
+        }
+    }
+    
+    reserved 1, 2;
+}

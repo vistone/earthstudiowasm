@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package geo.casemap.search;
+
+option features = enum_type: CLOSED
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.casemap.search.proto";
+
+enum PinStyle {
+    PIN_STYLE_DEFAULT = 0;
+    PIN_STYLE_CALLOUT = 1;
+    PIN_STYLE_TINY = 2;
+}

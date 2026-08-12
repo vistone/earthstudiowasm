@@ -1,0 +1,54 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/protos/view_group.proto";
+import "geo/earth/app/cpp/core/state/state.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+import "geo/earth/proto/mapstyle.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Approotderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derivedstate";
+
+message AppRootDerivedState {
+    optional bool is_toolbar_visible = 4 [default = true];
+    optional bool is_compass_visible = 7 [default = true];
+    optional bool is_pegman_button_visible = 8 [default = true];
+    optional bool is_hover_button_visible = 9 [default = true];
+    optional bool is_mylocation_button_visible = 10 [default = true];
+    optional bool is_in_street_view_pano = 11;
+    optional bool is_street_view_timeline_visible = 53;
+    optional bool is_street_view_timeline_collapsed = 54;
+    optional bool is_3d_editing_gizmo_visible = 13 [features = ];
+    optional bool is_search_open = 18;
+    optional bool have_search_results = 19;
+    optional bool is_measure_tool_active = 20;
+    optional bool is_map_styles_active = 21;
+    optional document.protos.BalloonStyle.DisplayMode balloon_display_mode = 24;
+    optional bool is_search_panel_suppressed_sui = 25;
+    optional bool is_tour_player_visible = 26;
+    optional bool is_timelapse_expanded_pui = 28;
+    optional bool is_timelapse_expanded_sui = 29;
+    optional bool is_timelapse_collapsed_sui = 61;
+    optional .earth.core.viewgroup.ViewGroup view_group = 32;
+    optional bool is_time_machine_expanded_pui = 35;
+    optional bool is_time_machine_expanded_sui = 36;
+    optional bool is_time_machine_collapsed_sui = 60;
+    optional bool is_coverage_overlay_active = 41;
+    optional bool has_focused_document = 43;
+    optional bool is_site_selection_active = 44;
+    optional bool is_legend_visible = 45;
+    optional bool is_menu_bar_collapsed = 46;
+    optional bool is_menu_open = 57;
+    optional bool is_site_study_active = 47;
+    optional bool is_property_editor_visible = 50;
+    optional bool is_industry_selector_banner_visible = 51;
+    optional layers.MapStyle map_style = 56;
+    optional bool is_earth_mate_chat_active = 62;
+    optional NonRestorableAppRootData.DefaultLoadingDestination default_loading_destination = 63;
+    
+    reserved 12;
+}

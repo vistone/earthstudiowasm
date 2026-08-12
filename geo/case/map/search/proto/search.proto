@@ -1,0 +1,299 @@
+syntax = "proto2";
+
+package geo.casemap.search;
+
+import "geo/case/map/search/proto/refinements.proto";
+import "geo/case/map/search/proto/style_options.proto";
+import "geo/photo/proto/image_key.proto";
+import "geo/serving/proto/ads/ads_entity.proto";
+import "geo/serving/proto/electricvehicle/electric_vehicle_options.proto";
+import "geo/serving/proto/localcategorical/intent_type.proto";
+import "geo/serving/proto/text/annotated_text.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/point.proto";
+import "geostore/base/proto/rect.proto";
+import "geostore/base/proto/relation.proto";
+import "java/com/google/apps/jspb/jspb_disable_randomization.proto";
+import "localsearch/lite/intent.proto";
+import "logs/proto/maps/shared/lodging_pricing_information.proto";
+import "maps/paint/proto/pipe-metadata.proto";
+import "maps/shared/common/geom/geom.proto";
+import "maps/spotlight/proto/search-params.proto";
+import "maps/tactile/api/ads-spotlight.proto";
+import "maps/tactile/url/proto/place-lookup-supplemental-info.proto";
+import "search/rendering/xuikit/elements/proto/elements_output_extensions.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "CMR";
+option java_multiple_files = true;
+option java_package = "com.google.geo.casemap.search.proto";
+
+message SearchPipeMetadata {
+    optional string query = 2;
+    optional SpotlitContext spotlit_context = 14;
+    repeated SearchResultEntity explicit_result_entity = 5;
+    optional ViewType view_type = 6;
+    optional LSLiteParams lslite_params = 9;
+    optional AppliedRefinements applied_refinements = 1;
+    optional HotelContext hotel_context = 7;
+    optional DeviceType device_type = 8;
+    optional PersonalizationParams personalization_params = 10;
+    optional QueryBasedLocalData query_based_local_data = 13;
+    repeated InferredIntent inferred_intent = 11 [packed = true];
+    optional string currency_code = 12;
+    optional geo_serving_proto.localcategorical.IntentType preset_query_type = 3 [deprecated = true];
+    optional maps_spotlight.ExploreSearchParams search_params = 4 [deprecated = true];
+    optional SearchLocationContext search_location_context = 15;
+    optional ImageryResultsContext imagery_results_context = 16;
+    optional bool enable_recently_viewed_results = 17;
+    optional RecentBundlesContext recent_bundles_context = 18;
+    optional AskMapsContext ask_maps_context = 19;
+    
+    extend maps_paint.PipeMetadata {
+        optional SearchPipeMetadata pipe_metadata = 299174093;
+    }
+    
+    extend .search.rendering.xuikit.elements.ElementsOutputExtensions {
+        optional SearchPipeMetadata search_pipe_metadata = 483753016;
+    }
+}
+
+message SpotlitContext {
+    optional SearchResultEntity result_entity = 1;
+    optional bool is_indoor_highlighting = 2;
+    optional bool should_maintain_selected_state = 3;
+    optional bool is_building_selection = 4 [deprecated = true];
+    optional bool is_transit_station_selection = 6;
+    optional SelectedStateType selected_state_type = 5 [default = TYPE_DEFAULT, deprecated = true];
+    optional maps_shared.geom.Camera preferred_viewport = 7;
+    optional bool is_highlightable_polyline_selection = 8;
+}
+
+message SearchResultJustification {
+    optional geo_serving_proto.text.AnnotatedText annotated_text = 1;
+    optional int32 max_num_lines = 2;
+}
+
+message SearchResultJustifications {
+    repeated SearchResultJustification justifications = 1;
+}
+
+message SearchResultDealContext {
+    optional bool is_top_ranked = 3;
+    optional string product_title = 4;
+    
+    oneof deal_context {
+        ValueDeal value = 1;
+        GenericDeal generic = 2;
+    }
+    
+    message GenericDeal {
+        optional int32 offer_count = 1;
+    }
+    
+    message ValueDeal {
+        optional MoneyValue price = 3;
+        message MoneyValue {
+            optional float money = 1;
+            optional string currency = 2;
+        }
+        
+        oneof value {
+            MoneyValue money = 1;
+            float percentage = 2;
+        }
+    }
+}
+
+message SearchResultPhoto {
+    optional geo_photo_service.ImageKey image_key = 1;
+    optional string thumbnail_url = 2;
+}
+
+message MapsVisualSearchResultPhoto {
+    optional geo_photo_service.ImageKey image_key = 1;
+    optional string thumbnail_url = 2;
+}
+
+message FormattedAddress {
+    optional string short_description = 1;
+}
+
+message SearchResultEntity {
+    optional geostore.FeatureIdProto feature_id = 1;
+    optional string mid = 2;
+    optional geostore.PointProto lat_lng = 4;
+    optional bool is_geocode = 8;
+    optional geo_serving_proto.ads.AdsEntity ads_entity = 20;
+    optional maps_tactile.AdsEntity ad = 3 [deprecated = true];
+    optional string ved = 5;
+    optional SearchResultJustifications justifications = 6;
+    optional SearchResultDealContext deal_context = 13;
+    optional SearchAlongRouteAnnotation search_along_route_annotation = 7;
+    optional bool synthetic_geometry = 9;
+    optional double geometry_precision_meters = 10;
+    optional SearchResultPhoto top_photo = 11 [deprecated = true];
+    optional geostore.RectProto preferred_viewport = 12;
+    optional FormattedAddress formatted_address = 14;
+    optional string primary_gcid = 15;
+    repeated EntityRelation related_entity = 16;
+    optional MapsVisualSearchResultPhoto maps_visual_search_photo = 17;
+    optional maps_tactile.url.PlaceLookupSupplementalInfo place_lookup_supplemental_info = 18;
+    optional logs_maps_shared.LodgingPricingInformation lodging_pricing_info = 19;
+    optional LodgingDisplayInfo lodging_display_info = 21;
+    optional bool is_suggested_along_route = 22;
+    optional HighlightOptions highlight_options = 23;
+    repeated geo_serving_proto.electricvehicle.ElectricVehicleConnector evcs_compatible_connectors = 24;
+    optional geo_serving_proto.electricvehicle.ElectricVehicleChargingSpeed evcs_charging_speed_filter = 30;
+    optional string xuikit_command_data_store_key = 26;
+    optional StyleOptions style_options = 27;
+    optional SearchResultPhoto photo_pin_photo = 28;
+    optional string local_query_intent_params_token = 29;
+    
+    reserved 25;
+}
+
+message HighlightOptions {
+    optional bool is_highlighted = 1;
+    optional bool highlight_geometry_ignoring_recommended_zoom_level = 2;
+}
+
+message EntityRelation {
+    optional SearchResultEntity entity = 1;
+    optional geostore.RelationProto.RelationCategory relation = 2;
+}
+
+message HotelContext {
+    optional int64 request_timestamp_ms = 8;
+    optional SearchResultEntity spotlit_hotel_result = 1;
+    optional bool allow_additional_hotel_results = 3 [default = true];
+    optional bool enable_hotel_deals = 6;
+    optional bool enable_hotel_unpaid_booking_links = 5;
+    optional bool enable_vacation_rentals_from_mapfacts = 12;
+    optional bool enable_vr_clustering = 11;
+    
+    optional PartnerConfig display_config = 4;
+    message PartnerConfig {
+        optional int32 num_promoted_partners = 1;
+        optional int32 num_menu_partners = 2;
+        optional int32 num_organic_promoted_partners = 3;
+        optional int32 num_organic_menu_partners = 4;
+    }
+    
+    optional string country_code = 9;
+    optional string language = 10;
+    
+    reserved 7;
+}
+
+message LodgingDisplayInfo {
+    optional string compact_formatted_price_per_night = 1;
+}
+
+message PersonalizationParams {
+    optional bool can_personalize = 1;
+    optional bool is_smh_enabled = 2;
+    optional bool is_google_one_user = 3;
+    optional bool is_recent_unicorn_child_user = 4;
+    optional bool is_dasher_user = 5;
+    optional bool is_corp_googler = 6;
+}
+
+message LSLiteParams {
+    optional localsearch.lite.IntentType intent = 1;
+    optional string structured_chain_mid = 2;
+}
+
+message QueryBasedLocalData {
+    optional Model model = 1;
+    message Model {
+        repeated Score gcid_score = 1;
+        repeated Score chain_score = 2;
+    }
+    
+    optional float top_gcid_score = 2;
+    optional float top_chain_score = 3;
+    
+    message Score {
+        optional float score = 3;
+        
+        oneof label {
+            string string_label = 1;
+            uint64 int_label = 2;
+        }
+    }
+}
+
+message SearchAlongRouteAnnotation {
+    optional geo_serving_proto.text.AnnotatedText annotated_text = 1;
+}
+
+message SearchLocationContext {
+    optional SearchResultEntity search_location = 1;
+}
+
+message ImageryResultsContext {
+    optional StreetParkingSignsContext street_parking_signs_context = 1;
+    message StreetParkingSignsContext {
+        optional bool include_restricted_parking = 1;
+        optional bool include_no_parking = 2;
+    }
+    
+    optional bool immersive = 2;
+}
+
+message AskMapsContext {
+    repeated string encoded_trips = 1;
+    optional bool use_area_highlighting_style = 2;
+}
+
+message RecentBundlesContext {
+    optional bool is_recent_bundles_search = 1;
+}
+
+enum SelectedStateType {
+    option deprecated = true;
+    TYPE_DEFAULT = 0;
+    TYPE_BUILDING_SELECTION = 1;
+    TYPE_3D_BUILDING_SELECTION = 2;
+}
+
+enum ViewType {
+    UNKNOWN_VIEW_TYPE = 0;
+    COMMODITY = 1;
+    RICH = 2;
+    LEAN = 3;
+    CHAIN = 4;
+    DINING = 5;
+    PARKING = 6;
+    HOTEL = 7;
+    HOTEL_CHAIN = 8;
+    GAS_STATION = 9;
+    SHOPPING = 10;
+    TRANSIT = 11;
+    ATTRACTION = 12;
+    BIKE_SHARE_STATION = 13;
+    SERVICES = 14;
+    EV_CHARGING_STATION = 15;
+}
+
+enum VerticalizedLabelData {
+    UNKNOWN_VERTICALIZED_LABEL_DATA = 0;
+    RATING = 1;
+    GAS_PRICE = 2;
+    BIKE_AVAILABILITY = 3;
+    LODGING_PRICE = 4;
+    EV_CHARGING_STATION_PORTS_AVAILABILITY = 5;
+}
+
+enum DeviceType {
+    DEVICE_UNKNOWN = 0;
+    DEVICE_DESKTOP = 1;
+    DEVICE_MOBILE = 2;
+    DEVICE_TABLET = 3;
+}
+
+enum InferredIntent {
+    INFERRED_INTENT_UNKNOWN = 0;
+    INFERRED_INTENT_NON_LOCAL = 1;
+}

@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "maps/tactile/api/shared/hotels/room.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "RoomClusterProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message RoomCluster {
+    optional string title = 1;
+    optional int32 number_of_rates = 2 [deprecated = true];
+    optional RoomRate display_rate = 3;
+}

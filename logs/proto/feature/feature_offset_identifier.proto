@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package logs.feature;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "FLOG";
+option java_multiple_files = true;
+
+message FeatureOffsetIdentifier {
+    repeated int32 identifier_base = 1;
+    optional int32 offset = 2 [default = 0];
+}

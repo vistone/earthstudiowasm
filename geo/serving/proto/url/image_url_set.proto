@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geo_serving_proto.url;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPURL";
+option java_multiple_files = true;
+option java_outer_classname = "ImageUrlSetProto";
+option java_package = "com.google.geo.serving.proto.url";
+
+message ImageUrlSet {
+    optional string light_mode_url = 1;
+    optional string dark_mode_url = 2;
+}

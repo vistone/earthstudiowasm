@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package maps_tactile.shared.place;
+
+import "geo/serving/proto/place/place_identifier.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPL";
+option java_multiple_files = true;
+option java_outer_classname = "MapsPlaceIdentifierProto";
+option java_package = "com.google.maps.tactile.shared.place";
+
+message MapsPlaceIdentifier {
+    optional geo_serving_proto.place.PlaceIdentifier place_identifier = 1;
+    optional bytes place_lookup_supplemental_info_token = 2;
+}

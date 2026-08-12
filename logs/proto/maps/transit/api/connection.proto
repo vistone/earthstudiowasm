@@ -1,0 +1,185 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "logs/proto/maps/limo/proto/response.proto";
+import "logs/proto/maps/roadtraffic/proto/path_traffic_flavor.proto";
+import "logs/proto/maps/roadtraffic/proto/traffic.proto";
+import "logs/proto/maps/transit/api/attribute_status.proto";
+import "logs/proto/maps/transit/api/core.proto";
+import "logs/proto/maps/transit/api/fare.proto";
+import "logs/proto/maps/transit/api/time.proto";
+import "logs/proto/maps/transit/api/vehicle_attributes.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ConnectionProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedWalk {
+    optional fixed64 transfer_key = 1;
+    optional int32 distance_meters = 2 [deprecated = true];
+    optional LoggedDurationRange duration = 3;
+}
+
+message LoggedRide {
+    optional LoggedDeparture departure = 1;
+    optional bool is_critical = 2;
+    optional bool must_phone = 5 [default = false];
+    
+    repeated LoggedStop stop = 6;
+    message LoggedStop {
+        optional fixed64 expected_stop_key = 1;
+        optional fixed64 scheduled_stop_key = 2;
+        optional fixed64 arrival_route_section_key = 3;
+        optional fixed64 departure_route_section_key = 4;
+        optional LoggedDuration arrival_time_offset = 5;
+        optional LoggedDuration departure_time_offset = 6;
+        optional bool on_request = 7 [default = false];
+    }
+    
+    repeated LoggedSegment segment = 7;
+    message LoggedSegment {
+        optional fixed64 polyline_key = 1;
+        optional fixed64 transit_trip_key = 2;
+        optional bool has_synthetic_polyline = 3;
+    }
+    
+    repeated fixed64 alert_key = 8 [packed = true];
+    optional LoggedAlertsAvailability alerts_availability = 9;
+    optional LoggedVehicleAttributes vehicle_attributes = 12;
+    optional LoggedAttributeStatus crowdedness_at_departure_stop = 15;
+    optional int64 last_trip_update_utc_seconds = 13;
+    optional bytes boarded_vehicle_token = 20;
+    
+    reserved 3, 4, 10, 11, 14;
+}
+
+message LoggedLeg {
+    oneof mode {
+        LoggedWalking walking = 1;
+        LoggedTransit transit = 2;
+        LoggedDriving driving = 3;
+        LoggedOfflineTaxi offline_taxi = 4;
+        LoggedOnlineTaxi online_taxi = 5;
+        LoggedCycling cycling = 6;
+        LoggedTwoWheeler two_wheeler = 7;
+    }
+    
+    message LoggedWalking {
+        optional LoggedDurationRange duration = 1;
+        optional LoggedInt32Range distance_meters = 2;
+        repeated LoggedWalk walk = 3;
+    }
+    
+    message LoggedTransit {
+        optional fixed64 departure_station_key = 1;
+        optional fixed64 arrival_station_key = 2;
+        repeated fixed64 valid_line_direction_key = 3 [packed = true];
+        optional LoggedDurationRange travel_time = 5;
+        optional LoggedDurationRange periodicity = 7;
+        repeated LoggedRide ride = 9;
+        optional bytes filtered_departures_query_token = 10;
+        optional bytes preferred_route_start_specifier = 11;
+        
+        repeated LoggedVehicleBoardingRecommendation vehicle_boarding_recommendation = 12;
+        message LoggedVehicleBoardingRecommendation {
+            optional fixed64 vehicle_key = 1;
+            
+            repeated LoggedCarriage carriage = 2;
+            message LoggedCarriage {
+                optional int32 index = 1;
+            }
+            
+            optional LoggedReason reason = 3;
+            enum LoggedReason {
+                UNKNOWN_REASON = 0;
+                FASTEST_TRANSFER = 1;
+                FASTEST_EXIT = 2;
+            }
+            
+            optional LoggedDirectionOfMotion departure_vehicle_direction = 4;
+            enum LoggedDirectionOfMotion {
+                UNKNOWN_DIRECTION_OF_MOTION = 0;
+                LEFT_TO_RIGHT = 1;
+                RIGHT_TO_LEFT = 2;
+            }
+            
+            optional LoggedVehicleOrientation departure_vehicle_orientation = 5;
+            enum LoggedVehicleOrientation {
+                UNKNOWN_ORIENTATION = 0;
+                FORWARD = 1;
+                BACKWARD = 2;
+            }
+        }
+        
+        reserved 4, 6, 8;
+    }
+    
+    message LoggedDriving {
+        optional LoggedDurationRange duration = 1;
+        optional fixed64 transfer_key = 2;
+        repeated maps.roadtraffic.proto.LoggedPathTrafficFlavor traffic_flavor = 3;
+        repeated maps.roadtraffic.proto.LoggedTripSummaryForTrafficFlavor roadtraffic_flavor_result = 4;
+    }
+    
+    message LoggedOfflineTaxi {
+        optional LoggedDriving driving_info = 1;
+        optional maps_limo.LoggedOfflineTaxiInfo offline_taxi_info = 2;
+    }
+    
+    message LoggedOnlineTaxi {
+        optional LoggedDriving driving_info = 1;
+        optional maps_limo.LoggedOnlineTaxiInfo online_taxi_info = 2;
+    }
+    
+    message LoggedCycling {
+        optional LoggedDurationRange duration = 1;
+        optional fixed64 transfer_key = 2;
+    }
+    
+    message LoggedTwoWheeler {
+        optional LoggedDriving driving_info = 1;
+    }
+}
+
+message LoggedJourney {
+    optional LoggedTime departure = 1;
+    optional LoggedTimeRange arrival = 2;
+    
+    reserved 4, 7;
+}
+
+message LoggedConnection {
+    repeated LoggedJourney journey = 1;
+    optional LoggedDurationRange duration = 2;
+    optional LoggedDurationRange periodicity = 3;
+    optional int32 transit_leg_count = 4;
+    repeated LoggedLeg leg = 7;
+    optional bool is_confidential = 8 [default = false];
+    optional LoggedFareInfo fare_info = 13;
+    
+    optional LoggedFeasibility feasibility = 10;
+    enum LoggedFeasibility {
+        FEASIBILITY_UNKNOWN = 0;
+        FEASIBILITY_FEASIBLE = 1;
+        FEASIBILITY_INFEASIBLE = 3;
+    }
+    
+    repeated LoggedLabel label = 11 [packed = true];
+    enum LoggedLabel {
+        LABEL_UNKNOWN = 0;
+        LABEL_EARLIEST_ARRIVAL = 1;
+        LABEL_LATEST_DEPARTURE = 2;
+        LABEL_SHORTEST_TRAVEL_TIME = 3;
+        LABEL_FEWEST_TRANSFERS = 4;
+        LABEL_LEAST_WALKING = 5;
+        LABEL_LOWEST_FARE = 6;
+        LABEL_TIGHT = 7;
+        LABEL_RELAXED = 8;
+        LABEL_RISKY = 9;
+        LABEL_SAFE = 10;
+    }
+    
+    reserved 5, 6, 9;
+}

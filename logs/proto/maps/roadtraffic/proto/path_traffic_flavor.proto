@@ -1,0 +1,57 @@
+syntax = "editions";
+
+package logs.proto.maps.roadtraffic.proto;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+;
+
+message LoggedPathTrafficFlavor {
+    optional LoggedTimeSpecifier time_specifier = 1;
+    
+    optional LoggedTimingType prediction_timing = 2 [default = TIME_GOES_BY];
+    enum LoggedTimingType {
+        TIMING_TYPE_UNSPECIFIED = 0;
+        TIME_GOES_BY = 1;
+    }
+    
+    optional LoggedBlendingSpecifier blending = 3;
+}
+
+message LoggedTimeSpecifier {
+    optional LoggedTimeInterpretation interpretation = 1 [default = ABSOLUTE_UTC];
+    enum LoggedTimeInterpretation {
+        TIME_INTERPRETATION_UNSPECIFIED = 0;
+        ABSOLUTE_UTC = 1;
+        ABSOLUTE_LOCAL_TIMEZONE = 3;
+    }
+    
+    optional int64 seconds = 2;
+    
+    optional LoggedTimeAnchoring anchoring = 3 [default = DEPARTURE];
+    enum LoggedTimeAnchoring {
+        TIME_ANCHORING_UNSPECIFIED = 0;
+        DEPARTURE = 1;
+        ARRIVAL = 2;
+    }
+}
+
+message LoggedBlendingSpecifier {
+    optional LoggedBlendingType type = 1 [default = BEST_GUESS];
+    enum LoggedBlendingType {
+        BLENDING_TYPE_UNSPECIFIED = 0;
+        BEST_GUESS = 5;
+        BEST_GUESS_PRE_PATH_MODEL = 9;
+        STATIC_HISTORICAL_MODEL = 6;
+        PESSIMISTIC_STATIC_HISTORICAL_MODEL = 7;
+        OPTIMISTIC_STATIC_HISTORICAL_MODEL = 8;
+        FREEFLOW = 4;
+        REALTIME = 3;
+        OBSOLETE_HISTORICAL = 1;
+        OBSOLETE_VOID = 2;
+    }
+    
+    optional bool use_supersegment = 8 [default = true];
+    optional bool use_path_model = 9 [default = true];
+}

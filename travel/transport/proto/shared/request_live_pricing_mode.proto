@@ -1,0 +1,13 @@
+syntax = "editions";
+
+package travel.transport.proto.shared;
+
+option java_outer_classname = "RequestLivePricingModeOuterClass";
+option java_package = "com.google.travel.transport.proto.shared";
+
+enum RequestLivePricingMode {
+    REQUEST_LIVE_PRICING_MODE_UNSPECIFIED = 0;
+    DISABLED = 1;
+    BACKGROUND = 2;
+    FOREGROUND = 3;
+}

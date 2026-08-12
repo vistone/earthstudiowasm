@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package earth.core.unittype;
+
+option objc_class_prefix = "RTHCORE";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "UnitTypeProto";
+option java_package = "com.google.geo.earth.app.common.core.unittype";
+
+message ProtoRequiresAtLeastOneMessageInFileUnitType {
+    
+}
+
+enum UnitType {
+    UNKNOWN_UNIT_TYPE = 0;
+    DISTANCE = 1;
+    AREA = 2;
+    PERCENT = 4;
+    FAR = 5;
+    SLOPE = 6;
+}

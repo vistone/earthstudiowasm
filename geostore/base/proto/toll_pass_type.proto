@@ -1,0 +1,31 @@
+syntax = "editions";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+enum TollPassType {
+    TOLL_PASS_TYPE_UNSPECIFIED = 0;
+    TOLL_PASS_TYPE_E_ZPASS = 1;
+    TOLL_PASS_TYPE_E_ZPASS_FLEX = 15;
+    TOLL_PASS_TYPE_FASTRAK = 2;
+    TOLL_PASS_TYPE_FASTRAK_FLEX = 16;
+    TOLL_PASS_TYPE_EXPRESSTOLL = 3;
+    TOLL_PASS_TYPE_EXPRESSTOLL_PLUS = 18;
+    TOLL_PASS_TYPE_SUNPASS = 4;
+    TOLL_PASS_TYPE_E_PASS = 5;
+    TOLL_PASS_TYPE_PEACH_PASS = 6;
+    TOLL_PASS_TYPE_I_PASS = 7;
+    TOLL_PASS_TYPE_NC_QUICK_PASS = 8;
+    TOLL_PASS_TYPE_PIKEPASS = 9;
+    TOLL_PASS_TYPE_TXTAG = 10;
+    TOLL_PASS_TYPE_EZ_TAG = 11;
+    TOLL_PASS_TYPE_EXPRESS_PASS = 12;
+    TOLL_PASS_TYPE_GOOD_TO_GO = 13;
+    TOLL_PASS_TYPE_GOOD_TO_GO_FLEX_PASS = 17;
+    TOLL_PASS_TYPE_TOLLTAG = 14;
+    TOLL_PASS_TYPE_EXEMPTION_DECAL = 19;
+}

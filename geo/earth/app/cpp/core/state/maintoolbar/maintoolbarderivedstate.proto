@@ -1,0 +1,53 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/protos/drawing_mode.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Maintoolbarderivedstate";
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message MainToolbarDerivedState {
+    optional DrawingToolsState drawing_tools_state = 2;
+    message DrawingToolsState {
+        optional .earth.core.drawingmode.DrawingMode drawing_tool_mode = 1;
+    }
+    
+    optional MeasurementToolsState measurement_tools_state = 3;
+    message MeasurementToolsState {
+        optional bool is_measuring = 2;
+        optional bool has_drawing_intent = 3;
+    }
+    
+    optional int32 focused_document_key = 5 [default = -1];
+    optional bool is_menu_bar_collapsed = 6;
+    
+    optional SiteSelectionState site_selection_state = 7;
+    message SiteSelectionState {
+        optional bool enable_site_selection = 1;
+        optional bool show_badge = 2;
+        optional bool is_site_selection_active = 3;
+    }
+    
+    optional EarthMateState earth_mate_state = 8;
+    message EarthMateState {
+        optional bool enable_earth_mate = 1;
+        optional bool show_badge = 2;
+        optional bool is_earth_mate_chat_active = 3;
+    }
+    
+    optional TimeMachineState time_machine_state = 9;
+    message TimeMachineState {
+        optional bool is_available = 1;
+        optional bool is_enabled = 2;
+        optional bool is_active = 3;
+    }
+    
+    optional EarthDataCatalogState earth_data_catalog_state = 13;
+    message EarthDataCatalogState {
+        optional bool show_badge = 1;
+    }
+}

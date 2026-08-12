@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package search.rendering.xuikit.elements;
+
+import "search/rendering/xuikit/elements/proto/elements_output.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "XUI";
+option java_multiple_files = true;
+option java_package = "com.google.search.rendering.xuikit.elements";
+
+message ElementsOutputExtensions {
+    extensions 318561016, 326314628, 327086580, 439971317, 350545586, 366188583, 367008027, 372145488, 383517811, 465593468, 483753016, 515682661, 525000000 to max;
+    
+    reserved 334558990, 494652967;
+    
+    extend ElementsOutput {
+        repeated ElementsOutputExtensions elements_output_extensions = 7;
+    }
+}

@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package maps_directions_customization_logs;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedDomainConfig {
+    optional string name = 1;
+    optional bool all_domains_allowed = 2;
+    
+    optional LoggingType logging_type = 3;
+    enum LoggingType {
+        LOGGING_TYPE_UNSPECIFIED = 0;
+        LOGGING_TYPE_GOOGLE = 1;
+        LOGGING_TYPE_THIRD_PARTY = 2;
+    }
+}

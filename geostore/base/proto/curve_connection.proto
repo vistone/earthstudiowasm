@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message CurveConnectionProto {
+    optional ConnectionType type = 1;
+    enum ConnectionType {
+        UNSPECIFIED = 0;
+        BEZIER = 1;
+        CIRCLE = 2;
+        STRAIGHT_EDGE = 3;
+    }
+    
+    oneof params {
+        BezierParams bezier_params = 2;
+        CircleParams circle_params = 3;
+    }
+    
+    message BezierParams {
+        repeated ControlPoint control_point = 1;
+        message ControlPoint {
+            optional double angle_degrees = 1;
+            optional double distance_multiplier = 2;
+        }
+    }
+    
+    message CircleParams {
+        optional double radius = 1;
+    }
+}

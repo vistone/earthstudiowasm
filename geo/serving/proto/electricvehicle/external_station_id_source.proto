@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package geo_serving_proto.electricvehicle;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPEV";
+option java_multiple_files = true;
+option java_outer_classname = "ExternalStationIdSourceProto";
+option java_package = "com.google.geo.serving.proto.electricvehicle";
+
+enum ExternalStationIdSource {
+    UNKNOWN_EXTERNAL_STATION_ID_SOURCE = 0;
+    EXTERNAL_STATION_ID_SOURCE_TESLA = 1;
+}

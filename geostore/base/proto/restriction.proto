@@ -1,0 +1,108 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "geostore/base/proto/autonomous_driving.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/timeschedule.proto";
+import "geostore/base/proto/travel_pattern.proto";
+import "geostore/base/proto/vehicle_attribute_filter.proto";
+import "geostore/base/proto/version_token_options.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "geostore/base/proto/stable_id_options.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message RestrictionProto {
+    optional uint64 restriction_id = 13;
+    repeated FeatureIdProto subpath = 1;
+    
+    optional RestrictionType type = 2;
+    enum RestrictionType {
+        RESTRICTION_TRAVEL_RESTRICTED = 17;
+        RESTRICTION_ILLEGAL = 273;
+        RESTRICTION_PHYSICAL = 274;
+        RESTRICTION_LOGICAL = 275;
+        RESTRICTION_GATE = 276;
+        RESTRICTION_CONSTRUCTION = 277;
+        RESTRICTION_SEASONAL_CLOSURE = 278;
+        RESTRICTION_PRIVATE = 279;
+        RESTRICTION_WRONG_WAY = 280;
+        RESTRICTION_TERMINAL = 281;
+        RESTRICTION_PAYMENT_REQUIRED = 18;
+        RESTRICTION_TOLL_BOOTH = 289;
+        RESTRICTION_USAGE_FEE_REQUIRED = 290;
+        RESTRICTION_ENTRANCE_FEE_REQUIRED = 291;
+        RESTRICTION_VIGNETTE_REQUIRED = 292;
+        RESTRICTION_TOLL_REQUIRED = 293;
+        RESTRICTION_TOLL_FULL = 4689;
+        RESTRICTION_TOLL_REDUCED = 4690;
+        RESTRICTION_ADVISORY = 19;
+        RESTRICTION_HIGH_CRIME = 305;
+        RESTRICTION_POLITICALLY_SENSITIVE = 306;
+        RESTRICTION_DISTURBED_BY_MAINTENANCE = 307;
+        RESTRICTION_CHECKPOINT = 308;
+        RESTRICTION_REGION_SPECIFIC = 20;
+    }
+    
+    repeated TravelCategory travel_mode = 3;
+    enum TravelCategory {
+        TRAVEL_ANY = 0;
+        TRAVEL_MOTOR_VEHICLE = 17;
+        TRAVEL_AUTO = 273;
+        TRAVEL_CARPOOL = 274;
+        TRAVEL_MOTORCYCLE = 275;
+        TRAVEL_BUS = 276;
+        TRAVEL_TRUCK = 277;
+        TRAVEL_DELIVERY = 278;
+        TRAVEL_TAXI = 279;
+        TRAVEL_EMERGENCY = 280;
+        TRAVEL_THROUGH_TRAFFIC = 281;
+        TRAVEL_AUTONOMOUS_VEHICLE = 282;
+        TRAVEL_PEDESTRIAN = 18;
+        TRAVEL_BICYCLE = 19;
+    }
+    
+    optional RestrictionStyle style = 4 [default = STYLE_CONTIGUOUS];
+    enum RestrictionStyle {
+        STYLE_CONTIGUOUS = 0;
+        STYLE_SINGLE = 1;
+        STYLE_TURN = 2;
+        STYLE_IN_OUT = 3;
+    }
+    
+    optional FeatureIdProto intersection_group = 7;
+    
+    optional RestrictionScope scope = 8 [default = SCOPE_DIRECTION];
+    enum RestrictionScope {
+        SCOPE_DIRECTION = 0;
+        SCOPE_SIDE = 1;
+    }
+    
+    optional FeatureIdProto restriction_group = 9;
+    optional VehicleAttributeFilterProto vehicle_attribute_filter = 10;
+    repeated AutonomousDrivingProto.ProductType autonomous_driving_products = 11;
+    optional TravelPatternProto travel_pattern = 14;
+    optional bool is_variable = 15;
+    optional string restriction_token = 12;
+    optional .proto2.bridge.MessageSet temporary_data = 6;
+    optional FieldMetadataProto metadata = 500;
+    
+    oneof restriction_timing {
+        TimeScheduleProto schedule = 5;
+        TimeApplicability time_applicability = 16;
+    }
+    
+    enum TimeApplicability {
+        TIME_APPLICABILITY_UNSPECIFIED = 0;
+        TIME_APPLICABILITY_UNKNOWN = 1;
+        LOCAL_INDICATOR = 2;
+    }
+}

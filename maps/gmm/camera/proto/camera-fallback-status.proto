@@ -1,0 +1,26 @@
+syntax = "editions";
+
+package maps_gmm_camera;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMCAM";
+option java_multiple_files = true;
+option java_package = "com.google.maps.gmm.camera";
+
+message CameraFallbackStatusProto {
+    repeated CameraFallbackReason fallback_reasons = 1;
+}
+
+enum CameraFallbackReason {
+    option features = enum_type: CLOSED
+    ;
+    FALLBACK_UNKNOWN_REASON = 0;
+    FALLBACK_THERMAL_STATE_SEVERE = 1;
+    FALLBACK_THERMAL_STATE_SEVERE_COOLDOWN = 2;
+    FALLBACK_LAP_GENERATION_FAILURE = 3;
+    FALLBACK_LAP_MISSING_LANE_DATA = 4;
+    FALLBACK_LAP_MISSING_REROUTILES = 5;
+    FALLBACK_LAP_INITIAL_STATE = 6;
+    FALLBACK_LAP_SEGMENT_FILTERED = 7;
+}

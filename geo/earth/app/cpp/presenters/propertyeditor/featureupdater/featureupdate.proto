@@ -1,0 +1,953 @@
+syntax = "proto2";
+
+package earth.featureupdater;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/math/basic_types.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.android.apps.earth.featureupdater";
+
+message LatLngRect {
+    optional .earth.math.LatLng north_west = 1;
+    optional .earth.math.LatLng south_east = 2;
+    optional double rotation = 3;
+}
+
+message LatLngQuad {
+    optional .earth.math.LatLng position1 = 1;
+    optional .earth.math.LatLng position2 = 2;
+    optional .earth.math.LatLng position3 = 3;
+    optional .earth.math.LatLng position4 = 4;
+}
+
+message Coordinate {
+    optional double latitude = 1;
+    optional double longitude = 2;
+    optional double altitude = 3;
+    optional AltitudeMode altitude_mode = 4;
+}
+
+message CoordinateUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            LATITUDE = 1;
+            LONGITUDE = 2;
+            ALTITUDE = 3;
+            ALTITUDE_MODE = 4;
+        }
+    }
+    
+    optional double latitude = 2;
+    optional double longitude = 3;
+    optional double altitude = 4;
+    optional AltitudeMode altitude_mode = 5;
+}
+
+message LookAtCamera {
+    optional double latitude = 1;
+    optional double longitude = 2;
+    optional double altitude = 3;
+    optional AltitudeMode altitude_mode = 4;
+    optional double heading = 5;
+    optional double tilt = 6;
+    optional double range = 7;
+    optional string pano_id = 8;
+    optional double fovy = 9;
+    optional double roll = 10;
+    
+    optional LookAtCameraType type = 11;
+    enum LookAtCameraType {
+        LOOKATCAMERA_UNKNOWN = 0;
+        LOOKATCAMERA_LOOKAT = 1;
+        LOOKATCAMERA_CAMERA = 2;
+    }
+}
+
+message LookAtCameraUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            LATITUDE = 1;
+            LONGITUDE = 2;
+            ALTITUDE = 3;
+            ALTITUDE_MODE = 4;
+            HEADING = 5;
+            TILT = 6;
+            RANGE = 7;
+            PANO = 8;
+            FOVY = 9;
+            ROLL = 10;
+            TYPE = 11;
+        }
+    }
+    
+    optional double latitude = 2;
+    optional double longitude = 3;
+    optional double altitude = 4;
+    optional AltitudeMode altitude_mode = 5;
+    optional double heading = 6;
+    optional double tilt = 7;
+    optional double range = 8;
+    optional string pano_id = 9;
+    optional double fovy = 10;
+    optional double roll = 11;
+    optional double type = 12;
+}
+
+message VertexList {
+    repeated Coordinate vertices = 1;
+}
+
+message VertexListUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            VERTICES = 1;
+            VERTICES_SPLICES = 2;
+        }
+    }
+    
+    repeated Coordinate vertices = 2;
+    
+    optional CoordinateSplices vertices_splices = 3;
+    message CoordinateSplices {
+        repeated Replacement replacements = 1;
+        message Replacement {
+            optional uint32 index = 1;
+            optional Coordinate value = 2;
+        }
+        
+        repeated Update updates = 2;
+        message Update {
+            optional uint32 index = 1;
+            optional CoordinateUpdate value = 2;
+        }
+        
+        repeated Removal removals = 3;
+        message Removal {
+            optional uint32 index = 1;
+        }
+        
+        repeated Insertion insertions = 4;
+        message Insertion {
+            optional uint32 insert_before = 1;
+            optional Coordinate value = 2;
+        }
+    }
+}
+
+message Polygon {
+    repeated VertexList rings = 1;
+}
+
+message PolygonUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            RINGS = 1;
+            RINGS_SPLICES = 2;
+        }
+    }
+    
+    repeated VertexList rings = 2;
+    
+    optional VertexListSplices rings_splices = 3;
+    message VertexListSplices {
+        repeated Replacement replacements = 1;
+        message Replacement {
+            optional uint32 index = 1;
+            optional VertexList value = 2;
+        }
+        
+        repeated Update updates = 2;
+        message Update {
+            optional uint32 index = 1;
+            optional VertexListUpdate value = 2;
+        }
+        
+        repeated Removal removals = 3;
+        message Removal {
+            optional uint32 index = 1;
+        }
+        
+        repeated Insertion insertions = 4;
+        message Insertion {
+            optional uint32 insert_before = 1;
+            optional VertexList value = 2;
+        }
+    }
+}
+
+message Geometry {
+    oneof type {
+        Coordinate point = 1;
+        VertexList line_string = 2;
+        Polygon polygon = 3;
+    }
+}
+
+message GeometryUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            POINT_UPDATE = 1;
+            LINE_STRING_UPDATE = 2;
+            POLYGON_UPDATE = 3;
+        }
+    }
+    
+    oneof type {
+        CoordinateUpdate point_update = 2;
+        VertexListUpdate line_string_update = 3;
+        PolygonUpdate polygon_update = 4;
+    }
+}
+
+message IconStyle {
+    optional .earth.math.RgbColor color = 3;
+    optional int32 hotspot_x = 4;
+    optional int32 hotspot_y = 5;
+    optional double render_scale = 6;
+    optional double heading = 7;
+    
+    oneof type {
+        int32 stock_icon_id = 1;
+        bytes custom_icon_bytes = 2;
+    }
+}
+
+message IconStyleUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            STOCK_ICON_ID = 1;
+            CUSTOM_ICON_BYTES = 2;
+            COLOR = 3;
+            HOTSPOT_X = 4;
+            HOTSPOT_Y = 5;
+            RENDER_SCALE = 6;
+            HEADING = 7;
+        }
+    }
+    
+    optional .earth.math.RgbColor color = 4;
+    optional int32 hotspot_x = 5;
+    optional int32 hotspot_y = 6;
+    optional double render_scale = 7;
+    optional double heading = 8;
+    
+    oneof type {
+        int32 stock_icon_id = 2;
+        bytes custom_icon_bytes = 3;
+    }
+}
+
+message LabelStyle {
+    optional bool visible = 1;
+    optional .earth.math.RgbColor color = 2;
+    optional double render_scale = 3;
+}
+
+message LabelStyleUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            VISIBLE = 1;
+            COLOR = 2;
+            RENDER_SCALE = 3;
+        }
+    }
+    
+    optional bool visible = 2;
+    optional .earth.math.RgbColor color = 3;
+    optional double render_scale = 4;
+}
+
+message LineStyle {
+    optional .earth.math.RgbColor color = 1;
+    optional uint32 opacity = 2;
+    optional int32 width = 3;
+}
+
+message LineStyleUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            COLOR = 1;
+            OPACITY = 2;
+            WIDTH = 3;
+        }
+    }
+    
+    optional .earth.math.RgbColor color = 2;
+    optional uint32 opacity = 3;
+    optional int32 width = 4;
+}
+
+message PolygonStyle {
+    optional .earth.math.RgbColor fill_color = 1;
+    optional uint32 fill_opacity = 2;
+    optional .earth.math.RgbColor stroke_color = 3;
+    optional uint32 stroke_opacity = 4;
+    optional int32 stroke_width = 5;
+}
+
+message PolygonStyleUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            FILL_COLOR = 1;
+            FILL_OPACITY = 2;
+            STROKE_COLOR = 3;
+            STROKE_OPACITY = 4;
+            STROKE_WIDTH = 5;
+        }
+    }
+    
+    optional .earth.math.RgbColor fill_color = 2;
+    optional uint32 fill_opacity = 3;
+    optional .earth.math.RgbColor stroke_color = 4;
+    optional uint32 stroke_opacity = 5;
+    optional int32 stroke_width = 6;
+}
+
+message HtmlContent {
+    optional string html = 1;
+}
+
+message TemplateContent {
+    optional string template_id = 1;
+}
+
+message BalloonStyle {
+    optional PanelType panel_type = 1;
+    optional .earth.math.RgbColor background_color = 4;
+    
+    oneof content {
+        HtmlContent html_content = 2;
+        TemplateContent template_content = 3;
+    }
+}
+
+message BalloonStyleUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            PANEL_TYPE = 1;
+            HTML_CONTENT = 2;
+            TEMPLATE_CONTENT = 3;
+            BACKGROUND_COLOR = 4;
+        }
+    }
+    
+    optional PanelType panel_type = 2;
+    optional .earth.math.RgbColor background_color = 5;
+    
+    oneof content {
+        HtmlContent html_content = 3;
+        TemplateContent template_content = 4;
+    }
+}
+
+message Style {
+    optional IconStyle icon_style = 1;
+    optional LabelStyle label_style = 2;
+    optional LineStyle line_style = 3;
+    optional PolygonStyle polygon_style = 4;
+    optional BalloonStyle balloon_style = 5;
+}
+
+message StyleUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            ICON_STYLE = 1;
+            ICON_STYLE_UPDATE = 2;
+            LABEL_STYLE = 3;
+            LABEL_STYLE_UPDATE = 4;
+            LINE_STYLE = 5;
+            LINE_STYLE_UPDATE = 6;
+            POLYGON_STYLE = 7;
+            POLYGON_STYLE_UPDATE = 8;
+            BALLOON_STYLE = 9;
+            BALLOON_STYLE_UPDATE = 10;
+        }
+    }
+    
+    optional IconStyle icon_style = 2;
+    optional IconStyleUpdate icon_style_update = 3;
+    optional LabelStyle label_style = 4;
+    optional LabelStyleUpdate label_style_update = 5;
+    optional LineStyle line_style = 6;
+    optional LineStyleUpdate line_style_update = 7;
+    optional PolygonStyle polygon_style = 8;
+    optional PolygonStyleUpdate polygon_style_update = 9;
+    optional BalloonStyle balloon_style = 10;
+    optional BalloonStyleUpdate balloon_style_update = 11;
+}
+
+message TemplateParameter {
+    optional string name = 1;
+    
+    oneof value_type {
+        string string_value = 2;
+        int32 integer_value = 3;
+    }
+}
+
+message TemplateParameterUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            STRING_VALUE = 1;
+            INTEGER_VALUE = 2;
+        }
+    }
+    
+    oneof value_type {
+        string string_value = 2;
+        int32 integer_value = 3;
+    }
+}
+
+message AttributeSpec {
+    optional string id = 1;
+    optional string display_name = 2;
+    optional string template_alias = 3;
+    optional AttributeType type = 4;
+    
+    oneof default_value {
+        string string_default = 5;
+        int32 integer_default = 6;
+        double double_default = 7;
+        bool boolean_default = 8;
+    }
+}
+
+message AttributeSpecSplices {
+    repeated Replacement replacements = 1;
+    message Replacement {
+        optional uint32 index = 1;
+        optional AttributeSpec value = 2;
+    }
+    
+    repeated Update updates = 2;
+    message Update {
+        optional uint32 index = 1;
+        optional AttributeSpec value = 2;
+    }
+    
+    repeated Removal removals = 3;
+    message Removal {
+        optional uint32 index = 1;
+    }
+    
+    repeated Insertion insertions = 4;
+    message Insertion {
+        optional int32 insert_before = 1;
+        optional AttributeSpec value = 2;
+    }
+}
+
+message Attribute {
+    optional string id = 1;
+    optional AttributeType type = 2;
+    
+    oneof value_type {
+        string string_value = 3;
+        int32 integer_value = 4;
+        double double_value = 5;
+        bool boolean_value = 6;
+    }
+}
+
+message AttributeUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            STRING_VALUE = 1;
+            INTEGER_VALUE = 2;
+            DOUBLE_VALUE = 3;
+            BOOLEAN_VALUE = 4;
+        }
+    }
+    
+    oneof value_type {
+        string string_value = 2;
+        int32 integer_value = 3;
+        double double_value = 4;
+        bool boolean_value = 5;
+    }
+}
+
+message Media {
+    optional string serialized_mutation_id = 5;
+    optional string title = 6;
+    optional string description = 7;
+    
+    oneof source {
+        string token = 1;
+        string url = 2;
+        string video_id = 4;
+        bytes image_bytes = 3;
+    }
+}
+
+message MediaUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            TOKEN = 1;
+            URL = 2;
+            VIDEO_ID = 3;
+        }
+    }
+    
+    oneof source {
+        string token = 2;
+        string url = 3;
+        string video_id = 4;
+    }
+}
+
+message RasterTileLayer {
+    optional string url_pattern = 1;
+}
+
+message PaintFeLayer {
+    optional string layer_id = 1;
+}
+
+message EarthDataLayer {
+    optional string earth_data_layer_identifier = 1;
+}
+
+message MapTilePyramid {
+    optional double altitude = 3;
+    optional AltitudeMode altitude_mode = 4;
+    optional int32 tile_size = 7;
+    optional int32 max_level = 8;
+    optional int32 min_level = 9;
+    
+    oneof layer_type {
+        RasterTileLayer raster_tile_layer = 1;
+        PaintFeLayer paintfe_layer = 2;
+        EarthDataLayer earth_data_layer = 10;
+    }
+    
+    oneof boundary_type {
+        LatLngRect rect = 5;
+        LatLngQuad quad = 6;
+    }
+}
+
+message MapTilePyramidUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            RASTER_TILE_LAYER = 1;
+            PAINTFE_LAYER = 2;
+            DATAMAPS_LAYER = 10;
+            ALTITUDE = 3;
+            ALTITUDE_MODE = 4;
+            RECT = 5;
+            QUAD = 6;
+            TILE_SIZE = 7;
+            MAX_LEVEL = 8;
+            MIN_LEVEL = 9;
+        }
+    }
+    
+    optional double altitude = 4;
+    optional AltitudeMode altitude_mode = 5;
+    optional int32 tile_size = 8;
+    optional int32 max_level = 9;
+    optional int32 min_level = 10;
+    
+    oneof layer_type {
+        RasterTileLayer raster_tile_layer = 2;
+        PaintFeLayer paintfe_layer = 3;
+        EarthDataLayer earth_data_layer = 11;
+    }
+    
+    oneof boundary_type {
+        LatLngRect rect = 6;
+        LatLngQuad quad = 7;
+    }
+}
+
+message NetworkLink {
+    optional string url = 1;
+}
+
+message NetworkLinkUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            URL = 1;
+        }
+    }
+    
+    optional string url = 2;
+}
+
+message GroundOverlay {
+    optional double altitude = 1;
+    optional AltitudeMode altitude_mode = 2;
+    optional Media image_media = 5;
+    optional double draw_order = 6;
+    optional .earth.math.RgbColor color = 7;
+    
+    oneof GroundOverlayType {
+        LatLngRect rect = 3;
+        LatLngQuad quad = 4;
+    }
+}
+
+message GroundOverlayUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            ALTITUDE = 1;
+            ALTITUDE_MODE = 2;
+            LOCATION = 3;
+            IMAGE_MEDIA = 4;
+            DRAW_ORDER = 5;
+            COLOR = 6;
+        }
+    }
+    
+    optional double altitude = 2;
+    optional AltitudeMode altitude_mode = 3;
+    optional Media image_media = 6;
+    optional double draw_order = 7;
+    optional .earth.math.RgbColor color = 8;
+    
+    oneof GroundOverlayType {
+        LatLngRect rect = 4;
+        LatLngQuad quad = 5;
+    }
+}
+
+message Model {
+    optional string url = 1;
+    optional AltitudeMode altitude_mode = 2;
+    optional .earth.math.LatLng position = 3;
+    optional double altitude = 4;
+    optional .earth.math.Orientation orientation = 5;
+    optional .earth.math.Scale3d scale = 6;
+    optional .earth.math.BoundingBox3d synthetic_bounding_box = 8;
+    
+    reserved 7;
+}
+
+message ModelUpdate {
+    optional Mask mask = 1;
+    message Mask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            URL = 1;
+            ALTITUDE_MODE = 2;
+            POSITION = 3;
+            ALTITUDE = 4;
+            ORIENTATION = 5;
+            SCALE3D = 6;
+        }
+    }
+    
+    optional string url = 2;
+    optional AltitudeMode altitude_mode = 3;
+    optional .earth.math.LatLng position = 4;
+    optional double altitude = 5;
+    optional .earth.math.Orientation orientation = 6;
+    optional .earth.math.Scale3d scale = 7;
+}
+
+message Feature {
+    optional Type type = 1;
+    optional bool visible = 2;
+    optional string name = 3;
+    optional string description = 4;
+    optional string snippet = 5;
+    optional LookAtCamera look_at_camera = 6;
+    repeated Geometry geometry = 7;
+    optional Style style = 8;
+    repeated TemplateParameter template_parameters = 9;
+    repeated Attribute attributes = 10;
+    repeated Media media = 11;
+    optional MapTilePyramid map_tile_pyramid = 12;
+    optional Model model = 13;
+    optional string address = 14;
+    optional bool is_geocoded = 16;
+    optional GroundOverlay ground_overlay = 15;
+    optional bool break_glass = 17;
+    optional NetworkLink network_link = 18;
+}
+
+message FeatureUpdate {
+    optional FeatureUpdateMask mask = 1;
+    message FeatureUpdateMask {
+        repeated Field fields = 1 [packed = true];
+        enum Field {
+            UNKNOWN_FIELD = 0;
+            TYPE = 1;
+            VISIBLE = 2;
+            NAME = 3;
+            DESCRIPTION = 4;
+            SNIPPET = 5;
+            LOOK_AT_CAMERA = 6;
+            LOOK_AT_CAMERA_UPDATE = 7;
+            GEOMETRY = 8;
+            GEOMETRY_SPLICES = 9;
+            STYLE = 10;
+            STYLE_UPDATE = 11;
+            TEMPLATE_PARAMETERS = 12;
+            TEMPLATE_PARAMETERS_SPLICES = 13;
+            ATTRIBUTES = 14;
+            ATTRIBUTES_SPLICES = 15;
+            MEDIA = 16;
+            MEDIA_SPLICES = 17;
+            MAP_TILE_PYRAMID = 18;
+            MAP_TILE_PYRAMID_UPDATE = 19;
+            MODEL = 20;
+            MODEL_UPDATE = 21;
+            ADDRESS = 22;
+            GROUND_OVERLAY = 23;
+            GROUND_OVERLAY_UPDATE = 24;
+            BREAK_GLASS = 25;
+            NETWORK_LINK = 26;
+            NETWORK_LINK_UPDATE = 27;
+        }
+    }
+    
+    optional Type type = 2;
+    optional bool visible = 3;
+    optional string name = 4;
+    optional string description = 5;
+    optional string snippet = 6;
+    optional LookAtCamera look_at_camera = 7;
+    optional LookAtCameraUpdate look_at_camera_update = 8;
+    repeated Geometry geometry = 9;
+    
+    optional GeometrySplices geometry_splices = 10;
+    message GeometrySplices {
+        repeated Replacement replacements = 1;
+        message Replacement {
+            optional uint32 index = 1;
+            optional Geometry value = 2;
+        }
+        
+        repeated Update updates = 2;
+        message Update {
+            optional uint32 index = 1;
+            optional GeometryUpdate value = 2;
+        }
+        
+        repeated Removal removals = 3;
+        message Removal {
+            optional uint32 index = 1;
+        }
+        
+        repeated Insertion insertions = 4;
+        message Insertion {
+            optional uint32 insert_before = 1;
+            optional Geometry value = 2;
+        }
+    }
+    
+    optional Style style = 11;
+    optional StyleUpdate style_update = 12;
+    repeated TemplateParameter template_parameters = 13;
+    
+    optional TemplateParameterSplices template_parameters_splices = 14;
+    message TemplateParameterSplices {
+        repeated Replacement replacements = 1;
+        message Replacement {
+            optional uint32 index = 1;
+            optional TemplateParameter value = 2;
+        }
+        
+        repeated Update updates = 2;
+        message Update {
+            optional uint32 index = 1;
+            optional TemplateParameterUpdate value = 2;
+        }
+        
+        repeated Removal removals = 3;
+        message Removal {
+            optional uint32 index = 1;
+        }
+        
+        repeated Insertion insertions = 4;
+        message Insertion {
+            optional uint32 insert_before = 1;
+            optional TemplateParameter value = 2;
+        }
+    }
+    
+    repeated Attribute attributes = 15;
+    
+    optional AttributeSplices attributes_splices = 16;
+    message AttributeSplices {
+        repeated Replacement replacements = 1;
+        message Replacement {
+            optional uint32 index = 1;
+            optional Attribute value = 2;
+        }
+        
+        repeated Update updates = 2;
+        message Update {
+            optional uint32 index = 1;
+            optional AttributeUpdate value = 2;
+        }
+        
+        repeated Removal removals = 3;
+        message Removal {
+            optional uint32 index = 1;
+        }
+        
+        repeated Insertion insertions = 4;
+        message Insertion {
+            optional int32 insert_before = 1;
+            optional Attribute value = 2;
+        }
+    }
+    
+    repeated Media media = 17;
+    
+    optional MediaSplices media_splices = 18;
+    message MediaSplices {
+        repeated Replacement replacements = 1;
+        message Replacement {
+            optional uint32 index = 1;
+            optional Media value = 2;
+        }
+        
+        repeated Update updates = 2;
+        message Update {
+            optional uint32 index = 1;
+            optional MediaUpdate value = 2;
+        }
+        
+        repeated Removal removals = 3;
+        message Removal {
+            optional uint32 index = 1;
+        }
+        
+        repeated Insertion insertions = 4;
+        message Insertion {
+            optional uint32 insert_before = 1;
+            optional Media value = 2;
+        }
+    }
+    
+    optional MapTilePyramid map_tile_pyramid = 19;
+    optional MapTilePyramidUpdate map_tile_pyramid_update = 20;
+    optional Model model = 21;
+    optional ModelUpdate model_update = 22;
+    optional string address = 23;
+    optional GroundOverlay ground_overlay = 24;
+    optional GroundOverlayUpdate ground_overlay_update = 25;
+    optional bool break_glass = 26;
+    optional NetworkLink network_link = 27;
+    optional NetworkLinkUpdate network_link_update = 28;
+}
+
+message TextFieldId {
+    optional Field text_field = 1;
+    enum Field {
+        NAME = 0;
+        HTML_DESCRIPTION = 1;
+        TEMPLATE_DESCRIPTION = 2;
+    }
+}
+
+enum Type {
+    UNKNOWN_TYPE = 0;
+    STORY = 1;
+    DOCUMENT = 2;
+    SCENE = 3;
+    FOLDER = 4;
+    VIEW = 5;
+    PANEL = 6;
+    POINT = 7;
+    PATH = 8;
+    POLYGON = 9;
+    MULTI_GEOMETRY = 10;
+    TILE_OVERLAY = 11;
+    THREE_D_MODEL = 12;
+    GROUND_OVERLAY = 13;
+    NETWORK_LINK = 14;
+    TOUR = 15;
+    SCREEN_OVERLAY = 16;
+    PHOTO_OVERLAY = 17;
+    TRACK = 18;
+    MULTI_TRACK = 19;
+}
+
+enum AltitudeMode {
+    UNKNOWN_ALTITUDE_MODE = 0;
+    ABSOLUTE = 1;
+    CLAMP_TO_GROUND = 2;
+    CLAMP_TO_SEA_FLOOR = 3;
+    RELATIVE_TO_GROUND = 4;
+    RELATIVE_TO_SEA_FLOOR = 5;
+    RELATIVE_TO_SURFACE_MODEL = 6;
+}
+
+enum PanelType {
+    UNKNOWN_PANEL_TYPE = 0;
+    PANEL_TYPE_NONE = 1;
+    PANEL_TYPE_POPUP_BALLOON = 2;
+    PANEL_TYPE_CARD = 3;
+    PANEL_TYPE_CARD_STACK = 6;
+    PANEL_TYPE_PANEL = 4;
+    PANEL_TYPE_FULLSCREEN = 5;
+}
+
+enum AttributeType {
+    UNKNOWN_ATTRIBUTE_TYPE = 0;
+    STRING = 1;
+    INTEGER = 2;
+    DOUBLE = 3;
+    BOOLEAN = 4;
+}

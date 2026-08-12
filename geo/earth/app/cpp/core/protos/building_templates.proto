@@ -1,0 +1,35 @@
+syntax = "editions";
+
+package earth.buildingtemplates;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "google/internal/earth/v1/builtenv/building_configuration.proto";
+import "google/internal/earth/v1/builtenv/building_far_range.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.buildingtemplates";
+
+message BuildingTemplateFarRangeInfo {
+    optional google.internal.earth.v1.builtenv.EstimatedBuildingTemplateFarRange building_template_far_range = 1;
+    optional FarRangeCategory far_range_category = 2;
+}
+
+message BuildingTemplateInfo {
+    optional string building_template_id = 1;
+    optional string name = 2;
+    optional google.internal.earth.v1.builtenv.BuildingConfiguration building_configuration = 3;
+    optional BuildingTemplateFarRangeInfo building_template_far_range_info = 4;
+    optional google.internal.earth.v1.builtenv.BuildingTemplateType building_template_type = 5;
+}
+
+enum FarRangeCategory {
+    option features = enum_type: CLOSED
+    ;
+    FAR_RANGE_CATEGORY_UNKNOWN = 0;
+    FAR_RANGE_CATEGORY_LOW = 1;
+    FAR_RANGE_CATEGORY_MEDIUM = 2;
+    FAR_RANGE_CATEGORY_HIGH = 3;
+}

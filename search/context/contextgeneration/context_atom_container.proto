@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package search.context.contextgeneration;
+
+import "frameworks/testing/rpcreplay/processors/rpc_replay_field_option.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.search.context.contextgeneration";
+
+message ContextAtomContainer {
+    repeated int32 extension_id = 1 [packed = true];
+    
+    extensions 100 to max;
+    
+    extend .proto2.bridge.MessageSet {
+        optional ContextAtomContainer message_set_extension = 525003221;
+    }
+}

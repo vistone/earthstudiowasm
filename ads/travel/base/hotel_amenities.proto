@@ -1,0 +1,90 @@
+syntax = "proto2";
+
+package ads_travel;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "HotelAmenitiesProto";
+
+message HotelAmenities {
+    optional uint64 is_known = 1 [default = 0];
+    optional uint64 is_set = 2 [default = 0];
+    optional string experimental_hotel_description = 3;
+    optional string experimental_location_description = 4;
+    
+    enum Amenities {
+        FREE_PARKING = 2;
+        PAID_PARKING = 3;
+        PARKING = 4;
+        INDOOR_POOL = 5;
+        OUTDOOR_POOL = 6;
+        POOL = 7;
+        FITNESS_CENTER_GYM = 8;
+        RESTAURANT = 9;
+        FREE_BREAKFAST = 10;
+        SPA = 11;
+        BEACH_ACCESS = 13;
+        CHILDREN_WELCOME = 14;
+        ACCESSIBLE_FACILITIES = 15;
+        AIRPORT_SHUTTLE = 16;
+        BAR_LOUNGE = 17;
+        CASINO = 18;
+        GOLF = 19;
+        TENNIS = 20;
+        PETS_ALLOWED = 21;
+        LAUNDRY_DRY_CLEANING = 22;
+        BUSINESS_CENTER = 23;
+        ROOM_SERVICE = 24;
+        BIKE_RENTAL = 26;
+        BOAT_RENTAL = 27;
+        FISHING_EQUIPMENT = 28;
+        GAME_ROOM = 29;
+        HORSEBACK_RIDING = 30;
+        HOT_TUB = 31;
+        JOGGING_TRACK = 32;
+        SCUBA_DIVING_EQUIPMENT = 33;
+        SHOPPING_AREA = 34;
+        SNORKELING_EQUIPMENT = 35;
+        SNOW_SKIING_EQUIPMENT = 36;
+        WATER_SKIING_EQUIPMENT = 37;
+        FREE_WIFI = 0;
+        PAID_WIFI = 50;
+        WIFI = 51;
+        PAID_INTERNET = 1;
+        INTERNET = 25;
+        AIR_CONDITIONED = 12;
+        BALCONY_IN_ALL_ROOMS = 38;
+        IRON_IN_ALL_ROOMS = 39;
+        KITCHEN_IN_ALL_ROOMS = 40;
+        MICROWAVE_OVEN_IN_ALL_ROOMS = 41;
+        NO_SMOKING_IN_ALL_ROOMS = 42;
+        REFRIGERATOR_IN_ALL_ROOMS = 43;
+        TV_IN_ALL_ROOMS = 44;
+        CABLE_OR_SATELLITE_TV_IN_ALL_ROOMS = 45;
+        UNKNOWN_TYPE = 46;
+        MAX_LEGACY_VALUE = 64;
+        SMOKE_FREE_PROPERTY = 47;
+        SMOKING_ALLOWED = 48;
+        ALL_INCLUSIVE_AVAILABLE = 49;
+        ALL_INCLUSIVE_ONLY = 65;
+        PETS_ALLOWED_FOR_FREE = 66;
+        AIR_CONDITIONED_IN_ALL_ROOMS = 67;
+        BREAKFAST_AVAILABLE = 68;
+        WHEELCHAIR_ACCESSIBLE = 69;
+        ONSEN = 70;
+        ECO_CERTIFIED = 71;
+        TRANSFER = 72;
+        PUBLIC_BATH = 73;
+        OPEN_AIR_BATH = 74;
+        FAMILY_BATH = 75;
+        SAUNA = 76;
+        JACUZZI = 77;
+        EV_CHARGING = 78;
+    }
+}
+
+message HotelAmenity {
+    optional HotelAmenities.Amenities amenity = 1;
+}

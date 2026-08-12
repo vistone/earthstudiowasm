@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package maps_paint_client;
+
+import "maps/versatile/proto/vector-render-op.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_outer_classname = "PoiLoggingInstructionProto";
+option java_package = "com.google.maps.paint.client";
+
+message PoiLoggingInstruction {
+    optional bool disable_client_logging = 1;
+    optional bool redact_sensitive_client_logging = 2;
+    
+    extend maps_versatile.VectorRenderOpProto {
+        optional PoiLoggingInstruction poi_logging_instruction = 1000;
+    }
+}

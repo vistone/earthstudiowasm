@@ -1,0 +1,35 @@
+syntax = "proto2";
+
+package geo_enterprise_common;
+
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = false;
+option optimize_for = SPEED;
+option java_outer_classname = "SparseProtoMergerAnnotationProto";
+option java_package = "com.google.geo.enterprise.common";
+
+message ProtoMergerOptions {
+    optional Granularity granularity = 1 [default = GRANULARITY_SPARSE];
+    optional string key = 2;
+}
+
+message ProtoMergerFieldOptions {
+    optional bool exclude = 1 [default = false];
+    optional Granularity granularity = 2;
+}
+
+enum Granularity {
+    UNKNOWN_GRANULARITY = 0;
+    GRANULARITY_SPARSE = 1;
+    GRANULARITY_COARSE = 2;
+}
+
+extend .proto2.MessageOptions {
+    optional ProtoMergerOptions merge_options = 397330331;
+}
+
+extend .proto2.FieldOptions {
+    optional ProtoMergerFieldOptions field_merge_options = 397330331;
+}

@@ -1,0 +1,29 @@
+syntax = "editions";
+
+package geo_photo;
+
+import "geo/photo/proto/image_key.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPH";
+option java_outer_classname = "ImageryCoverageMetadataOuterClass";
+option java_package = "com.google.geo.photo";
+
+message ImageryCoverageMetadata {
+    repeated Asset asset = 1;
+    message Asset {
+        optional geo_photo_service.ImageKey image_key = 3;
+        
+        reserved 1, 2;
+    }
+    
+    optional string gps_continuation_token = 2 [features = ];
+    optional int32 preference = 3;
+    
+    extend .proto2.bridge.MessageSet {
+        optional ImageryCoverageMetadata message_set_extension = 51650189;
+    }
+}

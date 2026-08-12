@@ -1,0 +1,36 @@
+syntax = "editions";
+
+package expvar;
+
+option features = utf8_validation: NONE
+;
+option java_package = "com.google.common.stats.proto";
+
+message MapProto {
+    optional string key_description = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    
+    repeated Pairs pairs = 2 [features = message_encoding: DELIMITED
+    ];
+    message Pairs {
+        optional string key = 3 [features = field_presence: LEGACY_REQUIRED
+        ];
+        optional int64 value_int = 4;
+        optional double value_float = 5;
+        optional string value_string = 6;
+    }
+}
+
+message VariableProto {
+    optional string name = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional string docstring = 6;
+    optional int64 value_int = 2;
+    optional double value_float = 3;
+    optional string value_string = 4;
+    optional MapProto value_map = 5;
+}
+
+message ListProto {
+    repeated VariableProto pair = 1;
+}

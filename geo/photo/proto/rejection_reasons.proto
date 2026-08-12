@@ -1,0 +1,50 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geostore/base/proto/featureid.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+;
+option objc_class_prefix = "GPS";
+option java_outer_classname = "RejectionReasonsProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message RejectionReasons {
+    repeated QualityRejectionReason quality = 1;
+    repeated PolicyRejectionReason policy = 2;
+    optional bool has_unknown_rejection_reason = 3;
+}
+
+message QualityRejectionReason {
+    optional QualityRejectionType type = 1;
+    enum QualityRejectionType {
+        GENERIC = 0;
+        DARK_OR_BLURRY = 1;
+        PEOPLE_POSING = 2;
+        NON_PHOTO = 3;
+        IRRELEVANT = 4;
+        STITCHING = 5;
+        HORIZONTAL_COVERAGE = 6;
+        BAD_SIZE = 7;
+    }
+    
+    repeated geostore.FeatureIdProto feature_id = 2;
+}
+
+message PolicyRejectionReason {
+    optional PolicyRejectionType type = 1;
+    enum PolicyRejectionType {
+        GENERIC = 0;
+        SPAM = 1;
+        HARASSMENT = 2;
+        VIOLENCE = 3;
+        SEXUALLY_EXPLICIT = 4;
+        HATE_SPEECH = 5;
+        PRIVACY = 6;
+        ADVERTISEMENT = 7;
+    }
+    
+    repeated geostore.FeatureIdProto feature_id = 2;
+}

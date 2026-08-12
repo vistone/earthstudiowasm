@@ -1,0 +1,353 @@
+syntax = "proto2";
+
+package geostore;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "geostore/base/proto/curve_connection.proto";
+import "geostore/base/proto/datetime.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/gradelevel.proto";
+import "geostore/base/proto/internal/internalsegment.proto";
+import "geostore/base/proto/lane.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/pedestriancrossing.proto";
+import "geostore/base/proto/polygon.proto";
+import "geostore/base/proto/restriction.proto";
+import "geostore/base/proto/routedirection.proto";
+import "geostore/base/proto/slope.proto";
+import "geostore/base/proto/speed_limit.proto";
+import "geostore/base/proto/stable_id_options.proto";
+import "geostore/base/proto/version_token_options.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message SegmentProto {
+    optional FeatureIdProto sibling = 1;
+    repeated FeatureIdProto route = 2;
+    repeated RouteAssociationProto route_association = 32;
+    
+    optional EndpointCategory endpoint = 3 [default = ENDPOINT_UNKNOWN];
+    enum EndpointCategory {
+        ENDPOINT_UNKNOWN = 17;
+        ENDPOINT_UNRESTRICTED = 18;
+        ENDPOINT_UNCONTROLLED = 19;
+        ENDPOINT_STOP_SIGN = 20;
+        ENDPOINT_ALL_WAY_STOP = 321;
+        ENDPOINT_TRAFFIC_LIGHT = 21;
+        ENDPOINT_THREE_WAY = 337;
+        ENDPOINT_FLASHING_RED = 338;
+        ENDPOINT_FLASHING_YELLOW = 339;
+        ENDPOINT_YIELD = 22;
+        ENDPOINT_MERGE = 23;
+        ENDPOINT_ROUNDABOUT = 24;
+        ENDPOINT_RAILROAD_CROSSING = 25;
+        ENDPOINT_NO_EXIT = 26;
+        ENDPOINT_WRONG_WAY = 27;
+        ENDPOINT_TOLL_BOOTH = 28;
+    }
+    
+    optional FieldMetadataProto endpoint_metadata = 500;
+    optional FeatureIdProto intersection = 4;
+    repeated RestrictionProto restriction = 5;
+    repeated LaneProto lane = 6;
+    optional bool on_right = 8 [default = true];
+    optional float max_permitted_speed_kph = 9;
+    optional FieldMetadataProto max_permitted_speed_kph_metadata = 501;
+    optional bool is_max_permitted_speed_derived = 36 [default = true];
+    repeated AppliedSpeedLimitProto legal_maximum_speed = 41;
+    repeated AppliedSpeedLimitProto advisory_maximum_speed = 42;
+    repeated AppliedSpeedLimitProto legal_minimum_speed = 43;
+    optional float avg_speed_kph = 10;
+    optional FieldMetadataProto avg_speed_kph_metadata = 502;
+    
+    optional ElevationCategory elevation = 13 [default = ELEVATION_NORMAL];
+    enum ElevationCategory {
+        ELEVATION_NORMAL = 1;
+        ELEVATION_BRIDGE = 2;
+        ELEVATION_TUNNEL = 3;
+        ELEVATION_SKYWAY = 4;
+        ELEVATION_STAIRWAY = 5;
+        ELEVATION_ESCALATOR = 6;
+        ELEVATION_ELEVATOR = 7;
+        ELEVATION_SLOPEWAY = 8;
+        ELEVATION_MOVING_WALKWAY = 9;
+    }
+    
+    optional FieldMetadataProto elevation_metadata = 503;
+    
+    optional SurfaceCategory surface = 12 [default = SURFACE_PAVED];
+    enum SurfaceCategory {
+        SURFACE_UNKNOWN = 0;
+        SURFACE_PAVED = 1;
+        SURFACE_ASPHALT = 17;
+        SURFACE_CONCRETE = 18;
+        SURFACE_CHIPSEAL = 19;
+        SURFACE_BRICK = 20;
+        SURFACE_SETT = 21;
+        SURFACE_COBBLESTONE = 22;
+        SURFACE_UNPAVED = 2;
+        SURFACE_GRAVEL = 33;
+        SURFACE_DIRT = 34;
+        SURFACE_SAND = 35;
+    }
+    
+    optional FieldMetadataProto surface_metadata = 504;
+    
+    optional Priority priority = 14;
+    enum Priority {
+        PRIORITY_UNKNOWN = 0;
+        PRIORITY_NON_TRAFFIC = 16;
+        PRIORITY_TERMINAL = 32;
+        PRIORITY_LOCAL = 48;
+        PRIORITY_MINOR_ARTERIAL = 64;
+        PRIORITY_MAJOR_ARTERIAL = 80;
+        PRIORITY_SECONDARY_ROAD = 96;
+        PRIORITY_PRIMARY_HIGHWAY = 112;
+        PRIORITY_LIMITED_ACCESS = 128;
+        PRIORITY_CONTROLLED_ACCESS = 144;
+    }
+    
+    optional FieldMetadataProto priority_metadata = 505;
+    
+    optional UsageCategory usage = 15;
+    enum UsageCategory {
+        USAGE_ANY = 0;
+        USAGE_RAMP = 17;
+        USAGE_ON_RAMP = 273;
+        USAGE_OFF_RAMP = 274;
+        USAGE_ON_OFF_RAMP = 275;
+        USAGE_INTERCHANGE = 276;
+        USAGE_SPECIAL_TRAFFIC_FIGURE = 18;
+        USAGE_ROUNDABOUT = 289;
+        USAGE_ROUNDABOUT_BYPASS = 290;
+        USAGE_ROUNDABOUT_INTERNAL_BYPASS = 4641;
+        USAGE_ROUNDABOUT_EXTERNAL_BYPASS = 4642;
+        USAGE_ENCLOSED_TRAFFIC_AREA = 19;
+        USAGE_PEDESTRIAN_MALL = 20;
+        USAGE_MAJOR_PEDESTRIAN_MALL = 321;
+        USAGE_MINOR_PEDESTRIAN_MALL = 322;
+        USAGE_WALKWAY = 21;
+        USAGE_TRAIL = 22;
+        USAGE_STATION_PATH = 23;
+        USAGE_ACCESS_PATH = 24;
+        USAGE_CROSSING = 25;
+        USAGE_MARKED_CROSSING = 401;
+        USAGE_UNMARKED_CROSSING = 402;
+        USAGE_OVERPASS = 26;
+        USAGE_UNDERPASS = 27;
+        USAGE_HALLWAY = 28;
+        USAGE_TURN_SEGMENT = 29;
+        USAGE_INDOOR_CONNECTION_PATH = 30;
+    }
+    
+    optional bool toll_road = 16 [default = false];
+    repeated FeatureIdProto road_sign = 17;
+    repeated GradeLevelProto grade_level = 18;
+    optional bool separated_roadways = 19 [default = false];
+    
+    optional BarrierCategory barrier = 21;
+    enum BarrierCategory {
+        BARRIER_NONE = 1;
+        BARRIER_PRESENT = 2;
+        BARRIER_LEGAL = 33;
+        BARRIER_PHYSICAL = 34;
+    }
+    
+    optional FieldMetadataProto barrier_metadata = 507;
+    repeated float altitude = 22;
+    
+    optional ConstructionCategory construction_status = 23 [default = CONSTRUCTION_COMPLETE];
+    enum ConstructionCategory {
+        CONSTRUCTION_PLANNED = 1;
+        CONSTRUCTION_STARTED = 2;
+        CONSTRUCTION_COMPLETE = 3;
+        CONSTRUCTION_CLOSED_FOR_MAINTENANCE = 4 [deprecated = true];
+        CONSTRUCTION_DISTURBED_BY_MAINTENANCE = 5 [deprecated = true];
+    }
+    
+    optional FieldMetadataProto construction_status_metadata = 508;
+    optional DateTimeProto construction_begin_date = 24;
+    optional DateTimeProto construction_end_date = 25;
+    
+    optional ConditionCategory condition = 26 [default = CONDITION_GOOD];
+    enum ConditionCategory {
+        CONDITION_GOOD = 1;
+        CONDITION_POOR = 2;
+    }
+    
+    optional FieldMetadataProto condition_metadata = 509;
+    
+    optional BicycleFacilityCategory bicycle_facility = 27;
+    enum BicycleFacilityCategory {
+        option allow_alias = true;
+        BICYCLE_FACILITY_SEPARATE_TRAIL = 1;
+        BICYCLE_FACILITY_PEDESTRIAN_PATH = 2;
+        BICYCLE_FACILITY_BIKE_FRIENDLY_PEDESTRIAN_PATH = 33;
+        BICYCLE_FACILITY_SHARED_ROAD = 3;
+        BICYCLE_FACILITY_BIKE_LANE = 49;
+        BICYCLE_FACILITY_BIKE_LANE_WITH_PEDESTRIAN_PATH = 785;
+        BICYCLE_FACILITY_BIKE_LANE_BUFFERED = 786;
+        BICYCLE_FACILITY_WIDE_SHOULDER = 50;
+        BICYCLE_FACILITY_SHARROW = 51;
+        BICYCLE_FACILITY_SHARED_ROAD_SIGNED = 51;
+        BICYCLE_FACILITY_SHARED_ROAD_WITH_PEDESTRIAN_PATH = 52;
+        BICYCLE_FACILITY_NEIGHBORHOOD_BIKEWAY = 53;
+    }
+    
+    optional BicycleSafetyCategory bicycle_safety = 28;
+    enum BicycleSafetyCategory {
+        BICYCLE_SAFETY_RECOMMENDED = 1;
+        BICYCLE_SAFETY_OFFICIALLY_RECOMMENDED = 17;
+        BICYCLE_SAFETY_NEUTRAL = 2;
+        BICYCLE_SAFETY_CAUTION = 3;
+        BICYCLE_SAFETY_OFFICIALLY_CAUTION = 49;
+    }
+    
+    optional PedestrianFacilityCategory pedestrian_facility = 29;
+    enum PedestrianFacilityCategory {
+        PEDESTRIAN_FACILITY_UNKNOWN = 1;
+        PEDESTRIAN_FACILITY_NONE = 2;
+        PEDESTRIAN_FACILITY_PRESENT = 3;
+        PEDESTRIAN_FACILITY_SIDEWALK = 49 [deprecated = true];
+        PEDESTRIAN_FACILITY_WIDE_SHOULDER = 50 [deprecated = true];
+    }
+    
+    optional PedestrianCrossingProto pedestrian_crossing = 37;
+    optional bool covered = 30 [deprecated = true];
+    
+    optional PedestrianGradeCategory pedestrian_grade = 31;
+    enum PedestrianGradeCategory {
+        PEDESTRIAN_GRADE_FLAT = 1;
+        PEDESTRIAN_GRADE_UP = 2;
+        PEDESTRIAN_GRADE_DOWN = 3;
+    }
+    
+    repeated LandmarkReferenceProto visible_landmark = 34;
+    optional float distance_to_edge = 35;
+    optional FieldMetadataProto distance_to_edge_metadata = 510;
+    optional float edge_follows_segment_begin_fraction = 44;
+    optional float edge_follows_segment_end_fraction = 45;
+    optional float interpolation_offset_meters = 38;
+    repeated SweepProto sweep = 39;
+    repeated FeatureIdProto road_monitor = 40;
+    repeated SlopeProto slope = 46;
+    
+    optional RampProto ramp = 47;
+    message RampProto {
+        optional Priority max_connected_priority = 1;
+    }
+    
+    repeated AccidentProneSpotProto accident_prone_spot = 49;
+    repeated FeatureIdProto related_median = 50;
+    repeated FeatureIdProto road_disruption = 51;
+    repeated RoadBarrierProto inner_barrier = 52;
+    repeated RoadBarrierProto outer_barrier = 53;
+    repeated FeatureIdProto signpost = 54;
+    repeated RoadEnclosureProto road_enclosure = 55;
+    optional InternalSegmentProto internal = 100;
+    
+    reserved 7, 11, 20, 33, 48, 506;
+}
+
+message RouteAssociationProto {
+    optional FeatureIdProto route = 1;
+    
+    optional DisplayCategory display_preference = 2 [default = DISPLAY_OK];
+    enum DisplayCategory {
+        DISPLAY_PREFERRED = 1;
+        DISPLAY_BEST = 17;
+        DISPLAY_OK = 2;
+        DISPLAY_HIDE = 3;
+    }
+    
+    optional RouteDirection route_direction = 3 [default = DIRECTION_NONE];
+    optional FieldMetadataProto metadata = 500;
+}
+
+message LandmarkReferenceProto {
+    optional FeatureIdProto landmark = 1;
+    optional int32 feature_type = 2;
+    
+    repeated TravelMode travel_mode = 3;
+    enum TravelMode {
+        UNKNOWN = 0;
+        TRAVEL_MOTOR_VEHICLE = 1;
+        TRAVEL_AUTO = 17;
+        TRAVEL_TWO_WHEELER = 18;
+        TRAVEL_BICYCLE = 2;
+        TRAVEL_PEDESTRIAN = 3;
+    }
+}
+
+message SweepProto {
+    optional PolygonProto polygon = 1;
+    optional FeatureIdProto other_segment_feature_id = 2;
+    optional CurveConnectionProto sweep_curve = 3;
+    optional string sweep_token = 16;
+}
+
+message AccidentProneSpotProto {
+    optional float accident_begin_fraction = 1;
+    optional float accident_end_fraction = 2;
+    
+    optional SourceAuthority source_authority = 3;
+    enum SourceAuthority {
+        SOURCE_AUTHORITY_UNSPECIFIED = 0;
+        SOURCE_AUTHORITY_CHANDIAGARH_TRAFFIC_POLICE = 1;
+        SOURCE_AUTHORITY_CYBERABAD_TRAFFIC_POLICE = 2;
+        SOURCE_AUTHORITY_GURUGRAM_TRAFFIC_POLICE = 3;
+        SOURCE_AUTHORITY_FARIDABAD_TRAFFIC_POLICE = 4;
+    }
+}
+
+message RoadBarrierProto {
+    optional uint64 road_barrier_id = 1;
+    
+    optional RoadBarrierType barrier_type = 2;
+    enum RoadBarrierType {
+        ROAD_BARRIER_UNSPECIFIED = 0;
+        ROAD_BARRIER_NONE = 1;
+        ROAD_BARRIER_TERRAIN = 2;
+        ROAD_BARRIER_WIDE_UNPAVED = 33;
+        ROAD_BARRIER_EMBANKMENT = 34;
+        ROAD_BARRIER_DITCH = 35;
+        ROAD_BARRIER_CURB = 3;
+        ROAD_BARRIER_FLEXIBLE_DELINEATOR = 4;
+        ROAD_BARRIER_FENCE = 5;
+        ROAD_BARRIER_GUARDRAIL = 6;
+        ROAD_BARRIER_CABLE = 7;
+        ROAD_BARRIER_JERSEY = 8;
+        ROAD_BARRIER_WALL = 9;
+        ROAD_BARRIER_SOUND_WALL = 145;
+        ROAD_BARRIER_TUNNEL_WALL = 146;
+        ROAD_BARRIER_BARRELS = 10;
+        ROAD_BARRIER_TERRAIN_STRONG = 11;
+        ROAD_BARRIER_OTHER_STRONG = 12;
+        ROAD_BARRIER_OTHER_WEAK = 13;
+        ROAD_BARRIER_CONCRETE_BARRIER = 14;
+    }
+    
+    optional bool is_regularly_moved = 5 [default = false];
+    optional double start_fraction = 3 [default = 0];
+    optional double end_fraction = 4 [default = 1];
+}
+
+message RoadEnclosureProto {
+    optional EnclosureType enclosure_type = 1;
+    enum EnclosureType {
+        ENCLOSURE_TYPE_UNSPECIFIED = 0;
+        BUILDING = 1;
+        TUBE = 2;
+        HIGHWAY_CAP = 3;
+        OVERHEAD_ROAD = 4;
+    }
+    
+    optional double start_fraction = 2 [default = 0];
+    optional double end_fraction = 3 [default = 1];
+}

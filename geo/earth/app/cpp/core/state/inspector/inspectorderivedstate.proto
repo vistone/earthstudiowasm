@@ -1,0 +1,33 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Inspectorderivedstate";
+option java_package = "com.google.geo.earth.app.common.state.derivedstate";
+
+message InspectorDerivedState {
+    optional bool is_knowledge_card_open = 4;
+    optional bool is_feeling_lucky_request_pending = 5;
+    optional bool is_my_location_card_visible = 6;
+    optional bool is_dropped_pin_open = 7;
+    optional bool is_feature_info_or_balloon_shown = 8;
+    optional document.protos.BalloonStyle.DisplayMode balloon_display_mode = 9;
+    optional bool is_drawing_tool_open = 12;
+    optional bool is_measure_tool_session_active = 13;
+    optional bool is_design_input_mode_chooser_visible = 15;
+    optional bool is_site_selection_active = 16;
+    optional bool is_earth_mate_chat_active = 17;
+    optional bool is_property_editor_visible = 18;
+    optional bool is_navigation_controls_active = 20;
+    optional bool is_coverage_overlay_active = 21;
+    optional bool is_design_built_entity_active = 23;
+    optional bool is_design_input_new_build_visible = 24;
+    optional bool is_design_input_solar_visible = 25;
+    optional bool is_in_street_view_pano = 26;
+    
+    reserved 1, 2, 10, 11, 14, 19, 22;
+}

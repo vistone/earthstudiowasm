@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package geo_serving_proto.color;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPCS";
+option java_multiple_files = true;
+option java_outer_classname = "ColorSetProto";
+option java_package = "com.google.geo.serving.proto.color";
+
+message ColorSet {
+    optional fixed32 light_theme = 1;
+    optional fixed32 dark_theme = 2;
+    
+    enum ColorMask {
+        COLOR_MASK_BLUE = 255;
+        COLOR_MASK_GREEN = 65280;
+        COLOR_MASK_RED = 16711680;
+        COLOR_MASK_ALPHA = -16777216;
+    }
+    
+    enum ColorShift {
+        COLOR_SHIFT_BLUE = 0;
+        COLOR_SHIFT_GREEN = 8;
+        COLOR_SHIFT_RED = 16;
+        COLOR_SHIFT_ALPHA = 24;
+    }
+}

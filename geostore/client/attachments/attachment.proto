@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geostore.attachments;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.geostore.client.attachments";
+
+message AttachmentProto {
+    optional .proto2.bridge.MessageSet messages = 1 [unverified_lazy = true];
+    optional string comment = 2 [deprecated = true];
+    optional uint64 type_id = 3;
+    optional uint64 attachment_id = 4;
+    optional string client_name_space = 5;
+    
+    reserved 6;
+}
+
+message AttachmentListProto {
+    repeated AttachmentProto attachment = 1;
+}

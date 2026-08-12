@@ -1,0 +1,505 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "geo/serving/proto/color/color_set.proto";
+import "geo/serving/proto/directions/duration.proto";
+import "geo/serving/proto/directions/time.proto";
+import "geo/serving/proto/omnimaps/omnimaps_data.proto";
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "logs/proto/maps/shared/directions-notice-data.proto";
+import "logs/proto/visual_element/crisis_info.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/paint/proto/legend-named-style.proto";
+import "maps/shared/common/geom/geom.proto";
+import "maps/tactile/api/directions-common.proto";
+import "maps/tactile/api/directions-polyline.proto";
+import "maps/tactile/api/directions/zone-info.proto";
+import "maps/tactile/api/geometry.proto";
+import "maps/tactile/api/logged-link.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "maps/tactile/api/shared/directions/dynamic-closure-options.proto";
+import "maps/tactile/api/shared/directions/image-options.proto";
+import "maps/tactile/api/shared/directions/problem-type.proto";
+import "maps/tactile/api/shared/directions/road-stretch.proto";
+import "maps/tactile/api/shared/directions/traffic-report-problem-alert-config.proto";
+import "maps/tactile/api/shared/experience-category.proto";
+import "maps/tactile/api/shared/feature-id.proto";
+import "maps/tactile/api/shared/occupancy-status.proto";
+import "maps/tactile/api/shared/platform-intent.proto";
+import "maps/tactile/api/shared/position.proto";
+import "maps/tactile/api/shared/transit/carriage-info.proto";
+import "maps/tactile/api/shared/transit/transit-attribute-status.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "DirectionsResultCommonProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message ComponentIcon {
+    optional Type type = 1 [default = DEFAULT_TYPE];
+    enum Type {
+        DEFAULT_TYPE = 0;
+        TURN = 2;
+        TRANSIT_ICON = 3;
+        INCIDENT = 4;
+        DEPRECATED_ROAD_SHIELD = 1 [deprecated = true];
+    }
+    
+    optional string id = 2;
+    
+    repeated Variant variant = 5;
+    message Variant {
+        optional string url = 1;
+        optional maps_tactile.shared.directions.ImageOptions.Format format = 2;
+        optional maps_shared.geom.Size dimensions = 3;
+        
+        optional Spriting spriting = 4;
+        message Spriting {
+            optional maps_shared.geom.Size dimensions = 1;
+            optional int32 offset_top = 2;
+            optional int32 offset_left = 3;
+        }
+        
+        optional maps_tactile.shared.directions.ImageOptions.UiContext context = 5;
+    }
+    
+    optional string alt = 4;
+    optional string subscript_text = 6;
+    optional float subscript_position_relative_to_width_of_icon = 7;
+    
+    extensions 3;
+}
+
+message AudioComponent {
+    optional string text = 1;
+    
+    optional SemanticEquivalent semantic_equivalent = 2 [default = DEFAULT_NO_SEMANTIC_EQUIVALENT];
+    enum SemanticEquivalent {
+        DEFAULT_NO_SEMANTIC_EQUIVALENT = 0;
+        ETA = 1;
+        REROUTE_TAKE_ACTION_CUE = 2;
+        UPDATED_ETA = 3;
+    }
+}
+
+message NoticeAttribution {
+    optional Provider provider = 1 [default = NO_ATTRIBUTION_REQUIRED];
+    enum Provider {
+        NO_ATTRIBUTION_REQUIRED = 0;
+        WAZE = 1;
+        TRANSIT_ALERT_PROVIDER = 2;
+    }
+    
+    optional maps_tactile.shared.PlatformIntent provider_intent = 2;
+    optional string provider_intent_text = 5;
+    optional string text = 3;
+    optional ComponentIcon icon = 4;
+}
+
+message RenderableComponent {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN_TYPE = 0;
+        TRAVEL_MODE = 1;
+        RAW_TEXT = 2;
+        POSSIBLE_LINE_BREAK = 20;
+        AGENCY = 3;
+        VEHICLE_TYPE = 4;
+        LINE = 5;
+        TRANSIT_TRIP_NAME = 6;
+        HEADING = 7;
+        BLOCK_TRANSFER = 8;
+        TRANSIT_GROUP_SEPARATOR = 9;
+        ALTERNATE_LINE_SEPARATOR = 10;
+        EXPRESS_TYPE = 15;
+        DESTINATION = 16;
+        HEADSIGN = 17;
+        TIME = 18;
+        DURATION = 19;
+        LINE_GROUP_STATUS = 21;
+        ON_DEMAND_SERVICE_PROVIDER = 23;
+        STATION = 24;
+        VEHICLE_CATEGORY_NAME = 25;
+        HIGHWAY = 11;
+        ROAD = 12;
+        VIA = 13;
+        TURN = 14;
+        ETA_TEXT = 22;
+    }
+    
+    optional ComponentTextBox text_box = 2;
+    optional ComponentIcon icon = 3;
+    optional bool no_whitespace_after = 4;
+    optional ComponentIcon subscript_icon = 5;
+}
+
+message ComponentTextBox {
+    optional string text = 1;
+    optional bool bold = 2 [default = false];
+    optional string background_color = 3;
+    optional string text_color = 4;
+    optional geo_serving_proto.directions.Time time = 5;
+    optional geo_serving_proto.directions.Duration duration = 7;
+    optional string tooltip_text = 6;
+}
+
+message Notice {
+    optional int32 ve_type = 34 [default = 0x186c8];
+    optional string ved = 32;
+    
+    optional Severity severity = 1 [default = INFORMATION];
+    enum Severity {
+        ALERT = 0;
+        WARNING = 1;
+        INFORMATION = 2;
+        CRITICAL = 3;
+    }
+    
+    optional Type type = 9 [default = UNKNOWN];
+    enum Type {
+        UNKNOWN = 0;
+        CONTINUE = 1;
+        TOLL = 2;
+        PARTIAL_TOLL = 3;
+        SEASONAL_CLOSURE = 4;
+        TEMPORARY_ROAD_CLOSURE = 15;
+        ROUNDABOUTS = 5;
+        COUNTRY_BORDER = 6;
+        CRISIS = 29;
+        COUNTRY_CROSSING = 16;
+        PRIVATE_ROAD = 17;
+        FERRY_BOAT = 18;
+        FERRY_TRAIN = 19;
+        PROVINCE_BORDER = 7;
+        SIDE_OF_ROAD = 8;
+        TOLL_ZONE_CROSSING = 9;
+        EVENT = 25;
+        INCIDENT = 10;
+        BETA = 11;
+        TRAFFIC_ONE_LINER = 12;
+        TRAFFIC_PROBLEM = 13;
+        TRAFFIC_PROMPT = 14;
+        TRAFFIC_TREND = 24;
+        TRANSIT_ALERT = 20;
+        TIME_BASED_RESTRICTION = 21;
+        TIME_BASED_HOV = 22;
+        TRANSIT_SYSTEM_SUMMARY = 23;
+        TIME_ZONE = 26;
+        VEHICLE_LICENSE_RESTRICTION = 27;
+        HIGHWAY = 28;
+        ON_ROUTE_PROBLEM = 30;
+        BUSYNESS = 31;
+        RESTRICTED_ZONE = 32;
+        ROUTE_FIXTURE = 33;
+        ENERGY_CONSUMPTION = 34;
+        IMPRECISE_LODGING = 35;
+        WIDESPREAD_TRANSIT_DISRUPTION = 36;
+        WEATHER_PRESENCE_CRITICAL = 37;
+        WEATHER_PRESENCE_WARNING = 38;
+    }
+    
+    optional string headline = 2;
+    optional string external_summary = 3;
+    optional string external_details = 4;
+    optional LoggedLink link = 5;
+    optional bool google_confidential = 6;
+    optional geo_serving_proto.directions.Time start_time = 7;
+    optional geo_serving_proto.directions.Time end_time = 8;
+    repeated RenderableComponent main_title = 20;
+    repeated RenderableComponent short_title = 24;
+    repeated RenderableComponent subtitle = 21;
+    repeated RenderableComponent short_subtitle = 26;
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 35;
+    optional LatLng icon_location = 10;
+    optional LatLng along_the_route_icon_location = 11;
+    optional string notice_id = 12;
+    optional IncidentType incident_type = 13 [default = INCIDENT_OTHER, deprecated = true];
+    optional ComponentIcon map_icon = 14;
+    optional ComponentIcon chrome_icon = 15;
+    optional geo_serving_proto.color.ColorSet chrome_icon_container_background_color = 37;
+    
+    optional SideOfRoad side_of_road = 16 [default = NONE];
+    enum SideOfRoad {
+        NONE = 0;
+        LEFT = 1;
+        RIGHT = 2;
+    }
+    
+    optional NoticeAttribution attribution = 17;
+    optional logs_maps_shared.visual_element.DirectionsNoticeData directions_notice_data_log_only = 33;
+    
+    oneof specialized_notice_details {
+        TrafficIncidentDetails traffic_incident_details = 18;
+        TrafficReportProblemDetails problem_details = 22;
+        TrafficPromptDetails traffic_prompt_details = 23;
+        TransitAlertDetails transit_alert_details = 25;
+        EventDetails event_details = 27;
+        TrafficTrendDetails traffic_trend_details = 28;
+        CrisisDetails crisis_details = 29;
+        OnRouteProblemDetails on_route_problem_details = 30;
+        RouteFixtureDetails route_fixture_details = 31;
+        ZoneInfo.RestrictedZone restricted_zone_details = 36;
+    }
+    
+    reserved 19;
+    
+    message TrafficIncidentDetails {
+        optional int32 along_the_route_offset_meters = 1;
+        optional int32 along_the_route_stretch_meters = 2;
+        optional bool is_trusted_road_closure = 3 [default = false];
+    }
+    
+    message TrafficReportProblemDetails {
+        optional string ei = 7 [deprecated = true];
+        optional string ved = 8;
+        optional maps_tactile.shared.directions.ProblemType type = 19;
+        optional geo_serving_proto.directions.Duration delay = 1;
+        optional bool is_demoted = 5;
+        optional Distance distance_ahead = 2;
+        optional geo_serving_proto.directions.Duration age = 9;
+        optional string schedule_description = 22;
+        
+        optional RestrictionValues restriction_values = 24;
+        message RestrictionValues {
+            optional int32 max_height_mm = 1;
+            optional int32 max_weight_kg = 2;
+        }
+        
+        optional geo_serving_proto.directions.Duration last_updated = 11 [deprecated = true];
+        optional geo_serving_proto.directions.Time last_updated_timestamp = 25;
+        optional int32 speed_limit_kph = 26 [default = -1];
+        
+        optional SpeedLimitDisplayUnits default_display_units = 27 [default = KILOMETERS_PER_HOUR];
+        enum SpeedLimitDisplayUnits {
+            UNKNOWN_SPEED_LIMIT_DISPLAY_UNITS = 0;
+            KILOMETERS_PER_HOUR = 1;
+            MILES_PER_HOUR = 2;
+        }
+        
+        optional JamStretch jam_stretch = 3 [deprecated = true];
+        message JamStretch {
+            optional int32 offset_meters = 1;
+            optional int32 length_meters = 2;
+            optional int32 traffic_report_trip_id = 5;
+            
+            reserved 3, 4;
+        }
+        
+        repeated string incident_id = 4;
+        
+        optional Visualization visualization = 6;
+        message Visualization {
+            repeated maps_tactile.shared.directions.RoadStretch road_stretch = 5;
+            
+            optional LegendNamedStyles legend_named_styles = 3;
+            message LegendNamedStyles {
+                optional maps_paint_client.LegendNamedStyle polyline_style = 1;
+                optional maps_paint_client.LegendNamedStyle callout_body_style = 2;
+                optional maps_paint_client.LegendNamedStyle callout_text_style = 3;
+                optional maps_paint_client.LegendNamedStyle icon_style = 4;
+            }
+            
+            oneof problem_location {
+                CompactPolyline compact_polyline = 1;
+                JamStretch jam_stretch = 4;
+            }
+            
+            reserved 2;
+        }
+        
+        optional RenderableComponent callout_text = 16;
+        
+        optional UserReports user_reports = 12;
+        message UserReports {
+            optional int32 confirm_count = 1;
+            optional geo_serving_proto.directions.Time last_confirm_time = 5;
+            optional int32 deny_count = 2;
+            optional bool solicit_more_votes = 3;
+            optional string moderation_question_text = 4 [deprecated = true];
+        }
+        
+        optional ProblemAttribution problem_attribution = 17;
+        message ProblemAttribution {
+            optional string text = 1;
+        }
+        
+        optional RenderableComponent problem_name = 18;
+        optional AudioComponent audio_component = 13;
+        
+        optional AudioAlertMethod audio_alert_method = 14 [default = AUDIO_NONE];
+        enum AudioAlertMethod {
+            AUDIO_NONE = 0;
+            CHIME_ONLY = 1;
+            CHIME_AND_AUDIO_COMPONENT = 2;
+        }
+        
+        optional maps_tactile.shared.directions.TrafficReportProblemAlertConfig alert_config = 23;
+        repeated maps_tactile.shared.directions.DynamicClosureOptions.DynamicClosure dynamic_closure = 15;
+        optional string location_description = 21;
+        
+        optional ClosureDetails closure_details = 20;
+        message ClosureDetails {
+            optional string closure_reason = 1;
+        }
+        
+        reserved 10;
+    }
+    
+    message TrafficPromptDetails {
+        optional bool main_title_redundant_with_headline = 1;
+        optional bool subtitle_redundant_with_on_map_display = 2;
+    }
+    
+    message EventDetails {
+        optional string ei = 2 [deprecated = true];
+        optional string ved = 3;
+        optional string event_mid = 1;
+    }
+    
+    message CrisisDetails {
+        optional string event_mid = 1;
+        optional maps_tactile.shared.ExperienceCategory category = 3;
+        optional string ved = 2;
+        optional geo_serving_proto.omnimaps.OmniMapsData omni_maps_data = 4;
+        optional .logs.CrisisInfo crisis_info_for_logging = 5;
+    }
+    
+    message TransitAlertDetails {
+        repeated RenderableComponent affected_lines = 1;
+        optional string affected_lines_string = 2;
+        optional int32 affected_line_count = 3;
+        optional double relative_importance = 4;
+        optional geo_serving_proto.directions.Time timestamp = 5;
+        
+        optional UserIncidentReports user_incident_reports = 6;
+        message UserIncidentReports {
+            optional string id = 1;
+            optional int32 vote_count = 2;
+            optional maps_tactile.shared.FeatureId feature_id = 3 [deprecated = true];
+            
+            repeated ReportLocation report_location = 4;
+            message ReportLocation {
+                optional maps_tactile.shared.FeatureId feature_id = 1;
+                optional LatLng lat_lng = 2;
+            }
+        }
+    }
+    
+    message TrafficTrendDetails {
+        optional int32 ve_type = 1 [default = 37090];
+        optional string ei = 2 [deprecated = true];
+        optional string ved = 3;
+    }
+    
+    message OnRouteProblemDetails {
+        optional OnRouteProblemType type = 5;
+        enum OnRouteProblemType {
+            UNKNOWN_ON_ROUTE_PROBLEM_TYPE = 0;
+            RAILROAD_CROSSING = 1;
+        }
+        
+        optional Distance distance_ahead = 1;
+        
+        optional LegendNamedStyles legend_named_styles = 2;
+        message LegendNamedStyles {
+            optional maps_paint_client.LegendNamedStyle callout_body_style = 1;
+            optional maps_paint_client.LegendNamedStyle callout_text_style = 2;
+            optional maps_paint_client.LegendNamedStyle icon_style = 3;
+        }
+        
+        optional RenderableComponent callout_text = 3;
+        
+        reserved 4;
+    }
+    
+    message RouteFixtureDetails {
+        optional Distance distance_ahead = 1;
+        
+        optional RouteFixtureType type = 3;
+        enum RouteFixtureType {
+            UNKNOWN_ROUTE_FIXTURE_TYPE = 0;
+            TRAFFIC_LIGHT = 1;
+            STOP_SIGN = 2;
+        }
+        
+        optional LegendNamedStyles legend_named_styles = 2;
+        message LegendNamedStyles {
+            optional maps_paint_client.LegendNamedStyle icon_style = 1;
+        }
+    }
+}
+
+message VehicleAttributes {
+    optional maps_tactile.shared.PositionSeries position = 2;
+    optional maps_tactile.shared.OccupancyStatus vehicle_occupancy_status = 3;
+    repeated maps_tactile.shared.transit.TransitAttributeStatus transit_attribute_status = 4;
+    repeated maps_tactile.shared.transit.CarriageInfo carriage_info = 5;
+    
+    reserved 1;
+}
+
+message TrainCarriageIdentifier {
+    optional int32 number_from_head = 1;
+    optional string carriage_name = 2;
+}
+
+enum IncidentType {
+    INCIDENT_ROAD_CLOSED = 1;
+    INCIDENT_CRASH = 2;
+    INCIDENT_CONSTRUCTION = 3;
+    INCIDENT_JAM = 4;
+    INCIDENT_SPEED_TRAP = 5 [deprecated = true];
+    INCIDENT_SPEED_CAMERA = 6;
+    INCIDENT_SPEED_CAMERA_ZONE = 38;
+    INCIDENT_SPEED_CONTROL_ZONE = 39;
+    INCIDENT_RED_LIGHT_CAMERA = 40;
+    INCIDENT_SUSPECTED_JAM = 7;
+    INCIDENT_LANE_CLOSURE = 10;
+    INCIDENT_STALLED_VEHICLE = 11;
+    INCIDENT_OBJECT_ON_ROAD = 12;
+    INCIDENT_POLICE_PRESENCE = 13;
+    INCIDENT_MOBILE_SPEED_CAMERA = 14;
+    INCIDENT_HEAVY_RAIN = 36;
+    INCIDENT_HAIL = 37;
+    INCIDENT_SNOW = 23;
+    INCIDENT_FLOOD = 25;
+    INCIDENT_FOG = 24;
+    INCIDENT_THUNDERSTORM = 35;
+    INCIDENT_CYCLONE = 33;
+    INCIDENT_LANDSLIDE = 32;
+    INCIDENT_EARTHQUAKE = 34;
+    INCIDENT_CRASH_PRONE = 31;
+    DEPRECATED_INCIDENT_HAZARD = 15 [deprecated = true];
+    DEPRECATED_INCIDENT_BROKEN_TRAFFIC_LIGHT = 16 [deprecated = true];
+    DEPRECATED_INCIDENT_POTHOLE = 17 [deprecated = true];
+    DEPRECATED_INCIDENT_SLIPPERY_ROAD = 30 [deprecated = true];
+    DEPRECATED_INCIDENT_ICE = 22 [deprecated = true];
+    DEPRECATED_INCIDENT_WEATHER = 21 [deprecated = true];
+    DEPRECATED_INCIDENT_SPEED_LIMIT = 8 [deprecated = true];
+    INCIDENT_SUSPECTED_CLOSURE = 9 [deprecated = true];
+    DEPRECATED_INCIDENT_CHECKPOINT = 26 [deprecated = true];
+    INCIDENT_RAILROAD_CROSSING = 27 [deprecated = true];
+    INCIDENT_TRAFFIC_LIGHT = 28 [deprecated = true];
+    INCIDENT_STOP_SIGN = 29 [deprecated = true];
+    INCIDENT_OTHER = 127;
+}
+
+enum WheelchairAccessibility {
+    ACCESSIBILITY_UNKNOWN = 0;
+    NOT_ACCESSIBLE = 1;
+    FULLY_ACCESSIBLE = 2;
+}
+
+enum TripType {
+    UNKNOWN_TRIP_TYPE = 0;
+    COMMUTE = 1;
+}
+
+enum DirectionOfMotion {
+    UNKNOWN_DIRECTION_OF_MOTION = 0;
+    LEFT_TO_RIGHT = 1;
+    RIGHT_TO_LEFT = 2;
+}

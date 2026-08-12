@@ -1,0 +1,58 @@
+syntax = "editions";
+
+package geo.search.transit;
+
+import "geo/search/api/map/map_link.proto";
+import "geo/search/api/transit/transit_line.proto";
+import "gws/mothership/api/v1/common/images/image.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.transit";
+
+message TransitStation {
+    repeated VehicleType type = 1 [deprecated = true];
+    enum VehicleType {
+        option features = enum_type: CLOSED
+        ;
+        VEHICLE_TYPE_UNSPECIFIED = 0;
+        RAIL = 1;
+        METRO_RAIL = 17;
+        SUBWAY = 273;
+        TRAM = 274;
+        MONORAIL = 275;
+        HEAVY_RAIL = 18;
+        COMMUTER_TRAIN = 289;
+        HIGH_SPEED_TRAIN = 290;
+        LONG_DISTANCE_TRAIN = 291;
+        BUS = 2;
+        INTERCITY_BUS = 33;
+        TROLLEYBUS = 34;
+        SHARE_TAXI = 35;
+        FERRY = 3;
+        CABLE_CAR = 4;
+        GONDOLA_LIFT = 65;
+        FUNICULAR = 66;
+        SPECIAL = 5;
+        HORSE_CARRIAGE = 81;
+        AIRPLANE = 6;
+    }
+    
+    repeated Vehicle vehicle = 2;
+    message Vehicle {
+        optional VehicleType type = 1;
+        optional string localized_name = 2;
+        optional gws.mothership.api.v1.common.images.Image icon = 3;
+    }
+    
+    optional string name = 5;
+    optional TransitLineGroup transit_lines = 6;
+    optional search.map.MapLink link = 7;
+    optional string station_type = 8;
+    repeated string agencies = 9;
+    
+    reserved 3, 4;
+}

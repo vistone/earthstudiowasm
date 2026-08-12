@@ -1,0 +1,75 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "frameworks/testing/rpcreplay/processors/rpc_replay_field_option.proto";
+import "geo/photo/proto/image_format.proto";
+import "geo/photo/proto/image_frontend_type.proto";
+import "geo/photo/proto/image_key.proto";
+import "geo/photo/proto/location.proto";
+import "geo/photo/proto/object_id.proto";
+import "geo/photo/proto/photo_filter_options.proto";
+import "geo/photo/proto/timestamp_range.proto";
+import "localsearch/lite/intent.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoSearchCriterionProto";
+option java_package = "com.google.geo.photo";
+
+message Criterion {
+    oneof by {
+        ObjectId object_id = 1;
+        LatLngRectangle viewport = 2;
+        ImageSemanticRestrictions semantic = 3;
+        string zipit_annotation_id = 4 [deprecated = true];
+        string ugc_offering_id = 5 [deprecated = true];
+        ImageFrontendType frontend_type = 6;
+        ImageFormat format = 7;
+        TimestampRange photo_age = 8;
+        string hashtag = 10 [deprecated = true];
+        string usv_sequence_id = 11;
+        string gaia_id = 12;
+        string canonical_offering_id = 13 [deprecated = true];
+        localsearch.lite.IntentType intent = 15 [deprecated = true];
+        ImageKey image_key = 14 [deprecated = true];
+        string provider_id_regex_allowlist = 16;
+        string provider_id_regex_denylist = 17;
+        string query_text = 18;
+    }
+    
+    reserved 9;
+}
+
+message CompositeCriterion {
+    optional Op op = 1 [default = NO_OP];
+    enum Op {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_OP = 0;
+        NO_OP = 1;
+        AND = 2;
+        OR = 3;
+    }
+    
+    repeated Criterion criterion = 2;
+    repeated CompositeCriterion composite_criterion = 3;
+    optional string tag = 4;
+    optional string continuation_token = 5;
+}
+
+message NamedQuery {
+    optional Criterion criterion = 1;
+    optional string tag = 2;
+    optional string continuation_token = 3;
+}
+
+message SelectByBatch {
+    optional CompositeCriterion common_criterion = 1;
+    repeated NamedQuery for_each = 2;
+    
+    extensions 100 to 999;
+}

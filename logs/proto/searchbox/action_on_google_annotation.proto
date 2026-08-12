@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package logs.proto.searchbox;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.searchbox";
+
+message ActionsOnGoogleAnnotation {
+    optional int64 project_id = 1;
+    optional string project_display_id = 2;
+    optional int64 version_id = 3;
+    optional bool preview = 4;
+    optional string release_channel_name = 5;
+    optional string log_join_token = 6;
+    optional int64 fulfillment_mode = 8;
+    optional string display_text = 9;
+    optional string app_display_name = 10;
+    
+    reserved 7;
+}

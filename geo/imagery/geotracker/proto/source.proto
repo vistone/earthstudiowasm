@@ -1,0 +1,114 @@
+syntax = "editions";
+
+package geotracker;
+
+import "cityblock/base/vehicles.proto";
+import "cityblock/public/pose.proto";
+import "geo/imagery/geotracker/proto/foreign_key.proto";
+import "geo/imagery/geotracker/proto/geometry.proto";
+import "geo/imagery/streetview/ingest/usv/proto/public/imagery_type.proto";
+import "geo/photo/catalog/proto/image_origin.proto";
+import "geo/photo/proto/image_format.proto";
+import "geo/tasking/dynamic/proto/task_resource_id.proto";
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+import "util/geometry2d/r2.proto";
+
+option features = utf8_validation: NONE
+;
+option java_package = "com.google.geo.imagery.geotracker.proto";
+
+message BoxProto {
+    optional .geometry2d.R2BoundingBoxProto bounding_box = 1;
+    repeated .geometry2d.R2PolygonProto polygons = 2;
+    optional int32 image_width = 3;
+}
+
+message GsvImageMetadata {
+    optional string rosette_type = 1;
+    optional int32 camera_index = 2;
+    optional cityblock.VehicleIdRange.VehicleType vehicle_type = 3;
+    optional bool is_published = 4;
+    optional bool is_publishable = 6;
+    optional cityblock.Pose pose = 5;
+    optional int32 num_cameras = 7;
+}
+
+message UsvImageMetadata {
+    optional string camera_make = 1;
+    optional string camera_model = 2;
+    optional geo.imagery.streetview.ingest.usv.ImageryType image_type = 3 [features = ];
+}
+
+message UgcImageMetadata {
+    optional geo_photo_catalog.ImageOrigin image_origin = 1;
+    optional geo_photo_service.ImageFormat image_format = 2;
+}
+
+message GcpImageMetadata {
+    optional string image_path = 1;
+}
+
+message FleetsImageMetadata {
+    repeated geo.tasking.dynamic.proto.TaskResourceId task_resource_ids = 2;
+    optional google.protobuf.Timestamp planned_deletion_time = 3;
+    
+    reserved 1;
+}
+
+message EarthEngineImageMetadata {
+    optional google.protobuf.Timestamp asset_update_time = 1;
+    optional string asset_correlation_id = 2;
+    optional string asset_creation_method = 3;
+    optional string asset_platform = 4;
+    optional google.protobuf.Timestamp asset_rejection_time = 5;
+    optional string asset_stable_id = 6;
+}
+
+message ImageMetadata {
+    optional int32 height = 1;
+    optional int32 width = 2;
+    
+    oneof SourceSpecificMetadata {
+        GsvImageMetadata gsv_image_metadata = 3;
+        UsvImageMetadata usv_image_metadata = 4;
+        UgcImageMetadata ugc_image_metadata = 5;
+        GcpImageMetadata gcp_image_metadata = 6;
+        FleetsImageMetadata fleets_image_metadata = 7;
+        EarthEngineImageMetadata earth_engine_image_metadata = 8;
+    }
+}
+
+message DataBackMetadata {
+    optional google.protobuf.Timestamp timestamp = 2;
+    optional string vehicle_configuration_id = 3;
+    optional string pseudo_user_id = 4;
+    
+    reserved 1;
+}
+
+message SourceIdentifierProto {
+    optional string collection_id = 1;
+    optional string member_id = 4;
+    optional string bucket = 2;
+    optional string version_id = 3;
+    optional BoxProto bounding_box = 5;
+    optional ForeignKeyProto foreign_key = 6;
+    optional GeometryProto geometry = 7;
+    optional ImageMetadata image_metadata = 8;
+    optional DataBackMetadata databack_metadata = 9;
+    optional string creation_run_id = 10;
+}
+
+message DecoratorInfo {
+    optional string decorator_name = 1;
+}
+
+message AssociationSourceInfoProto {
+    optional ForeignKeyProto foreign_key = 1;
+    optional BoxProto bounding_box = 2;
+    optional ImageMetadata image_metadata = 3;
+    optional DecoratorInfo decorator_info = 4;
+}

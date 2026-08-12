@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package searchbox.protos;
+
+import "google/api/inclusion.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "SBP";
+option java_multiple_files = true;
+option java_outer_classname = "LogEnumsProtos";
+option java_package = "com.google.searchbox.protos";
+
+message SearchXray {
+    enum ResponseType {
+        RESPONSE_TYPE_UNSPECIFIED = 0;
+        HISTORY = 1;
+        RECOMMENDATION = 2;
+        REACTIVE_PSUGGEST = 3;
+    }
+}
+
+enum OnFocusEventType {
+    ON_FOCUS_EVENT_TYPE_UNSPECIFIED = 0;
+    SRP_ON_FOCUS = 1;
+    CONTENT_ON_FOCUS = 2;
+}
+
+enum QueryFeatureType {
+    QUERY_FEATURE_TYPE_UNSPECIFIED = 0;
+    CHANNEL = 1;
+}

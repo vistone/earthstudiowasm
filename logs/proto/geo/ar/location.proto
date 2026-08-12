@@ -1,0 +1,33 @@
+syntax = "editions";
+
+package logs.proto.geo.ar;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LPGAR";
+
+message LocationProto {
+    optional int64 boot_timestamp_ns = 1;
+    optional int64 utc_timestamp_ns = 2;
+    
+    optional LocationSource location_source = 3;
+    enum LocationSource {
+        option features = enum_type: CLOSED
+        ;
+        SOURCE_UNKNOWN = 0;
+        SOURCE_FUSED = 1;
+        SOURCE_GPS = 2;
+        SOURCE_NETWORK = 3;
+        SOURCE_IOS_CORE_LOCATION = 4;
+    }
+    
+    optional double latitude_degrees = 4;
+    optional double longitude_degrees = 5;
+    optional double accuracy_meters = 6;
+    optional double altitude_wgs84_meters = 7;
+    optional float vertical_accuracy_meters = 8;
+    optional float bearing_degrees = 9;
+    optional float bearing_accuracy_degrees = 10;
+    optional float speed_meters_per_second = 11;
+    optional float speed_accuracy_meters_per_second = 12;
+}

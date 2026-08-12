@@ -1,0 +1,10 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedAnnotationVersion {
+    optional string annotation_id = 1;
+    optional string data_version = 2;
+}

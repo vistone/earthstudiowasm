@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package cityblock;
+
+option features = repeated_field_encoding: EXPANDED
+;
+option objc_class_prefix = "CB";
+option java_outer_classname = "PoseProto";
+option java_package = "com.google.cityblock.protos.proto1api";
+
+message Pose {
+    optional double lat = 1 [default = nan];
+    optional double lng = 2 [default = nan];
+    optional double alt = 3 [default = nan];
+    optional float roll_deg = 4 [default = nan];
+    optional float pitch_deg = 5 [default = nan];
+    optional float heading_deg = 6 [default = nan];
+    
+    reserved 7 to 12;
+}
+
+message PoseCovariance {
+    repeated float covariance = 1;
+}

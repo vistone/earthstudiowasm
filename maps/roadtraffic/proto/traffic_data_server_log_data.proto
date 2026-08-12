@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package maps_roadtraffic;
+
+import "maps/roadtraffic/proto/travel_mode.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMRTC";
+option java_multiple_files = true;
+option java_outer_classname = "TrafficDataServerLogDataProto";
+option java_package = "com.google.maps.roadtraffic.proto";
+
+message TrimmedSpeedReading {
+    optional int32 offset_meters = 1;
+    optional int64 elapsed_time_ms = 2;
+}
+
+message TrafficDataServerLogData {
+    optional double path_model_time_stretch_factor = 1 [default = 1];
+    repeated TrimmedSpeedReading historical_speed_reading = 2;
+    repeated TrimmedSpeedReading optimistic_historical_speed_reading = 3;
+    repeated TrimmedSpeedReading pessimistic_historical_speed_reading = 4;
+    repeated TrimmedSpeedReading pre_path_model_speed_reading = 10;
+    optional string country_code = 5;
+    optional string start_locality = 6;
+    optional string end_locality = 7;
+    optional int32 start_minute_of_the_week = 8;
+    optional int32 end_minute_of_the_week = 9;
+    optional TravelMode travel_mode = 11;
+}

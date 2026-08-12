@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geostore/base/proto/featureid.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureDescriptionProto";
+option java_package = "com.google.geo.photo";
+
+message FeatureDescription {
+    optional geostore.FeatureIdProto feature_id = 1;
+    
+    repeated Point access_point = 2;
+    message Point {
+        optional fixed32 lat_e7 = 1;
+        optional fixed32 lng_e7 = 2;
+    }
+    
+    repeated geostore.FeatureIdProto segment_feature_id = 3;
+    repeated geostore.FeatureIdProto container_feature_id = 4;
+    optional Point location = 5;
+}

@@ -1,0 +1,27 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+import "geo/earth/proto/documentnamespace.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.app.common.state.derivedstate";
+
+message DocumentInfo {
+    optional int32 document_key = 1 [default = -1];
+    optional string document_id = 2;
+    optional string resource_key = 3;
+    optional document.DocumentNamespace document_namespace = 4;
+    optional document.protos.ModelVersion document_model_version = 5;
+}
+
+message EarthMateManagerDerivedState {
+    optional DocumentInfo document_info = 1;
+    optional bool is_in_street_view = 2;
+}

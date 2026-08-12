@@ -1,0 +1,66 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "geo/serving/proto/directions/engine_type.proto";
+import "geo/serving/proto/directions/fuel_consumption_routing_options.proto";
+import "geo/serving/proto/directions/request/decoration_options.proto";
+import "geo/serving/proto/directions/request/trailering_routing_options.proto";
+import "geo/serving/proto/directions/vehicle_physical_attributes.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "PathfinderRequestBuildingOptionsProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message PathfinderRequestBuildingOptions {
+    optional geo_serving_proto.directions.request.DecorationOptions decoration_options = 1;
+    
+    optional RoutingOptions routing_options = 2;
+    message RoutingOptions {
+        optional geo_serving_proto.directions.request.TraileringRoutingOptions trailering_routing_options = 4;
+        
+        optional TruckRoutingExperimentState truck_routing_experiment_state = 5;
+        enum TruckRoutingExperimentState {
+            UNKNOWN_TRUCK_ROUTING_EXPERIMENT_STATE = 0;
+            TRUCK_ROUTING_ENABLED = 1;
+            TRUCK_ROUTING_ABLATED = 2;
+        }
+        
+        optional bool enable_truck_routing = 15;
+        optional geo_serving_proto.directions.FuelConsumptionRoutingOptions drive_fuel_consumption_routing_options = 6;
+        optional geo_serving_proto.directions.FuelConsumptionRoutingOptions two_wheeler_fuel_consumption_routing_options = 7;
+        
+        optional CyclingRouteRankingModel cycling_route_ranking_model = 12;
+        enum CyclingRouteRankingModel {
+            UNKNOWN_CYCLING_ROUTE_RANKING_MODEL = 0;
+            CYCLING_SAFETY_CUSTOMIZATION_V1 = 1;
+            DEPRECATED_CYCLING_SAFETY_CUSTOMIZATION_V2 = 2 [deprecated = true];
+        }
+        
+        optional bool soft_avoid_tunnels = 8;
+        
+        optional VignetteOptions vignette_options = 11;
+        message VignetteOptions {
+            repeated string soft_avoid_vignette_country = 1;
+        }
+        
+        optional HOVPreference hov_preference = 10;
+        message HOVPreference {
+            optional bool allow_hov_only_roads = 1;
+        }
+        
+        optional bool enable_parameterized_driving_customizations = 13;
+        optional bool enable_routing_with_jartic_licensed_data = 14;
+        
+        reserved 1, 2, 3, 9;
+    }
+    
+    optional SharedAttributes shared_attributes = 3;
+    message SharedAttributes {
+        optional geo_serving_proto.directions.EngineType engine_type = 1;
+        optional geo_serving_proto.directions.VehiclePhysicalAttributes vehicle_physical_attributes = 2;
+    }
+    
+    reserved 4 to max;
+}

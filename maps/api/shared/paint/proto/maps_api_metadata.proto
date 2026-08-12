@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package maps_api;
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMA";
+option java_outer_classname = "MapsApiMetadata";
+
+message MapsApiMetadataProto {
+    repeated KeyValue properties = 1;
+    message KeyValue {
+        optional string key = 1 [features = ];
+        optional string value = 2 [features = ];
+    }
+}

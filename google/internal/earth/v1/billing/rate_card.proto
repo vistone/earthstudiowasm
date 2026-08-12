@@ -1,0 +1,87 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.billing;
+
+import "google/internal/earth/v1/billing/capability.proto";
+import "google/internal/earth/v1/billing/limit.proto";
+import "google/internal/earth/v1/billing/plantype.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.billing";
+
+message RateCard {
+    repeated Plan plans = 1;
+    message Plan {
+        optional PlanType plan_type = 1;
+        repeated Capability enabled_capabilities = 3 [packed = true];
+        repeated Limit limits = 4;
+        
+        reserved 2;
+        
+        reserved "plan_type_display_name";
+    }
+    
+    optional DisplayInfo display_info = 2;
+    message DisplayInfo {
+        repeated PlanDisplayInfo plans_display_info = 1;
+        repeated FeatureDisplayInfo features_display_info = 2;
+        optional string localized_dialog_header = 3;
+        optional string localized_header_link_text = 4;
+        optional string localized_title = 5;
+        optional string localized_title_badge = 6;
+        optional DisplayIcon title_badge_icon_svg = 11;
+        optional string localized_current_plan_enabled_button = 7;
+        optional DisplayIcon current_plan_enabled_button_icon_svg = 8;
+        optional string localized_upgrade_now_button_text = 9;
+        optional string localized_switch_to_standard_button_text = 12;
+        optional string localized_switch_to_professional_button_text = 13;
+        
+        reserved 10;
+    }
+    
+    message DisplayIcon {
+        oneof icon_name {
+            string material_icon_name = 2;
+            string static_icon_name = 3;
+        }
+    }
+    
+    message PlanDisplayInfo {
+        optional PlanType plan_type = 1;
+        optional string localized_plan_type = 2;
+        optional string price = 3;
+        optional string localized_price_unit = 4;
+        optional string promotional_price = 5;
+        optional string localized_promotion_disclaimer = 6;
+    }
+    
+    message PerPlanFeatureDisplayInfo {
+        optional PlanType plan_type = 1;
+        
+        oneof per_plan_info {
+            DisplayIcon plan_icon_svg = 2;
+            string localized_plan_desc = 3;
+        }
+    }
+    
+    message FeatureDisplayInfo {
+        optional string feature_id = 6;
+        optional string localized_title = 1;
+        optional string localized_desc = 2;
+        optional DisplayIcon feature_icon_svg = 3;
+        
+        optional Chip feature_chip = 4;
+        message Chip {
+            optional string localized_chip_text = 1;
+            
+            optional ChipType chip_type = 2;
+            enum ChipType {
+                CHIP_TYPE_UNSPECIFIED = 0;
+                EXPERIMENTAL = 1;
+                PROMOTIONAL = 2;
+            }
+        }
+        
+        repeated PerPlanFeatureDisplayInfo per_plan_display_info = 5;
+    }
+}

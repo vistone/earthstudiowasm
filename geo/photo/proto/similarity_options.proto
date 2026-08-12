@@ -1,0 +1,26 @@
+syntax = "editions";
+
+package geo_photo;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPH";
+option java_multiple_files = true;
+option java_outer_classname = "SimilarityOptionsProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message VersionedDescriptor {
+    optional bytes starburst_descriptor = 1;
+    optional int32 version = 2;
+}
+
+message SimilarityOptions {
+    repeated VersionedDescriptor versioned_descriptor = 1;
+    optional double uprank_threshold = 2;
+    optional int32 num_to_uprank = 3;
+    optional bool enable_cutoff = 5 [default = false];
+    optional double cutoff_threshold = 6;
+    optional bool remove_same_request_descriptor = 7 [default = false];
+    optional double duplicate_threshold = 8;
+    optional double semantic_ratio = 4 [default = 0.5, deprecated = true];
+}

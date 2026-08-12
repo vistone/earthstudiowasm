@@ -1,0 +1,74 @@
+syntax = "editions";
+
+package three_d_serving.tiles;
+
+import "google/protobuf/struct.proto";
+
+option features = field_presence: IMPLICIT
+;
+option java_outer_classname = "Core";
+
+message Tileset {
+    option features = ;
+    optional Asset asset = 1;
+    map<string, TileProperty> properties = 2;
+    optional double geometric_error = 3 [features = field_presence: EXPLICIT
+    ];
+    optional Tile root = 4;
+    repeated string extensions_used = 5;
+    repeated string extensions_required = 6;
+    map<string, google.protobuf.Struct> extensions = 7;
+    optional google.protobuf.Value extras = 8;
+    
+    message TileProperty {
+        optional double minimum = 1 [features = field_presence: EXPLICIT
+        ];
+        optional double maximum = 2 [features = field_presence: EXPLICIT
+        ];
+        map<string, google.protobuf.Struct> extensions = 3;
+        optional google.protobuf.Value extras = 4;
+    }
+}
+
+message Asset {
+    option features = ;
+    optional string version = 1 [features = field_presence: EXPLICIT
+    ];
+    optional string tileset_version = 2 [features = field_presence: EXPLICIT
+    ];
+    map<string, google.protobuf.Struct> extensions = 3;
+    optional google.protobuf.Value extras = 4;
+}
+
+message Tile {
+    option features = ;
+    optional BoundingVolume bounding_volume = 1;
+    optional BoundingVolume viewer_request_volume = 2;
+    optional double geometric_error = 3 [features = field_presence: EXPLICIT
+    ];
+    optional string refine = 4 [features = field_presence: EXPLICIT
+    ];
+    repeated double transform = 5;
+    optional Content content = 6;
+    repeated Tile children = 7;
+    map<string, google.protobuf.Struct> extensions = 8;
+    optional google.protobuf.Value extras = 9;
+}
+
+message BoundingVolume {
+    option features = ;
+    repeated double box = 1;
+    repeated double region = 2;
+    repeated double sphere = 3;
+    map<string, google.protobuf.Struct> extensions = 4;
+    optional google.protobuf.Value extras = 5;
+}
+
+message Content {
+    option features = ;
+    optional BoundingVolume bounding_volume = 1;
+    optional string uri = 2 [features = field_presence: EXPLICIT
+    ];
+    map<string, google.protobuf.Struct> extensions = 3;
+    optional google.protobuf.Value extras = 4;
+}

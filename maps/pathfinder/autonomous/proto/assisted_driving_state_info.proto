@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package maps_autonomous;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.pathfinder.autonomous.proto";
+
+message AssistedDrivingStateInfo {
+    repeated StateInfo state_info = 2;
+    message StateInfo {
+        State state = 1;
+    }
+    
+    enum State {
+        UNKNOWN = 0;
+        UNSUPPORTED = 1;
+        TEMPORARILY_UNAVAILABLE = 2;
+        AVAILABLE = 3;
+        IMMEDIATELY_ENGAGEABLE = 4;
+        ENGAGED = 5;
+        DRIVER_SUSPENDED = 6;
+        FORCE_DISENGAGED = 7;
+    }
+}

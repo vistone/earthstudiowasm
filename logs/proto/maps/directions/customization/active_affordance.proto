@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package maps_directions_customization_logs;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedActiveAffordanceDataset {
+    enum Dataset {
+        DATASET_UNSPECIFIED = 0;
+        DATASET_TRUCKING_AVOIDANCE = 1;
+        DATASET_TRUCKING_HAZMAT = 2;
+        DATASET_DIDI_AVOID = 3;
+    }
+}
+
+message LoggedDatasetInfo {
+    repeated LoggedActiveAffordanceDataset.Dataset dataset = 1 [packed = true];
+}

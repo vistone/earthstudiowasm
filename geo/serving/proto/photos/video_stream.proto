@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "VideoStreamProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message VideoStream {
+    optional Protocol protocol = 5;
+    enum Protocol {
+        UNKNOWN_PROTOCOL = 0;
+        PROGRESSIVE = 1;
+        DASH = 2;
+        HLS = 3;
+    }
+    
+    optional int32 format_id = 1;
+    optional int32 stream_width_px = 2;
+    optional int32 stream_height_px = 3;
+    optional string url = 4;
+}

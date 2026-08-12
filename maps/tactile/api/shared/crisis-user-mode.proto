@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "CrisisUserModeProto";
+option java_package = "com.google.maps.tactile.shared";
+
+enum CrisisUserMode {
+    UNKNOWN_CRISIS_USER_MODE = 0;
+    INDIRECTLY_AFFECTED = 1;
+    DIRECTLY_AFFECTED = 2;
+}

@@ -1,0 +1,44 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "GeometryProto";
+option java_package = "com.google.maps.tactile";
+
+message LatLng {
+    option deprecated = true;
+    optional double lat = 3;
+    optional double lng = 4;
+    
+    reserved 1, 2;
+}
+
+message LatLngRectangle {
+    option deprecated = true;
+    optional LatLng lo = 3;
+    optional LatLng hi = 4;
+    
+    reserved 1, 2;
+}
+
+message LatLngPolygon {
+    option deprecated = true;
+    repeated LatLng point = 1;
+}
+
+message RasterPoint {
+    option deprecated = true;
+    optional int32 x = 1;
+    optional int32 y = 2;
+}
+
+message RasterRectangle {
+    option deprecated = true;
+    optional RasterPoint lo = 1;
+    optional RasterPoint hi = 2;
+}

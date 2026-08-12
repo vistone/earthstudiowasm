@@ -1,0 +1,239 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/proto/maps/directions/mrp/money.proto";
+import "logs/proto/maps/directions/mrp/properties.proto";
+import "maps/directions/mrp/proto/cost_function_spec_type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedCostFunctionSpecProto {
+    optional LoggedType type = 1 [deprecated = true];
+    enum LoggedType {
+        UNKNOWN_COST_FUNCTION_TYPE = 0;
+        TIME = 1;
+        DISTANCE = 2;
+        RATE_CARD_PLUS_TOLL = 4;
+        ASSISTED_DRIVING = 6;
+        REQUERY_SIMILARITY = 8;
+        AVOID_TOLLS = 9;
+        RELATIVE = 10;
+        ROUTE_CHANGE = 11;
+        AVOID_HIGHWAYS = 12;
+        FAKE = 13;
+        AVOID_RANDOMLY_SELECTED_SEGMENTS = 14;
+        TIME_FUEL = 15;
+        CYCLING = 16;
+        AVOID_FERRIES = 20;
+        SIGNAL_SHAPING = 24;
+        AST_TIME = 18 [deprecated = true];
+        OPTIMAL_ANNOTATION = 26 [deprecated = true];
+        CUSTOMIZATION_CONFIG = 27;
+        RISK_AVERSE = 28;
+    }
+    
+    optional .maps.mrp.cost_function_spec.Type cost_function_type = 26;
+    repeated LoggedTripPropertiesProto.LoggedProperty relevant_properties = 2;
+    optional string label = 3;
+    repeated LoggedCostFunctionSpecProto sub_specs = 4;
+    
+    oneof details {
+        LoggedTimeParametersProto time_parameters = 5;
+        LoggedDistanceParametersProto distance_parameters = 6;
+        LoggedTimeDistanceParametersProto time_distance_parameters = 7 [deprecated = true];
+        LoggedRateCardPlusTollParametersProto rate_card_plus_toll_parameters = 8;
+        LoggedMatchParametersProto match_parameters = 9;
+        LoggedAssistedDrivingParametersProto assisted_driving_parameters = 10;
+        LoggedGoesNearParametersProto goes_near_parameters = 11 [deprecated = true];
+        LoggedRequerySimilarityParametersProto requery_similarity_parameters = 13;
+        LoggedAvoidTollsParametersProto avoid_tolls_parameters = 12;
+        LoggedRelativeParametersProto relative_parameters = 16;
+        LoggedRouteChangeParametersProto route_change_parameters = 14;
+        LoggedAvoidHighwaysParametersProto avoid_highways_parameters = 15;
+        LoggedFakeCostParametersProto fake_cost_parameters = 17;
+        LoggedAvoidRandomSegmentsParametersProto avoid_random_segments_parameters = 18;
+        LoggedFuelTimeParametersProto fuel_parameters = 19;
+        LoggedCyclingParametersProto cycling_parameters = 20;
+        LoggedDynamicClosuresParametersProto dynamic_closures_parameters = 23 [deprecated = true];
+        LoggedAvoidFerriesParametersProto avoid_ferries_parameters = 25;
+        LoggedFallbackParametersProto fallback_parameters = 21 [deprecated = true];
+        LoggedSignalShapingParametersProto signal_shaping_parameters = 24;
+        LoggedAstTimeParametersProto ast_time_parameters = 22 [deprecated = true];
+        LoggedCustomizationConfigParametersProto customization_config_parameters = 27;
+        LoggedActiveAffordancesParametersProto active_affordances_parameters = 28;
+        LoggedOptimalAnnotationCostParametersProto optimal_annotation_cost_parameters = 29 [deprecated = true];
+    }
+}
+
+message LoggedTimeParametersProto {
+    optional double raw_penalty_weight = 1;
+}
+
+message LoggedDistanceParametersProto {
+    optional double raw_penalty_speed_km_per_hr = 1;
+}
+
+message LoggedTimeDistanceParametersProto {
+    option deprecated = true;
+    optional double hrs_per_km = 1;
+    optional double raw_penalty_weight = 2;
+}
+
+message LoggedRateCardProto {
+    optional LoggedMoneyVector cost_per_min = 1;
+    optional LoggedMoneyVector cost_per_km = 2;
+}
+
+message LoggedRateCardPlusTollParametersProto {
+    optional LoggedRateCardProto rate_card = 1;
+    optional LoggedMoneyVector toll_weight = 2;
+    optional LoggedMoneyVector overall_weight = 3;
+    optional double raw_penalty_weight = 4;
+    optional double raw_penalty_speed_km_per_hr = 5;
+}
+
+message LoggedMatchParametersProto {
+    
+}
+
+message LoggedAssistedDrivingParametersProto {
+    optional double discount_percent = 1;
+    optional double raw_penalty_weight = 2;
+}
+
+message LoggedGoesNearParametersProto {
+    option deprecated = true;
+    
+    repeated LoggedTarget targets = 1;
+    message LoggedTarget {
+        optional double max_visited_distance_km = 2;
+        optional double min_avoided_distance_km = 3;
+        optional double reward = 4;
+        optional double penalty_per_km = 5;
+    }
+}
+
+message LoggedRequerySimilarityParametersProto {
+    optional double similarity_weight = 1;
+}
+
+message LoggedAvoidTollsParametersProto {
+    optional double multiplicative_toll_penalty = 1;
+}
+
+message LoggedRelativeParametersProto {
+    optional double max_cost_difference = 1;
+}
+
+message LoggedRouteChangeParametersProto {
+    optional double route_change_penalty = 1;
+}
+
+message LoggedAvoidHighwaysParametersProto {
+    optional double full_route_cost_multiplier_for_routes_with_any_highway = 1;
+    optional double highway_travel_time_multiplier = 2;
+}
+
+message LoggedAvoidRandomSegmentsParametersProto {
+    optional double route_cost_multiplier_for_routes_with_any_selected_segment = 1;
+    optional double selected_segment_travel_time_multiplier = 2;
+}
+
+message LoggedFuelTimeParametersProto {
+    optional double raw_penalty_weight = 1 [deprecated = true];
+    optional double fuel_weight_secs_per_ml = 2;
+    optional double fuel_penalty_abs_cap_seconds = 3;
+    optional double fuel_penalty_rel_cap_percent = 4;
+    optional double fuel_penalty_long_trip_cap_seconds = 8;
+    
+    optional LoggedSubType sub_type = 5 [default = NUDGE];
+    enum LoggedSubType {
+        UNKNOWN_TIME_FUEL_SUB_TYPE = 0;
+        NUDGE = 1;
+    }
+    
+    optional LoggedExternalityType externality_type = 7 [default = NO_EXPERIMENT];
+    enum LoggedExternalityType {
+        NO_EXPERIMENT = 0;
+        MEASUREMENT_EXPERIMENT = 1;
+    }
+}
+
+message LoggedFakeCostParametersProto {
+    
+}
+
+message LoggedCyclingParametersProto {
+    optional double raw_penalty_weight = 1;
+    
+    reserved 2;
+}
+
+message LoggedDynamicClosuresParametersProto {
+    option deprecated = true;
+}
+
+message LoggedAvoidFerriesParametersProto {
+    
+}
+
+message LoggedSignalShapingParametersProto {
+    
+}
+
+message LoggedFallbackParametersProto {
+    option deprecated = true;
+}
+
+message LoggedAstTimeParametersProto {
+    optional double raw_penalty_weight = 1 [deprecated = true];
+}
+
+message LoggedCostProto {
+    optional int32 trip_index = 1;
+    optional int32 selector_index = 2;
+    optional string label = 3;
+    repeated LoggedCostProto sub_costs = 4;
+    optional double cost = 5;
+    optional int32 rank = 6;
+    
+    optional LoggedCostingStatus costing_status = 7;
+    enum LoggedCostingStatus {
+        UNKNOWN_COSTING_STATUS = 0;
+        SUCCESS = 1;
+        MISSING_OPTIONAL_ANNOTATIONS = 2;
+    }
+    
+    optional int32 fallback_sub_cost_index = 8 [deprecated = true];
+}
+
+message LoggedSelectorSpecProto {
+    optional LoggedCostFunctionSpecProto cost_function_spec = 1;
+    optional int32 max_to_select = 2;
+    optional double better_route_cost_tolerance = 3;
+    optional double reroute_similarity_weight = 4;
+    optional double reroute_max_cost_difference = 8;
+    optional double max_similarity_cost_factor = 5;
+    optional double max_cost_factor = 6;
+    optional bool is_optional = 7 [deprecated = true];
+    optional double relative_selector_weight = 9;
+    optional double decay_rate = 10;
+}
+
+message LoggedSelectedTripInfoProto {
+    optional LoggedCostProto cost = 1;
+    optional string label = 2;
+    optional double relevance = 3;
+}
+
+message LoggedCustomizationConfigParametersProto {
+    
+}
+
+message LoggedActiveAffordancesParametersProto {
+    
+}
+
+message LoggedOptimalAnnotationCostParametersProto {
+    
+}

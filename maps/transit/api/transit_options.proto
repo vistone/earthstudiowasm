@@ -1,0 +1,175 @@
+syntax = "proto2";
+
+package maps_transit.api;
+
+import "geostore/base/proto/featureid.proto";
+import "google/protobuf/timestamp.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/transit/api/fare.proto";
+import "maps/transit/api/input_time.proto";
+import "maps/transit/api/non_transit_mode.proto";
+import "maps/transit/api/personalization.proto";
+import "maps/transit/api/routing_signals.proto";
+import "maps/transit/tripfinder/common/cost_model.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "travel/transport/proto/price/booking_module_options.proto";
+import "travel/transport/proto/shared/client_enums.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TransitOptionsProto";
+option java_package = "com.google.maps.transit.api";
+
+message TransitOptions {
+    optional int32 max_non_transit_meters = 1 [default = -1];
+    
+    repeated BooleanOption boolean_option = 2;
+    enum BooleanOption {
+        DISALLOW_AIRPLANE = 1;
+        AVOID_VEHICLE_TRAIN = 3;
+        AVOID_VEHICLE_TRAM = 4;
+        AVOID_VEHICLE_BUS = 5;
+        AVOID_VEHICLE_SUBWAY = 6;
+        AVOID_VEHICLE_FERRY = 21;
+        AVOID_VEHICLE_RAIL = 30;
+        AVOID_VEHICLE_OTHER = 7;
+        DISALLOW_VEHICLE_TRAIN = 15;
+        DISALLOW_VEHICLE_TRAM = 16;
+        DISALLOW_VEHICLE_BUS = 17;
+        DISALLOW_VEHICLE_SUBWAY = 18;
+        DISALLOW_VEHICLE_FERRY = 19;
+        DISALLOW_VEHICLE_OTHER = 20;
+        LIMIT_WALKING_RADIUS = 9;
+        AVOID_TRANSFERS = 10;
+        MORE_DIVERSITY = 11;
+        DISABLE_REALTIME = 12;
+        SUPPRESS_PURE_NON_TRANSIT_RESULTS = 13;
+        SUPPRESS_INCOMPLETE_COVERAGE_RESULTS = 14;
+        DISABLE_DETAILED_WALKING = 22;
+        PREFER_ACCESSIBLE = 23;
+        PREFER_CHEAPER = 27;
+        DISABLE_METRO_SHARDS = 31;
+        FORCE_METRO_LAUNCHED = 33;
+    }
+    
+    optional bool prefer_earliest_arrival = 23;
+    optional bool want_fares = 7;
+    
+    optional TimeAnchoring time_anchoring = 4 [default = DEPARTURE_TIME];
+    enum TimeAnchoring {
+        DEPARTURE_TIME = 0;
+        ARRIVAL_TIME = 1;
+        LAST_AVAILABLE = 2;
+        CALENDAR_DEPARTURE_TIME = 4;
+        CALENDAR_ARRIVAL_TIME = 5;
+        OVERVIEW = 6 [deprecated = true];
+        OVERVIEW_NOW = 3;
+    }
+    
+    optional InputTime time = 5;
+    optional PersonalizedOptions personalized_options = 6;
+    
+    optional RequestedEntities requested_entities = 8;
+    message RequestedEntities {
+        repeated geostore.FeatureIdProto requested_lines = 1;
+        
+        reserved 2, 3;
+    }
+    
+    repeated FareType fare_type_preference = 9;
+    
+    optional StationSelectionMethod station_selection_method = 10;
+    enum StationSelectionMethod {
+        DEFAULT_STATION_SELECTION_METHOD = 0;
+        INVALID_STATION_SELECTION_METHOD = -1;
+        PERSONALIZED_STATIONS = 1;
+        ALL_RADIUS_CANDIDATES = 8;
+        DEFAULT_WALKING_WITH_TRIANGLE_SEQUENCE_DRIVING_SLOW_ALT = 41;
+        DEFAULT_WALKING_WITH_PREFER_TRAINS_DRIVING = 42;
+        OVERCOMPUTED_HULK_DRIVING_FOR_DEBUGGING = 55;
+    }
+    
+    optional NonTransitOptions non_transit_options = 11;
+    message NonTransitOptions {
+        repeated NonTransitMode.Mode requested_modes = 1;
+        repeated NonTransitMode.Mode supported_modes = 5;
+        optional NonTransitLegOptions first_leg = 2;
+        optional NonTransitLegOptions last_leg = 3;
+        optional bool show_multimodal_results_in_group_at_end = 4;
+        optional bool enable_multimodal_mode_swapping = 7;
+        optional bool force_crowflight_walking = 8;
+        
+        reserved 6;
+    }
+    
+    optional bool include_all_confidential_feeds = 12;
+    optional CostModelProto cost_model_overrides = 15;
+    optional RoutingSignals routing_signals = 16;
+    
+    optional LongDistanceOptions long_distance_options = 17;
+    message LongDistanceOptions {
+        optional TimeHorizon time_horizon = 1;
+        enum TimeHorizon {
+            TIME_HORIZON_UNSPECIFIED = 0;
+            TIME_HORIZON_ONE_DAY = 1;
+        }
+        
+        optional bool mix_in_cheaper_trips = 2;
+        optional bool request_fares_after_trip_removal = 3;
+        optional bool mix_in_all_direct_trips = 4;
+        optional bool add_alternative_stops = 5;
+        optional int32 max_transit_legs = 6 [default = 0x7fffffff];
+        optional bool enable_auto_max_transit_legs = 22;
+        optional bool enable_bad_geometry_filtering = 21;
+        
+        optional ForceTravelTransportPrice force_travel_transport_price = 7;
+        enum ForceTravelTransportPrice {
+            FORCE_TRAVEL_TRANSPORT_PRICE_UNSPECIFIED = 0;
+            FORCE_TRAVEL_TRANSPORT_PRICE_ENABLED = 1;
+            FORCE_TRAVEL_TRANSPORT_PRICE_DISABLED = 2;
+        }
+        
+        optional bool travel_transport_price_qual_data = 8;
+        optional google.protobuf.Timestamp travel_transport_price_spanner_read_timestamp = 10;
+        optional bool use_historical_stops = 12;
+        optional string travel_transport_booking_module_currency = 13;
+        optional travel.transport.proto.shared.ClientDeviceType travel_transport_device_type = 14;
+        optional travel.transport.proto.shared.ClientPlatform travel_transport_platform = 15;
+        optional travel.transport.proto.shared.BookingSurface travel_transport_booking_surface = 18;
+        optional travel.transport.proto.price.BookingModuleOptions travel_transport_booking_module_options = 16;
+        optional bool want_travel_transport_booking_modules = 17;
+        optional bool is_travel_transport_search_request = 19;
+        optional bool enable_travel_indexes = 20;
+        
+        reserved 9, 11;
+    }
+    
+    optional bool include_attributable_alerts = 18;
+    optional bool include_ugc_alerts = 21;
+    optional bool include_token_optimized_alert_summary = 25;
+    
+    optional TransitApi transit_api = 19;
+    enum TransitApi {
+        TRANSIT_API_UNSPECIFIED = 0;
+        TRANSIT_PATH_API = 1;
+        TRANSIT_CONNECTION_API = 2;
+        TRANSIT_PATH_AND_CONNECTION_API = 3;
+    }
+    
+    optional bool want_cancelled_trips = 20 [default = false];
+    
+    optional PatagoniaOptions patagonia_options = 22;
+    message PatagoniaOptions {
+        optional int32 num_extra_trips = 1;
+        optional bool include_similar_trips = 2;
+    }
+    
+    optional bool force_long_distance_walking = 24;
+    
+    reserved 3, 13, 14;
+    
+    message NonTransitLegOptions {
+        repeated NonTransitMode.Mode avoid_modes = 1;
+        repeated NonTransitMode.Mode disallow_modes = 2;
+        optional bytes leg_alternate_token = 3;
+    }
+}

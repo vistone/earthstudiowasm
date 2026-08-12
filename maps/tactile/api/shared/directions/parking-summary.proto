@@ -1,0 +1,55 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "geo/serving/proto/directions/duration.proto";
+import "maps/tactile/api/shared/place/maps-place-identifier.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "ParkingSummaryProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message ParkingSummary {
+    optional bool onsite_parking_present = 1;
+    
+    optional ParkingDifficulty overall_parking_difficulty = 2;
+    message ParkingDifficulty {
+        optional Level level = 1;
+        enum Level {
+            UNKNOWN_LEVEL = 0;
+            EASY = 1;
+            DIFFICULT = 2;
+        }
+        
+        optional Confidence confidence = 2;
+    }
+    
+    repeated ParkingOption parking_option = 3;
+    message ParkingOption {
+        optional Type type = 1;
+        enum Type {
+            UNKNOWN_TYPE = 0;
+            GARAGE = 1;
+            LOT = 2;
+            STREET = 3;
+            VALET = 4;
+        }
+        
+        optional bool payment_required = 2;
+        optional Confidence confidence = 3;
+    }
+    
+    optional ParkingRecommendation top_parking_recommendation = 4;
+    message ParkingRecommendation {
+        optional maps_tactile.shared.place.MapsPlaceIdentifier maps_place_identifier = 1;
+        optional geo_serving_proto.directions.Duration walking_duration = 2;
+    }
+    
+    enum Confidence {
+        UNKNOWN_CONFIDENCE = 0;
+        LOW = 1;
+        HIGH = 2;
+    }
+}

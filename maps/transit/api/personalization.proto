@@ -1,0 +1,60 @@
+syntax = "proto2";
+
+package maps_transit.api;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/name.proto";
+import "geostore/base/proto/point.proto";
+import "geostore/base/proto/transitline.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "PersonalizationProto";
+option java_package = "com.google.maps.transit.api";
+
+message PersonalizedRoutePattern {
+    repeated Station station = 1;
+    message Station {
+        optional geostore.PointProto location = 1;
+        optional geostore.PointProto root_location = 3;
+        optional geostore.FeatureIdProto root_station_id = 4;
+        repeated geostore.NameProto station_name = 2;
+    }
+    
+    repeated TransitLeg leg = 2;
+    message TransitLeg {
+        repeated TransitStep step = 2;
+        message TransitStep {
+            optional geostore.TransitLineProto.VehicleTypeCategory vehicle_type = 1;
+        }
+        
+        optional int32 expected_duration_seconds = 3;
+        repeated fixed64 line_fprints = 5;
+        
+        reserved 1, 4;
+    }
+}
+
+message PersonalizedRoutePatternToken {
+    optional bytes preferred_transit_pattern = 1;
+    optional bytes preferred_route_start_specifier = 6;
+    optional string saved_trip_id = 2;
+}
+
+message PersonalizedOptions {
+    repeated PersonalizedRoutePattern route = 1;
+    repeated PersonalizedRoutePatternToken route_token = 3;
+    
+    optional MatchingMode matching_mode = 2 [default = SOFT_MATCHING];
+    enum MatchingMode {
+        SOFT_MATCHING = 0;
+        STRICT_MATCHING = 1;
+    }
+    
+    optional TripMatching trip_matching = 5;
+    message TripMatching {
+        repeated PersonalizedRoutePatternToken matching_token = 1;
+    }
+    
+    reserved 4;
+}

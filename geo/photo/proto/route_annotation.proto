@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/named_object.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "RouteAnnotationOuterClass";
+option java_package = "com.google.geo.photo.proto1api";
+
+message RouteAnnotation {
+    repeated NamedObject route = 1;
+    repeated float compass_heading_deg = 2;
+}

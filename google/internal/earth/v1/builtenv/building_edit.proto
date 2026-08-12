@@ -1,0 +1,43 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message AddFloorsEdit {
+    optional string floor_id = 1;
+    optional int32 num_floors = 2;
+}
+
+message RemoveFloorEdit {
+    optional string floor_id = 1;
+}
+
+message ConvertBuildingToParkEdit {
+    optional string building_id = 1;
+}
+
+message ConvertBuildingToParkingLotEdit {
+    optional string building_id = 1;
+}
+
+message RegenerateBuildingEdit {
+    optional string building_id = 1;
+    optional ConvertToBuildingEdit new_building_inputs = 2;
+}
+
+message ConvertToBuildingEdit {
+    optional string building_config_name = 3;
+    
+    repeated UseTypeTarget targets = 5;
+    message UseTypeTarget {
+        optional string use_type_id = 1;
+        optional bool is_wrapped = 2;
+        optional int32 floor_count = 3;
+    }
+    
+    reserved 1, 2, 4;
+}

@@ -1,0 +1,20 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "maps/paint/proto/maps_impression_data.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+option java_package = "com.google.maps.paint";
+
+message VisualElementMetadata {
+    optional string ei = 1 [deprecated = true];
+    optional string primary_label_group_ved = 2;
+    optional string secondary_label_group_ved = 3 [deprecated = true];
+    optional int32 primary_label_group_ve_type = 4;
+    optional int32 secondary_label_group_ve_type = 5;
+    optional int32 tertiary_label_group_ve_type = 6;
+    optional MapsImpressionData maps_impression_data = 7;
+}

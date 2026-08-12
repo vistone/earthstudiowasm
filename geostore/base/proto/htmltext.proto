@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/languagetaggedtext.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message HtmlTextProto {
+    optional TypeCategory type = 1 [default = HTML_DESCRIPTION];
+    enum TypeCategory {
+        HTML_DESCRIPTION = 17;
+    }
+    
+    repeated LanguageTaggedTextProto text = 2;
+}

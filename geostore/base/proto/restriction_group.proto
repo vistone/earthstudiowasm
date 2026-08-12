@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/restriction.proto";
+import "geostore/base/proto/travel_pattern.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message RestrictionGroupProto {
+    repeated FeatureIdProto segment = 1;
+    
+    repeated TravelPatternRestrictionProto travel_pattern_restrictions = 2;
+    message TravelPatternRestrictionProto {
+        optional TravelPatternProto travel_pattern = 14;
+        optional RestrictionProto.RestrictionType restriction_type = 2;
+    }
+    
+    repeated FeatureIdProto related_signposts = 3;
+    optional bool is_variable = 4;
+    optional FieldMetadataProto metadata = 500;
+}

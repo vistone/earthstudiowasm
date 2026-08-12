@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/businesshours.proto";
+import "geostore/base/proto/exceptionalhours.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message OpeningHoursProto {
+    optional BusinessHoursProto regular_hours = 1;
+    repeated ExceptionalHoursProto exception = 2;
+    
+    extend .proto2.bridge.MessageSet {
+        optional OpeningHoursProto message_set_extension = 98510069;
+    }
+}

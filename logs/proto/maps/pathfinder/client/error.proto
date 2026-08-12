@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ErrorProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedError {
+    optional LoggedErrorCategory category = 1 [default = ERROR];
+    enum LoggedErrorCategory {
+        ERROR = 1;
+        ERROR_WAYPOINT = 17;
+        ERROR_ROUTE = 18;
+        ERROR_INTERNAL = 19;
+        ERROR_INTERNAL_RPC_FAILURE = 305;
+        ERROR_DEADLINE_EXCEEDED = 306;
+        WARNING = 2;
+        WARNING_ROUTE = 34;
+        WARNING_ROUTE_INCOMPLETE_COVERAGE = 545;
+        WARNING_ROUTE_INCOMPLETE_TRANSIT_COVERAGE = 8721;
+        WARNING_ROUTE_AUTO_EXTENDED_COVERAGE = 546;
+        WARNING_ROUTE_AUTO_EXTENDED_TRANSIT_COVERAGE = 8737;
+        WARNING_ROUTE_NOT_FOUND = 547;
+        WARNING_ROUTE_NOT_FOUND_NO_COVERAGE = 8753;
+        WARNING_ROUTE_NOT_FOUND_WAYPOINTS_NOT_CONNECTED = 8754;
+        WARNING_ROUTE_OPTION_UNFULFILLED = 548;
+        WARNING_ROUTE_OPTION_UNFULFILLED_UNMATCHED_ENTITY = 8769;
+    }
+    
+    optional int32 waypoint_index = 2;
+    repeated int32 unmatched_requested_lines = 4;
+    repeated int32 unmatched_requested_agencies = 5 [deprecated = true];
+    repeated int32 unmatched_requested_agencies_by_gtfs_id = 6 [deprecated = true];
+    
+    reserved 3;
+}

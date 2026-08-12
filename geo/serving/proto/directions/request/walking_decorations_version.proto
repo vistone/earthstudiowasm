@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package geo_serving_proto.directions.request;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPDR";
+option java_multiple_files = true;
+option java_outer_classname = "WalkingDecorationsVersionProto";
+option java_package = "com.google.geo.serving.proto.directions.request";
+
+enum WalkingDecorationsVersion {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_WALKING_DECORATIONS_VERSION = 0;
+    WALKING_DECORATIONS_VERSION_1 = 1;
+    WALKING_DECORATIONS_VERSION_2 = 2;
+}

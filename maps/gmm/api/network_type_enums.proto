@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package gmm;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMM";
+option java_multiple_files = true;
+option java_outer_classname = "NetworkTypeEnumsProto";
+option java_package = "com.google.maps.gmm";
+
+enum NetworkType {
+    option allow_alias = true;
+    OTHER_NETWORK = 0;
+    UNKNOWN_NETWORK_TYPE = 0;
+    DISCONNECTED = 1;
+    WIFI = 2;
+    CELL = 3;
+    BLUETOOTH = 4;
+    ETHERNET = 5;
+    SATELLITE = 6;
+}
+
+enum CellNetworkType {
+    option allow_alias = true;
+    OTHER_CELL_NETWORK = 0;
+    UNKNOWN_CELL_NETWORK_TYPE = 0;
+    EDGE = 1;
+    GPRS = 2;
+    UMTS = 3;
+    CDMA = 4;
+    CDMA2000_1XRTT = 5;
+    CDMA2000_1XEVDO_0 = 6;
+    CDMA2000_1XEVDO_A = 7;
+    CDMA2000_1XEVDO_B = 8;
+    IDEN = 9;
+    HSPA = 10;
+    HSDPA = 11;
+    HSUPA = 12;
+    HSPAP = 13;
+    EHRPD = 14;
+    LTE = 15;
+    NRNSA = 16;
+    NR = 17;
+}

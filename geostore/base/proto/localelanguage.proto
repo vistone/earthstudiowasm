@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message LocaleLanguageProto {
+    required string language = 1;
+    optional float preference = 2;
+    optional bool official = 3;
+    optional float speaking_percent = 4;
+    optional float writing_percent = 5;
+}

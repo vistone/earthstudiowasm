@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package geo_serving_proto.openhours;
+
+import "google/type/timeofday.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "webserver/shared/gws/eval/gws_eval_proto_options.proto";
+
+option objc_class_prefix = "GSPOPH";
+option java_multiple_files = true;
+option java_outer_classname = "HoursIntervalProto";
+option java_package = "com.google.geo.serving.proto.openhours";
+
+message HoursInterval {
+    optional string formatted_interval = 1;
+    
+    optional StructuredInterval structured_interval = 2;
+    message StructuredInterval {
+        optional .google.type.TimeOfDay start_time = 1;
+        optional .google.type.TimeOfDay end_time = 2;
+    }
+}

@@ -1,0 +1,21 @@
+syntax = "editions";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option java_multiple_files = true;
+option java_outer_classname = "VolumetricImageFormatProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+enum VolumetricImageFormat {
+    UNKNOWN_VOLUMETRIC_IMAGE_FORMAT = 0;
+    GSPLATS = 1;
+}

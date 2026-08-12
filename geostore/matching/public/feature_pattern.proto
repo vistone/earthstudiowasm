@@ -1,0 +1,430 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/featuremetadata.proto";
+import "geostore/base/proto/fieldtype.proto";
+import "geostore/base/proto/gconceptinstance.proto";
+import "geostore/base/proto/property_value_status_enum.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "metaweb/data/topictable/topic.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GS";
+
+message FeaturePatternProto {
+    optional string description = 1;
+    
+    optional ExpectedUsage expected_usage = 2 [default = USAGE_UNKNOWN];
+    enum ExpectedUsage {
+        USAGE_UNKNOWN = 0;
+        USAGE_NONE = 1;
+        USAGE_EXACTLY_ONCE = 2;
+        USAGE_AT_LEAST_ONCE = 3;
+    }
+    
+    optional string pattern_name = 3;
+    repeated string pattern_name_reference = 4;
+    optional FeaturePatternProto boolean_not = 5;
+    repeated FeaturePatternProto boolean_and = 6;
+    repeated FeaturePatternProto boolean_or = 7;
+    repeated string feature_type = 8;
+    repeated string establishment_type = 15;
+    optional bool exact_feature_type = 29 [default = false];
+    optional bool exact_establishment_type = 31 [default = false];
+    optional NamePatternProto name = 9;
+    repeated DataSourcePatternProto data_source = 10;
+    optional AddressPatternProto address = 11;
+    repeated string country_code = 12;
+    repeated BoundPatternProto bound = 13;
+    optional RankPatternProto rank = 14;
+    optional SegmentPatternProto segment = 16;
+    optional GeometryPatternProto geometry = 17;
+    optional FeatureIdPatternProto feature_id = 18;
+    repeated RelatedTimezonePatternProto related_timezone = 49;
+    repeated RelationPatternProto relation = 19;
+    optional BorderPatternProto border = 20;
+    repeated SourceInfoPatternProto source_info = 21;
+    repeated MatchEnvironmentPatternProto match_environment = 22;
+    repeated MatchTemporaryDataProto match_temporary_data = 23;
+    repeated TelephonePatternProto telephone = 26;
+    repeated ReflectionPatternProto reflection = 27;
+    repeated AccessPointPatternProto access_point = 34;
+    optional TransitLinePatternProto transit_line = 35;
+    optional BestNamePatternProto best_name = 36;
+    repeated ExistencePatternProto existence = 37;
+    repeated GConceptPatternProto gconcept = 38;
+    repeated LintPatternProto lint = 39;
+    optional BuildingPatternProto building = 41;
+    optional RoutePatternProto route = 42;
+    optional LevelPatternProto level = 43;
+    optional ClaimPatternProto claim = 44;
+    optional FeatureMetadataPatternProto feature_metadata = 45;
+    repeated KGPropertyPatternProto kg_property = 47;
+    repeated AttachmentPatternProto attachment = 46;
+    optional BestLocalePatternProto best_locale = 48;
+    optional PropertyValueStatusPatternProto property_value_status = 50;
+    optional RegulatedAreaPatternProto regulated_area = 51;
+    
+    reserved 25, 28, 33, 40;
+}
+
+message AddressComponentPatternProto {
+    repeated string component_type = 1;
+    repeated string feature_type = 2;
+    optional bool exact_feature_type = 7 [default = false];
+    optional NamePatternProto name = 3;
+    optional bool has_feature_id = 5;
+    optional FeatureIdProto component_feature_id = 6;
+}
+
+message AddressLinesPatternProto {
+    repeated string line = 1;
+    repeated string language = 2;
+}
+
+message AddressPatternProto {
+    repeated AddressComponentPatternProto component = 1;
+    repeated AddressLinesPatternProto address_lines = 2;
+}
+
+message BorderPatternProto {
+    repeated string type = 1;
+    repeated string status = 2;
+}
+
+message BoundPatternProto {
+    optional bool contains = 1 [default = false];
+    optional bool geometric = 6 [default = false];
+    optional double minlat = 2;
+    optional double minlng = 3;
+    optional double maxlat = 4;
+    optional double maxlng = 5;
+    optional int32 min_radius_m = 7;
+    optional int32 max_radius_m = 8;
+    optional bool is_point = 9;
+    optional bool is_empty = 10;
+}
+
+message DataSourcePatternProto {
+    required string provider = 1;
+    repeated string source_dataset = 2;
+}
+
+message FeatureIdPatternProto {
+    optional bool match_references = 1;
+    optional bool match_strong_references = 4;
+    optional fixed64 cell_id = 2;
+    optional fixed64 fprint = 3;
+}
+
+message GeometryPointProto {
+    required double lat = 1;
+    required double lng = 2;
+}
+
+message GeometryPolylineProto {
+    repeated GeometryPointProto vertex = 1;
+}
+
+message GeometryPolygonProto {
+    repeated GeometryPolylineProto loop = 1;
+}
+
+message GeometryCapProto {
+    required double lat = 1;
+    required double lng = 2;
+    required double radius_meters = 3;
+}
+
+message GeometryPatternProto {
+    optional bool present = 17;
+    optional bool center = 1;
+    optional bool point = 2;
+    optional bool polyline = 3;
+    optional bool polygon = 4;
+    optional bool three_dim_model = 25;
+    optional bool multiple_points = 10;
+    optional bool multiple_polylines = 11;
+    optional bool multiple_polygons = 12;
+    optional bool extruded_polygon = 21;
+    optional GeometryCapProto center_contained_by = 5;
+    optional GeometryCapProto point_contained_by = 6;
+    repeated GeometryPointProto polygon_contains = 7;
+    repeated GeometryPolygonProto geometry_contained_by_polygon = 8;
+    repeated GeometryPolygonProto geometry_intersects_polygon = 9;
+    repeated GeometryCapProto geometry_contained_by_cap = 13;
+    repeated GeometryCapProto geometry_intersects_cap = 14;
+    optional int32 geometry_min_radius_m = 15;
+    optional int32 geometry_max_radius_m = 16;
+    optional double min_total_area_square_m = 18;
+    optional double max_total_area_square_m = 19;
+    optional GeometryCapProto physical_centroid_contained_by_cap = 20;
+    optional double geometry_precision_meters_min = 22;
+    optional double geometry_precision_meters_max = 23;
+    optional bool synthetic_geometry = 24;
+    optional int32 min_mesh_triangles_count = 26;
+    optional int32 max_mesh_triangles_count = 27;
+}
+
+message NamePatternProto {
+    optional bool regular_expression = 1 [default = false];
+    
+    optional TextType text_type = 7 [default = NAME_TEXT];
+    enum TextType {
+        NAME_TEXT = 0;
+        NAME_RAW_TEXT = 1;
+        NAME_SHORT_TEXT = 2;
+    }
+    
+    repeated string text = 2;
+    optional bool invert_text_match = 13;
+    repeated string language = 3;
+    optional bool invert_language_match = 14;
+    repeated string flag = 4;
+    optional bool ignore_case = 5 [default = false];
+    repeated string not_flag = 6;
+    optional bool exists = 8 [default = false];
+    optional TermPatternProto term_pattern = 9;
+    optional bool use_segmenter = 10 [default = false];
+    optional string segment_separator = 11 [default = "\t"];
+    optional bool ignore_diacritics = 12 [default = false];
+}
+
+message BestNamePatternProto {
+    required NamePatternProto name_pattern = 1;
+    optional string language_code = 2;
+    optional bool require_exact_language = 3 [default = true];
+    optional bool use_tile_renderer_preferences = 4;
+}
+
+message RankPatternProto {
+    optional string type = 1;
+    optional float min_value = 2;
+    optional float max_value = 3;
+    optional float min_raw_scalar = 4;
+    optional float max_raw_scalar = 5;
+}
+
+message RawDataPatternProto {
+    required string key = 1;
+    optional string value_string = 2;
+    optional bool regular_expression = 3 [default = false];
+}
+
+message RelatedTimezonePatternProto {
+    optional string id = 1;
+}
+
+message RelationPatternProto {
+    required string relation = 1;
+    optional FeaturePatternProto feature_pattern = 2;
+    optional float min_overlap_fraction = 3 [default = 0];
+    optional float max_overlap_fraction = 4 [default = 1];
+    optional string other_feature_type = 5;
+    optional bool exact_feature_type = 6 [default = false];
+    optional FeatureIdPatternProto other_feature_id = 7;
+}
+
+message RestrictionPatternProto {
+    repeated string type = 1;
+    repeated string travel_mode = 2;
+    optional bool has_any_schedule = 3;
+    optional bool has_no_schedule = 4;
+}
+
+message LandmarkReferencePatternProto {
+    repeated string type = 1;
+}
+
+message SegmentPatternProto {
+    optional string min_priority = 1;
+    optional string max_priority = 2;
+    repeated string usage = 3;
+    optional float min_length_meters = 4 [default = -1];
+    optional float max_length_meters = 5 [default = -1];
+    optional float min_avg_speed_kph = 6 [default = -1];
+    optional float max_avg_speed_kph = 7 [default = -1];
+    optional float min_max_permitted_speed_kph = 8 [default = -1];
+    optional float max_max_permitted_speed_kph = 9 [default = -1];
+    repeated string surface = 10;
+    repeated string condition = 11;
+    repeated string endpoint = 12;
+    repeated RestrictionPatternProto restriction = 13;
+    optional BoundPatternProto intersection_bound = 14;
+    repeated string elevation = 15;
+    repeated string construction_status = 16;
+    repeated string bicycle_facility = 17;
+    repeated string bicycle_safety = 18;
+    repeated string pedestrian_facility = 19;
+    optional bool has_toll_road = 20;
+    repeated LandmarkReferencePatternProto landmark_reference = 21;
+    repeated string pedestrian_grade = 22;
+}
+
+message SourceInfoPatternProto {
+    optional string provider = 1;
+    optional string not_provider = 11;
+    repeated string release = 2;
+    repeated string source_dataset = 3;
+    optional bool source_dataset_regular_expression = 12 [default = false];
+    optional string layer_regex = 4;
+    repeated RawDataPatternProto raw_data = 5;
+    repeated int64 ogr_fid = 6;
+    repeated string cookie = 7;
+    
+    reserved 8;
+}
+
+message TelephonePatternProto {
+    optional bool exists = 1 [default = false];
+    repeated int32 country_code = 2;
+}
+
+message IntegerPatternProto {
+    optional NumberComparisonOperator comparison_operator = 1;
+    optional int64 value = 2;
+}
+
+message ReflectionPatternProto {
+    required string field_name = 1;
+    optional bool exists = 2;
+    optional int32 size_equals = 4;
+    optional int32 size_greater_than = 5;
+    optional int32 size_less_than = 6;
+    repeated ReflectionPatternProto reflection = 7;
+    optional bool boolean_pattern = 8;
+    optional IntegerPatternProto integer_pattern = 9;
+}
+
+message ExistencePatternProto {
+    optional bool closed = 1;
+    optional int32 close_reason = 3;
+    optional bool removed = 2;
+    optional int32 removed_reason = 4;
+}
+
+message MatchEnvironmentPatternProto {
+    optional string key = 1;
+    optional string value = 2;
+    optional FeaturePatternProto context_feature = 3;
+}
+
+message MatchTemporaryDataProto {
+    required string key = 1;
+    optional string value = 2;
+}
+
+message TermPatternProto {
+    required string regular_expression = 1;
+    repeated LookupListProto lookup_list = 2;
+}
+
+message LookupListProto {
+    optional string language = 1;
+    optional bool lowercase_before_lookup = 2 [default = false];
+    optional bool stem_before_lookup = 3 [default = false];
+    repeated string text = 4;
+}
+
+message AccessPointPatternProto {
+    optional FeaturePatternProto feature_pattern = 1;
+    repeated GeometryCapProto geo_caps = 2;
+    optional bool check_geo_caps = 3 [default = false];
+}
+
+message TransitLinePatternProto {
+    optional string vehicle_type = 1;
+}
+
+message GConceptPatternProto {
+    optional string gconcept_id = 1;
+    optional GConceptInstanceProto.Prominence prominence = 3;
+    optional bool match_empty = 2 [default = false];
+    optional bool exact_match = 4 [default = false];
+}
+
+message LintPatternProto {
+    optional string lint_severity = 1;
+    optional string lint_id = 2;
+}
+
+message BuildingPatternProto {
+    optional int32 min_number_of_levels = 1;
+    optional int32 max_number_of_levels = 2;
+}
+
+message RoutePatternProto {
+    repeated string child_type = 1;
+    optional bool exact_child_type = 2 [default = false];
+}
+
+message LevelPatternProto {
+    optional int32 min_number_of_buildings = 1;
+    optional int32 max_number_of_buildings = 2;
+}
+
+message ClaimPatternProto {
+    optional bool has_bizbuilder_reference = 1;
+}
+
+message FeatureMetadataPatternProto {
+    optional FeatureMetadataProto.BulkUpdatable bulk_updatable = 1;
+}
+
+message AttachmentPatternProto {
+    optional int64 type_id = 1;
+    optional int64 attachment_id = 2;
+    optional string client_name_space = 3;
+    optional .proto2.bridge.MessageSet messages = 4;
+}
+
+message KGValuePatternProto {
+    optional freebase.Value.Type type = 1;
+    optional bool bool_value = 2;
+}
+
+message KGPropertyPatternProto {
+    repeated string id = 1;
+    repeated KGValuePatternProto value = 2;
+}
+
+message BestLocalePatternProto {
+    optional string localization_policy_id = 1;
+}
+
+message FeaturePropertyIdPatternProto {
+    optional fieldtype.Type field_type = 1;
+    
+    oneof sub_field {
+        string attribute_id = 2;
+        uint64 attachment_type_id = 3;
+        string kg_property_id = 4;
+        string name_language = 5;
+    }
+}
+
+message FeaturePropertyIdPatternListProto {
+    repeated FeaturePropertyIdPatternProto patterns = 1;
+}
+
+message PropertyValueStatusPatternProto {
+    optional FeaturePropertyIdPatternProto property_id_pattern = 1;
+    optional bool exists = 2;
+    optional PropertyValueStatus property_value_status = 3;
+}
+
+message RegulatedAreaPatternProto {
+    repeated RestrictionPatternProto restriction = 1;
+}
+
+enum NumberComparisonOperator {
+    UNSPECIFIED = 0;
+    EQUAL = 1;
+    LESS_THAN = 2;
+    LESS_THAN_OR_EQUAL = 3;
+    GREATER_THAN = 4;
+    GREATER_THAN_OR_EQUAL = 5;
+}

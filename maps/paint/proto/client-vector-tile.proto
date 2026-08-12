@@ -1,0 +1,583 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_lazy_extension.proto";
+import "logs/proto/maps/tactile/annotation-data.proto";
+import "maps/paint/proto/client-vector-annotation-targeting.proto";
+import "maps/paint/proto/client-vector-data-bound-value.proto";
+import "maps/paint/proto/client-vector-label.proto";
+import "maps/paint/proto/client-vector-style-info.proto";
+import "maps/paint/proto/client-vector-style.proto";
+import "maps/paint/proto/client-vector-tile-debug.proto";
+import "maps/paint/proto/client-vector-tile-serialization.proto";
+import "maps/paint/proto/maps-metadata-container.proto";
+import "maps/shared/mapcore/api/proto/pose.proto";
+import "maps/util/geometry-transform.proto";
+import "maps/util/tile_coordinate.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_outer_classname = "ClientVectorTileProto";
+option java_package = "com.google.maps.paint.client";
+
+message LineRenderOp {
+    optional bytes vertex_data = 1 [ctype = CORD];
+    optional int32 vertex_count = 7;
+    repeated int32 vertex_break = 2 [packed = true];
+    repeated int64 segment_multi_zoom_style_id = 12 [packed = true];
+    optional bool use_segment_multi_zoom_style_id_as_index = 18;
+    
+    optional CapShape start_cap = 6 [default = CAP_ROUNDED_OUT];
+    enum CapShape {
+        CAP_NONE = 0;
+        CAP_ROUNDED_OUT = 1;
+        CAP_ROUNDED_IN = 2;
+        CAP_ROUNDED_OUT_SKIP_STROKE0 = 3;
+        CAP_CUSTOM = 4;
+    }
+    
+    optional CapShape end_cap = 8 [default = CAP_ROUNDED_OUT];
+    optional JointShape joint_shape = 15 [default = BEVEL];
+    repeated Point2List segment = 1000;
+    optional int32 attributes = 10;
+    optional int32 min_additional_zoom_eighths = 13;
+    optional int32 max_additional_zoom_eighths = 14;
+    optional int32 multi_zoom_style_index = 3 [default = -1];
+    optional int64 multi_zoom_style_id = 11 [default = -1];
+    optional int32 z_grade = 4;
+    optional fixed32 z_within_grade = 5;
+    optional uint32 legacy_base_tile_op_id = 9 [deprecated = true];
+    repeated DataBoundValue data_bound_value = 16;
+    optional MapsMetadataContainer maps_metadata_container = 17;
+    optional ClientVectorStyleInfo client_vector_style_info = 19;
+    optional int32 z_plane_for_sorting = 1001;
+    
+    extensions 25000000 to max;
+    
+    enum Attributes {
+        ATTRIBUTES_GMM_FAST_LINE_SHADER = 1;
+        ATTRIBUTES_GMM_ABOVE_ROADS = 2;
+        ATTRIBUTES_STITCH_SEGMENTS = 4;
+    }
+}
+
+message PolyPolyline {
+    optional bytes vertex_data = 1 [ctype = CORD];
+    repeated int32 vertex_break = 2 [packed = true];
+}
+
+message PolyPolygon {
+    optional bytes loop_data = 1 [ctype = CORD];
+    repeated int32 loop_break = 4 [packed = true];
+    repeated float texture_coordinates = 12 [packed = true];
+    optional int32 vertex_count = 5;
+    repeated int32 triangle_index = 2 [packed = true];
+    optional int32 triangle_fan_start_index = 6 [default = -1];
+    repeated int32 unstroked_edge = 3 [packed = true];
+    optional int32 client_side_tessellate_start_index = 7 [default = -1];
+    optional bytes triangle_fan_vertices = 8 [ctype = CORD];
+    repeated int32 triangle_fan_breaks = 9 [packed = true];
+    optional bytes triangle_strip_vertices = 10 [ctype = CORD];
+    repeated int32 triangle_strip_breaks = 11 [packed = true];
+    repeated Point2List loop = 1000;
+    repeated Point2List fan = 1001;
+    repeated Point2List strip = 1002;
+}
+
+message AreaRenderOp {
+    optional PolyPolygon polygon = 1;
+    optional bool is_full_coverage = 7;
+    optional bool is_stroked = 2;
+    optional JointShape joint_shape = 13 [default = BEVEL];
+    optional fixed64 base_tile_op_id = 10 [deprecated = true];
+    optional int32 min_additional_zoom_eighths = 11;
+    optional int32 max_additional_zoom_eighths = 12;
+    optional int32 multi_zoom_style_index = 3 [default = -1];
+    optional int64 multi_zoom_style_id = 8 [default = -1];
+    optional int32 z_grade = 4;
+    optional fixed32 z_within_grade = 5;
+    optional uint32 legacy_base_tile_op_id = 6 [deprecated = true];
+    repeated DataBoundValue data_bound_value = 14;
+    optional MapsMetadataContainer maps_metadata_container = 15;
+    optional ClientVectorStyleInfo client_vector_style_info = 16;
+    optional int32 z_plane_for_sorting = 1000;
+    
+    extensions 25000000 to max;
+}
+
+message ExtrudedArea {
+    optional PolyPolygon component = 1;
+    optional int32 min_z = 2;
+    optional int32 max_z = 3;
+}
+
+message StripifiedMesh {
+    optional bytes vertex_data = 1 [ctype = CORD];
+    optional int32 vertex_count = 6;
+    optional bytes vertex_normal_data = 2 [ctype = CORD];
+    repeated int32 triangle_strip_data = 3 [packed = true];
+    repeated int32 triangle_strip_break = 5 [packed = true];
+    repeated int32 edge_index = 4 [packed = true];
+    optional Point3List vertex = 1000;
+    repeated QuantizedUnitNormal vertex_normal = 1001;
+    repeated Point3List triangle_strip = 1002;
+    
+    extensions 25000000 to max;
+}
+
+message VolumeRenderOp {
+    repeated ExtrudedArea extruded_area = 1;
+    optional StripifiedMesh mesh = 2;
+    optional fixed64 base_tile_op_id = 6 [deprecated = true];
+    optional int32 min_additional_zoom_eighths = 9;
+    optional int32 max_additional_zoom_eighths = 10;
+    optional int32 multi_zoom_style_index = 3 [default = -1];
+    optional int64 multi_zoom_style_id = 8 [default = -1];
+    optional int32 z_grade = 4;
+    optional fixed32 z_within_grade = 5;
+    optional uint32 legacy_base_tile_op_id = 7 [deprecated = true];
+    optional MapsMetadataContainer maps_metadata_container = 111;
+    optional ClientVectorStyleInfo client_vector_style_info = 12;
+    optional int32 z_plane_for_sorting = 1000;
+    
+    extensions 25000000 to max;
+}
+
+message GltfRenderOp {
+    optional int64 multi_zoom_style_id = 2 [default = -1];
+    optional int32 min_additional_zoom_eighths = 3;
+    optional int32 max_additional_zoom_eighths = 4;
+    repeated DataBoundValue data_bound_value = 6;
+    repeated AnnotationAttribute annotation_attribute = 7;
+    optional fixed32 z_within_grade = 8;
+    optional int32 gltf_node_index = 10;
+    optional MapsMetadataContainer maps_metadata_container = 11;
+    
+    extensions 25000000 to max;
+    
+    reserved 1, 5, 9;
+}
+
+message PolyPolygon3D {
+    optional bytes contour_data = 1 [ctype = CORD];
+    repeated int32 contour_break = 2 [packed = true];
+}
+
+message Mesh3DRenderOp {
+    repeated bytes mesh_data = 1 [ctype = CORD];
+    repeated PolyPolygon3D poly_polygon = 15;
+    repeated int32 multi_zoom_style_index = 2 [packed = true];
+    repeated int64 multi_zoom_style_id = 3 [packed = true];
+    optional maps_util.Transform3D local_t_model = 4;
+    optional bool is_terrain_model = 5;
+    repeated float vertical_extents_begin_xyz = 12 [packed = true];
+    repeated float vertical_extents_end_xyz = 13 [packed = true];
+    repeated DataBoundValue data_bound_value = 6;
+    repeated AnnotationAttribute annotation_attribute = 7;
+    optional fixed32 z_within_grade = 8;
+    optional int32 min_additional_zoom_eighths = 9;
+    optional int32 max_additional_zoom_eighths = 10;
+    repeated MapsMetadataContainer maps_metadata_container = 11;
+    repeated ClientVectorStyleInfo client_vector_style_info = 14;
+    
+    extensions 25000000 to max;
+}
+
+message InstanceModelRenderOp {
+    optional int64 multi_zoom_style_id = 1 [default = -1];
+    optional int32 multi_zoom_style_index = 7 [default = -1];
+    optional int32 min_additional_zoom_eighths = 2;
+    optional int32 max_additional_zoom_eighths = 3;
+    repeated DataBoundValue data_bound_value = 4;
+    repeated AnnotationAttribute annotation_attribute = 5;
+    optional maps_util.Transform3D transform = 6;
+    optional MapsMetadataContainer maps_metadata_container = 8;
+    optional ClientVectorStyleInfo client_vector_style_info = 9;
+    
+    extensions 25000000 to max;
+}
+
+message Line3DRenderOp {
+    optional bytes vertex_data = 1 [ctype = CORD];
+    optional maps_util.Transform3D local_t_model = 16;
+    repeated int32 vertex_break = 2 [packed = true];
+    repeated int64 segment_multi_zoom_style_id = 13 [packed = true];
+    optional int32 attributes = 14;
+    optional LineRenderOp.CapShape start_cap = 3 [default = CAP_ROUNDED_OUT];
+    optional LineRenderOp.CapShape end_cap = 4 [default = CAP_ROUNDED_OUT];
+    optional JointShape joint_shape = 5 [default = BEVEL];
+    optional int32 min_additional_zoom_eighths = 6;
+    optional int32 max_additional_zoom_eighths = 7;
+    optional int32 multi_zoom_style_index = 8 [default = -1];
+    optional int64 multi_zoom_style_id = 9 [default = -1];
+    optional int32 z_grade = 10;
+    optional fixed32 z_within_grade = 11;
+    repeated DataBoundValue data_bound_value = 12;
+    optional MapsMetadataContainer maps_metadata_container = 15;
+    optional ClientVectorStyleInfo client_vector_style_info = 17;
+    
+    extensions 25000000 to max;
+    
+    enum Attributes {
+        ATTRIBUTES_NONE = 0;
+        ATTRIBUTES_STITCH_SEGMENTS = 1;
+    }
+}
+
+message RasterRenderOp {
+    optional bytes image_data = 1 [ctype = CORD];
+    optional int32 multi_zoom_style_index = 3 [default = -1];
+    optional int64 multi_zoom_style_id = 6 [default = -1];
+    optional int32 z_grade = 4;
+    optional fixed32 z_within_grade = 5;
+    optional uint32 legacy_base_tile_op_id = 2 [deprecated = true];
+    optional MapsMetadataContainer maps_metadata_container = 7;
+    optional int32 z_plane_for_sorting = 1000;
+    
+    extensions 25000000 to max;
+}
+
+message WaterShaderData {
+    option deprecated = true;
+    
+    optional ShaderType type = 1;
+    enum ShaderType {
+        TYPE_UNKNOWN = 0;
+        TYPE_WATER_BLUR_POLYGON_MULTI_RASTER = 1;
+        TYPE_WATER_BLUR_MULTI_RASTER = 2;
+        TYPE_WATER_BLUR_MULTI_CHANNEL = 3;
+        TYPE_WATER_BLUR_FULL_COVERAGE = 4;
+        TYPE_WATER_BLUR_EXPANDED_COVERAGE_ONLY_POLYGON = 5;
+        TYPE_WATER_BLUR_EXPANDED_COVERAGE_ONLY_RASTER = 6;
+    }
+    
+    repeated bytes raster = 2 [ctype = CORD];
+    optional PolyPolygon coverage = 3;
+    optional int32 blur_radius = 4 [default = 32];
+    optional int32 coverage_margin = 5 [default = 32];
+}
+
+message ShaderRenderOp {
+    optional WaterShaderData water_shader_data = 1;
+    optional int32 multi_zoom_style_index = 2 [default = -1];
+    optional int64 multi_zoom_style_id = 6 [default = -1];
+    optional int32 z_grade = 3;
+    optional fixed32 z_within_grade = 4;
+    optional uint32 legacy_base_tile_op_id = 5 [deprecated = true];
+    optional int32 z_plane_for_sorting = 1000;
+    
+    extensions 25000000 to max;
+}
+
+message PointRenderOp {
+    optional AbsolutePointPosition position = 1;
+    optional int32 min_additional_zoom_eighths = 2;
+    optional int32 max_additional_zoom_eighths = 3;
+    optional int32 multi_zoom_style_index = 4 [default = -1];
+    optional int64 multi_zoom_style_id = 5 [default = -1];
+    optional int32 z_grade = 6;
+    optional fixed32 z_within_grade = 7;
+    optional MapsMetadataContainer maps_metadata_container = 8;
+    optional ClientVectorStyleInfo client_vector_style_info = 9;
+    optional int32 z_plane_for_sorting = 1000;
+    
+    extensions 25000000 to max;
+}
+
+message LabelingAvoidancePolyline {
+    optional int32 width_dp = 1;
+    optional PolyPolyline polyline = 2;
+}
+
+message Vector2D {
+    optional float x = 1;
+    optional float y = 2;
+}
+
+message BoundingBox2D {
+    optional Vector2D top_left = 1;
+    optional Vector2D size = 2;
+}
+
+message ExclusionZone {
+    optional .mapcore.Position position = 1;
+    repeated BoundingBox2D bounds = 2;
+    optional string debug_name = 3;
+}
+
+message LabelingHint {
+    repeated LabelingAvoidancePolyline labeling_avoidance_polyline = 1;
+    repeated ExclusionZone exclusion_zone = 2;
+}
+
+message RenderOpAnnotation {
+    optional RenderOpAnnotationTarget target = 1;
+    optional LabelAnnotationContent content = 2;
+    optional RenderOpAnnotationExperimentInfo experiment_info = 3;
+    optional fixed64 fprint = 4;
+    optional int32 rank_within_use_case = 12;
+    optional logs_tactile.AnnotationData subtitle_logging_data = 5;
+    optional logs_tactile.AnnotationData style_modification_logging_data = 7;
+    optional logs_tactile.AnnotationData boost_logging_data = 11;
+    optional int32 min_additional_zoom_eighths = 8;
+    optional int32 max_additional_zoom_eighths = 9;
+    optional bool personalized_annotation = 10;
+    
+    extensions 25000000 to max;
+    
+    reserved 6;
+}
+
+message RenderOpAnnotationTarget {
+    optional fixed64 fprint = 1;
+    optional AnnotationPredicate predicate = 2;
+    optional string mid = 3;
+}
+
+message AnnotationContentExtensions {
+    extensions 436262924;
+}
+
+message LabelAnnotationSubtitle {
+    repeated LabelElement element = 1;
+    
+    reserved 2;
+}
+
+message AnnotationStyleModification {
+    repeated int32 transform_tag = 1 [packed = true];
+}
+
+message LabelAnnotationBoost {
+    optional int32 boost_amount = 1;
+    
+    enum BoostAmount {
+        BOOST_NONE = 0;
+        BOOST_SMALL = 1;
+        BOOST_MEDIUM = 2;
+        DEBOOST_SMALL = 3;
+        DEBOOST_MEDIUM = 4;
+    }
+}
+
+message LabelAnnotationContent {
+    optional int32 use_case = 1;
+    optional LabelAnnotationSubtitle subtitle = 2;
+    optional AnnotationStyleModification style_modification = 3;
+    optional LabelAnnotationBoost label_boost = 4;
+    repeated DataBoundValue data_bound_value = 5;
+    optional AnnotationContentExtensions extensions = 6;
+    optional bool presence_force_off = 7;
+}
+
+message RenderOpAnnotationExperimentInfo {
+    repeated int32 for_experiment_id = 1 [packed = true];
+    repeated int32 exclude_from_experiment_id = 2 [packed = true];
+    repeated int32 counterfactual_experiment_id = 3 [packed = true];
+    
+    repeated LoggingDirective logging_directive = 4;
+    message LoggingDirective {
+        optional int32 annotation_id = 1;
+        optional int32 logged_id = 2;
+    }
+}
+
+message CounterfactualLoggingDirective {
+    optional int32 experiment_id = 1;
+    optional int32 min_zoom = 2;
+    optional int32 max_zoom = 3;
+    repeated int32 map_style = 4;
+}
+
+message RenderOpDiff {
+    optional DiffType type = 1;
+    enum DiffType {
+        DIFF_UNKNOWN = 0;
+        DIFF_REMOVE = 1;
+        DIFF_RESTYLE = 2;
+    }
+    
+    repeated fixed64 base_tile_op_id = 2 [packed = true, deprecated = true];
+    optional int32 multi_zoom_style_index = 3 [default = -1];
+    optional int32 multi_zoom_style_id = 4 [default = -1];
+}
+
+message LabelSpriteInfo {
+    optional int32 x = 1;
+    optional int32 y = 2;
+    optional int32 width = 3;
+    optional int32 height = 4;
+    optional fixed64 glyph_id = 7;
+}
+
+message LabelSpriteMap {
+    optional bytes raster = 1 [ctype = CORD];
+    repeated LabelSpriteInfo sprite_info = 2;
+}
+
+message TileOptions {
+    optional VertexEncoding vertex_encoding = 1;
+    optional VertexResolution vertex_resolution = 2;
+    optional Line3DEncoding line_3d_encoding = 3 [default = LINE_3D_ENCODING_DRACO];
+}
+
+message GeometryStats {
+    optional int32 vertex_count = 1;
+    optional int32 segment_count = 2;
+    optional int32 polygon_count = 3;
+}
+
+message Provider {
+    optional string description = 1;
+    optional bytes coverage = 2 [ctype = CORD];
+    repeated int32 style_index = 3;
+    
+    optional DataType data_type = 4 [default = MAP_DATA];
+    enum DataType {
+        UNKNOWN = 0;
+        MAP_DATA = 1;
+        IMAGERY = 2;
+    }
+}
+
+message ProviderTable {
+    repeated Provider provider = 1;
+}
+
+message PointRenderOpGroup {
+    repeated PointRenderOp point_op = 1;
+}
+
+message LineRenderOpGroup {
+    repeated LineRenderOp line_op = 1;
+    optional GeometryStats geometry_stats = 2;
+    
+    extensions 25000000 to max;
+}
+
+message AreaRenderOpGroup {
+    repeated AreaRenderOp area_op = 1;
+    optional GeometryStats geometry_stats = 2;
+    
+    extensions 25000000 to max;
+}
+
+message VolumeRenderOpGroup {
+    repeated VolumeRenderOp volume_op = 1;
+    optional GeometryStats geometry_stats = 2;
+}
+
+message LabelRenderOpGroup {
+    repeated LabelRenderOp label_op = 1;
+    repeated LineLabelCandidateSet line_label_candidate_set = 3;
+    optional GeometryStats geometry_stats = 2;
+}
+
+message RasterRenderOpGroup {
+    repeated RasterRenderOp raster_op = 1;
+    
+    extensions 25000000 to max;
+}
+
+message ShaderRenderOpGroup {
+    option deprecated = true;
+    repeated ShaderRenderOp shader_op = 1;
+    optional GeometryStats geometry_stats = 2;
+}
+
+message RenderOpAnnotationGroup {
+    repeated RenderOpAnnotation annotation = 1;
+}
+
+message GltfRenderOpGroup {
+    repeated GltfRenderOp gltf_op = 1;
+    optional GltfRenderOp terrain_model = 2;
+    optional bytes serialized_gltf_model = 3 [ctype = CORD];
+    
+    repeated MaterialStyleMapping material_style_mapping = 4;
+    message MaterialStyleMapping {
+        optional int32 material_index = 1;
+        
+        oneof style_key_oneof {
+            int32 multi_zoom_style_id = 2;
+            int32 named_style_id = 3;
+            int32 multi_zoom_style_index = 4;
+        }
+    }
+    
+    extensions 25000000 to max;
+}
+
+message Mesh3DRenderOpGroup {
+    repeated Mesh3DRenderOp mesh_3d_op = 1;
+}
+
+message InstanceModelRenderOpGroup {
+    repeated InstanceModelRenderOp instance_model_op = 1;
+    
+    extensions 25000000 to max;
+}
+
+message Line3DRenderOpGroup {
+    repeated Line3DRenderOp line_3d_op = 1;
+    
+    extensions 25000000 to max;
+}
+
+message LayerEpoch {
+    optional string layer_id = 1;
+    optional int32 epoch = 2;
+}
+
+message ClientVectorTile {
+    optional maps_util.TileCoordinateProto coords = 1;
+    optional TileOptions tile_options = 2;
+    repeated MultiZoomStyle multi_zoom_style_table = 3;
+    optional uint32 major_epoch = 16;
+    optional bytes style_table_consistency_key = 18;
+    optional LabelSpriteMap sprite_map = 4;
+    repeated RenderOpDiff edit = 5 [deprecated = true];
+    optional PointRenderOpGroup point_group = 6;
+    optional LineRenderOpGroup line_group = 7;
+    optional AreaRenderOpGroup area_group = 8;
+    optional VolumeRenderOpGroup volume_group = 9;
+    optional LabelRenderOpGroup label_group = 10;
+    optional bytes label_group_bytes = 21 [ctype = CORD];
+    optional RasterRenderOpGroup raster_group = 11;
+    optional ShaderRenderOpGroup shader_group = 12;
+    optional RenderOpAnnotationGroup annotation_group = 17;
+    optional GltfRenderOpGroup gltf_group = 20;
+    optional InstanceModelRenderOpGroup instance_model_group = 23;
+    optional Line3DRenderOpGroup line_3d_group = 26;
+    optional Mesh3DRenderOpGroup mesh_3d_group = 27;
+    optional ProviderTable provider_table = 13;
+    optional int32 attributes = 14;
+    repeated LayerEpoch layer_epoch = 15;
+    repeated CounterfactualLoggingDirective counterfactual_directive = 19;
+    optional maps_util.Transform3D local_to_ecef_transform = 22;
+    optional float tile_maximum_height = 24;
+    optional float tile_minimum_height = 25;
+    optional bool contains_style_ids = 28;
+    optional bool contains_node_paths = 29;
+    
+    extensions 25000000 to max;
+    
+    enum Attributes {
+        ATTRIBUTE_HAS_COUNTRY_WHITELISTED_FOR_OFFLINE = 1;
+        ATTRIBUTE_HAS_COUNTRY_NOT_WHITELISTED_FOR_OFFLINE = 2;
+    }
+    
+    extend .proto2.bridge.MessageSet {
+        optional ClientVectorTile message_set_extension = 56117675;
+    }
+}
+
+enum JointShape {
+    BEVEL = 0;
+    MITER = 1;
+    ROUND = 2;
+}

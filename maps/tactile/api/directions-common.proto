@@ -1,0 +1,727 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "geo/serving/proto/directions/fuel_consumption_routing_options.proto";
+import "geo/serving/proto/directions/request/decoration_options.proto";
+import "geo/serving/proto/directions/request/entrance_options.proto";
+import "geo/serving/proto/directions/request/parking_options.proto";
+import "geo/serving/proto/directions/request/trailering_routing_options.proto";
+import "geo/serving/proto/directions/vehicle_physical_attributes.proto";
+import "geo/serving/proto/directions/vehicle_type_options.proto";
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "logs/proto/maps/tactile/annotations.proto";
+import "maps/pathfinder/client/experiments.proto";
+import "maps/tactile/api/geometry.proto";
+import "maps/tactile/api/shared/automotive/electric-vehicle-options.proto";
+import "maps/tactile/api/shared/common.proto";
+import "maps/tactile/api/shared/directions/assisted-driving-options.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "maps/tactile/api/shared/directions/dynamic-closure-options.proto";
+import "maps/tactile/api/shared/directions/image-options.proto";
+import "maps/tactile/api/shared/directions/opaque-trip-options.proto";
+import "maps/tactile/api/shared/directions/roadside-facility-options.proto";
+import "maps/tactile/api/shared/directions/toll-price-options.proto";
+import "maps/tactile/api/shared/directions/transit-trip-result-display-style.proto";
+import "maps/tactile/api/shared/directions/voice-guidance-options.proto";
+import "maps/tactile/api/shared/transit/long-distance-options.proto";
+import "maps/tactile/api/shared/transit/transit-logging-context.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "DirectionsCommonProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message Distance {
+    optional int32 meters = 1;
+    optional string formatted_value = 2;
+    
+    optional Units units = 3 [default = REGIONAL];
+    enum Units {
+        KILOMETERS = 0;
+        MILES = 1;
+        MILES_YARDS = 3;
+        REGIONAL = 2;
+    }
+}
+
+message WaypointQuery {
+    optional QueryType query_type = 6 [default = QUERY_TYPE_FEATURE];
+    enum QueryType {
+        QUERY_TYPE_FEATURE = 0;
+        QUERY_TYPE_REVERSE_GEOCODE = 2;
+        QUERY_TYPE_LAT_LNG = 3;
+        QUERY_TYPE_USER_LOCATION = 4;
+        QUERY_TYPE_LOCATION_CONTEXT = 9;
+        QUERY_TYPE_CHARGING_STATION = 7;
+        QUERY_TYPE_FEATURE_WITH_LAT_LNG_ACCESS = 8;
+    }
+    
+    optional string query = 1;
+    optional string feature_id = 2;
+    optional LatLng position = 3;
+    optional string place_id = 19;
+    optional string segment_feature_id = 30;
+    optional string navigation_point_token = 32;
+    optional string compact_geocode = 12;
+    optional bool prefer_same_side_of_road = 21 [default = false];
+    optional int32 preferred_segment_heading = 22;
+    optional string display_text = 4;
+    
+    optional EntityType entity_type = 5 [default = ENTITY_TYPE_DEFAULT];
+    enum EntityType {
+        ENTITY_TYPE_MY_LOCATION = 0;
+        ENTITY_TYPE_HOME = 1;
+        ENTITY_TYPE_WORK = 2;
+        ENTITY_TYPE_AD = 3;
+        ENTITY_TYPE_DEFAULT = 4;
+        ENTITY_TYPE_NICKNAME = 5;
+        ENTITY_TYPE_CONTACT = 6;
+    }
+    
+    optional BuildingLevel level = 7;
+    optional string routable_waypoint_token = 8;
+    optional string serialized_suggest_context = 13 [deprecated = true];
+    optional bool is_dragged = 11 [default = false];
+    optional string boarded_transit_vehicle_token = 14;
+    optional string boarded_transit_last_station_id = 31;
+    optional ParkingOptions parking_options = 16 [deprecated = true];
+    optional bool transit_strictly_match_waypoint = 18;
+    
+    optional LocationFilters location_filters = 23;
+    message LocationFilters {
+        optional bool filter_elevated = 1 [default = false];
+        optional bool filter_ferry = 2 [default = false];
+        optional bool filter_limited_access = 3 [default = false];
+        optional bool filter_underground = 4 [default = false];
+        optional bool allow_hov = 5 [default = false];
+    }
+    
+    optional ElectricVehicleChargingStationDetails charging_station_details = 24;
+    
+    optional ImprecisionType imprecision_type = 25;
+    enum ImprecisionType {
+        UNKNOWN_IMPRECISION_TYPE = 0;
+        IMPRECISE_LODGING = 1;
+    }
+    
+    optional int32 imprecision_radius_meters = 27;
+    optional ElectricVehicleTripPlanningInfo trip_planning_info = 28;
+    
+    optional UserProvidedEvInfo user_provided_ev_info = 29;
+    message UserProvidedEvInfo {
+        optional bool is_charging_supported = 1;
+    }
+    
+    reserved 9, 10, 15, 17, 26;
+}
+
+message ViaPoint {
+    optional int32 after_waypoint = 1;
+    optional LatLng position = 2;
+    optional string segment_feature_id = 3;
+    optional float segment_interpolation = 4;
+    optional bool is_dragged = 5 [default = false];
+}
+
+message AnchoredTime {
+    optional maps_tactile.shared.directions.TimeAnchoring anchoring = 1 [default = DEPARTURE];
+    optional maps_tactile.shared.directions.TimezoneInterpretation timezone_interpretation = 2 [default = UTC];
+    optional int64 time = 3;
+}
+
+message ElectricVehicleChargingStationDetails {
+    optional float charging_power_kw = 1;
+}
+
+message ElectricVehicleTripPlanningInfo {
+    optional Provenance provenance = 1;
+    enum Provenance {
+        UNKNOWN_PROVENANCE = 0;
+        PROVENANCE_USER = 1;
+        PROVENANCE_AUTOMATICALLY_ADDED_CHARGING_STOP = 2;
+    }
+    
+    repeated WaypointIdentifier original_auto_added_charging_stop = 2;
+    message WaypointIdentifier {
+        optional string feature_id = 1;
+    }
+    
+    optional int32 target_arrival_battery_percentage = 3;
+}
+
+message Options {
+    optional TravelModeOptions travel_mode_options = 20;
+    optional TransitOptions transit_options = 1;
+    optional DrivingOptions driving_options = 2;
+    optional TwoWheelerOptions two_wheeler_options = 46;
+    optional WalkingOptions walking_options = 75;
+    optional CyclingOptions cycling_options = 84;
+    optional BikesharingOptions bikesharing_options = 51;
+    optional TaxiOptions taxi_options = 61;
+    optional int32 max_trips = 43 [default = 3];
+    optional bool include_multiwaypoint_trip_alternates = 89;
+    optional bool avoid_ferries = 7;
+    optional bool prefer_indoor_walking = 68;
+    optional bool is_trusted_partner_request = 58;
+    optional .pathfinder.ExperimentalParameters experiments = 6;
+    optional bool include_road_traffic_encoded_path_token = 8 [default = false];
+    optional bool include_trip_update_token = 27 [default = false];
+    
+    optional TripUpdateInput trip_update_input = 28;
+    message TripUpdateInput {
+        optional bytes trip_update_token = 1;
+        optional int32 distance_from_start_meters = 2;
+    }
+    
+    optional bool include_reroute_token = 29 [default = false];
+    
+    optional RerouteInput reroute_input = 30;
+    message RerouteInput {
+        optional bytes reroute_token = 1;
+    }
+    
+    optional DetailLevel detail_level = 9 [default = STEPS];
+    enum DetailLevel {
+        SUMMARY = 1;
+        STEPS = 2;
+        DRAGGING = 3;
+        TURN_BY_TURN = 4;
+        MIXED = 5;
+        TURN_BY_TURN_STEPS = 6;
+    }
+    
+    repeated TravelModeMinimumDetailLevelRestriction minimum_travel_mode_detail_level = 85;
+    message TravelModeMinimumDetailLevelRestriction {
+        optional maps_tactile.shared.directions.TravelMode travel_mode = 1;
+        optional DetailLevel minimum_detail_level = 2;
+    }
+    
+    optional bool want_lane_guidance = 10 [default = false];
+    optional bool include_step_inspection = 12 [default = true];
+    optional bool include_step_inspection_panos = 13 [default = true];
+    optional bool enable_imagery_hint_face_destination = 99;
+    optional bool include_compact_polyline = 14 [default = false];
+    optional float compact_polyline_tolerance_meters = 71;
+    optional bool include_altitudes_in_compact_polyline = 90 [default = false];
+    optional bool include_offline_altitudes_in_compact_polyline = 103 [default = false];
+    repeated int32 partner_app_capability_id = 15;
+    optional bool include_taxi_auto_rickshaw_results = 49 [deprecated = true];
+    optional bool enable_taxi_accurate_trip_estimates = 47 [deprecated = true];
+    optional string preferred_taxi_provider_token = 44 [deprecated = true];
+    optional bool include_elevation_profile = 16 [default = false];
+    optional maps_tactile.shared.directions.ImageOptions image_options = 17;
+    optional AnchoredTime time = 19;
+    optional bool legacy_gmm_request = 24 [default = false];
+    optional bool enable_taxi_trip_promotions = 25 [default = false];
+    optional bool enable_trip_groups = 26 [default = false];
+    optional bool enable_flight_prices = 31 [default = true];
+    optional bool want_legacy_roundabout_semantics = 33 [default = true];
+    optional bool include_speed_limits = 34 [default = false];
+    optional bool include_low_quality_speed_limits = 64 [default = false];
+    optional bool include_parking_difficulty = 35 [deprecated = true];
+    optional bool is_route_preview = 48;
+    optional bool include_nlg_data = 52;
+    optional WaypointAlertOptions waypoint_alert_options = 55;
+    optional bool include_eyes_free_walking_guidance = 57;
+    optional maps_tactile.shared.automotive.ElectricVehicleOptions electric_vehicle_options = 62;
+    optional maps_tactile.shared.directions.DynamicClosureOptions dynamic_closure_options = 63;
+    optional bool allow_unavailable_trips = 67;
+    optional maps_tactile.shared.directions.AssistedDrivingOptions assisted_driving_options = 69;
+    optional maps_tactile.shared.directions.RoadsideFacilityOptions roadside_facility_options = 72;
+    optional bool include_destination_busyness_alerts = 73 [default = false, deprecated = true];
+    optional bool include_railroads_in_on_route_traffic_problems_notice = 74;
+    optional bool include_stop_sign_notices = 80;
+    optional bool include_traffic_light_notices = 81;
+    optional bool use_component_icon_in_step_cues = 78;
+    optional bool include_unimodal_mode_relevance = 82;
+    optional bool include_waypoint_render_overrides = 86;
+    optional geo_serving_proto.directions.request.DecorationOptions decoration_options = 88;
+    optional bool enable_immersive_view_route_preview = 91;
+    optional geo_serving_proto.directions.request.EntranceOptions entrance_options = 92;
+    optional maps_tactile.shared.directions.VoiceGuidanceOptions voice_guidance_options = 93;
+    optional bool include_suggest_along_route_token = 96;
+    optional bool include_search_along_route_directions_context = 104;
+    optional geo_serving_proto.directions.request.ParkingOptions parking_options = 95;
+    optional maps_tactile.shared.directions.OpaqueTripOptions opaque_trip_options = 97;
+    optional bool enable_origin_refinement = 98;
+    optional bool enable_landmark_description = 100;
+    optional bool enable_destination_landmarks = 101;
+    optional bool enable_arrival_summary = 102;
+    
+    oneof route_input {
+        PrecomputedRouteInput precomputed_route_input = 70;
+    }
+    
+    reserved 3, 4, 5, 11, 18, 21, 22, 23, 32, 36, 37 to 42, 50, 53, 54, 56, 59, 60, 65, 66, 76, 77, 79, 83, 87, 94;
+    
+    message PrecomputedRouteInput {
+        optional bytes precomputed_route_token = 1;
+    }
+}
+
+message TrafficReportOptions {
+    optional bytes report_history_token = 1;
+    optional bool enable_ambient_traffic_reports = 5 [default = false];
+    optional bool enable_event_information = 9;
+    
+    optional TripTrafficReportMode trip_traffic_report_mode = 6;
+    enum TripTrafficReportMode {
+        UNKNOWN_TRIP_TRAFFIC_REPORT_MODE = 0;
+        TRIP_TRAFFIC_REPORT_DISABLED = 1;
+        TRIP_TRAFFIC_REPORT_NAVIGATION = 2;
+        TRIP_TRAFFIC_REPORT_TRAFFIC_ANSWER_TO_DESTINATION = 3;
+    }
+    
+    optional TripsetTrafficReportMode tripset_traffic_report_mode = 7;
+    enum TripsetTrafficReportMode {
+        UNKNOWN_TRIPSET_TRAFFIC_REPORT_MODE = 0;
+        TRIPSET_TRAFFIC_REPORT_DISABLED = 1;
+        TRIPSET_TRAFFIC_REPORT_FREEDRIVE_WITH_DESTINATION = 2;
+        TRIPSET_TRAFFIC_REPORT_TRAFFIC_ANSWER_TO_DESTINATION = 3;
+    }
+    
+    optional TrafficTrendOptions traffic_trend_options = 10 [default = UNKNOWN_TRAFFIC_TREND_OPTIONS];
+    enum TrafficTrendOptions {
+        UNKNOWN_TRAFFIC_TREND_OPTIONS = 0;
+        TREND_DISABLED = 3;
+        TREND_ONLY = 1;
+        TREND_WITH_CHART = 2;
+    }
+    
+    optional bool include_road_closure_route_callouts = 11;
+    optional bool include_problem_road_stretch = 12;
+    optional bool enable_blue_camera_icons = 13;
+    
+    reserved 2 to 4, 8;
+}
+
+message TravelModeOptions {
+    optional maps_tactile.shared.directions.TravelMode preferred_travel_mode = 1 [default = MIXED];
+    
+    optional Filtering filtering = 2 [default = BLENDED];
+    enum Filtering {
+        BLENDED = 1;
+        DEPRECATED_UNIFORM = 2 [deprecated = true];
+        STRICT = 3;
+        RECOMMENDED = 4;
+    }
+    
+    optional BlendedFilteringOptions blended_filtering_options = 12;
+    message BlendedFilteringOptions {
+        optional RankingStrategy ranking_strategy = 1 [default = DEFAULT_DURATION_RANKING];
+        enum RankingStrategy {
+            DEFAULT_DURATION_RANKING = 0;
+            CONTEXTUAL_AND_PERSONALIZED_RANKING = 1;
+        }
+        
+        optional RankingSignals ranking_signals = 2;
+        message RankingSignals {
+            repeated TravelModePreference preferred_travel_mode = 1;
+            message TravelModePreference {
+                optional maps_tactile.shared.directions.TravelMode travel_mode = 1;
+                optional TransitOptions.TransitVehicleTypePreference vehicle_preference = 2;
+                optional float weight = 3 [default = 1];
+                optional float confidence = 4 [default = 1];
+                
+                optional TravelModePreferenceSource source = 5;
+                enum TravelModePreferenceSource {
+                    UNKNOWN_TRAVEL_MODE_PREFERENCE_SOURCE = 0;
+                    EXPLICIT_USER_PREFERENCE = 1;
+                    INFERRED_USER_PREFERENCE = 2;
+                    EXPLICIT_TRAVEL_MODE_OVERRIDE = 3;
+                    LAST_VIEWED_TRAVEL_MODE = 4;
+                    LAST_USED_TRAVEL_MODE = 5;
+                }
+            }
+            
+            optional bool enable_transit_preference_routing = 2;
+            optional bool includes_location_signals = 6;
+        }
+        
+        map<string, RankingSignals> ranking_signals_counterfactual = 4;
+        optional bool return_feasible_modes_only = 3 [default = true];
+        optional int32 default_duration_ranking_trip_limit = 5;
+    }
+    
+    optional RecommendedFilteringOptions recommended_filtering_options = 13;
+    message RecommendedFilteringOptions {
+        repeated RequestedTripGrouping requested_trip_grouping = 1;
+        message RequestedTripGrouping {
+            oneof grouping_options {
+                TravelModeCentricOptions travel_mode_centric = 1;
+                TripComparisonOptions trip_comparison = 2;
+            }
+        }
+        
+        optional bool want_preview_recommendation = 2;
+        optional int32 intended_trip_grouping_recommendation_index = 3;
+        optional BlendedFilteringOptions.RankingSignals recommendation_signals = 4;
+        map<string, BlendedFilteringOptions.RankingSignals> recommendation_signals_counterfactual = 5;
+        
+        message TravelModeCentricOptions {
+            optional maps_tactile.shared.directions.TravelMode primary_travel_mode = 1;
+            
+            repeated AlternateTravelMode alternate_travel_mode = 2;
+            message AlternateTravelMode {
+                optional maps_tactile.shared.directions.TravelMode travel_mode = 1;
+                optional Options.DetailLevel detail_level_in_best_trip_grouping = 2;
+                
+                optional TriggeringCriteria triggering_criteria = 3;
+                enum TriggeringCriteria {
+                    UNKNOWN_TRIGGERING_CRITERIA = 0;
+                    MODE_NUDGE_TRIGGERING_CRITERIA = 1;
+                }
+            }
+        }
+        
+        message TripComparisonOptions {
+            repeated AllowedTravelMode allowed_travel_mode = 1;
+            message AllowedTravelMode {
+                optional maps_tactile.shared.directions.TravelMode mode = 1;
+            }
+        }
+    }
+    
+    optional bool walk_as_drive_alternate = 7;
+    optional bool enable_fly = 3 [default = true];
+    optional bool fly_as_transit_alternate = 11;
+    optional bool enable_taxi = 4 [default = false];
+    optional bool enable_two_wheeler = 8 [default = false];
+    optional bool enable_bikesharing = 10;
+    
+    optional TabStyle tab_style = 5 [default = UNKNOWN_TAB_STYLE];
+    enum TabStyle {
+        UNKNOWN_TAB_STYLE = 0;
+        NO_TABS = 1;
+        TRAVEL_MODE_TABS = 2;
+        MODES_PLUS_TAXI = 3;
+    }
+    
+    optional bool desire_tab_durations = 6 [default = false];
+    optional bool include_travel_mode_availability = 14;
+    
+    reserved 9;
+}
+
+message WaypointAlertOptions {
+    repeated Alert supported_alert = 1;
+    message Alert {
+        optional Type type = 1;
+        enum Type {
+            UNKNOWN_TYPE = 0;
+            POI_OUT_OF_RANGE = 1;
+            POI_LOW_BATTERY_ON_ARRIVAL = 2;
+            POI_EVCS_OUT_OF_SERVICE = 3;
+            POI_EVCS_CLOSING_AT_ETA = 4;
+            POI_EVCS_INCOMPATIBLE_PLUGS = 5;
+            POI_EV_TRAILERING_INACCURATE_BATTERY_ESTIMATION = 6;
+        }
+    }
+    
+    optional bool supports_multiple_alerts = 2 [default = false];
+}
+
+message TransitOptions {
+    optional maps_tactile.shared.directions.TransitTimeAnchoring time_anchoring = 1 [default = TRANSIT_SERVER_DEFINED_TIME, deprecated = true];
+    optional maps_tactile.shared.directions.TimezoneInterpretation timezone_interpretation = 2 [default = UTC, deprecated = true];
+    optional int64 time = 3 [deprecated = true];
+    optional maps_tactile.shared.directions.TransitScoringPreference scoring_preference = 5 [default = TRANSIT_BEST];
+    optional bool treat_trips_without_vehicles_as_transit = 6 [default = false];
+    repeated maps_tactile.shared.directions.VehicleTypePreference preferred_vehicle = 7;
+    
+    repeated TransitVehicleTypePreference vehicle_preference = 10;
+    message TransitVehicleTypePreference {
+        optional maps_tactile.shared.directions.TransitVehicleType type = 1;
+    }
+    
+    optional maps_tactile.shared.directions.TransitTripAggregation aggregation = 8 [default = SERVER_DEFINED];
+    optional int32 departure_window_duration_seconds = 13;
+    optional bool allow_early_trips = 17;
+    optional bool allow_cancelled_trips = 19;
+    
+    optional ReachabilitySpec reachability_spec = 20;
+    message ReachabilitySpec {
+        optional int32 drive_arrival_buffer_seconds = 1;
+    }
+    
+    optional bool include_network_type_icon_with_line_icon = 9 [default = false];
+    
+    optional TransitNetworkOptions transit_network_options = 11;
+    message TransitNetworkOptions {
+        optional TransitSystemAlertType alert_type = 1 [default = NETWORK_ALERT_SUMMARY];
+        enum TransitSystemAlertType {
+            UNKNOWN_TRANSIT_SYSTEM_ALERT_TYPE = 0;
+            NETWORK_ALERT_SUMMARY = 1;
+            LINE_GROUP_DOMINANT_SUMMARY = 2;
+        }
+        
+        optional LineAggregationOptions line_aggregation_options = 3;
+        message LineAggregationOptions {
+            optional int32 line_count_limit = 1 [default = 0];
+            optional int32 line_character_limit = 2 [default = 0];
+        }
+        
+        reserved 2;
+    }
+    
+    optional maps_tactile.shared.directions.RealTimePolicy real_time_policy = 12;
+    optional int32 leading_polyline_length_meters = 14 [default = 0];
+    
+    repeated FareTypePreference fare_preference = 15;
+    message FareTypePreference {
+        optional maps_tactile.shared.directions.FareType type = 1;
+    }
+    
+    optional bool enable_top_level_notices = 16;
+    optional bool enable_widespread_transit_disruption_notices = 30;
+    optional bool include_attributable_notices = 28;
+    optional bool include_ugc_notices = 32;
+    
+    optional MultimodalOptions multimodal_options = 21;
+    message MultimodalOptions {
+        optional MultimodalTripTypes supported_multimodal_trips = 1;
+        message MultimodalTripTypes {
+            optional bool car_and_transit = 1;
+            optional bool rickshaw_and_transit = 2;
+            optional bool two_wheeler_and_transit = 3;
+            optional bool ridesharing_and_transit = 4;
+            optional bool bicycle_and_transit = 5;
+        }
+        
+        optional MultimodalTripTypes requested_multimodal_trips = 2;
+        optional bytes first_mile_leg_alternate_token = 4;
+        optional bytes last_mile_leg_alternate_token = 5;
+        optional bool enable_multimodal_mode_swapping = 6;
+        
+        reserved 3;
+    }
+    
+    optional bool suppress_transit_summary_deprecated_fields = 18;
+    repeated maps_tactile.shared.directions.TripResultDisplayStyle supported_trip_result_display_style = 25;
+    optional maps_tactile.shared.transit.TransitLoggingContext transit_logging_context = 26;
+    optional bool enable_transit_inline_payments = 27;
+    optional bool transit_ticket_booking_webview_supported = 29;
+    optional maps_tactile.shared.transit.LongDistanceOptions long_distance_options = 31;
+    optional bool enable_cancelled_trip_and_alert = 33;
+    
+    optional TransitBackendApi backend_api = 34;
+    enum TransitBackendApi {
+        UNKNOWN_TRANSIT_BACKEND_API = 0;
+        TRANSIT_BACKEND_PATH_API = 1;
+        TRANSIT_BACKEND_CONNECTION_API = 2;
+    }
+    
+    reserved 4, 22, 23, 24;
+}
+
+message DrivingOptions {
+    optional bool avoid_highways = 1;
+    optional bool avoid_tolls = 2;
+    optional maps_tactile.shared.directions.TrafficRoutingStrategy traffic_routing_strategy = 20 [default = IGNORE_TRAFFIC];
+    optional bool enable_traffic_for_multiwaypoint_queries = 39;
+    optional bool include_traffic_data = 3 [default = true];
+    optional bool include_traffic_incident_notices = 4 [default = true, deprecated = true];
+    optional bool include_traffic_incident_notice_attributions = 6 [default = true, deprecated = true];
+    optional bool include_suspected_road_closures = 25;
+    optional bool include_zones = 32;
+    optional TrafficReportOptions traffic_report_options = 5;
+    optional bool ignore_anchored_time = 8 [default = false];
+    optional int32 license_plate_last_digit = 21 [default = -1];
+    
+    repeated LicensePlateRestriction license_plate_restriction = 23;
+    message LicensePlateRestriction {
+        optional LicensePlateType license_plate_type = 1;
+        enum LicensePlateType {
+            UNKNOWN_LICENSE_PLATE_TYPE = 0;
+            UNSET = 1;
+            JAKARTA_ODD = 2;
+            JAKARTA_EVEN = 3;
+            SAO_PAULO_RODIZIO_1_2 = 4;
+            SAO_PAULO_RODIZIO_3_4 = 5;
+            SAO_PAULO_RODIZIO_5_6 = 6;
+            SAO_PAULO_RODIZIO_7_8 = 7;
+            SAO_PAULO_RODIZIO_9_0 = 8;
+            MANILA_NUMBER_CODING_1_2 = 9;
+            MANILA_NUMBER_CODING_3_4 = 10;
+            MANILA_NUMBER_CODING_5_6 = 11;
+            MANILA_NUMBER_CODING_7_8 = 12;
+            MANILA_NUMBER_CODING_9_0 = 13;
+            SANTIAGO_SELLO_VERDE_0_1 = 14;
+            SANTIAGO_SELLO_VERDE_2_3 = 15;
+            SANTIAGO_SELLO_VERDE_4_5 = 16;
+            SANTIAGO_SELLO_VERDE_6_7 = 17;
+            SANTIAGO_SELLO_VERDE_8_9 = 18;
+        }
+    }
+    
+    repeated SupportedLicensePlateCity supported_license_plate_city = 45;
+    message SupportedLicensePlateCity {
+        optional LicensePlateCity license_plate_city = 1;
+        enum LicensePlateCity {
+            UNKNOWN_LICENSE_PLATE_CITY = 0;
+            JAKARTA_ODD_EVEN = 1;
+            SAO_PAULO_RODIZIO = 2;
+            MANILA_NUMBER_CODING = 3;
+            SANTIAGO_SELLO_VERDE = 4;
+        }
+    }
+    
+    optional bool include_elevation_profile = 22;
+    optional ElevationProfileOptions elevation_profile_options = 28 [deprecated = true];
+    optional bool include_passenger_safety_details = 24;
+    
+    optional RouteLabelOptions route_label_options = 26;
+    enum RouteLabelOptions {
+        LABEL_UNKNOWN = 0;
+        LABEL_ALL = 1;
+    }
+    
+    optional RouteLabelRenderingOptions route_label_rendering_options = 30;
+    enum RouteLabelRenderingOptions {
+        UNKNOWN_ROUTE_LABEL_RENDERING_OPTIONS = 0;
+        DEFAULT = 1;
+        POSITION_ICON_AT_START = 2;
+    }
+    
+    optional maps_tactile.shared.directions.TollPriceOptions toll_price_options = 27;
+    optional bool include_elevation_category_change = 42;
+    optional bool include_road_priority_change = 29;
+    optional geo_serving_proto.directions.FuelConsumptionRoutingOptions fuel_consumption_routing_options = 31;
+    optional geo_serving_proto.directions.VehicleTypeOptions vehicle_type_options = 34;
+    optional bool prefer_truck_routes = 35;
+    optional bool enable_trailering_routing = 36 [deprecated = true];
+    optional geo_serving_proto.directions.request.TraileringRoutingOptions trailering_routing_options = 37;
+    optional geo_serving_proto.directions.VehiclePhysicalAttributes vehicle_physical_attributes = 38;
+    optional bool enable_routing_with_jartic_licensed_data = 40;
+    optional bool enable_hov_routing = 41;
+    
+    reserved 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 33, 82;
+}
+
+message ElevationProfileOptions {
+    option deprecated = true;
+    
+    optional DetailLevel detail_level = 1;
+    enum DetailLevel {
+        UNKNOWN_DETAIL_LEVEL = 0;
+        VISUALIZATION = 1;
+        FINE_GRAINED = 2;
+    }
+    
+    optional AltitudeModel altitude_model = 2;
+    enum AltitudeModel {
+        UNKNOWN_ALTITUDE_MODEL = 0;
+        EGM_96 = 1;
+        WGS_84 = 2;
+    }
+    
+    reserved 3;
+}
+
+message TwoWheelerOptions {
+    optional bool ignore_anchored_time = 1 [default = false];
+    optional geo_serving_proto.directions.FuelConsumptionRoutingOptions fuel_consumption_routing_options = 2;
+}
+
+message WalkingOptions {
+    optional bool avoid_wheelchair_inaccessible_routes = 1;
+    
+    optional ContextualRoutingMode contextual_routing_mode = 2 [default = UNKNOWN_CONTEXTUAL_ROUTING_MODE];
+    enum ContextualRoutingMode {
+        option allow_alias = true;
+        UNKNOWN_CONTEXTUAL_ROUTING_MODE = 0;
+        CONTEXTUAL_ROUTING_MODE_UNSPECIFIED = 0;
+        NO_MODE_SELECTED = 1;
+        CONTEXTUAL_ROUTING_SHADED = 2;
+    }
+}
+
+message CyclingOptions {
+    optional bool enable_cycling_summary = 1 [deprecated = true];
+}
+
+message BikesharingOptions {
+    optional RequestedResultTypes requested_result_types = 1;
+    message RequestedResultTypes {
+        optional bool include_dockless_bikesharing = 1;
+        optional bool include_docked_bikesharing = 2;
+    }
+    
+    optional string preferred_provider_token = 3;
+    
+    oneof reroute_token {
+        string vehicle_reroute_token = 2;
+        BikeStationRerouteTokens station_reroute_tokens = 4;
+    }
+    
+    message BikeStationRerouteTokens {
+        optional string pick_up_station_reroute_token = 1;
+        optional string drop_off_station_reroute_token = 2;
+    }
+}
+
+message TaxiOptions {
+    optional RequestedResultTypes requested_result_types = 1;
+    message RequestedResultTypes {
+        optional bool include_regular_ridesharing = 1;
+        optional bool include_long_distance_ridesharing = 2;
+        optional bool include_offline_auto_rickshaw = 3;
+    }
+    
+    optional bool return_all_available_results = 2;
+    optional string preferred_provider_token = 3;
+    optional bool enable_accurate_trip_estimates = 4;
+}
+
+message ParkingOptions {
+    optional OffstreetParking offstreet_parking = 1 [deprecated = true];
+}
+
+message OffstreetParking {
+    optional WaypointQuery parking_location = 1 [deprecated = true];
+    optional bool calculate_walking_trip = 2 [deprecated = true];
+}
+
+message DirectionsSuggestionContext {
+    repeated WaypointQuery waypoint = 1;
+    optional int32 suggested_waypoint_index = 2;
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 3;
+    
+    reserved 4;
+}
+
+message SpotlightOptions {
+    optional RenderingDetailLevel rendering_detail_level = 1 [default = FULL];
+    enum RenderingDetailLevel {
+        FULL = 0;
+        MINIMAL = 1;
+    }
+    
+    optional bool suppress_alternates = 2;
+    optional bool show_only_waypoints_vias = 3 [deprecated = true];
+    repeated int32 suppressed_waypoint_index = 4 [deprecated = true];
+    repeated int32 suppressed_via_index = 5 [deprecated = true];
+    optional bool show_step_inspection_arrows = 6;
+    optional bool is_enroute = 7;
+    optional bool suppress_directions_destination_pin = 8;
+    optional bool suppress_all_transfer_points = 9;
+    optional bool suppress_non_transit_transfer_points = 15;
+    optional bool enable_modern_route_callout_style = 16;
+    optional bool suppress_waypoint_labels = 14;
+    optional bool show_intermediate_transit_stops = 10;
+    optional bool show_transfer_icons = 11;
+    optional bool show_transit_line_icons = 12;
+    optional bool show_bikelane_polyline_styling = 13;
+    optional bool suppress_label_priority_boost = 17;
+    optional bool expand_suppress_label_priority_boost = 22;
+    optional bool suppress_user_location_waypoint_label = 18;
+    optional bool suppress_label_requiredness = 19;
+    optional bool enable_callout_visibility_enhancements = 20;
+    optional bool attach_waypoint_feature_type = 21;
+    optional bool enable_route_callout_subtitle_modifications = 23;
+}

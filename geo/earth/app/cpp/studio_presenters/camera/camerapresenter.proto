@@ -1,0 +1,109 @@
+syntax = "proto2";
+
+package earth.studio.camera;
+
+option objc_class_prefix = "RTHCA";
+option optimize_for = CODE_SIZE;
+
+message CameraUpdate {
+    optional UpdateMode update_mode = 1;
+    optional ViewUpdateType event_type = 2;
+}
+
+message Intersection {
+    optional bool did_intersect = 1;
+    optional double latitude = 2;
+    optional double longitude = 3;
+    optional double altitude = 4;
+}
+
+message CameraInfo {
+    oneof LatitudeType {
+        double latitude = 1;
+        bool use_current_latitude = 10;
+    }
+    
+    oneof LongitudeType {
+        double longitude = 2;
+        bool use_current_longitude = 11;
+    }
+    
+    oneof AltitudeType {
+        double altitude = 3;
+        bool use_current_altitude = 12;
+    }
+    
+    oneof HeadingType {
+        double heading = 4;
+        bool use_current_heading = 13;
+    }
+    
+    oneof TiltType {
+        double tilt = 5;
+        bool use_current_tilt = 14;
+    }
+    
+    oneof RollType {
+        double roll = 6;
+        bool use_current_roll = 15;
+    }
+    
+    oneof RangeType {
+        double range = 7;
+        bool use_current_range = 16;
+    }
+    
+    oneof FovyTpe {
+        double fovy = 8;
+        bool use_current_fovy = 17;
+    }
+    
+    oneof PanoIdType {
+        string pano_id = 9;
+        bool use_current_pano_id = 18;
+    }
+}
+
+message CameraTransformation {
+    optional CameraInfo camera = 1;
+    optional Trajectory trajectory_mode = 2;
+    optional Presentation presentation_mode = 3;
+    optional double duration = 4;
+}
+
+message CameraPosition {
+    optional CameraInfo lookat = 1;
+    optional CameraInfo lookfrom = 2;
+}
+
+message Copyrights {
+    repeated string providers = 1;
+}
+
+enum Trajectory {
+    TRAJECTORY_UNKNOWN = 0;
+    TRAJECTORY_LINEAR = 1;
+    TRAJECTORY_PARABOLIC = 2;
+    TRAJECTORY_CONTEXTUAL = 3;
+}
+
+enum Presentation {
+    PRESENTATION_UNKNOWN = 0;
+    PRESENTATION_STATIC = 1;
+    PRESENTATION_POI_ORBIT = 2;
+    PRESENTATION_PLANET_ORBIT = 3;
+    PRESENTATION_CINEMATIC = 4;
+}
+
+enum UpdateMode {
+    UPDATE_MODE_UNKNOWN = 0;
+    UPDATE_MODE_ANIMATION = 1;
+    UPDATE_MODE_DIRECT_SET = 2;
+    UPDATE_MODE_USER_INPUT = 3;
+}
+
+enum ViewUpdateType {
+    UPDATE_TYPE_UNKNOWN = 0;
+    UPDATE_TYPE_START = 1;
+    UPDATE_TYPE_STOP = 2;
+}

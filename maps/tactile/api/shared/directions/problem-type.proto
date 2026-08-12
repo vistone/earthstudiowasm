@@ -1,0 +1,53 @@
+syntax = "editions";
+
+package maps_tactile.shared.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "ProblemTypeProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+enum ProblemType {
+    UNKNOWN_PROBLEM_TYPE = 0;
+    ROAD_CLOSURE = 1;
+    LANE_CLOSURE = 2;
+    SUSPECTED_ROAD_CLOSURE = 3;
+    CRASH = 4;
+    CONSTRUCTION = 5;
+    JAM = 6;
+    STALLED_VEHICLE = 8;
+    OBJECT_ON_ROAD = 9;
+    POLICE_PRESENCE = 11;
+    MOBILE_SPEED_CAMERA = 12;
+    SPEED_CAMERA = 13;
+    SPEED_CAMERA_ZONE = 31;
+    SPEED_CONTROL_ZONE = 32;
+    RED_LIGHT_CAMERA = 33;
+    HEAVY_RAIN = 29;
+    HAIL = 30;
+    SNOW = 14;
+    FLOOD = 16;
+    FOG = 15;
+    THUNDERSTORM = 28;
+    CYCLONE = 26;
+    LANDSLIDE = 25;
+    EARTHQUAKE = 27;
+    CRASH_PRONE_SPOT = 17;
+    UNPAVED_ROAD = 18;
+    NARROW_ROAD = 19;
+    HEIGHT_RESTRICTION = 20;
+    WEIGHT_RESTRICTION = 21;
+    HAZARD_RESTRICTION = 22;
+    TRUCK_PROHIBITED = 23;
+    UNDERPASS = 24;
+    DEPRECATED_SUSPECTED_JAM = 7 [deprecated = true];
+    DEPRECATED_SPEED_TRAP = 10 [deprecated = true];
+}

@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package earth.studio.layers;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.layers";
+
+message BaseLayer {
+    optional string id = 1;
+    optional string name = 2;
+    optional string description = 3;
+    optional bool visible = 4;
+}
+
+message BaseLayers {
+    repeated BaseLayer layers = 1;
+}
+
+message BaseLayerVisibilities {
+    repeated string ids = 1;
+}

@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions;
+
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/contrib/output_source_markup/options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPD";
+option java_multiple_files = true;
+option java_outer_classname = "DurationProto";
+option java_package = "com.google.geo.serving.proto.directions";
+
+message Duration {
+    optional int32 seconds = 1;
+    optional string formatted_value = 2;
+    optional int32 rounded_seconds = 3;
+}

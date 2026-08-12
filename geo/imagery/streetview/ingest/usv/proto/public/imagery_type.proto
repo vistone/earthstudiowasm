@@ -1,0 +1,11 @@
+syntax = "editions";
+
+package geo.imagery.streetview.ingest.usv;
+
+option java_package = "com.google.geo.imagery.streetview.ingest.usv.proto";
+
+enum ImageryType {
+    UNKNOWN_IMAGERY_TYPE = 0;
+    SPHERICAL = 1;
+    FLAT = 2;
+}

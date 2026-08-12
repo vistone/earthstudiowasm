@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package logs_gmm;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGGMM";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps.mobile";
+
+message MapVersusSensorInconsistency {
+    optional float distance_meters = 1;
+    optional int32 segment_index = 2;
+    optional int32 grid_x = 3;
+    optional int32 grid_y = 4;
+    optional int32 lat_e5 = 5;
+    optional int32 lng_e5 = 6;
+    optional int32 map_version = 7;
+    optional float barometric_altitude_meters = 8;
+    optional float barometric_altitude_uncertainty = 9;
+    optional float road_altitude_meters = 10;
+}
+
+message MapVersusSensorInconsistencies {
+    repeated MapVersusSensorInconsistency map_versus_sensor_inconsistency = 1;
+}

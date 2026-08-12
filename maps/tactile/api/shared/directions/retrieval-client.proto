@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "RetrievalClientProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+enum RetrievalClient {
+    UNKNOWN_RETRIEVAL_CLIENT = 0;
+    RETRIEVAL_CLIENT_TEST_ONLY = 6;
+    RETRIEVAL_CLIENT_TACTILE = 2;
+    RETRIEVAL_CLIENT_MAPS_LITE = 11;
+    RETRIEVAL_CLIENT_MAPS_COMPANION = 12;
+    RETRIEVAL_CLIENT_LOCAL_TOP_ADS = 8;
+    RETRIEVAL_CLIENT_MAPS_EMBED_API = 10;
+    RETRIEVAL_CLIENT_DAISY_CHAIN = 14;
+}

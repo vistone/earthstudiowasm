@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package pathfinder;
+
+import "maps/pathfinder/client/find-path-input.proto";
+import "maps/pathfinder/shared/config/crp_dynamic_config.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "PathfinderDynamicConfigProto";
+
+message PathfinderDynamicConfig {
+    optional crp.CrpDynamicConfig crp_config = 1;
+    optional crp.CounterfactualInfo crp_counterfactual_info = 2;
+    
+    extend FindPathInput {
+        optional PathfinderDynamicConfig ext = 20001;
+    }
+}

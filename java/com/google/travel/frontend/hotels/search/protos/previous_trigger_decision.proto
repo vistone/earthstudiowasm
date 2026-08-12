@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package boq.travelfrontendhotelssearch.protos;
+
+option java_multiple_files = true;
+option java_package = "com.google.travel.frontend.hotels.search.protos";
+
+enum PreviousTriggerDecision {
+    PREVIOUS_TRIGGER_UNKNOWN = 0;
+    PREVIOUS_TRIGGER_HOTEL_SEARCH = 1;
+    PREVIOUS_TRIGGER_NON_HOTEL_SEARCH = 2;
+    NOT_APPLICABLE = 3;
+}

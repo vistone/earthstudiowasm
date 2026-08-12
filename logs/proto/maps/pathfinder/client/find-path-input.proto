@@ -1,0 +1,181 @@
+syntax = "editions";
+
+package logs.proto.maps.pathfinder.client;
+
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/directions/tolls/proto/client_id.proto";
+import "logs/proto/maps/directions/tolls/proto/pricing_factors.proto";
+import "logs/proto/maps/pathfinder/autonomous/assisted_driving_info.proto";
+import "logs/proto/maps/pathfinder/client/cost-model-options.proto";
+import "logs/proto/maps/pathfinder/client/customization_inputs.proto";
+import "logs/proto/maps/pathfinder/client/experiments.proto";
+import "logs/proto/maps/pathfinder/client/logging-context.proto";
+import "logs/proto/maps/pathfinder/client/on-demand-transportation.proto";
+import "logs/proto/maps/pathfinder/client/polyline-codec.proto";
+import "logs/proto/maps/pathfinder/client/waypoint.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_outer_classname = "FindPathInputProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedRequeryInput {
+    optional LoggedType type = 5 [default = TYPE_UNKNOWN];
+    enum LoggedType {
+        TYPE_UNKNOWN = 0;
+        TYPE_TRIP_UPDATE_AND_ALTERNATES = 1;
+        TYPE_OFFLINE_TRIP_UPDATE_AND_ALTERNATES = 3;
+        TYPE_REROUTE_AND_ALTERNATES_FROM_NEW_LOCATION = 2;
+        TYPE_PREDICTED_TRIP = 4 [deprecated = true];
+        TYPE_PERSONAL_ROUTE = 5 [deprecated = true];
+        TYPE_INITIAL = 6;
+    }
+    
+    optional bytes requery_token = 1;
+    optional int32 distance_from_start_meters = 2;
+    optional bool personal_route_counterfactual = 6 [default = false, deprecated = true];
+}
+
+message LoggedTrafficReportOptions {
+    optional bool enable_ambient_traffic_reports = 4 [default = false];
+    
+    optional LoggedTripTrafficReportMode trip_traffic_report_mode = 5;
+    enum LoggedTripTrafficReportMode {
+        TRIP_TRAFFIC_REPORT_DISABLED = 0;
+        TRIP_TRAFFIC_REPORT_NAVIGATION = 1;
+        TRIP_TRAFFIC_REPORT_TRAFFIC_ANSWER_TO_DESTINATION = 2;
+        TRIP_TRAFFIC_REPORT_NOTIFICATION = 3;
+        TRIP_TRAFFIC_REPORT_WITHOUT_SELECTABLE_ALTERNATES = 4;
+    }
+    
+    optional LoggedTripsetTrafficReportMode tripset_traffic_report_mode = 6;
+    enum LoggedTripsetTrafficReportMode {
+        TRIPSET_TRAFFIC_REPORT_DISABLED = 0;
+        TRIPSET_TRAFFIC_REPORT_FREEDRIVE_WITH_DESTINATION = 1;
+        TRIPSET_TRAFFIC_REPORT_TRAFFIC_ANSWER_TO_DESTINATION = 2;
+    }
+    
+    optional LoggedTrafficTrendOptions traffic_trend_options = 9 [default = TREND_DISABLED];
+    enum LoggedTrafficTrendOptions {
+        TREND_DISABLED = 0;
+        TREND_ONLY = 1;
+        TREND_WITH_CHART = 2;
+    }
+    
+    optional bool enable_event_information = 8 [default = false];
+    
+    reserved 2, 7;
+}
+
+message LoggedFindPathInput {
+    repeated LoggedWaypoint waypoint = 2;
+    
+    optional LoggedWaypointPairing waypoint_pairing = 3 [default = WAYPOINTS_IN_ORDER];
+    enum LoggedWaypointPairing {
+        WAYPOINTS_IN_ORDER = 0;
+        WAYPOINTS_OPTIMIZE_ORDER = 1;
+        WAYPOINTS_CONNECT_MANY_TO_MANY = 2;
+    }
+    
+    optional int32 num_source_waypoints_for_many_to_many_query = 25;
+    optional LoggedCostModelOptions cost_model_options = 4;
+    optional string locale = 9 [default = "en"];
+    optional string language = 14 [default = "en"];
+    optional string request_country = 15 [default = "ZZ"];
+    
+    optional LoggedDistanceUnits distance_units = 12;
+    enum LoggedDistanceUnits {
+        KILOMETERS = 0;
+        MILES = 1;
+    }
+    
+    optional LoggedTextOutputType text_output_type = 10 [default = TEXT_XML];
+    enum LoggedTextOutputType {
+        TEXT_XML = 0;
+        TEXT_HTML = 1;
+        TEXT_PLAIN = 2;
+        TEXT_NONE = 3;
+    }
+    
+    optional LoggedDirectionsVerbosity verbosity = 8 [default = VERBOSITY_PRINTED];
+    enum LoggedDirectionsVerbosity {
+        VERBOSITY_PRINTED = 0;
+        VERBOSITY_TURN_BY_TURN = 1;
+    }
+    
+    optional LoggedPolylineCodecOptions polyline_options = 13;
+    optional bool want_alternates = 1 [default = false];
+    optional int32 max_trips = 43 [default = 3];
+    optional bool want_alternates_polylines = 16 [default = false];
+    optional bool want_alternates_descriptions = 28 [default = false];
+    optional bool want_lane_guidance = 30 [default = false];
+    optional bool want_step_group_descriptions = 31 [default = false];
+    optional bool want_reference_trip = 50 [default = false];
+    
+    optional LoggedMetricsOnlyMode metrics_only_mode = 26 [default = METRICS_AND_DETAILS];
+    enum LoggedMetricsOnlyMode {
+        METRICS_AND_DETAILS = 0;
+        METRICS_COST_ONLY = 1;
+        METRICS_DURATION = 2;
+        METRICS_DURATION_AND_DISTANCE = 3;
+        INFERRED_NO_POLYLINE = 4;
+    }
+    
+    optional bool omit_snapped_waypoints = 27 [default = false];
+    optional bool output_non_alternate_vias = 44 [default = false];
+    optional bool output_segment_ids = 6 [default = false];
+    optional bool output_static_segment_level_duration_info = 51 [default = false];
+    optional bool output_step_cues = 7 [default = false];
+    optional bool include_input_token = 19 [default = false, deprecated = true];
+    optional bool return_fuel_consumption_data = 21 [default = false];
+    optional int32 max_num_transit_stops_before_arrival = 22 [default = 0];
+    optional bool want_mode_availability = 33 [default = false];
+    optional LoggedExperimentalParameters experiments = 35;
+    optional LoggedRequeryInput requery_input = 38;
+    optional LoggedTrafficReportOptions traffic_report_options = 39;
+    optional bool enable_trip_groups = 40 [default = false];
+    
+    optional LoggedTollOptions toll_info_options = 52;
+    message LoggedTollOptions {
+        optional bool want_toll_fee = 1 [default = false];
+        optional bool want_price_in_directions_toll_label = 4 [default = false];
+        optional bool want_price_in_nav_toll_label = 5 [default = false];
+        optional directions.tolls.proto.LoggedPricingFactors pricing_factors = 2;
+        optional directions.tolls.proto.LoggedClientId originator = 3;
+    }
+    
+    repeated LoggedDynamicClosure dynamic_closure = 48;
+    message LoggedDynamicClosure {
+        optional logs_maps.FeatureIdProto feature_id = 2;
+    }
+    
+    optional LoggedOnDemandTransportationOptions on_demand_transportation_options = 49;
+    optional LoggedTaxiOptions taxi_options = 54;
+    optional LoggedBikesharingOptions bikesharing_options = 55;
+    
+    optional LoggedAssistedDrivingOptions assisted_driving_options = 56;
+    message LoggedAssistedDrivingOptions {
+        optional bool want_assisted_driving_path_info = 1 [default = false];
+        optional maps.autonomous.LoggedAssistedDrivingInfo assisted_driving_info = 2;
+    }
+    
+    optional LoggedLoggingContext logging_context = 57;
+    
+    optional LoggedRoadsideFacilityOptions roadside_facility_options = 58;
+    message LoggedRoadsideFacilityOptions {
+        optional bool want_roadside_facility_info = 1 [default = false];
+        optional int32 min_segment_priority = 2 [default = 128];
+    }
+    
+    optional LoggedSustainabilityOptions sustainability_options = 60;
+    message LoggedSustainabilityOptions {
+        optional bool label_least_fuel_consumption_trip = 1 [default = false];
+    }
+    
+    optional LoggedCustomizationInputs customization_inputs = 61;
+    
+    extensions 20000 to max;
+}

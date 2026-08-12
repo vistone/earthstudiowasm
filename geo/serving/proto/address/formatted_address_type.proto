@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geo_serving_proto.address;
+
+import "java/com/google/apps/jspb/jspb.proto";
+
+option objc_class_prefix = "GSPADR";
+option java_multiple_files = true;
+option java_outer_classname = "FormattedAddressTypeProto";
+option java_package = "com.google.geo.serving.proto.address";
+
+enum FormattedAddressType {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_FORMATTED_ADDRESS_TYPE = 0;
+    SINGLE_LINE_ADDRESS_ONLY = 1;
+    SINGLE_LINE_NAME_AND_ADDRESS = 2;
+    SINGLE_LINE_SHORT_STREET_ADDRESS = 3;
+    SINGLE_LINE_COMPACT_LOCALITY_ADDRESS = 4;
+    SINGLE_LINE_UNAMBIGUOUS_COMPACT_ADDRESS = 8;
+    SINGLE_LINE_ADDRESS_ONLY_IN_LOCAL_LANGUAGE = 5;
+    SINGLE_LINE_VICINITY = 6;
+    MULTI_LINE_NAME_AND_ADDRESS = 7;
+}

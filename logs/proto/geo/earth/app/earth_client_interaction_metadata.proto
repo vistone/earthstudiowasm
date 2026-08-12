@@ -1,0 +1,38 @@
+syntax = "editions";
+
+package logs.proto.geo.earth.app;
+
+import "logs/proto/visual_element/client_interaction_metadata.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.common.logging";
+
+message EarthClientInteractionMetadata {
+    optional EarthMateMetadata earth_mate = 1;
+    message EarthMateMetadata {
+        optional ThumbsUpDownRating rating = 1;
+    }
+    
+    optional RateCardDialogMetadata rate_card_metadata = 2;
+    message RateCardDialogMetadata {
+        optional RatecardClickthroughType ratecard_clickthrough_type = 1;
+    }
+    
+    enum ThumbsUpDownRating {
+        UNKNOWN = 0;
+        THUMB_UP = 1;
+        THUMB_DOWN = 2;
+    }
+    
+    enum RatecardClickthroughType {
+        UNKNOWN_CLICKTHROUGH_TYPE = 0;
+        UPGRADE_PROF = 1;
+        UPGRADE_PROF_ADV = 2;
+        DOWNGRADE_STANDARD = 3;
+        DOWNGRADE_PROF = 4;
+    }
+    
+    extend ClientInteractionMetadata {
+        optional EarthClientInteractionMetadata earth_client_interaction_metadata = 329;
+    }
+}

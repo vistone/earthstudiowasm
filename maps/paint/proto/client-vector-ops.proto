@@ -1,0 +1,48 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "maps/paint/proto/client-vector-style.proto";
+import "maps/paint/proto/client-vector-tile-serialization.proto";
+import "maps/paint/proto/client-vector-tile.proto";
+import "maps/util/geometry-transform.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint.client";
+
+message ClientVectorOps {
+    optional WorldBasedVertexEncoding vertex_encoding = 1 [default = WORLD_ENCODING_UNKNOWN];
+    optional Line3DEncoding line_3d_encoding = 15 [default = LINE_3D_ENCODING_DRACO];
+    repeated MultiZoomStyleTable multi_zoom_style_table = 11 [deprecated = true];
+    optional PointRenderOpGroup point_group = 3;
+    optional LineRenderOpGroup line_group = 4;
+    optional AreaRenderOpGroup area_group = 5;
+    optional VolumeRenderOpGroup volume_group = 6;
+    optional LabelRenderOpGroup label_group = 7;
+    optional RasterRenderOpGroup raster_group = 8;
+    optional ShaderRenderOpGroup shader_group = 9 [deprecated = true];
+    optional GltfRenderOpGroup gltf_group = 12;
+    optional Line3DRenderOpGroup line_3d_group = 13;
+    optional InstanceModelRenderOpGroup instance_model_group = 16;
+    optional Mesh3DRenderOpGroup mesh_3d_group = 18;
+    optional maps_util.Transform3D local_to_ecef_transform = 14;
+    optional ProviderTable provider_table = 10;
+    optional LabelingHint labeling_hint = 17;
+    
+    extensions 25000000 to 524999999, 525000000 to max;
+    
+    extend .proto2.bridge.MessageSet {
+        optional ClientVectorOps message_set_extension = 116304058;
+    }
+}
+
+enum WorldBasedVertexEncoding {
+    WORLD_ENCODING_UNKNOWN = 0;
+    WORLD_ENCODING_LAT_LNG_E7 = 3;
+    WORLD_ENCODING_LAT_LNG_DOUBLE = 4;
+    SCREEN_SPACE_FLOAT = 5;
+    WORLD_ENCODING_MAX_PRECISION_DELTA_VARINT = 6;
+}

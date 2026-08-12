@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package geo.production.antiscraping;
+
+import "java/com/google/geo/production/antiscraping/proto/antiscraping_geo_data_type.proto";
+import "net/proto2/proto/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.production.antiscraping.proto";
+
+message FieldConfig {
+    optional AntiscrapingGeoDataType antiscraping_geo_data_type = 1;
+    
+    extend .proto2.FieldOptions {
+        optional FieldConfig field_config = 535801620;
+    }
+}

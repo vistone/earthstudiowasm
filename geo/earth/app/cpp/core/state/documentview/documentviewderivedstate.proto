@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Documentviewderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derived";
+
+message DocumentViewDerivedState {
+    optional int32 document_key = 2 [default = -1];
+    optional bool is_street_view_active = 3;
+    optional bool industry_selector_banner_visible = 5;
+    
+    reserved 1, 4;
+}

@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package maps_spotlight;
+
+import "maps/tactile/api/ads-spotlight.proto";
+import "maps/tactile/api/geometry.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMSL";
+option java_multiple_files = true;
+option java_outer_classname = "DummyAdsLayerParams";
+option java_package = "com.google.maps.spotlight.proto";
+
+message AdsLayerParams {
+    optional OnMapAds inline_ads = 2;
+    optional OnMapChains chains = 3;
+    repeated PromotedFeature promoted_feature = 4;
+}
+
+message OnMapAds {
+    repeated maps_tactile.AdsEntity ad = 4;
+}
+
+message OnMapChains {
+    repeated string chain_feature_id = 1;
+    optional int32 chain_on_map_style_id = 2;
+}
+
+message PromotedFeature {
+    optional string feature_id = 1;
+    optional maps_tactile.LatLng point = 2;
+    
+    optional PromotedFeatureType type = 3;
+    enum PromotedFeatureType {
+        PROMOTED_FEATURE_UNKNOWN = 0;
+        PROMOTED_FEATURE_HOTEL = 1;
+        PROMOTED_FEATURE_ORGANIC = 2;
+    }
+}

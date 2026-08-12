@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+enum LoggedQueryPlanPreset {
+    UNKNOWN_QUERY_PLAN_PRESET = 0;
+    CONSUMER = 1;
+    COMPUTE_CUSTOM_ROUTES = 2;
+    ASSISTED_DRIVING = 3;
+    CUSTOMIZATION_CONFIG = 4;
+}

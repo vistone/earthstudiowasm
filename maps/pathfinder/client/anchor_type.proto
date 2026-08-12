@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package pathfinder;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.pathfinder.client";
+
+enum AnchorType {
+    ANCHOR_TYPE_UNSPECIFIED = 0;
+    ANCHOR_TYPE_TRAFFIC_LIGHT = 1;
+    ANCHOR_TYPE_STOP_SIGN = 2;
+    ANCHOR_TYPE_RAILROAD_CROSSING = 3;
+    ANCHOR_TYPE_OVERPASS = 4;
+    ANCHOR_TYPE_LANDMARK_NAMED = 5;
+    ANCHOR_TYPE_LANDMARK_CATEGORICAL = 6;
+}

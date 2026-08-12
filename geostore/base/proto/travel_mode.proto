@@ -1,0 +1,15 @@
+syntax = "editions";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+enum TravelMode {
+    TRAVEL_MODE_UNSPECIFIED = 0;
+    TRAVEL_MODE_MOTOR_VEHICLE = 1;
+    TRAVEL_MODE_BICYCLE = 2;
+    TRAVEL_MODE_PEDESTRIAN = 3;
+}

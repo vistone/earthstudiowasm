@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package geo.search.map;
+
+import "gws/mothership/api/v1/common/app/applink.proto";
+import "gws/mothership/api/v1/common/net/url.proto";
+
+option objc_class_prefix = "GSM";
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.map";
+
+message MapLink {
+    optional gws.mothership.api.v1.common.net.Url web_url = 1;
+    optional gws.mothership.api.v1.common.app.AppLink app_link = 2;
+}

@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/image_size.proto";
+import "geo/photo/proto/location.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "CameraProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message Camera {
+    optional LocationInfo location = 1;
+    optional ImageSize screen_size = 2;
+    optional float field_of_view_y = 3;
+}

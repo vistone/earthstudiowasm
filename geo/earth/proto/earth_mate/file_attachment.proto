@@ -1,0 +1,11 @@
+syntax = "editions";
+
+package geo.earth.proto.earth_mate;
+
+option java_multiple_files = true;
+option java_outer_classname = "FileAttachmentOuterClass";
+option java_package = "com.google.geo.earth.proto";
+
+message FileAttachment {
+    optional string encoded_attachment_id = 1;
+}

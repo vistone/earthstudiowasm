@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package gws.mothership.api.v1.common.images;
+
+import "gws/mothership/api/v1/common/images/raster_image.proto";
+import "gws/mothership/api/v1/common/images/scalable_image.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "MSPI";
+option java_multiple_files = true;
+option java_outer_classname = "ImageSourceProto";
+option java_package = "com.google.gws.mothership.api.v1.common.images";
+
+message ImageSource {
+    repeated RasterImage raster = 1;
+    ScalableImage scalable = 2;
+}

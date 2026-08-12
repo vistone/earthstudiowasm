@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "i18n/localization/proto/localized_text.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "DescriptionProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message Description {
+    optional i18n.localization.LocalizedTextProto title = 1 [deprecated = true];
+    optional i18n.localization.LocalizedTextProto thumbnail_label = 4 [deprecated = true];
+    repeated i18n.localization.LocalizedTextProto address_line = 3;
+    optional i18n.localization.LocalizedTextProto type_subtitle = 5;
+    optional i18n.localization.LocalizedTextProto explicit_title = 6;
+    optional i18n.localization.LocalizedTextProto derived_title = 7;
+    optional i18n.localization.LocalizedTextProto place_name = 8;
+    optional i18n.localization.LocalizedTextProto static_intent_display_text = 9;
+}

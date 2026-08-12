@@ -1,0 +1,13 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+import "geo/ar/protos/pose.proto";
+
+option java_multiple_files = true;
+
+message Frame {
+    optional double timestamp_secs = 1;
+    optional ar.Pose camera_pose = 2;
+    optional double fov_y = 3;
+}

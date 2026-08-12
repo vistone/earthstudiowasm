@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message ConvertBlockToParkEdit {
+    optional string block_id = 1;
+}
+
+message AdjustBlockProgramEdit {
+    optional string block_id = 1;
+    
+    repeated UseTypeGfaTarget use_type_gfa_targets = 2;
+    message UseTypeGfaTarget {
+        optional string use_type_id = 1;
+        optional double gfa_target = 2;
+    }
+}

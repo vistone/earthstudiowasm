@@ -1,0 +1,85 @@
+syntax = "editions";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/proto/maps/directions/mrp/measure.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "util/task/codes.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+
+message LoggedLogProto {
+    repeated LoggedLogEntry entries = 1;
+    message LoggedLogEntry {
+        optional LoggedSeverity severity = 1;
+        optional string context = 2;
+        optional string source = 5;
+    }
+    
+    repeated LoggedPhaseTiming phase_timings = 2;
+    message LoggedPhaseTiming {
+        optional LoggedPhaseTag tag = 1;
+        optional string context = 5;
+        optional int64 duration_microseconds = 2;
+        optional util.error.Code status_code = 3;
+    }
+    
+    repeated LoggedMrpMeasureProto measures = 4;
+    
+    repeated LoggedDarkLaunchLogProto dark_launch_logs = 6;
+    message LoggedDarkLaunchLogProto {
+        optional string name = 1;
+        optional bool is_churn = 2;
+        optional bool test_generator_cancelled = 3;
+        optional string control_trip_generator_label = 4;
+        optional string test_trip_generator_label = 5;
+        optional util.error.Code test_status_code = 6;
+        optional int64 control_duration_msec = 7;
+        optional int64 test_duration_msec = 8;
+        optional int32 control_trip_count = 9;
+        optional int32 test_trip_count = 10;
+        optional int32 common_trip_count = 11;
+        optional int32 control_reference_trip_count = 12;
+        optional int32 test_reference_trip_count = 13;
+        optional int32 control_requery_trip_count = 14;
+        optional int32 test_requery_trip_count = 15;
+        optional bool main_trips_are_equal = 16;
+        optional bool tripsets_are_equivalent = 17;
+    }
+    
+    enum LoggedSeverity {
+        UNKNOWN_SEVERITY = 0;
+        REALLY_VERBOSE = 5;
+        VERBOSE = 6;
+        DEBUG = 7;
+        INFO = 8;
+        WARNING = 9;
+        ERROR = 10;
+        FATAL = 11;
+    }
+    
+    enum LoggedPhaseTag {
+        UNKNOWN_PHASE_TAG = 0;
+        ALL = 1;
+        QUERY_REWRITE = 2;
+        HINTING = 19;
+        GENERATION = 3;
+        MIXING = 4;
+        PRE_CULL_ANNOTATION = 5;
+        PREPARE_FOR_REQUERY = 13;
+        TRIP_PROPERTIES = 6;
+        COSTING = 7;
+        SELECTION = 8;
+        PENALTY_FREE_FIXUP = 15;
+        RANKING = 9;
+        CULLING = 10;
+        POST_CULL_ANNOTATION = 11;
+        MEASUREMENT = 14;
+        PREPARE_LOGS = 17;
+        RESULT_REWRITE = 12;
+        RESPONSE_FINALIZE = 16;
+        DECORATE = 18;
+    }
+}

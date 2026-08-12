@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "MRPVehicleInfoProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message MRPVehicleInfo {
+    optional Type type = 1;
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        TYPE_TRUCK = 1;
+    }
+    
+    repeated HazardousGoodsType hazardous_goods_type = 2;
+    enum HazardousGoodsType {
+        HAZARD_UNSPECIFIED = 0;
+        HAZARD_UNKNOWN = 1;
+    }
+}

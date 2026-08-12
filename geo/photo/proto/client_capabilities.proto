@@ -1,0 +1,20 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/image_size.proto";
+import "geo/photo/proto/render_strategy.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ClientCapabilitiesProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message ClientCapabilities {
+    repeated RenderStrategy supported_render_strategy = 1;
+    optional bool allow_3p_photo = 2;
+    optional ImageSize max_dimension = 3;
+    optional bool allow_crawled_photo = 4 [deprecated = true];
+    optional bool allow_photo_sequence = 5;
+}

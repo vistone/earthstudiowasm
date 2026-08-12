@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "OccupancyStatusProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message OccupancyStatus {
+    optional OccupancySource source = 1;
+    enum OccupancySource {
+        OCCUPANCY_SOURCE_UNKNOWN = 0;
+        PREDICTED_BY_UGC = 1;
+        REALTIME_FROM_AGENCY = 2;
+        REALTIME_FROM_UGC = 3;
+        PREDICTED_BY_HULK = 4;
+        PREDICTED_BY_AGENCY_HISTORICAL_REALTIME = 5;
+        STATIC_FROM_AGENCY = 6;
+        STATIC_FROM_OPERATORS = 7;
+    }
+    
+    optional OccupancyRate occupancy_rate = 2;
+    enum OccupancyRate {
+        OCCUPANCY_RATE_UNKNOWN = 0;
+        EMPTY = 1;
+        MANY_SEATS_AVAILABLE = 2;
+        FEW_SEATS_AVAILABLE = 3;
+        STANDING_ROOM_ONLY = 4;
+        CRUSHED_STANDING_ROOM_ONLY = 5;
+        FULL = 6;
+        NOT_ACCEPTING_PASSENGERS = 7;
+        NOT_BOARDABLE = 8;
+    }
+}

@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package geo_serving_proto.hotels;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPH";
+option java_multiple_files = true;
+option java_outer_classname = "CrisisPolicyProto";
+option java_package = "com.google.geo.serving.proto.hotels";
+
+enum CrisisPolicy {
+    UNKNOWN_CRISIS_POLICY = 0;
+    ANY_POLICY = 1;
+    FREE_ACCOMMODATIONS = 2;
+    DISCOUNTED_ACCOMMODATIONS = 3;
+}

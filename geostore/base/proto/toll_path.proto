@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "google/api/inclusion.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message TollPathProto {
+    optional TollClusterSequence toll_cluster_sequence = 1;
+    message TollClusterSequence {
+        repeated IndexedTollCluster indexed_toll_clusters = 1;
+    }
+    
+    message IndexedTollCluster {
+        optional int32 index = 1;
+        optional FeatureIdProto cluster = 2;
+    }
+}

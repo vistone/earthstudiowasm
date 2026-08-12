@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package logs_maps_shared;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps";
+
+message PointE7 {
+    optional fixed32 lat_e7 = 1;
+    optional fixed32 lng_e7 = 2;
+}
+
+message RectE7 {
+    optional PointE7 lo = 1;
+    optional PointE7 hi = 2;
+}

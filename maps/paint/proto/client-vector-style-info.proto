@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint.client";
+
+message ClientVectorStyleInfo {
+    repeated int32 style_class = 1 [packed = true];
+    optional int32 style_type = 2;
+    optional int32 render_op_type = 1001;
+    
+    oneof render_op_subtype {
+        int32 icon_subclass = 1002;
+        int32 text_subclass = 1003;
+        int32 group_subclass = 1004;
+        int32 gltf_subclass = 1005;
+    }
+    
+    extensions 25000000 to max;
+}

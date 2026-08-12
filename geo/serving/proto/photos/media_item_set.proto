@@ -1,0 +1,137 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "frameworks/client/data/data_annotation.proto";
+import "geo/serving/proto/attribution/user_attribution.proto";
+import "geo/serving/proto/geometry/lat_lng.proto";
+import "geo/serving/proto/link/link.proto";
+import "geo/serving/proto/photos/cluster_category.proto";
+import "geo/serving/proto/photos/color_detection_result.proto";
+import "geo/serving/proto/photos/image_content_tag.proto";
+import "geo/serving/proto/photos/licensing_info.proto";
+import "geo/serving/proto/photos/media_entity_info.proto";
+import "geo/serving/proto/photos/media_item_preview.proto";
+import "geo/serving/proto/photos/media_ocr_info.proto";
+import "geo/serving/proto/photos/merchant_media_metadata.proto";
+import "geo/serving/proto/photos/photo_user_capabilities.proto";
+import "geo/serving/proto/time/date_time.proto";
+import "geo/serving/proto/userreactions/reaction_stickers.proto";
+import "geo/serving/proto/userreactions/reactions.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/shared/common/geom/geom.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "MediaItemSetProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message MediaItemSet {
+    repeated MediaItem media_item_set = 1;
+}
+
+message MediaItem {
+    optional MediaItemPreview media_item_preview = 1;
+    optional MediaMetadata metadata = 2;
+    optional string viewer_url = 3;
+    optional string contextual_placesheet_info = 4;
+    optional string lqi_params = 5;
+}
+
+message MediaMetadata {
+    optional MetadataDescription description = 1;
+    optional MediaAttribution media_attribution = 2;
+    optional MediaAttributes media_attributes = 3;
+    
+    optional MediaPostInfo media_post_info = 4;
+    message MediaPostInfo {
+        optional string post_id = 1;
+        optional geo_serving_proto.link.Link flag_inappropriate_post_link = 2 [deprecated = true];
+        optional int32 photo_count = 3 [deprecated = true];
+        optional geo_serving_proto.userreactions.Reactions reactions = 4;
+    }
+    
+    optional MediaOcrInfo media_ocr_info = 5;
+    optional MerchantMediaMetadata merchant_media_metadata = 6;
+    
+    repeated PhotoLabel label = 7;
+    message PhotoLabel {
+        optional string name = 1;
+        optional string mid = 2;
+        
+        optional PhotoLabelSource source = 3;
+        enum PhotoLabelSource {
+            UNKNOWN_PHOTO_LABEL_SOURCE = 0;
+            DISH = 1;
+            RANKING = 2;
+            ICA = 3;
+            FUSED_TOPIC = 4;
+        }
+        
+        optional string concept_id = 4;
+    }
+    
+    optional ImageAffiliation affiliation = 8;
+    enum ImageAffiliation {
+        UNKNOWN_IMAGE_AFFILIATION = 0;
+        UGC_OWNER = 1;
+        UGC_OTHER = 2;
+        GOOGLE = 3;
+        LICENSED_TO_GOOGLE = 4;
+        MAP_CARD = 5;
+        GMB_PHOTO_CARD = 6;
+        AIE_PHOTO_CARD = 7;
+    }
+    
+    repeated MediaEntityInfo media_entity_info = 10;
+    optional geo_serving_proto.userreactions.Reactions reactions = 13;
+    optional geo_serving_proto.userreactions.ReactionStickers reaction_stickers = 14;
+    optional string content_reference_token = 12;
+    
+    repeated ClusterInfo cluster_info = 15;
+    message ClusterInfo {
+        optional ClusterCategory cluster_category = 1;
+    }
+    
+    repeated ImageContentTag content_tags = 16 [packed = true];
+    
+    optional Location location = 17;
+    message Location {
+        optional geo_serving_proto.geometry.LatLng lat_lng = 1;
+        optional string feature_id = 2;
+        optional string place_name = 3;
+        optional maps_shared.geom.Rotation orientation = 4;
+        optional maps_shared.geom.Rotation view = 5;
+    }
+    
+    optional ReportAbuse report_abuse = 18;
+    
+    optional StreetViewAttributes street_view_attributes = 19;
+    message StreetViewAttributes {
+        optional string sequence_id = 2;
+    }
+    
+    optional PhotoUserCapabilities user_capabilities = 20;
+    
+    reserved 9, 11, 21;
+}
+
+message MetadataDescription {
+    optional string caption = 1;
+    optional string translated_caption = 2;
+}
+
+message MediaAttribution {
+    optional geo_serving_proto.attribution.UserAttribution account = 1;
+    optional LicensingInfo licensing_info = 10;
+    optional string copyright = 2;
+}
+
+message MediaAttributes {
+    optional geo_serving_proto.time.DateTime upload_time = 1;
+    optional geo_serving_proto.time.DateTime capture_time = 4;
+    optional string video_duration = 2;
+    optional int64 video_duration_ms = 3;
+    repeated ColorDetectionResult color_detection_result = 5;
+}

@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geostore.ontology;
+
+import "geostore/base/proto/options.proto";
+import "geostore/ontology/proto/rawgconceptinstance.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.geostore.ontology.proto";
+
+message RawGConceptInstanceContainerProto {
+    repeated RawGConceptInstanceProto instance = 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional RawGConceptInstanceContainerProto message_set_extension = 20497290;
+    }
+}

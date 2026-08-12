@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package search.rendering.xuikit.elements;
+
+import "google/api/inclusion.proto";
+import "search/rendering/xuikit/elements/proto/data_store_mutation_payload.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "XUI";
+option java_multiple_files = true;
+option java_package = "com.google.search.rendering.xuikit.elements";
+
+message DataStoreBatchUpdate {
+    repeated DataStoreMutation mutations = 1;
+}
+
+message DataStoreMutation {
+    optional string data_store_key = 1;
+    optional DataStoreMutationType type = 2;
+    optional DataStoreMutationPayload payload = 3;
+}
+
+enum DataStoreMutationType {
+    UNKNOWN_DATA_STORE_MUTATION_TYPE = 0;
+    REPLACE = 1;
+    DELETE = 2;
+}

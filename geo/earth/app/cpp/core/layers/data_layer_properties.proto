@@ -1,0 +1,297 @@
+syntax = "editions";
+
+package earth.layers;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option features = utf8_validation: NONE
+;
+option optimize_for = CODE_SIZE;
+
+message EarthDataLayerProperties {
+    repeated EarthDataLayerAttributeFilters attribute_filters = 1;
+    repeated EarthDataLayerAttributeStyles attribute_styles = 2;
+    optional EarthDataLayerAttributeStyles uniform_style = 3;
+    
+    optional StyleStrategy strategy = 4;
+    enum StyleStrategy {
+        STYLESTRATEGY_UNSPECIFIED = 0;
+        STYLESTRATEGY_UNIFORM = 1;
+        STYLESTRATEGY_DATADRIVEN = 2;
+    }
+    
+    optional string active_style_attribute_key = 5;
+    optional string active_label_attribute_key = 6;
+    optional DataLayerClassificationInputs classification_layer_inputs = 7;
+    optional int64 last_modified_timestamp_millis = 8;
+}
+
+message EarthDataLayerAttributeFilters {
+    optional string attribute_key_name = 1;
+    
+    oneof FilterSet {
+        CategoricalFilterSet categorical_filter_set = 2;
+        RangeFilterSet range_filter_set = 3;
+    }
+}
+
+message CategoricalFilterSet {
+    repeated CategoricalFilter filters = 1;
+}
+
+message CategoricalFilter {
+    optional string value_id = 1;
+    optional bool is_enabled = 2;
+}
+
+message RangeFilterSet {
+    repeated RangeFilter filters = 1;
+}
+
+message RangeFilter {
+    optional string filter_id = 1;
+    optional RangeFilterValueType min_value_type = 4;
+    optional RangeFilterValueType max_value_type = 5;
+    
+    oneof RangeFilter {
+        DoubleRangeFilter double_range_filter = 2;
+        IntRangeFilter int_range_filter = 3;
+    }
+}
+
+message DoubleRangeFilter {
+    optional double min = 1;
+    optional double max = 2;
+}
+
+message IntRangeFilter {
+    optional int64 min = 1;
+    optional int64 max = 2;
+}
+
+message EarthDataLayerGeometricFilter {
+    optional string filter_id = 1;
+    
+    optional GeometricOperator geometric_operator = 2;
+    enum GeometricOperator {
+        GEOMETRICOPERATOR_UNKNOWN = 0;
+        GEOMETRICOPERATOR_CONTAINS = 1;
+        GEOMETRICOPERATOR_INTERSECTS = 2;
+    }
+    
+    optional Geometry geometry = 3;
+}
+
+message Geometry {
+    repeated Point points = 1;
+    repeated Polyline polylines = 2;
+    repeated Polygon polygons = 3;
+}
+
+message Point {
+    optional LatLng position = 1;
+    optional double altitude = 2;
+    optional AltitudeMode altitude_mode = 3 [default = CLAMP_TO_GROUND];
+    optional bool extrude = 4 [default = false];
+    optional int32 geometry_index = 5;
+}
+
+message Polyline {
+    repeated Point point = 1;
+    optional AltitudeMode altitude_mode = 2 [default = CLAMP_TO_GROUND];
+    optional bool extrude = 3 [default = false];
+    optional bool tessellate = 4 [default = false];
+    optional int32 geometry_index = 5;
+}
+
+message Polygon {
+    repeated Polyline loop = 1;
+    optional AltitudeMode altitude_mode = 2 [default = CLAMP_TO_GROUND];
+    optional bool extrude = 3 [default = false];
+    optional int32 geometry_index = 4;
+}
+
+message LatLng {
+    optional double latitude = 1;
+    optional double longitude = 2;
+}
+
+message EarthDataLayerAttributeStyles {
+    optional string attribute_key_name = 1;
+    optional FeatureStyle default_attribute_style = 2;
+    
+    oneof DataDrivenStyleRuleSet {
+        CategoricalStyleRuleSet categorical_styles = 3;
+        InterpolatedStyleRuleSet interpolated_styles = 4;
+    }
+}
+
+message ColorPalette {
+    optional bool reversed = 2;
+    
+    oneof Palette {
+        PredefinedColorPalette predefined_color_palette = 1;
+    }
+}
+
+message CategoricalStyleRuleSet {
+    optional ColorPalette color_palette = 1;
+    repeated CategoricalStyleRule categorical_style_rules = 2;
+}
+
+message CategoricalStyleRule {
+    optional string value_id = 1;
+    optional FeatureStyle style = 2;
+    optional string user_defined_label = 3;
+    optional Color user_defined_color = 4;
+    optional bool is_enabled = 5;
+}
+
+message ColorRamp {
+    optional bool reversed = 2;
+    
+    oneof Ramp {
+        PredefinedColorRamp predefined_color_ramp = 1;
+    }
+}
+
+message InterpolatedStyleRuleSet {
+    optional ColorRamp color_ramp = 1;
+    
+    optional InterpolationMode mode = 3;
+    enum InterpolationMode {
+        INTERPOLATIONMODE_UNKNOWN = 0;
+        INTERPOLATIONMODE_LINEAR = 1;
+        INTERPOLATIONMODE_INTERVAL = 2;
+    }
+    
+    oneof Classification {
+        CustomIntervals custom_intervals = 4;
+    }
+}
+
+message CustomIntervals {
+    repeated CustomIntervalInput inputs = 1;
+}
+
+message CustomIntervalInput {
+    optional string value_id = 1;
+    optional double input_value = 2;
+}
+
+message FeatureStyle {
+    optional PointStyle point_style = 1;
+    optional PolylineStyle polyline_style = 2;
+    optional PolygonStyle polygon_style = 3;
+    optional LabelStyle label_style = 4;
+}
+
+message PointStyle {
+    optional Icon icon = 1;
+    optional bool draw_occluded = 2;
+}
+
+message Icon {
+    optional Color filter_color = 2;
+    optional double render_scale = 3 [default = 1];
+    
+    oneof IconType {
+        StockIcon stock_icon = 1;
+    }
+}
+
+message StockIcon {
+    optional int32 stock_icon_id = 1;
+}
+
+message PolylineStyle {
+    optional Color color = 1;
+    optional int32 width = 2;
+    optional bool draw_occluded = 3;
+}
+
+message PolygonStyle {
+    optional Color fill_color = 1;
+    optional Color border_color = 2;
+    optional int32 border_width = 3;
+    optional bool flatten_surface_model = 4;
+    optional bool draw_occluded = 5;
+}
+
+message LabelStyle {
+    optional bool visible = 1;
+    optional Color text_color = 2;
+    optional double scale = 3;
+    optional bool draw_occluded = 4;
+}
+
+message Color {
+    optional int32 color = 1;
+    optional int32 opacity = 2 [default = 255];
+}
+
+message DataLayerClassificationInputs {
+    optional int32 year = 1;
+    repeated DataLayerClassDefinition class_definitions = 2;
+    optional Geometry classification_area = 3;
+}
+
+message DataLayerClassDefinition {
+    optional string class_id = 1;
+    repeated SamplePoint sample_points = 2;
+}
+
+message SamplePoint {
+    optional string sample_point_id = 1;
+    optional LatLng position = 2;
+}
+
+enum RangeFilterValueType {
+    option features = enum_type: CLOSED
+    ;
+    RANGEFILTERVALUETYPE_UNKNOWN = 0;
+    RANGEFILTERVALUETYPE_INCLUSIVE = 1;
+    RANGEFILTERVALUETYPE_EXCLUSIVE = 2;
+}
+
+enum AltitudeMode {
+    UNKNOWN_ALTITUDE_MODE = 0;
+    ABSOLUTE = 1;
+    CLAMP_TO_GROUND = 2;
+    CLAMP_TO_SEA_FLOOR = 3;
+    RELATIVE_TO_GROUND = 4;
+    RELATIVE_TO_SEA_FLOOR = 5;
+    RELATIVE_TO_SURFACE_MODEL = 6;
+}
+
+enum PredefinedColorPalette {
+    PREDEFINEDCOLORPALETTE_UNKNOWN = 0;
+    PREDEFINEDCOLORPALETTE_DEFAULT = 1;
+    PREDEFINEDCOLORPALETTE_CONTRASTING = 2;
+    PREDEFINEDCOLORPALETTE_RAINBOW = 3;
+    PREDEFINEDCOLORPALETTE_BRIGHT = 4;
+    PREDEFINEDCOLORPALETTE_COOL = 5;
+    PREDEFINEDCOLORPALETTE_WARM = 6;
+}
+
+enum PredefinedColorRamp {
+    PREDEFINEDCOLORRAMP_UNKNOWN = 0;
+    PREDEFINEDCOLORRAMP_MATERIAL_BLUE = 1;
+    PREDEFINEDCOLORRAMP_MATERIAL_YELLOW = 2;
+    PREDEFINEDCOLORRAMP_MATERIAL_PURPLE = 3;
+    PREDEFINEDCOLORRAMP_MATERIAL_GREEN = 4;
+    PREDEFINEDCOLORRAMP_MATERIAL_PINK = 5;
+    PREDEFINEDCOLORRAMP_MATERIAL_CYAN = 6;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_BLUE = 7;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_YELLOW = 8;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_PURPLE = 9;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_GREEN = 10;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_PINK = 11;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_CYAN = 12;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_ORANGE = 13;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_RED = 14;
+    PREDEFINEDCOLORRAMP_TWO_COLOR_YELLOW_RED = 15;
+    PREDEFINEDCOLORRAMP_TWO_COLOR_CYAN_PINK = 16;
+    PREDEFINEDCOLORRAMP_TWO_COLOR_YELLOW_GREEN = 17;
+    PREDEFINEDCOLORRAMP_TWO_COLOR_STANDARD_RED_GREEN = 18;
+}

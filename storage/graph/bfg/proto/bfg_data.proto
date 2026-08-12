@@ -1,0 +1,327 @@
+syntax = "proto2";
+
+package storage_graph_bfg;
+
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "knowledge/graph/proto/triple.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "storage/graph/bfg/proto/livegraph_metadata.proto";
+import "storage/graph/bfg/proto/policy_metadata.proto";
+import "storage/graph/bfg/proto/spii_certification.proto";
+
+option java_string_check_utf8 = false;
+option java_package = "com.google.storage.graph.bfg.proto";
+
+message Triple {
+    optional string sub = 1;
+    optional string pred = 2;
+    optional string obj = 3;
+    
+    optional ObjType obj_type = 5 [default = ID];
+    enum ObjType {
+        ID = 0;
+        TEXT = 1;
+        DATETIME = 2;
+        BOOLEAN = 3;
+        INT = 4;
+        RAWSTRING = 5;
+        URL = 6;
+        KEY = 7;
+        FLOAT = 8;
+        PROTO = 9;
+        NESTED_STRUCT = 10;
+    }
+    
+    optional string text_lang = 6 [default = "en"];
+    optional int64 timestamp = 7 [default = -1];
+    optional int64 forward_order = 8;
+    optional int64 reverse_order = 9;
+    optional int64 deleted_on = 10;
+    
+    repeated Provenance provenance = 11;
+    message Provenance {
+        optional string creator = 1;
+        optional string source = 2;
+        optional string process = 3;
+        optional string ranking_token = 17;
+        optional string dataset = 5;
+        
+        repeated RestrictionType restrictions = 6;
+        enum RestrictionType {
+            REQUIRES_CITATION = 1;
+            REQUIRES_PCOUNSEL_REVIEW = 2;
+            REQUIRES_ACCESS_CONTROL = 3 [deprecated = true];
+            UNRESTRICTED_WITHIN_GOOGLE_NO_3P_USE = 4;
+        }
+        
+        repeated SourceCategory source_category = 10;
+        enum SourceCategory {
+            THIRD_PARTY = 1;
+            CURATION = 2;
+            PARTNER_FEED = 3;
+            EXTRACTION = 4;
+        }
+        
+        repeated int64 source_doc_id = 11;
+        optional bool is_supporting_data = 13;
+        optional bool requires_triangulation = 16;
+        
+        optional AccessRequirement access_required = 14;
+        enum AccessRequirement {
+            ACCESS_REQUIREMENT_UNSPECIFIED = 0;
+            LEGACY_RESTRICTION = 1;
+            LEGAL_UNSERVABLE_UNTIL_FURTHER_REVIEW = 5;
+            CONTRACTUAL_PRERELEASE_MUSIC_DATA = 2;
+            CONTRACTUAL_PRERELEASE_MUSIC_DATA_GPM = 7;
+            CONTRACTUAL_STATS_LLC_DATA = 3;
+            LEGAL_PUBLIC_DOMAIN_US = 4;
+            LEGAL_GEO_NOT_SERVABLE_IN_CHINA = 6 [deprecated = true];
+            ACCESS_REQUIREMENT_OUT_OF_RANGE = 999;
+            SPII_SEARCH_PUBLIC_INTEREST = 18;
+            SPII_KGO = 20;
+            SPII_WALDREF = 21;
+            CONTRACTUAL_OPTA_DATA_MIGRATION = 1000;
+            CONTRACTUAL_STATS_DATA_MIGRATION = 1001;
+            TECHNICAL_DEBT_SIRIUS_MIGRATION = 1002 [deprecated = true];
+            TECHNICAL_IN_DEVELOPMENT_GEO_KG_UGC = 1003;
+            MOMA_RESTRICTED_TVC = 2000;
+            MOMA_UNRESTRICTED_TVC = 2001;
+            MOMA_FTE = 2002;
+            AOG_TEST_DATA = 2003;
+            CONTRACTUAL_NETFLIX_DATA = 3001;
+            CONTRACTUAL_NETFLIX_GRACENOTE = 3010;
+            CONTRACTUAL_SPOTIFY_PODCAST_DATA = 93;
+            CONTRACTUAL_IPG_DATA = 100;
+            CONTRACTUAL_YOUVIEW_DATA = 101;
+            CONTRACTUAL_YOUTUBE_ALC_DATA = 107;
+            CONTRACTUAL_SLING_DATA = 113;
+            CONTRACTUAL_GTV_FREEPLAY_LIVETV_DATA = 114;
+            CREATOR_PRESENCE_DATA = 104 [deprecated = true];
+            YOUTUBE_PODCASTS_DATA = 109;
+            TECHNICAL_UNRECONCILED_MEDIA_ACTION = 3002;
+            CONTRACTUAL_AUDIBLE_DATA = 3003;
+            CONTRACTUAL_SEARCH_NETFLIX_DATA = 3004;
+            CONTRACTUAL_ASSISTANT_MEDIA_ACTIONS = 3005;
+            CONTRACTUAL_ANDROID_TV_NETFLIX_DATA = 3006;
+            CONTRACTUAL_GOOGLE_PLAY_MOVIES_DATA = 3007;
+            CONTRACTUAL_RANKING_PROVIDER_POPULARITY_DATA = 3008;
+            CONTRACTUAL_CARBON_INDEX_DATA = 105;
+            CONTRACTUAL_CARBON_INDEX_APP = 106;
+            TRAVEL_ACTIVITY_DATA = 3009;
+            MERCHANT_EVENTS_DATA = 111;
+            CONTRACTUAL_AOG_FOOD_ORDERING_DATA = 4000;
+            CONTRACTUAL_YETI_DATA = 94;
+            CONTRACTUAL_BBC_PROVIDER_METADATA = 92 [deprecated = true];
+            JANATA_USER_GENERATED_DATA = 8;
+            TRIANGULATION_LOSERS_FOR_REFX = 9;
+            CONTRACTUAL_PRERELEASE_YT_SHOWS = 10;
+            SPII_LOSERS_FOR_REFX = 11;
+            SHOPPING_PRODUCT_IMAGE = 22;
+            SHOPPING_PRODUCT_DESCRIPTION = 23;
+            SHOPPING_PRODUCT_ATTRIBUTE = 24;
+            SHOPPING_ON_DOT_COM_ONLY = 25;
+            SHOPPING_ORGANIC_ONLY = 26;
+            SHOPPING_ORGANIC_ON_DOT_COM_ONLY = 27;
+            SHOPPING_PRE_RELEASE_PRODUCT = 29;
+            SHOPPING_DO_NOT_PUBLISH_TO_TOPIC_SERVER = 67;
+            LMS_POLICY_ACKED_ONLY = 28;
+            MINED_PEOPLE = 12;
+            LIMITED_FOR_SEMANTIC_UNDERSTANDING = 13;
+            ISOLATION_S3_MEDIA_ACTION = 14;
+            ISOLATION_S3_REAL_ESTATE = 15;
+            ISOLATION_S3_AUTOS = 30;
+            ISOLATION_S3_NLWEB = 31;
+            ISOLATION_S3_RECOMEDIA = 80;
+            ISOLATION_S3_GEO_CARS = 10000;
+            ISOLATION_S3_CULTURAL = 10013;
+            ISOLATION_YOUTUBE_OTT = 99;
+            ISOLATION_YOUTUBE_MUSIC_BASS_ENTITIES = 102;
+            YOUTUBE_CHANNEL_ENTITIES = 112;
+            ISOLATION_FINANCIAL_DATA = 97;
+            ISOLATION_MEDICAL = 10004;
+            ISOLATION_G4C = 103 [deprecated = true];
+            ISOLATION_EXPERIMENT_ONLY = 16;
+            ISOLATION_KE_INTERNAL = 86;
+            ISOLATION_WEB_CHANNELS = 10001;
+            ISOLATION_ONRAMP_DICTIONARY_EXPERIMENT = 10002;
+            ISOLATION_S3_TRAVEL_HOTEL_ROOMS = 10006;
+            ISOLATION_PKG_ANDROID_AUTO_EMBEDDED_SIGNED_IN = 15034;
+            ISOLATION_PKG_ANDROID_AUTO_EMBEDDED_SIGNED_OUT = 15035;
+            ISOLATION_PKG_APP_NAMES = 15002;
+            ISOLATION_PKG_ASSISTANT_CONTACT_AFFINITY_WITH_METADATA = 15011;
+            ISOLATION_PKG_ASSISTANT_DEVICE_SETTINGS = 49;
+            ISOLATION_PKG_ASSISTANT_LIST_NAMES_FOR_SPEECH_BIASING = 15039;
+            ISOLATION_PKG_ASSISTANT_SETTINGS_FOOTPRINTS = 37;
+            ISOLATION_PKG_ASSISTANT_SETTINGS_NICKNAME = 15026;
+            ISOLATION_PKG_CALENDAR_EVENTS_FOR_QUERY_ANNOTATION = 15006;
+            ISOLATION_PKG_CALENDAR_EVENTS_FOR_SPEECH_BIASING = 15005;
+            ISOLATION_PKG_CALENDARS_FOR_QUERY_ANNOTATION = 15021;
+            ISOLATION_PKG_CALENDARS_FOR_SPEECH_BIASING = 15022;
+            ISOLATION_PKG_ASSISTANT_SETTINGS_DEVICE_SETTINGS = 15043;
+            PKG_ASSISTANT_CONTACT_AFFINITY_FOOTPRINTS = 73;
+            ISOLATION_PKG_CONTACT_AGGREGATED_SIGNALS = 63;
+            ISOLATION_PKG_CONTENT_INTERESTS = 35;
+            ISOLATION_PKG_DEVICE_INSTALLED_APPS = 66;
+            ISOLATION_PKG_DISCOVER_SMART_HOME_DEVICES = 43;
+            ISOLATION_PKG_DYNAMIC_ENTITIES = 54;
+            ISOLATION_PKG_FLIGHT_LEG_RESERVATIONS = 50;
+            ISOLATION_PKG_FOCUS_OWNER_PROFILE = 56;
+            ISOLATION_PKG_FORMATTED_ADDRESS = 83;
+            ISOLATION_PKG_GAIA = 59;
+            ISOLATION_PKG_GELLER_ANSWERS = 55;
+            ISOLATION_PKG_ASSISTANT_EPHEMERAL_SUGGESTIONS = 15042;
+            ISOLATION_PKG_GMAIL_BILLS = 15009;
+            ISOLATION_PKG_GMAIL_ORDERS = 15010;
+            ISOLATION_PKG_HABITS = 15015;
+            ISOLATION_PKG_HANDBAG_ENTITIES = 40;
+            ISOLATION_PKG_HERON_INTENTS_AND_TYPES = 15008;
+            ISOLATION_PKG_HOTEL_RESERVATIONS = 51;
+            ISOLATION_PKG_HOUSEHOLD = 41;
+            ISOLATION_PKG_LAMS_PREFERENCES = 34;
+            ISOLATION_PKG_LOCATION_SHARING_CONTACTS = 85;
+            ISOLATION_PKG_MAPS_ALIAS_FOOTPRINTS = 39;
+            ISOLATION_PKG_MAPS_SEARCH_LOCATIONS = 84;
+            ISOLATION_PKG_LOCAL_LEAF_PAGE_VIEW_LOCATIONS = 15040;
+            ISOLATION_PKG_MEDIA_HABITUAL_CACHE = 58;
+            ISOLATION_PKG_MEDIA_LIBRARY = 15004;
+            ISOLATION_PKG_MEDIA_USER_CONTEXT_INFO = 15001;
+            ISOLATION_PKG_MEDIA_USER_ENTITIES = 15007;
+            ISOLATION_PKG_PARKING_LOCATIONS = 57;
+            ISOLATION_PKG_PEOPLE_API = 36;
+            ISOLATION_PKG_PEOPLE_API_CONTACT_ANNOTATIONS = 15023;
+            ISOLATION_PKG_PEOPLE_API_GET_PEOPLE_BY_IDS = 15037;
+            ISOLATION_PKG_PERSONAL_CONTACT_ANNOTATIONS = 15019;
+            ISOLATION_PKG_PERSONAL_PLACES = 76;
+            ISOLATION_PKG_PERSONAL_SHARED_CONTACT_ANNOTATIONS = 15024;
+            ISOLATION_PKG_PERSONALIZED_PRONUNCIATIONS = 68;
+            ISOLATION_PKG_PLAY_AUDIO_BOOKS = 65;
+            ISOLATION_PKG_PWS_ASSISTANT_CONTACTS_FOOTPRINTS = 38;
+            ISOLATION_PKG_ASSISTANT_UPP_PERSONAL_TOP_ENTITIES = 15041;
+            PKG_RESERVATION_DATA = 89;
+            ISOLATION_PKG_GI_HOTEL_RESERVATION_DATA = 15029;
+            ISOLATION_PKG_GI_FLIGHT_RESERVATION_DATA = 15030;
+            ISOLATION_PKG_GI_CAR_RENTAL_RESERVATION_DATA = 15031;
+            ISOLATION_PKG_GI_TRANSPORTATION_RESERVATION_DATA = 15032;
+            ISOLATION_PKG_GI_RESTAURANT_RESERVATION_DATA = 15033;
+            ISOLATION_PKG_RESTAURANT_RESERVATIONS = 52;
+            ISOLATION_PKG_SELF_ENTITIES = 15020;
+            ISOLATION_PKG_SOCIAL_EVENT_RESERVATIONS = 53;
+            ISOLATION_PKG_SOCIAL_GRAPH_PEOPLE_API = 15012;
+            ISOLATION_PKG_STADIA_CONTACTS = 77;
+            ISOLATION_PKG_STARLIGHT_BULK_LOOKUP = 44;
+            ISOLATION_PKG_STARLIGHT_BULK_LOOKUP_CONSISTENT = 45;
+            ISOLATION_PKG_STARLIGHT_BULK_LOOKUP_CONSISTENT_CONTACTS = 15003;
+            ISOLATION_PKG_STARLIGHT_COMPOSITE = 60;
+            ISOLATION_PKG_STARLIGHT_COMPOSITE_FACE_LABELS = 61;
+            ISOLATION_PKG_STARLIGHT_FACE_LABELS = 46;
+            ISOLATION_PKG_STARLIGHT_QUERY = 15016;
+            ISOLATION_PKG_STARLIGHT_TOP_CONTACTS = 47;
+            ISOLATION_PKG_STARLIGHT_VISIBLE_TO_GUESTS = 82;
+            ISOLATION_PKG_STRUCTURED_MEMORY_FOOTPRINTS = 42;
+            ISOLATION_PKG_TEACH_AND_LEARN_ENTITIES = 48;
+            ISOLATION_PKG_TYPED_QUERIES = 15044;
+            ISOLATION_PKG_ASSISTANT_ROUTINES = 15038;
+            ISOLATION_PKG_VANITY_COLLECTIONS = 15013;
+            ISOLATION_PKG_WEBSEARCH = 15027;
+            ISOLATION_PKG_WHITEPAGES_PHONE_NUMBER = 33;
+            ISOLATION_PKG_VOICE_PROFILE = 15036;
+            ISOLATION_PKG_YOUTUBE_ASSISTANT_CONTEXT = 74;
+            ISOLATION_PKG_YOUTUBE_ASSISTANT_XWALKSAFE_CONTEXT = 15014;
+            ISOLATION_PKG_YOUTUBE_MUSIC_LOCKER = 79;
+            ISOLATION_PKG_YOUTUBE_PLAYLISTS = 15017;
+            ISOLATION_PKG_YOUTUBE_PLAYLIST_SEARCH = 15028;
+            ISOLATION_PKG_YOUTUBE_PRIVATE_PLAYLISTS = 15018;
+            ISOLATION_PKG_YOUTUBE_PUBLIC_AND_PRIVATE_PLAYLISTS = 15025;
+            ISOLATION_S3_CREATOR_PRESENCE = 10003;
+            ISOLATION_S12Y_RECIPE_INGREDIENT_INSIGHTS = 10005;
+            ISOLATION_SCOUTS_SOCIETAL_CONTEXT_ENTITIES = 10007;
+            ISOLATION_ASTROLOGY_HOROSCOPE = 10008;
+            ISOLATION_LLM_GENERATED_TVM_SYNOPSIS = 10009;
+            ISOLATION_GENERATED_DATA = 10010;
+            ISOLATION_KID_FRIENDLY_SEARCH = 10011;
+            ISOLATION_RWJ_CRUISE = 10012;
+            UMP_TESTING_ONLY = 32;
+            INTENTJOINS_NB_SIGNALS = 62;
+            ADS_INTEGRITY_ANNOTATION = 64;
+            COVID_MAPS_SENSITIVE = 69;
+            KE_TRUST = 70;
+            SENSITIVE_ENTITIES_CLASSIFICATION = 71;
+            ISOLATION_S3_DATASEARCH = 72;
+            VIRTUALCARE_US = 75;
+            NETFLIX_AVAILABILITY_MEDIA_ACTION = 78;
+            ACCC_RISKY_DATA = 87;
+            AU_ACCC_RISKY_FOR_DISPLAY = 88;
+            GEO_FEATURE_RESTRICTION = 98;
+            RIGHTS_MANAGEMENT_100 = 20101;
+            RIGHTS_MANAGEMENT_101 = 20102;
+            RIGHTS_MANAGEMENT_102 = 20103;
+            RIGHTS_MANAGEMENT_INSIDER_RISK = 20104;
+            RIGHTS_MANAGEMENT_EBF_DATA = 20105;
+            RIGHTS_MANAGEMENT_LLM_DATA_ACCESS_RESTRICTION = 20106;
+            DICTIONARY_DATA_OXFORD = 95;
+            DICTIONARY_DATA_LE_ROBERT = 96;
+            ENTITY_TEXT_FEATURES = 108;
+            AR_ONBOARDING_TEST = 90;
+            AR_ONBOARDING_TEST_2 = 91;
+            MATERIALIZED_ENRICHER_INTERNAL = 1701;
+            MATERIALIZED_SCUBED_INTERNAL = 1702;
+            CIVICS_SEARCH_POLITICAL_TOPIC_SCORING_DATA = 110;
+        }
+        
+        optional int32 access_required_int = 20;
+        optional SpiiCertification spii_certification = 18;
+        optional LivegraphProvenanceMetadata lg_metadata = 19;
+        optional PolicyMetadata policy_metadata = 21;
+        optional string freebase_attribution = 4 [deprecated = true];
+        optional bytes extraction_pattern = 7 [deprecated = true];
+        optional int64 authoring_timestamp = 8 [default = -1, deprecated = true];
+        optional int64 extraction_timestamp = 9 [default = -1, deprecated = true];
+        optional .proto2.bridge.MessageSet provenance_extension = 12 [deprecated = true];
+        optional knowledge_graph.SourceContentReference source_content_reference = 22;
+        
+        extensions 1000000 to max;
+        
+        message AccessRequirementProto3Wrapper {
+            optional AccessRequirement access_requirement = 1;
+        }
+        
+        enum AccessRequirementCategory {
+            UNKNOWN_CATEGORY = 0;
+            END_TO_END = 1;
+            INGESTED_BUT_NOT_SERVED = 2;
+            MATERIALIZED_AND_SERVED = 3;
+            INTERNAL_KG_USE_ONLY = 4;
+        }
+    }
+    
+    optional string expected_proto = 12;
+    repeated Provenance deletion_provenance = 13;
+    repeated uint64 subgraph_id = 15;
+    repeated knowledge_graph.QualifierSet qualifier_sets = 17;
+    optional double edge_weight = 18;
+    
+    extensions 1000000 to max;
+    
+    reserved 4;
+    
+    extend .proto2.bridge.MessageSet {
+        optional Triple message_set_extension = 43918061;
+    }
+}
+
+message TripleSet {
+    repeated Triple triple = 1;
+    
+    extensions 1000000 to max;
+    
+    extend .proto2.bridge.MessageSet {
+        optional TripleSet message_set_extension = 45632928;
+    }
+}
+
+extend .proto2.EnumValueOptions {
+    optional Triple.Provenance.AccessRequirementCategory access_requirement_category = 350454980;
+}

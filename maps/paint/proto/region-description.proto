@@ -1,0 +1,60 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "geostore/base/proto/point.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/util/tile_bitmap.proto";
+import "maps/util/tile_coordinate.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "util/geometry2d/r2.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "RegionDescriptionProto";
+option java_package = "com.google.maps.paint";
+
+message RegionDescription {
+    optional maps_util.TileCoordinateProto tile = 1;
+    optional TileCoordinateDelta tile_delta = 6;
+    optional maps_util.TileBitmap tile_bitmap = 8;
+    optional RegionRectangle rect = 3;
+    optional LatLngRegionRectangle latlng_rect = 4;
+    optional S2TileCoordinateProto s2_tile = 9;
+    optional string client_tile_version_id = 25;
+    optional bool enable_unchanged_epoch_detection = 26 [default = true];
+    optional .geometry2d.R2TransformerProto overzooming_transform = 1001;
+    
+    reserved 5, 1000;
+}
+
+message TileCoordinateDelta {
+    optional int32 x_delta = 1;
+    optional int32 y_delta = 2;
+}
+
+message RegionRectangle {
+    optional PixelProto top_left = 1;
+    optional PixelProto span = 2;
+    optional int32 zoom = 3;
+}
+
+message LatLngRegionRectangle {
+    optional uint32 zoom = 2;
+    optional uint32 min_zoom = 7;
+    optional uint32 max_zoom = 8 [default = 17];
+    optional PixelProto span = 1;
+    optional geostore.PointProto center = 3;
+    repeated geostore.PointProto visible_location = 4;
+    optional geostore.PointProto lo = 5;
+    optional geostore.PointProto hi = 6;
+}
+
+message PixelProto {
+    required uint32 x = 1;
+    required uint32 y = 2;
+}
+
+message S2TileCoordinateProto {
+    optional uint64 s2_cell = 1;
+}

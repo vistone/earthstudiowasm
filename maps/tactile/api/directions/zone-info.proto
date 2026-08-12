@@ -1,0 +1,61 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "maps/tactile/api/shared/feature-id.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "ZoneInfoProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message ZoneInfo {
+    repeated RestrictedZone restricted_zone = 1;
+    message RestrictedZone {
+        optional string name = 1;
+        optional string description = 2;
+        optional string url = 3;
+        optional string link_description = 8;
+        optional maps_tactile.shared.FeatureId feature_id = 4;
+        
+        optional ZoneType zone_type = 11;
+        enum ZoneType {
+            UNKNOWN_ZONE_TYPE = 0;
+            GENERIC = 1;
+            LOW_EMISSION_ZONE = 2;
+            LOW_TRAFFIC_ZONE = 3;
+        }
+        
+        optional EmissionRestriction emission_restriction = 12;
+        enum EmissionRestriction {
+            UNKNOWN_EMISSION_RESTRICTION = 0;
+            UNRESTRICTED = 1;
+            RESTRICTED = 2;
+        }
+        
+        optional TraversalDetails traversal_details = 13;
+        message TraversalDetails {
+            optional bool enters_zone = 1;
+        }
+        
+        optional maps_tactile.shared.LatLngRectangle bound = 5;
+        optional maps_tactile.shared.LatLng center_point = 6;
+        
+        optional RestrictionsIcon icon = 7;
+        message RestrictionsIcon {
+            optional IconType type = 1 [default = UNKNOWN_ICON_TYPE];
+            enum IconType {
+                UNKNOWN_ICON_TYPE = 0;
+                GENERIC = 1;
+            }
+        }
+        
+        optional RouteContext route_context = 9;
+        message RouteContext {
+            optional bool should_suppress_polygon = 1;
+        }
+    }
+}

@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package youtube.elements.templates.proto;
+
+import "google/api/inclusion.proto";
+import "google/protobuf/any.proto";
+
+option objc_class_prefix = "ELMPB";
+
+message EMLTemplateData {
+    optional string identifier = 1;
+    optional google.protobuf.Any template_config = 2;
+    repeated string direct_dependencies = 3;
+    optional int64 resource_tag = 4;
+    optional ElementsResourceStatus resource_status = 5;
+}
+
+message EMLParcel {
+    repeated EMLTemplateData eml_template_data = 1;
+}
+
+enum ElementsResourceStatus {
+    ELEMENTS_RESOURCE_STATUS_UNKNOWN = 0;
+    ELEMENTS_RESOURCE_STATUS_OMITTED = 1;
+    ELEMENTS_RESOURCE_STATUS_ATTACHED = 2;
+}

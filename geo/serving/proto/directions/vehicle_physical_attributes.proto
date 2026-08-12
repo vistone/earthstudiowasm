@@ -1,0 +1,42 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions;
+
+import "geo/serving/proto/directions/trailer_physical_attributes.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPD";
+option java_multiple_files = true;
+option java_outer_classname = "VehiclePhysicalAttributesProto";
+option java_package = "com.google.geo.serving.proto.directions";
+
+message VehiclePhysicalAttributes {
+    optional int32 total_height_mm = 1;
+    optional int32 total_width_mm = 2;
+    optional int32 total_length_mm = 3;
+    optional int32 total_weight_kg = 4;
+    optional TrailerPhysicalAttributes trailer_physical_attributes = 5 [deprecated = true];
+    optional int32 total_axle_count = 6;
+    repeated TrailerPhysicalAttributes trailer = 7;
+    
+    repeated HazardousGoods hazardous_goods = 8;
+    message HazardousGoods {
+        optional HazardousGoodsType type = 1;
+    }
+    
+    enum HazardousGoodsType {
+        UNKNOWN_HAZARDOUS_GOODS_TYPE = 0;
+        EXPLOSIVES = 1;
+        GASES = 2;
+        FLAMMABLE = 3;
+        COMBUSTIBLE = 4;
+        ORGANIC = 5;
+        POISON = 6;
+        RADIOACTIVE = 7;
+        CORROSIVE = 8;
+        ASPIRATION_HAZARD = 9;
+        ENVIRONMENTAL_HAZARD = 10;
+        OTHER = 11;
+    }
+}

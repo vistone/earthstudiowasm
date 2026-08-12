@@ -1,0 +1,66 @@
+syntax = "editions";
+
+package earth.document;
+
+import "geo/earth/app/cpp/core/document/icon.proto";
+import "geo/earth/app/cpp/core/document/role.proto";
+import "geo/earth/proto/documentnamespace.proto";
+import "geo/earth/proto/map_type.proto";
+import "geo/earth/proto/storage_restrictions.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "DocumentStorageMetadataProto";
+
+message DocumentUmsMetadata {
+    optional string map_id = 1;
+    optional bool is_owner = 2;
+    optional bool has_write_access = 3;
+    optional string resource_key = 4;
+    optional DocumentNamespace document_namespace = 5 [default = DOCUMENT_NAMESPACE_EARTH];
+    optional MapType map_type = 6 [default = MAP_EARTH];
+}
+
+message DocumentStorageMetadata {
+    optional bool visibility = 1;
+    optional string title = 2;
+    optional string snippet = 3;
+    optional string description = 4;
+    
+    optional Origin origin = 5;
+    enum Origin {
+        ORIGIN_UNKNOWN = 0;
+        ORIGIN_NONE = 1;
+        ORIGIN_LOCAL = 2;
+        ORIGIN_UMS = 3;
+    }
+    
+    optional string url = 6;
+    optional string base_url = 7;
+    optional Icon icon = 8;
+    optional Role role = 9;
+    optional DocumentUmsMetadata ums_metadata = 10;
+    optional int64 document_key = 11;
+    optional int64 last_modified_timestamp_milliseconds = 12;
+    optional bool is_pinned = 13;
+    optional bool wants_visibility = 14;
+    optional bool is_safe_to_load = 15;
+    optional string owner_name = 16;
+    optional string owner_photo_url = 17;
+    optional string owner_filter_token = 20;
+    
+    optional DocumentAssociation association = 18;
+    enum DocumentAssociation {
+        UNKNOWN_DOCUMENT_ASSOCIATION = 0;
+        DOCUMENT_ASSOCIATED_WITH_DEVICE = 1;
+        DOCUMENT_ASSOCIATED_WITH_USER = 2;
+        DOCUMENT_ASSOCIATED_WITH_NOTHING = 3;
+    }
+    
+    optional uint32 earth_mate_folder_index = 19 [default = 1];
+    optional bool using_design_feature = 21;
+    optional bool legacy_file_warning_dismissed = 22;
+}

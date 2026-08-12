@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package gws.mothership.api.v1.common.images;
+
+import "apps/framework/data/caching_annotations.proto";
+import "geo/serving/proto/photos/image_key.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "MSPI";
+option java_multiple_files = true;
+option java_outer_classname = "ImageIdProto";
+option java_package = "com.google.gws.mothership.api.v1.common.images";
+
+message ImageId {
+    string encrypted_docid = 1;
+    geo_serving_proto.photos.ImageKey image_key = 2;
+}

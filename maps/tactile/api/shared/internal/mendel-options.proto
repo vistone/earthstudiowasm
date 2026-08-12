@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package maps.mendel;
+
+import "net/proto2/proto/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.mendel";
+
+extend .proto2.MessageOptions {
+    optional string import_path = 191484328;
+    optional string feature = 116904589;
+    optional string proto_param = 116904593;
+}
+
+extend .proto2.FieldOptions {
+    optional string param = 116904590;
+    optional string import_override = 191484329;
+    optional string feature_override = 116904591;
+    optional bool ignore = 116904592;
+    optional bool text_value = 127580885;
+}

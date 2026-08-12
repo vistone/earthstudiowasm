@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package maps_directions_customization_logs_serving_protos;
+
+import "logs/proto/maps/directions/customization/config/serving_protos/parameter_value.proto";
+import "logs/proto/maps/directions/customization/config/serving_protos/segment_annotations.proto";
+import "logs/proto/maps/directions/customization/config/serving_protos/trip_time.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedTripPropertyInputs {
+    map<string, LoggedCustomizationAnnotation> annotation_map = 1;
+    map<string, LoggedParameterValue> parameter_map = 3;
+    optional int64 segment_count = 2;
+    
+    message LoggedCustomizationAnnotation {
+        oneof annotation_type {
+            LoggedSegmentLengthList segment_length_list = 1;
+            LoggedSegmentTraversalTimeList segment_traversal_time_list = 2;
+            LoggedTripAnchorTime trip_anchor_time = 9;
+        }
+    }
+}

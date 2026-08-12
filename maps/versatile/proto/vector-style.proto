@@ -1,0 +1,345 @@
+syntax = "editions";
+
+package maps_versatile;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/paint/proto/client-vector-annotation-targeting.proto";
+import "maps/versatile/proto/annotation-enums.proto";
+import "maps/versatile/proto/intent.proto";
+
+option features = enum_type: CLOSED
+repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_outer_classname = "DummyVectorStyleProto";
+option java_package = "com.google.maps.versatile";
+
+message ContextIntent {
+    enum ContextType {
+        ARAB_COUNTRIES = 12;
+        ARMENIA = 25;
+        ARGENTINA = 5;
+        AZERBAIJAN = 26;
+        CHILE = 24;
+        CHINA = 2;
+        GIBRALTAR = 19;
+        GREECE = 21;
+        HONG_KONG = 27;
+        INDIA = 1;
+        ISRAEL = 22;
+        JAPAN = 6;
+        MACAO = 28;
+        MACEDONIA = 20;
+        MEXICO = 31;
+        MOROCCO = 16;
+        MYANMAR_BURMA = 15;
+        PAKISTAN = 17;
+        RUSSIA = 7;
+        SERBIA = 8;
+        SOUTH_KOREA = 9;
+        SPAIN = 10;
+        SYRIA = 23;
+        TAIWAN = 11;
+        TURKEY = 14;
+        UKRAINE = 13;
+        UNITED_KINGDOM = 18;
+        UNITED_STATES = 30;
+        VIETNAM = 29;
+    }
+    
+    enum ContextPolicy {
+        CONTEXT_ONLY = 0;
+        CONTEXT_NEVER = 1;
+    }
+}
+
+message PlaneStyleProto {
+    optional PixelCompositingMode plane_compositing_mode = 2 [default = COMPOSITING_BLEND];
+    enum PixelCompositingMode {
+        COMPOSITING_BLEND = 0;
+        COMPOSITING_REPLACE = 1;
+    }
+    
+    optional PixelCompositingMode render_op_compositing_mode = 3 [default = COMPOSITING_BLEND];
+}
+
+message StrokeStyleProto {
+    optional fixed32 color_argb = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional TextureStyleProto texture = 7;
+    optional float width = 2 [default = 1];
+    optional bool end_caps = 3 [default = false];
+    repeated float dashes = 4;
+    
+    optional EndCapType start_cap = 5 [default = ENDCAP_NONE];
+    enum EndCapType {
+        ENDCAP_NONE = 0;
+        ENDCAP_OUT = 1;
+        ENDCAP_ARROW = 2;
+        ENDCAP_IN = 3;
+        ENDCAP_CUSTOM = 4;
+    }
+    
+    optional EndCapType end_cap = 6 [default = ENDCAP_NONE];
+    optional CustomCapStyle start_cap_style = 14;
+    optional CustomCapStyle end_cap_style = 15;
+    optional float arrow_cap_length = 13;
+    
+    optional SideType side = 8 [default = SIDE_BOTH];
+    enum SideType {
+        SIDE_INNER = 0;
+        SIDE_OUTER = 1;
+        SIDE_BOTH = 2;
+    }
+    
+    optional float orthogonal_offset = 12;
+    optional float gradient_start_offset = 10;
+    optional float bevel_width = 11 [deprecated = true];
+    optional AnnotationRankingOptions annotation_ranking_options = 16;
+}
+
+message CustomCapStyle {
+    optional string alpha_mask_url = 1;
+}
+
+message FillStyleProto {
+    optional fixed32 color_argb = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional TextureStyleProto texture = 2 [deprecated = true];
+    optional FillTextureStyleProto configurable_texture = 3;
+}
+
+message TextureStyleProto {
+    optional string name = 1;
+    optional string file = 2;
+    optional string url = 3;
+}
+
+message FillTextureStyleProto {
+    optional string file = 1;
+    
+    optional TextureType texture_type = 6 [default = TEXTURE_GRAIN];
+    enum TextureType {
+        TEXTURE_UNKNOWN = 0;
+        TEXTURE_PATTERN = 1;
+        TEXTURE_GRAIN = 2;
+    }
+    
+    optional TextureBlendMode texture_blend_mode = 2;
+    enum TextureBlendMode {
+        BLEND_NORMAL = 0;
+        BLEND_MULTIPLY = 1;
+        BLEND_SCREEN = 2;
+    }
+    
+    optional TextureOffsetMode texture_offset_mode = 4;
+    enum TextureOffsetMode {
+        OFFSET_NONE = 0;
+        OFFSET_HALF_VERTICAL = 1;
+        OFFSET_HALF_HORIZONTAL = 2;
+    }
+    
+    optional int32 texture_minimum_version = 5;
+    optional float scale_factor = 3 [default = 0.25];
+}
+
+message TextStyleProto {
+    optional string font_file = 5;
+    optional string font_name = 1;
+    optional float point_size = 2 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional float leading_ratio = 6 [default = 1];
+    optional float tracking_ratio = 10 [default = 0];
+    optional float outline_width = 3;
+    optional fixed32 color_argb = 4 [features = field_presence: LEGACY_REQUIRED
+    ];
+    
+    optional Justification justification = 7 [default = JUSTIFY_CENTER];
+    enum Justification {
+        JUSTIFY_CENTER = 1;
+        JUSTIFY_LEFT = 2;
+        JUSTIFY_RIGHT = 3;
+        JUSTIFY_TOP = 4;
+        JUSTIFY_BOTTOM = 5;
+    }
+    
+    optional TextCapitalization text_capitalization = 11 [default = CASE_AS_IS];
+    enum TextCapitalization {
+        CASE_AS_IS = 0;
+        CASE_UPPERCASE = 1;
+    }
+    
+    optional bool strikethrough = 12;
+    optional bool in_box = 13;
+}
+
+message IconImageProto {
+    optional string file = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional int32 min_length = 2 [default = 0, deprecated = true];
+    optional int32 max_length = 3 [default = 100000, deprecated = true];
+    optional int32 anchor_x = 4 [default = -1];
+    optional int32 anchor_y = 5 [default = -1];
+}
+
+message IconStyleProto {
+    optional string icon_name = 1;
+    repeated IconImageProto icon_image = 2;
+    optional bool align_to_polyline = 3;
+    optional float scale_factor = 4 [default = 0.25];
+    
+    optional IconPadding icon_padding = 9;
+    message IconPadding {
+        optional int32 padding_top = 1;
+        optional int32 padding_bottom = 2;
+        optional int32 padding_left = 3;
+        optional int32 padding_right = 4;
+    }
+    
+    optional fixed32 color_filter_argb = 5;
+    optional fixed32 highlight_color_rgb = 6;
+    optional bool allow_display_without_text = 7 [default = true, deprecated = true];
+    
+    optional RecolorableState recolorable_state = 8;
+    enum RecolorableState {
+        UNKNOWN = 0;
+        LAYER_NOT_RECOLORABLE = 1;
+        LAYER_RECOLORABLE = 2;
+        LAYER_INTERNAL_RECOLORABLE_ONLY = 3;
+    }
+    
+    optional IconLayer layer = 10 [default = UNKNOWN_LAYER];
+    enum IconLayer {
+        UNKNOWN_LAYER = 0;
+        OUTLINE = 1;
+        CONTAINER = 2;
+        PICTOGRAM = 3;
+        HIGHLIGHT = 4;
+    }
+}
+
+message AnnotationRankingOptions {
+    repeated annotations.UseCase ordered_use_cases = 1 [features = repeated_field_encoding: PACKED
+    ];
+}
+
+message PolygonStyleProto {
+    optional AnnotationRankingOptions annotation_ranking_options = 1;
+}
+
+message LabelStyleProto {
+    optional float padding = 1;
+    optional float minor_axis_padding = 8;
+    optional float min_width = 2;
+    optional float min_height = 3;
+    optional int32 caret_height = 9;
+    optional int32 caret_corner_offset_distance = 11;
+    optional int32 caret_height_corner = 12;
+    
+    repeated AnchorPoint supported_anchor_point = 13;
+    enum AnchorPoint {
+        CENTER = 1;
+        LEFT = 2;
+        RIGHT = 3;
+        TOP = 4;
+        TOP_LEFT = 5;
+        TOP_RIGHT = 6;
+        BOTTOM = 7;
+        BOTTOM_LEFT = 8;
+        BOTTOM_RIGHT = 9;
+    }
+    
+    optional int32 drop_shadow_offset = 10;
+    optional int32 drop_shadow_offset_minor_axis = 17;
+    optional fixed32 drop_shadow_color = 18;
+    optional int32 drop_shadow_blur_radius = 14;
+    optional int32 corner_radius = 15;
+    
+    optional ShapeType shape_type = 16 [default = RECT];
+    enum ShapeType {
+        RECT = 1;
+        ROUNDED_RECT = 2;
+        PILL = 3;
+    }
+    
+    optional bool allow_icon_nestling = 19 [default = false];
+    optional AnnotationRankingOptions annotation_ranking_options = 20;
+    
+    optional SubtitleAnnotationDirective subtitle_annotate = 21;
+    enum SubtitleAnnotationDirective {
+        SUBTITLE_ANNOTATE_UNKNOWN = 0;
+        SUBTITLE_ANNOTATE_AFTER_LAST_ELEMENT = 1;
+    }
+    
+    optional int32 num_annotation_subtitles = 22;
+    
+    reserved 4, 5, 6, 7;
+    
+    reserved "draw_dynamic_labels", "conflict_padding_major_axis", "conflict_padding_minor_axis", "line_label_spacing";
+}
+
+message MeshStyleProto {
+    optional float z_projection_ratio = 1 [default = 1];
+    optional fixed32 shade_argb = 2;
+    optional fixed32 roof_argb = 5;
+    optional float light_azimuth = 3;
+    optional float light_altitude = 4 [default = 45];
+    optional fixed32 edge_argb = 6;
+    optional AnnotationRankingOptions annotation_ranking_options = 7;
+}
+
+message UpsampleStyleProto {
+    optional TextureStyleProto texture = 2;
+    repeated fixed32 palette_argb = 1;
+}
+
+message RasterStyleProto {
+    optional float opacity = 1 [default = 1];
+}
+
+message PointStyleProto {
+    optional fixed32 fill_color_argb = 1;
+    optional float radius = 2;
+    optional fixed32 stroke_color_argb = 3;
+    optional float stroke_width = 4;
+}
+
+message VectorStyleProto {
+    optional PlaneStyleProto plane_style = 17;
+    repeated StrokeStyleProto stroke_style = 1;
+    repeated FillStyleProto fill_style = 2;
+    repeated TextStyleProto text_style = 3;
+    repeated IconStyleProto icon_style = 5;
+    optional UpsampleStyleProto upsample_style = 19;
+    optional RasterStyleProto raster_style = 20;
+    optional PointStyleProto point_style = 25;
+    optional LabelStyleProto label_style = 6;
+    repeated IntentProto intent = 10;
+    
+    optional MaskBehavior mask = 9;
+    enum MaskBehavior {
+        MASK_AND_DRAW = 1;
+        MASK_ONLY = 2;
+    }
+    
+    optional MeshStyleProto mesh_style = 11;
+    optional PolygonStyleProto polygon_style = 24;
+    optional int32 z_plane = 18;
+    optional bool backend_style_preserved = 22;
+    repeated maps_paint_client.AnnotationAttribute annotation_attribute = 23;
+    
+    extensions 1000 to max;
+}
+
+message VectorStyleListProto {
+    repeated VectorStyleProto style = 1;
+}
+
+message EncodedStyleTableProto {
+    repeated bytes encoded_style = 1;
+}
+
+message StyleTableWrapperProto {
+    optional EncodedStyleTableProto encoded_style_table = 1;
+}

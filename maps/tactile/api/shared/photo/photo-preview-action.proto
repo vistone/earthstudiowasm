@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package maps_tactile.shared.photo;
+
+import "maps/tactile/api/shared/photo/photo-preview-action-type.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHP";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoPreviewActionProto";
+option java_package = "com.google.maps.tactile.shared.photo";
+
+message PhotoPreviewAction {
+    optional PhotoPreviewActionType action_type = 1;
+    
+    optional ThreeDFlyoverViewConfig three_d_flyover_view_options = 2;
+    message ThreeDFlyoverViewConfig {
+        optional FlyoverType flyover_type = 1;
+        enum FlyoverType {
+            UNKNOWN_FLYOVER_TYPE = 0;
+            FLYOVER_AERIAL = 1;
+            FLYOVER_INDOOR = 2;
+            ROUTE_PREVIEW = 3;
+        }
+    }
+}

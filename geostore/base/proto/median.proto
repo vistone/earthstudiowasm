@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message MedianProto {
+    optional SegmentLoopProto geometry_segment_loop = 1;
+    message SegmentLoopProto {
+        repeated IndexedComponentProto component = 1;
+        message IndexedComponentProto {
+            optional int32 index = 1;
+            optional FeatureIdProto segment = 2;
+            optional double begin_fraction = 3 [default = 0];
+            optional double end_fraction = 4 [default = 1];
+        }
+    }
+}

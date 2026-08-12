@@ -1,0 +1,378 @@
+syntax = "proto2";
+
+package geo.earth.proto;
+
+import "geo/earth/earthfeed/proto/earthfeed.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+import "geo/earth/proto/documentnamespace.proto";
+import "geo/earth/proto/earth_mate/overhead_imagery.proto";
+import "geo/earth/proto/mapstyle.proto";
+import "geo/earth/proto/storage_restrictions.proto";
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.proto";
+
+message Commands {
+    repeated Command commands = 1;
+}
+
+message Command {
+    oneof command_type {
+        ClearSearchHistory clear_search_history = 1;
+        OpenSearchHistory open_search_history = 2;
+        OpenVoyagerGrid open_voyager_grid = 3 [deprecated = true];
+        OpenVoyagerStory open_voyager_story = 4 [deprecated = true];
+        PerformSearch perform_search = 5;
+        OpenFeelingLuckyCard open_feeling_lucky_card = 6;
+        OpenKnowledgeCard open_knowledge_card = 7;
+        FlyToCamera fly_to_camera = 8;
+        OpenCloudProject open_cloud_project = 9;
+        CreateCloudProject create_cloud_project = 10;
+        EnterTimeMachine enter_time_machine = 11;
+        OpenKmlDocument open_kml_document = 12;
+        EnterTimelapse enter_timelapse = 13;
+        CreatePointPlacemark create_point_placemark = 14;
+        EnterStreetView enter_street_view = 15;
+        ToggleLayer toggle_layer = 16;
+        CreateFeature create_feature = 17;
+        OpenKmlDocumentFromContent open_kml_document_from_content = 18;
+        DeleteFeature delete_feature = 19;
+        EditFeature edit_feature = 20;
+        OpenProjectByKey open_project_by_key = 21;
+        SetHomescreenVisibility set_homescreen_visibility = 22;
+        SetBasemapStyle set_basemap_style = 23;
+        CreateFeaturesInFolder create_features_in_folder = 24;
+        RenderDesign render_design = 25 [deprecated = true];
+        ViewDesign view_design = 26;
+        CreateDesigns create_designs = 27;
+        ToggleAvailableLayersUi toggle_available_layers_ui = 28;
+        PreviewDataLayer preview_data_layer = 29;
+        ViewRateCard view_rate_card = 30;
+        OpenEarthMateChat open_earth_mate_chat = 31;
+        ShowLayerCardDetails show_layer_card_details = 32;
+        ViewOnDemandAnalysis view_on_demand_analysis = 33;
+        OpenImageGenerator open_image_generator = 34;
+    }
+    
+    reserved 35, 36;
+}
+
+message ClearSearchHistory {
+    
+}
+
+message OpenSearchHistory {
+    
+}
+
+message OpenFeelingLuckyCard {
+    
+}
+
+message OpenVoyagerGrid {
+    optional string category_id = 1;
+}
+
+message OpenVoyagerStory {
+    optional string balloon_feature_id = 3;
+    optional bool suppress_fly_to = 4;
+    
+    oneof story_id_type {
+        string guid = 1;
+        .earthfeed.EarthFeedItem feed_item = 2;
+    }
+}
+
+message PerformSearch {
+    optional string query = 1;
+    optional string result_group_id = 2;
+    
+    optional LatLonBox viewport = 3;
+    message LatLonBox {
+        optional double north = 1;
+        optional double south = 2;
+        optional double east = 3;
+        optional double west = 4;
+    }
+    
+    optional bool suppress_fly_to_results = 4;
+}
+
+message OpenKnowledgeCard {
+    optional PlaceMetadata metadata = 4;
+    message PlaceMetadata {
+        optional string query = 4;
+        optional string layer_id = 5;
+        
+        oneof coordinates {
+            LatLon lat_lon = 1;
+        }
+        
+        message LatLon {
+            optional double latitude = 1;
+            optional double longitude = 2;
+        }
+    }
+    
+    optional CardSize card_size = 5 [default = CARD_SIZE_NORMAL];
+    enum CardSize {
+        CARD_SIZE_UNKNOWN = 0;
+        CARD_SIZE_COLLAPSED = 1;
+        CARD_SIZE_NORMAL = 2;
+        CARD_SIZE_EXPANDED = 3;
+    }
+    
+    optional bool fly_to_immediately = 3;
+    
+    oneof place_id {
+        string fid = 1;
+        string mid = 2;
+    }
+}
+
+message FlyToCamera {
+    optional CameraAnimation camera_animation = 3 [default = CAMERA_ANIMATION_TELEPORT];
+    enum CameraAnimation {
+        CAMERA_ANIMATION_UNKNOWN = 0;
+        CAMERA_ANIMATION_TELEPORT = 1;
+        CAMERA_ANIMATION_FLY = 2;
+    }
+    
+    optional CameraPresentationMode camera_presentation_mode = 4 [default = PRESENTATION_MODE_STATIC];
+    enum CameraPresentationMode {
+        PRESENTATION_MODE_UNKNOWN = 0;
+        PRESENTATION_MODE_STATIC = 1;
+        PRESENTATION_MODE_POI_ORBIT = 2;
+        PRESENTATION_MODE_PLANET_ORBIT = 3;
+        PRESENTATION_MODE_CINEMATIC = 4;
+    }
+    
+    optional Panorama panorama = 5;
+    message Panorama {
+        optional string pano_id = 1;
+        
+        optional PanoFrontEnd front_end = 2;
+        enum PanoFrontEnd {
+            PANO_FRONTEND_UNKNOWN = 0;
+            PANO_FRONTEND_ALLEYCAT = 1;
+            PANO_FRONTEND_FIFE = 2;
+            PANO_FRONTEND_FIFE_MEDIA_KEY = 3;
+            PANO_FRONTEND_LOCAL = 4;
+        }
+    }
+    
+    optional bool disable_clamping = 6;
+    
+    oneof camera_type {
+        LookAt look_at = 1;
+        LookFrom look_from = 2;
+    }
+    
+    message LookAt {
+        optional double latitude = 1;
+        optional double longitude = 2;
+        optional double altitude = 3;
+        optional double range = 4;
+        optional double heading = 5;
+        optional double tilt = 6;
+        optional double roll = 7;
+        optional double fovy = 8;
+    }
+    
+    message LookFrom {
+        optional double latitude = 1;
+        optional double longitude = 2;
+        optional double altitude = 3;
+        optional double heading = 4;
+        optional double tilt = 5;
+        optional double roll = 6;
+        optional double fovy = 7;
+    }
+}
+
+message OpenCloudProject {
+    optional string project_id = 1;
+    optional bool fly_to_after_load = 3;
+    optional string resource_key = 4;
+    optional .earth.document.DocumentNamespace document_namespace = 5 [default = DOCUMENT_NAMESPACE_EARTH];
+    
+    oneof open_mode {
+        PresentMode present_mode = 2;
+    }
+    
+    message PresentMode {
+        optional string feature_id = 1;
+    }
+}
+
+message CreateCloudProject {
+    optional string folder_id = 1;
+}
+
+message EnterTimeMachine {
+    optional string date = 1;
+    optional bool expanded = 2;
+    optional bool timelapse_enabled = 3;
+    optional double timelapse_framerate_multiplier = 4 [default = 1];
+    optional int32 timelapse_paused_at_year = 5;
+}
+
+message EnterTimelapse {
+    optional bool enabled = 1;
+    optional bool expanded = 2;
+    optional double framerate_multiplier = 3 [default = 1];
+    optional int32 paused_at_year = 4;
+}
+
+message OpenKmlDocument {
+    optional string uri = 1;
+}
+
+message OpenProjectByKey {
+    optional int32 document_key = 1;
+    optional bool fly_to_after_load = 2;
+}
+
+message OpenKmlDocumentFromContent {
+    optional bytes content = 1;
+}
+
+message LatLngAlt {
+    optional double latitude = 1;
+    optional double longitude = 2;
+    optional double altitude = 3;
+}
+
+message CreatePointPlacemark {
+    optional LatLngAlt lat_lng_alt = 1;
+    optional .earth.document.protos.AltitudeMode altitude_mode = 2 [default = CLAMP_TO_GROUND];
+}
+
+message EnterStreetView {
+    optional LatLngAlt lat_lng_alt = 1;
+}
+
+message ToggleLayer {
+    optional LayerType layer_type = 1;
+    enum LayerType {
+        LAYER_TYPE_UNKNOWN = 0;
+        LAYER_TYPE_3D_BUILDINGS = 1;
+        LAYER_TYPE_TIMELAPSE = 2;
+        LAYER_TYPE_RECENTLY_UPDATED = 3;
+        LAYER_TYPE_3D_COVERAGE = 4;
+        LAYER_TYPE_PHOTOS = 5;
+        LAYER_TYPE_GRIDLINES = 6;
+        LAYER_TYPE_ANIMATED_CLOUDS = 7;
+        LAYER_TYPE_PINNED_PROJECTS = 10;
+    }
+    
+    optional bool enabled = 2;
+}
+
+message SetBasemapStyle {
+    optional .earth.layers.MapStyle.Imagery imagery = 1;
+}
+
+message CreateFeature {
+    optional .earth.document.protos.FeatureProperties feature_properties = 1;
+    optional .earth.document.protos.FeatureStyle feature_style = 2;
+    optional int32 document_key = 3;
+    optional OverheadImageryProperties overhead_imagery_properties = 4;
+}
+
+message CreateFeatureTree {
+    optional .earth.document.protos.Feature feature_tree = 1;
+    optional .earth.document.protos.DocumentSchema source_schema = 2;
+    optional string source_cloud_document_id = 3;
+}
+
+message DeleteFeature {
+    optional int32 document_key = 1;
+    optional string feature_id = 2;
+}
+
+message EditFeature {
+    optional int32 document_key = 1;
+    optional string feature_id = 2;
+    optional .earth.document.protos.FeatureProperties feature_properties = 3;
+    optional .earth.document.protos.FeatureStyle feature_style = 4;
+}
+
+message CreateFeaturesInFolder {
+    repeated Command commands = 1;
+    optional int32 document_key = 3;
+    optional string folder_name = 4;
+}
+
+message SetHomescreenVisibility {
+    optional bool is_open = 1;
+}
+
+message ViewDesign {
+    optional string selected_design_id = 1;
+    optional bool is_design_details_open = 2;
+    optional bool is_design_viewer_open = 3;
+}
+
+message CreateDesigns {
+    optional DesignInputMode design_input_mode = 1;
+    enum DesignInputMode {
+        DESIGN_INPUT_MODE_UNSPECIFIED = 0;
+        DESIGN_INPUT_MODE_NEW_BUILD = 1;
+        DESIGN_INPUT_MODE_SOLAR = 2;
+    }
+}
+
+message RenderDesign {
+    option deprecated = true;
+    optional bytes design = 1;
+}
+
+message ToggleAvailableLayersUi {
+    optional bool open_data_catalog = 1;
+}
+
+message PreviewDataLayer {
+    optional string earth_data_layer_identifier = 1;
+}
+
+message ViewRateCard {
+    optional bool open_rate_card = 1;
+}
+
+message OpenEarthMateChat {
+    optional bool is_open = 1;
+    optional string initial_query = 2;
+}
+
+message ShowLayerCardDetails {
+    optional string earth_data_layer_identifier = 1;
+}
+
+message ViewOnDemandAnalysis {
+    oneof analysis {
+        bool open_slope_analysis = 1;
+        bool open_aspect_analysis = 2;
+        bool open_cut_and_fill_analysis = 3;
+        bool open_contour_analysis = 4;
+    }
+}
+
+message OpenImageGenerator {
+    optional string initial_query = 1;
+}
+
+enum CommandSource {
+    COMMAND_SOURCE_UNKNOWN = 0;
+    COMMAND_SOURCE_DEEPLINK = 1;
+    COMMAND_SOURCE_SEARCH = 2;
+    COMMAND_SOURCE_INTERNAL_DEPRECATED = 3;
+    COMMAND_SOURCE_EARTH_MATE = 4;
+}
+
+extend .proto2.FieldOptions {
+    repeated CommandSource allowed_sources = 535801085 [packed = true];
+}

@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package maps_directions_customization_logs_serving_protos;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedTripAnchorTime {
+    oneof anchor_time {
+        int64 depart_time_ms = 1;
+        int64 arrive_by_time_ms = 2;
+    }
+}

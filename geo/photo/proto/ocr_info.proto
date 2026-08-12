@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/catalog/proto/ocr_summary.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "OcrInfoProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message OcrInfo {
+    repeated OcrLanguage detected_languages = 5;
+    optional float avg_text_confidence = 6;
+    optional geo_photo_catalog.OcrArea ocr_area = 7;
+    
+    reserved 1, 2, 3, 4;
+}
+
+message OcrLanguage {
+    optional string language_code = 1;
+}

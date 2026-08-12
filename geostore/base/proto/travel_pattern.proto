@@ -1,0 +1,41 @@
+syntax = "editions";
+
+package geostore;
+
+import "frameworks/testing/rpcreplay/processors/rpc_replay_field_option.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/timeschedule.proto";
+import "geostore/base/proto/travel_mode.proto";
+import "geostore/base/proto/vehicle_attribute_filter.proto";
+import "geostore/base/proto/vehicle_occupancy_range.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message TravelPatternProto {
+    optional Direction direction = 1 [default = IS];
+    enum Direction {
+        DIRECTION_UNKNOWN = 0;
+        IS = 1;
+        NOT = 2;
+    }
+    
+    optional Operation operation = 2;
+    enum Operation {
+        OPERATION_UNKNOWN = 0;
+        MATCH = 1;
+        ALL_OF = 2;
+        ANY_OF = 3;
+    }
+    
+    repeated TravelPatternProto terms = 6;
+    
+    oneof criterion {
+        TimeScheduleProto time_schedule = 3;
+        VehicleAttributeFilterProto vehicle_attribute_filter = 4;
+        VehicleOccupancyRangeProto vehicle_occupancy_range = 5;
+        TravelMode travel_mode = 7;
+    }
+}

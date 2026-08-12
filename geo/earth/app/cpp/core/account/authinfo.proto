@@ -1,0 +1,41 @@
+syntax = "proto2";
+
+package earth.account;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.android.apps.earth.account";
+
+message AuthInfoRequest {
+    optional int32 request_id = 1;
+    optional string focus_obfuscated_gaia_id = 2;
+}
+
+message AuthInfoResponse {
+    optional uint32 request_id = 1;
+    optional bool unable_to_get_auth_info = 2;
+    optional string focus_obfuscated_gaia_id = 3;
+    optional string auth_token = 4;
+    optional string session_identifier = 5;
+    repeated string auth_headers = 6;
+}
+
+message PlatformAccountInfo {
+    optional string focus_obfuscated_gaia_id = 1;
+    optional string session_identifier = 2;
+}
+
+message UserAccountInfo {
+    optional string focus_obfuscated_gaia_id = 1;
+    optional string session_identifier = 2;
+    optional string display_name = 3;
+    optional string photo_url = 4;
+    optional bool drive_enabled = 5 [default = true];
+    optional string email = 6;
+    optional bool earth_enabled = 7 [default = true];
+    optional bool mymaps_enabled = 8 [default = true];
+}

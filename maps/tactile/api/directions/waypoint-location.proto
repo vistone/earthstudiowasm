@@ -1,0 +1,98 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/geo/production/antiscraping/proto/limited_response_annotations.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/shared/common/geom/geom.proto";
+import "maps/tactile/api/directions-common.proto";
+import "maps/tactile/api/directions/address.proto";
+import "maps/tactile/api/directions/destination-landmark.proto";
+import "maps/tactile/api/directions/parking-planner.proto";
+import "maps/tactile/api/directions/related-location.proto";
+import "maps/tactile/api/entity-details-common.proto";
+import "maps/tactile/api/shared/common.proto";
+import "maps/tactile/api/shared/directions/parking-summary.proto";
+import "maps/tactile/api/shared/ev-info.proto";
+import "maps/tactile/api/shared/logging-common.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "net/proto2/contrib/output_source_markup/options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "WaypointLocationProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message WaypointLocation {
+    optional WaypointQuery waypoint_query = 1;
+    optional Address address = 2;
+    optional bool is_spell_corrected = 4 [deprecated = true];
+    optional bool is_approximate = 5 [deprecated = true];
+    optional bool place_is_closed = 6;
+    optional SuggestIconType icon_type = 8;
+    optional WaypointQuery compact_waypoint_query = 9;
+    optional Entity entity = 10;
+    
+    optional Alert alert = 11;
+    message Alert {
+        optional int32 ve_type = 6 [default = 12102];
+        optional string ei = 7 [deprecated = true];
+        optional string ved = 8;
+        
+        optional Type type = 1 [default = UNKNOWN_TYPE];
+        enum Type {
+            UNKNOWN_TYPE = 0;
+            POI_CLOSED_AT_ETA = 1;
+            POI_CLOSING_SOON_AT_ETA = 2;
+            POI_PERMANENTLY_CLOSED = 3;
+            DEPRECATED_POI_VAGUE_DESTINATION = 4 [deprecated = true];
+            POI_OUT_OF_RANGE = 5;
+            POI_LOW_BATTERY_ON_ARRIVAL = 6;
+            DEPRECATED_COVID_19_RESTRICTED_BORDER_CROSSING = 7 [deprecated = true];
+            DEPRECATED_COVID_19_CHECKPOINT = 8 [deprecated = true];
+            DEPRECATED_COVID_19_MEDICAL_POI = 9 [deprecated = true];
+            POI_TEMPORARILY_CLOSED = 10;
+            RESTRICTED_ZONE = 11;
+            POI_EVCS_OUT_OF_SERVICE = 12;
+            POI_EVCS_CLOSING_AT_ETA = 13;
+            POI_EVCS_INCOMPATIBLE_PLUGS = 14;
+            POI_EV_TRAILERING_INACCURATE_BATTERY_ESTIMATION = 15;
+        }
+        
+        optional string headline = 2;
+        optional string short_headline = 9;
+        optional string micro_headline = 11;
+        optional string description = 3;
+        optional string micro_description = 12;
+        optional bool include_eta = 4;
+        
+        optional ExpirationPolicy expiration_policy = 5;
+        message ExpirationPolicy {
+            optional int64 valid_until_utc_seconds = 2;
+            
+            reserved 1;
+        }
+        
+        optional int32 search_along_route_preferred_distance_km = 10;
+    }
+    
+    repeated Alert other_alert = 21;
+    repeated RelatedLocation related_location = 12;
+    optional maps_shared.geom.Camera more_specific_location_camera = 13;
+    optional bool enable_parking_planning = 23;
+    optional ParkingDifficultyLevel parking_difficulty = 14 [deprecated = true];
+    optional ParkingPlanner parking_planner = 17 [deprecated = true];
+    optional maps_tactile.shared.directions.ParkingSummary parking_summary = 22;
+    optional string address_landmark_description = 25;
+    repeated DestinationLandmark destination_landmark = 26;
+    optional WaypointQuery.EntityType entity_type = 15 [default = ENTITY_TYPE_DEFAULT];
+    optional string ved = 16;
+    optional bool is_transit_station = 18;
+    optional bool is_car_parking = 24;
+    optional EvInfo ev_info = 19;
+    
+    reserved 3, 7, 20;
+}

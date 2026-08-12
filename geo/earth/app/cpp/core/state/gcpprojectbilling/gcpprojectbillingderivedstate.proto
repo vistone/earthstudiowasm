@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "logs/proto/geo/earth/app/earth_log.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Gcpprojectbillingderivedstate";
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message GcpProjectBillingDerivedState {
+    optional bool is_session_active = 1;
+    optional .geo.earth.app.BillingUpgradeDialogSourceView source_view = 2 [default = BILLING_UPGRADE_DIALOG_SOURCE_VIEW_UNSPECIFIED];
+    optional bool is_earth_mate_chat_active = 3;
+}

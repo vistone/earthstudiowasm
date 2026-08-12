@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geo.search.map;
+
+import "geo/search/api/map/camera.proto";
+import "google/type/latlng.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSM";
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.map";
+
+message Viewport {
+    optional google.type.LatLng center = 3;
+    optional int32 recommended_zoom = 4;
+    optional google.type.LatLng southwest_corner = 1;
+    optional google.type.LatLng northeast_corner = 2;
+    optional Camera camera = 5;
+}

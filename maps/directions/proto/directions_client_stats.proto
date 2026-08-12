@@ -1,0 +1,109 @@
+syntax = "proto2";
+
+package maps_directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.directions";
+
+message DirectionsClientStats {
+    optional DirectionsClient directions_client = 1;
+    enum DirectionsClient {
+        UNKNOWN_DIRECTIONS_CLIENT = 0;
+        ONE_DIRECTION_CLIENT = 1;
+        TWO_DIRECTION_CLIENT = 2;
+        TWO_DIRECTION_TABS_CLIENT = 17;
+        GMM_NAVIGATION_CLIENT = 20;
+        GMM_MISC_CLIENT = 10;
+        WEAR_MAPS_CLIENT = 3;
+        NAVIGATION_SDK = 4;
+        MAPS_SDK = 5;
+        ANDROID_AUTO_EMBEDDED = 6;
+        MAPS_TACTILE = 7;
+        WEB_SPOTLIGHT = 8;
+        NAV_GO = 9;
+        PASSIVE_ASSIST = 11;
+        DIRECTIONS_ASSIST = 16;
+        SUPERROOT_MISC = 12;
+        LOCAL_UNIVERSAL = 13;
+        ASSISTANT = 14;
+        GOOGLE_MAPS_PLATFORM_ROUTES_API = 19;
+        GEMINI_MAPS_EXTENSION = 21;
+        GEMINI_MAPS_OFFLINE_EVALS = 29;
+        UNKNOWN_MAPS_FE_DIRECTIONS_COMMON_CLIENT = 15;
+        MONITORING_PROBER_SERVICE = 22;
+        MAPS_COMPANION = 23;
+        MAPS_LITE = 24;
+        GOOGLE_EARTH = 25;
+        GMM_COMMUTE_NOTIFICATION = 26;
+        MAGI_EXTENSIONS_AS_CODE = 27;
+        MAPS_EMBED_API = 28;
+        MAPS_API_GROUNDING = 30;
+        MAP_GENIE = 31;
+        ASK_MAPS = 32;
+        ASSISTANT_VIOLET = 33;
+        XR_CONTEXTUAL_NAVIGATION_TEST_TOOL = 34;
+    }
+    
+    optional DirectionsContext directions_context = 2;
+    enum DirectionsContext {
+        UNKNOWN_DIRECTIONS_CONTEXT = 0;
+        DEBUG_CONTEXT = 1;
+        EXPLICIT_DIRECTIONS_QUERY = 2;
+        IMPLICIT_PLACESHEET_DIRECTIONS_PREFETCH = 3;
+        ACTIVE_NAVIGATION = 4;
+        ACTIVE_NAVIGATION_UPDATE = 31;
+        FREE_NAVIGATION = 5;
+        JOURNEY_SHARING = 6;
+        MODE_ALTERNATES = 7;
+        BIKESHARING_ALTERNATES = 8;
+        SAVED_TRANSIT_ROUTES = 9;
+        TRANSPORTATION_TAB_PREDICTED_DESTINATIONS = 10;
+        EXPLICIT_DIRECTIONS_QUERY_REFRESH = 11;
+        DIRECTIONS_TURN_BY_TURN_UPGRADE = 12;
+        EXPLICIT_SEARCH_QUERY = 13;
+        SEARCH_ALONG_ROUTE = 35;
+        EXPLICIT_EXTERNAL_DIRECTIONS_INTENT = 14;
+        EXPLICIT_EXTERNAL_DIRECTIONS_INVOCATION = 20;
+        ROUTE_PREVIEW = 15;
+        TRAFFIC_HUB = 16;
+        DIRECTIONS_WIDGET = 17;
+        IMPLICIT_MIXED_QUERY_UPGRADE = 19;
+        LIVE_TRIPS = 21;
+        IMPLICIT_BASEMAP_POI_ETA = 22;
+        MAPS_TIMELINE = 23;
+        TRAVEL_GETTING_THERE = 25;
+        TRAVEL_MODE_SUGGESTIONS = 26;
+        DIRECTIONS_ONEBOX = 27;
+        SEARCH_RESULT_DIRECTIONS_V2 = 38;
+        TRIP_DETAILS_TRANSIT_REFRESH = 28;
+        WAYPOINT_DRAGGING = 29;
+        PAINT_TILES_FOR_WEB_MAPS = 30;
+        PAINT_TILES_FOR_UNKNOWN_LU_CLIENT = 42;
+        PREDICTED_DRIVING_DESTINATIONS = 32;
+        PREDICTED_TRANSIT_DESTINATIONS = 33;
+        TRANSIT_CONNECTION_BOARD = 34;
+        UNKNOWN_CONTEXT_GMM_BEFORE_TWO_DIRECTION = 36;
+        LOCAL_NAV = 37;
+        MAGI_TRIP_IDEAS = 39;
+        PAINT_TILES_FOR_LOCAL_TOP_ADS = 41;
+        EV_RANGE_INSIGHTS = 44;
+        GEOPOLITICAL_PAGE = 45;
+        SEARCH_ROUTE_PREVIEWS = 46;
+        SEARCH_WEEKEND_IDEAS = 47;
+        PDSTORE_PUBLISHER = 48;
+    }
+    
+    optional DirectionsClientPlatform directions_client_platform = 3;
+    enum DirectionsClientPlatform {
+        UNKNOWN_CLIENT_PLATFORM = 0;
+        WEB = 1;
+        ANDROID = 2;
+        IOS = 3;
+        PAINT = 4;
+    }
+    
+    optional bool inferred_statistics = 4 [default = true];
+}

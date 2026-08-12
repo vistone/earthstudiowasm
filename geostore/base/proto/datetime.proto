@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message DateTimeProto {
+    optional double seconds = 1;
+    
+    optional TimePrecision precision = 2 [default = PRECISION_SECOND];
+    enum TimePrecision {
+        PRECISION_CENTURY = 100;
+        PRECISION_DECADE = 200;
+        PRECISION_YEAR = 300;
+        PRECISION_MONTH = 400;
+        PRECISION_DAY = 500;
+        PRECISION_HOUR = 600;
+        PRECISION_MINUTE = 700;
+        PRECISION_SECOND = 800;
+    }
+    
+    extend .proto2.bridge.MessageSet {
+        optional DateTimeProto message_set_extension = 15303159;
+    }
+}

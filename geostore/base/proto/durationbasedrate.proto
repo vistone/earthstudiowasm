@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "metaweb/data/topictable/topic.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message DurationBasedRateProto {
+    optional int32 range_start_seconds = 1;
+    optional int32 range_end_seconds = 2;
+    optional bool is_free = 3;
+    repeated freebase.Topic price = 4;
+    optional int32 periodicity_seconds = 5;
+}

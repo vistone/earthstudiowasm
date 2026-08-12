@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint.client";
+
+message AppliedAnnotation {
+    optional int32 use_case = 1;
+}
+
+message AnnotationApplicationInfo {
+    repeated AppliedAnnotation factual = 1;
+    repeated AppliedAnnotation counterfactual = 2 [deprecated = true];
+}

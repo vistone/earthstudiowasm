@@ -1,0 +1,47 @@
+syntax = "proto2";
+
+package gws.mothership.api.v1.common.app;
+
+import "gws/mothership/api/v1/common/images/image.proto";
+import "gws/mothership/api/v1/common/net/url.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "MSP";
+option java_multiple_files = true;
+option java_outer_classname = "AppLinkProto";
+option java_package = "com.google.gws.mothership.api.v1.common.app";
+
+message AppLink {
+    optional AppLaunchInfo app_launch_info = 1;
+    optional AppDisplayInfo app_display_info = 2;
+}
+
+message AppLaunchInfo {
+    optional net.Url app_uri = 1;
+    optional AppIdentifier app_identifier = 4;
+    optional net.Url install_url = 2;
+    optional AppInstallStatus installation_status = 3;
+    optional net.Url fallback_url = 5;
+    
+    extensions 6;
+}
+
+message AppIdentifier {
+    optional string package_id = 1;
+}
+
+message AppDisplayInfo {
+    optional images.Image app_icon = 1;
+    optional string app_title = 2;
+    optional string title_text_for_escape_hatch = 4;
+    optional int32 ui_type = 5;
+    
+    reserved 3;
+}
+
+enum AppInstallStatus {
+    UNKNOWN = 0;
+    INSTALLED = 1;
+    NOT_INSTALLED = 2;
+    INSTANT_APP = 3;
+}

@@ -1,0 +1,37 @@
+syntax = "editions";
+
+package geo.production.antiscraping;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.production.antiscraping.proto";
+
+enum AntiscrapingGeoDataType {
+    ANTISCRAPING_GEO_DATA_TYPE_UNSPECIFIED = 0;
+    ESSENTIAL_RESPONSE_DATA = 1;
+    HIGH_VALUE_POI_INFO = 2;
+    POI_OPEN_HOURS_WEEKLY_SCHEDULE = 3;
+    POI_OPEN_HOURS_DEPRECATED_DATA = 6;
+    REVIEW_DATA = 4;
+    REVIEW_COUNT = 23;
+    REVIEW_USER_QUOTES = 17;
+    REVIEW_FULL_TEXT = 18;
+    REVIEW_FIVE_STAR_HISTOGRAM = 19;
+    REVIEW_GENERATED_TOPIC_SUMMARY = 20;
+    REVIEW_FULL_TEXT_OWN_REVIEW = 21;
+    REVIEW_FILTER_INFO = 22;
+    REVIEW_ASPECT_RATINGS = 24;
+    REVIEW_CONTINUATION_TOKEN = 25;
+    ELECTRIC_VEHICLE_CHARGING_STATION_DATA = 5;
+    PRIMARY_PHOTO = 7;
+    PRIMARY_STREET_VIEW = 8;
+    SECONDARY_PHOTOS = 9;
+    PHOTO_DESCRIPTION_SET_PHOTOS = 10;
+    SCALABLE_ATTRIBUTE_CONTAINER = 11;
+    SCALABLE_ATTRIBUTE_CONTAINER_ATTRIBUTE_GROUP = 13;
+    LIMITED_RESPONSE_RESULT = 12;
+    IS_SPECIAL_CONSIDERATION_GCID = 14;
+    HOTEL_ADS = 15;
+    HOTEL_ATTRIBUTES = 16;
+}

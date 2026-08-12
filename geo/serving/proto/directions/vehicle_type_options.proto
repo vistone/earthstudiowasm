@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions;
+
+import "geo/serving/proto/directions/engine_type.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPD";
+option java_multiple_files = true;
+option java_outer_classname = "VehicleTypeOptionsProto";
+option java_package = "com.google.geo.serving.proto.directions";
+
+message VehicleTypeOptions {
+    optional EngineType engine_type = 1;
+    optional int64 last_modified_timestamp_ms = 2;
+}

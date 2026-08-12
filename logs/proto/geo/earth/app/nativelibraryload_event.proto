@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package geo.earth.app;
+
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_outer_classname = "NativeLibraryLoadProto";
+option java_package = "com.google.geo.earth.app";
+
+message NativeLibraryLoad {
+    optional string source_dir = 1;
+    optional string source_name = 2;
+    optional string target_file = 3;
+}

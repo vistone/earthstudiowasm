@@ -1,0 +1,106 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+import "geo/ar/protos/pose.proto";
+import "geo/imagery/karto/proto/bounding_box.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_outer_classname = "MovieActorParametersProto";
+option java_package = "com.google.geo.imagery.karto.proto";
+
+message MovieActorParameters {
+    optional bool adjust_for_visibility = 1 [default = true];
+    optional float orbit_duration_seconds = 2 [default = 30];
+    optional float heading_bias = 5 [default = 0];
+    optional float radius_multiplier = 6 [default = 1];
+    optional float fov_y = 7 [default = 60];
+    optional float initial_aperture = 8 [default = 0.1];
+    optional float secondary_radius_multiplier = 12 [default = 1];
+    optional float min_orbit_distance_meters = 31 [default = 70];
+    optional float max_orbit_distance_meters = 32 [default = 1200];
+    optional string debug_parameters = 18;
+    repeated string related_pins_place_ids_override = 26;
+    repeated string sub_poi_place_ids = 34;
+    optional float overview_ratio = 35 [default = 0.1];
+    
+    repeated CameraOverride camera_overrides = 25;
+    message CameraOverride {
+        optional AspectRatio aspect_ratio = 1;
+        optional OrbitParameter primary_orbit = 2;
+        optional OrbitParameter secondary_orbit = 3;
+    }
+    
+    optional OrbitType orbit_type = 27 [default = VPS_DUAL_ORBIT];
+    enum OrbitType {
+        UNKNOWN_TYPE = 0;
+        VPS_DUAL_ORBIT = 2;
+        STATIC_POSE = 3;
+        MULTI_ORBIT = 4;
+    }
+    
+    optional StaticPoseParameter static_pose = 29;
+    message StaticPoseParameter {
+        optional ar.LatLngAlt camera_position = 1;
+        optional ar.LatLngAlt orbit_origin = 2;
+    }
+    
+    optional StartupMode startup_mode = 28 [default = ORBIT];
+    enum StartupMode {
+        UNKNOWN_MODE = 0;
+        ORBIT = 1;
+        STREET_LEVEL = 2;
+        ROUTE_PREVIEW = 3;
+        CINEMATIC_PLAN = 4;
+    }
+    
+    optional DualOrbitOptions dual_orbit_options = 33;
+    message DualOrbitOptions {
+        optional PositionCalculationOptions position_calculation_options = 3;
+        message PositionCalculationOptions {
+            optional float default_initial_pitch_deg = 1 [default = -10];
+            optional float default_initial_distance_m = 2 [default = 100];
+            optional float min_allowed_pitch_deg = 3 [default = -37];
+            optional float max_allowed_pitch_deg = 4 [default = 20];
+        }
+        
+        reserved 1, 2;
+    }
+    
+    optional StreetLevelOptions street_level_options = 36;
+    message StreetLevelOptions {
+        oneof identifier {
+            string nerf_uuid = 1;
+            string radsplat_point_cloud_directory = 2;
+        }
+    }
+    
+    oneof box_override {
+        BoundingBoxOverride bounding_box_override = 23;
+        OrientedBoundingBox oriented_bounding_box_override = 30;
+    }
+    
+    reserved 3, 4, 9, 10, 11, 13, 14, 15, 16, 17, 19, 20, 21, 22, 24;
+    
+    message ScreenSpace {
+        optional float top = 1;
+        optional float bottom = 2;
+        optional float left = 3;
+        optional float right = 4;
+    }
+    
+    message AspectRatio {
+        optional int32 numerator = 1;
+        optional int32 denominator = 2;
+    }
+    
+    message OrbitParameter {
+        optional float radius_m = 1;
+        optional float pitch = 2;
+        optional float aperture = 3 [default = 0.06];
+        optional float fov_y = 4 [default = 60];
+    }
+}

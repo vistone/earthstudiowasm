@@ -1,0 +1,9 @@
+syntax = "proto2";
+
+package geostore;
+
+import "net/proto2/proto/descriptor.proto";
+
+extend .proto2.FieldOptions {
+    optional bool stable_id = 535801262;
+}

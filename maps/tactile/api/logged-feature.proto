@@ -1,0 +1,197 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "geo/serving/proto/ads/ad_ref.proto";
+import "geo/serving/proto/photos/image_key.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "logs/proto/maps/tactile/annotation-data.proto";
+import "logs/proto/visual_element/disruptions-impression-data.proto";
+import "logs/proto/visual_element/element_value_data.proto";
+import "logs/proto/visual_element/place_list_data.proto";
+import "maps/tactile/api/real-time-common.proto";
+import "maps/tactile/api/shared/money.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "LoggedFeatureProto";
+option java_package = "com.google.maps.tactile";
+
+message LoggedFeature {
+    optional string fprint = 1;
+    optional geo_serving_proto.ads.AdRef ad_ref = 4;
+    
+    repeated Appearance appearance = 2;
+    enum Appearance {
+        PRIMARY_RESULT = 1;
+        SECONDARY_RESULT = 2;
+        MINOR_RESULT = 3;
+        RELATED_PLACE = 4;
+        AREA_RESULT = 5;
+        NORMAL_RESULT = 6;
+        AD_TIER_1 = 9;
+        AD_TIER_2 = 10;
+        AD_TIER_3 = 11;
+        AD_NOT_RENDERED = 12 [deprecated = true];
+        PROMOTED_OFFER = 13 [deprecated = true];
+        DEPRECATED_14 = 14;
+        DEPRECATED_15 = 15;
+        DEPRECATED_16 = 16;
+        DEPRECATED_17 = 17;
+        DEPRECATED_18 = 18;
+        PROMOTED_LISTING = 19 [deprecated = true];
+        RELATED_PLACE_SECONDARY = 20;
+        GENERIC_INTERACTIVE = 21;
+        INCIDENT_ROAD_CLOSED = 22;
+        INCIDENT_CRASH = 23;
+        INCIDENT_CONSTRUCTION = 24;
+        INCIDENT_OTHER = 25;
+        INCIDENT_SPEED_TRAP = 35;
+        SPOTLIT_PIN = 26;
+        DEPRECATED_INLINE_AD = 27 [deprecated = true];
+        PROMOTED_FEATURE = 28 [deprecated = true];
+        CHAIN_AD = 29;
+        CHAIN_AD_COUNTERFACTUAL = 30;
+        PROMOTED_POI = 31;
+        LODGING = 32;
+        PICO_PINLET = 33;
+        ANNOTATED = 34 [deprecated = true];
+        BOOSTED = 36;
+        PROMOTED_AGGREGATOR = 37;
+        PROMOTED_MANUFACTURER = 38;
+        PROMOTED_LOGOLESS_FIRST_PARTY = 39;
+        PROMOTED_SHOPPING = 42;
+        PROMOTED_KEYWORD_AD = 43;
+        PROMOTED_TRAVEL_AD = 46;
+        PROMOTED_TRAVEL_AD_LOGOLESS = 47;
+        PROMOTED_TRAVEL_ACTIVITY_AD = 58;
+        STREAMING_SEARCH_RESULT = 40;
+        INJECTED_SEARCH_RESULT = 41;
+        SEARCH_CANVAS_RESULT = 44;
+        BOOSTMAP_RELATED_PLACE = 45;
+        SEARCH_LOCATION = 48;
+        THREE_DIMENSIONAL_PLACE = 49;
+        COMPOUND_PLACE_SUB_POI = 50;
+        MAPS_VISUAL_SEARCH_RESULT = 51;
+        COMPOUND_ACCESS_POINT_LABEL = 52;
+        RECENTLY_VIEWED = 53;
+        ORIENTATION_LANDMARK = 54;
+        MANEUVER_LANDMARK = 59;
+        EXPERIENCE_COLLECTION = 55;
+        SUGGESTED_STOP_PIN = 56;
+        SUGGESTED_STOP_PHOTO_PIN = 57;
+    }
+    
+    optional geo_serving_proto.photos.ImageKey image_key = 25;
+    
+    repeated PersonalAppearance personal_appearance = 3;
+    enum PersonalAppearance {
+        GEO_PORTRAIT = 1;
+        RATED = 2;
+        RECOMMENDED = 3;
+        HOME = 4;
+        WORK = 5;
+        PERSONAL_SEARCH_RESULT = 6;
+        STARRED = 7;
+        CHECKIN = 8;
+        EVENT = 9;
+        HAPTIC_PLACE = 10;
+        HAPTIC_PLACE_LIST = 11;
+        PLACE_LIST_FAVORITES = 12;
+        PLACE_LIST_WANT_TO_GO = 13;
+        PLACE_LIST_JUST_SAVE = 22;
+        PLACE_LIST_CUSTOM = 14;
+        LOCATION_HISTORY = 15;
+        PERSONAL_BOOSTED = 16;
+        RECENTLY_VIEWED_PLACE = 17;
+        EXEMPLAR_PLACE = 18;
+        PLACE_LIST_WISHLIST = 19;
+        MARS_PERSONALIZATION = 20;
+        RECENT_BUNDLES = 21;
+        SUDDENLY_IMPORTANT_ML = 23;
+    }
+    
+    repeated int32 haptic_place_list_source = 7;
+    
+    optional Visibility visibility = 5 [default = COMPLETE];
+    enum Visibility {
+        COMPLETE = 1;
+        PARTIAL = 2;
+        NONE = 3;
+        REPRESSED = 4;
+    }
+    
+    optional VisibilityReason visibility_reason = 11;
+    enum VisibilityReason {
+        UNKNOWN_REASON = 0;
+        TRUMPED = 1;
+    }
+    
+    optional bool is_counterfactual = 9 [default = false];
+    
+    optional IncidentProvider incident_provider = 6 [default = UNKNOWN_PROVIDER];
+    enum IncidentProvider {
+        UNKNOWN_PROVIDER = 0;
+        TRAFFICCAST = 1;
+        WAZE = 2;
+        TOMTOM = 3;
+        GT = 4;
+        USER_REPORT = 16;
+    }
+    
+    repeated PersonalFeatureProvider personal_feature_provider = 8;
+    enum PersonalFeatureProvider {
+        UNKNOWN_PERSONAL_FEATURE_PROVIDER = 0;
+        KANSAS = 1;
+        HAPPYHOUR = 2;
+    }
+    
+    optional RealTimeData real_time_data = 10;
+    optional int32 model_id = 12 [default = 0];
+    repeated logs_tactile.AnnotationData annotation_data = 13;
+    optional int32 establishment_type_id = 14 [deprecated = true];
+    optional int32 rendering_category_id = 18;
+    optional maps_tactile.shared.Money gas_price = 15;
+    optional int32 rating = 16;
+    
+    repeated LabelContent label_content = 17;
+    message LabelContent {
+        optional LabelContentType label_content_type = 1;
+        optional LabelContentLocation label_content_location = 2;
+    }
+    
+    optional bool tertiary_visible = 19;
+    
+    optional LabelBounds primary_label = 20;
+    message LabelBounds {
+        optional float height = 1;
+        optional float width = 2;
+    }
+    
+    optional LabelBounds secondary_label = 21;
+    optional LabelBounds tertiary_label = 22;
+    optional logs.ElementValueData element_value_data = 23;
+    optional logs.PlaceListData place_list_data = 24;
+    optional logs.DisruptionsImpressionData disruptions_impression_data = 26;
+    
+    enum LabelContentType {
+        UNKNOWN_LABEL_CONTENT_TYPE = 0;
+        GAS_PRICE = 1;
+        RATING = 2;
+        BRAND_LOGO = 3;
+        BIKE_AVAILABILITY = 4;
+        LODGING_PRICE = 5;
+    }
+    
+    enum LabelContentLocation {
+        UNKNOWN_LABEL_CONTENT_LOCATION = 0;
+        PRIMARY = 1;
+        SECONDARY = 2;
+    }
+}
+
+message VisibleFeatureCount {
+    repeated LoggedFeature.Appearance appearance = 1;
+    optional int32 count = 2;
+}

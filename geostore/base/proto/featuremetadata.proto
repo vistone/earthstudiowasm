@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/feature_field_metadata.proto";
+import "geostore/base/proto/feature_replacement_info.proto";
+import "geostore/base/proto/featureidforwardings.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message FeatureHistoryMetadataProto {
+    optional int64 feature_birth_timestamp_us = 1;
+    optional int64 removal_timestamp_us = 2;
+    optional int64 last_modification_timestamp_us = 3;
+}
+
+message FeatureMetadataProto {
+    optional bytes version_token = 1;
+    optional bytes core_version_token = 5;
+    optional FeatureHistoryMetadataProto history = 2;
+    
+    optional BulkUpdatable bulk_updatable = 3 [default = NOT_BULK_UPDATABLE];
+    enum BulkUpdatable {
+        NOT_BULK_UPDATABLE = 0;
+        BULK_UPDATABLE = 1;
+    }
+    
+    optional FeatureIdForwardingsProto forwardings = 4;
+    optional FeatureFieldMetadataProto field_metadata = 6;
+    optional FeatureReplacementInfoProto feature_replacement_info = 7;
+}

@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message SocialReferenceProto {
+    optional int64 base_gaia_id = 1;
+    optional int64 gaia_id_for_display = 2;
+    optional int64 claimed_gaia_id = 3;
+}

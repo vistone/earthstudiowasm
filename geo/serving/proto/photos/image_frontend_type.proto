@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "ImageFrontendTypeProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+enum ImageFrontendType {
+    IMAGE_UNKNOWN = 0;
+    IMAGE_INTERNET = 1;
+    IMAGE_ALLEYCAT = 2;
+    IMAGE_FIFE = 3 [deprecated = true];
+    IMAGE_PANORAMIO = 4 [deprecated = true];
+    METADATA_GEO_PHOTO_SERVICE = 5 [deprecated = true];
+    VIDEO_YOUTUBE = 6;
+    KEYHOLE = 7;
+    IMAGE_CONTENT_FIFE = 8;
+    IMAGE_ALLEYCAT_SEARCH = 9 [deprecated = true];
+    MEDIA_GUESSABLE_FIFE = 10;
+    SECURE_FIFE = 11 [deprecated = true];
+    STADIA = 12;
+    IMMERSIVE_EDGE = 13;
+    CONTRIB_SERVICE_SECURE_FIFE = 14 [deprecated = true];
+}

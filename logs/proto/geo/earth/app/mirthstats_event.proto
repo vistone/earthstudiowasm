@@ -1,0 +1,74 @@
+syntax = "editions";
+
+package geo.earth.app;
+
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_outer_classname = "EarthLogMirthStats";
+option java_package = "com.google.geo.earth.app";
+
+message MirthStatsEvent {
+    optional GraphicsInfo graphics_info = 1;
+    message GraphicsInfo {
+        optional string vendor = 1;
+        optional string renderer = 2;
+    }
+    
+    optional RenderingStats rendering_stats = 2;
+    message RenderingStats {
+        optional double average_fps = 1;
+        optional int32 jank30_frame_count = 2;
+        optional int32 jank30_frame_percent = 3;
+        optional int32 jank60_frame_count = 4;
+        optional int32 jank60_frame_percent = 5;
+        optional double video_target_rate = 6;
+        optional double video_playback_performance = 7;
+        optional double video_tile_count = 8;
+        optional double video_playing_count = 9;
+        optional double webm_tile_decode_time_ms = 10;
+    }
+    
+    optional MemoryStats memory_stats = 3;
+    message MemoryStats {
+        optional double total_allocator_memory = 1;
+        optional double total_allocator_gpu_memory = 2;
+    }
+    
+    optional KmlStats kml_stats = 4;
+    message KmlStats {
+        optional int32 data_count = 1;
+        optional int32 document_count = 2;
+        optional int32 extended_data_count = 3;
+        optional int32 folder_count = 4;
+        optional int32 ground_overlay_count = 5;
+        optional int32 icon_count = 6;
+        optional int32 line_string_count = 7;
+        optional int32 linear_ring_count = 8;
+        optional int32 link_count = 9;
+        optional int32 map_tile_pyramid_count = 10;
+        optional int32 model_count = 11;
+        optional int32 multi_geometry_count = 12;
+        optional int32 multi_track_count = 13;
+        optional int32 network_link_count = 14;
+        optional int32 photo_overlay_count = 15;
+        optional int32 placemark_count = 16;
+        optional int32 point_count = 17;
+        optional int32 polygon_count = 18;
+        optional int32 region_count = 19;
+        optional int32 schema_count = 20;
+        optional int32 schema_data_count = 21;
+        optional int32 screen_overlay_count = 22;
+        optional int32 simple_array_data_count = 23;
+        optional int32 simple_data_count = 24;
+        optional int32 time_span_count = 25;
+        optional int32 time_stamp_count = 26;
+        optional int32 tour_count = 27;
+        optional int32 track_count = 28;
+        optional int32 video_count = 29;
+    }
+}

@@ -1,0 +1,70 @@
+syntax = "proto2";
+
+package redwood;
+
+option objc_class_prefix = "GARPB";
+option java_package = "com.google.ar.redwood.base";
+
+message Vector2Proto {
+    optional double x = 1;
+    optional double y = 2;
+}
+
+message Vector2iProto {
+    optional int32 x = 1;
+    optional int32 y = 2;
+}
+
+message Vector3Proto {
+    optional double x = 1;
+    optional double y = 2;
+    optional double z = 3;
+}
+
+message Vector3fProto {
+    optional float x = 1;
+    optional float y = 2;
+    optional float z = 3;
+}
+
+message QuaternionProto {
+    optional double w = 1;
+    optional double x = 2;
+    optional double y = 3;
+    optional double z = 4;
+}
+
+message TransformationProto {
+    optional Vector3Proto p = 1;
+    optional QuaternionProto q = 2;
+}
+
+message GeneralTransformationProto {
+    optional Vector3Proto p = 1;
+    
+    oneof rotation_type {
+        MatrixXd rotation_matrix = 2;
+        QuaternionProto rotation_quaternion = 3;
+    }
+}
+
+message MatrixXd {
+    optional uint32 rows = 1;
+    optional uint32 cols = 2;
+    repeated double data = 3 [packed = true];
+}
+
+message Ray3Proto {
+    optional Vector3Proto origin = 1;
+    optional Vector3Proto direction = 2;
+}
+
+message RangeProto {
+    optional double start = 1;
+    optional double end = 2;
+}
+
+message SequenceProto {
+    optional RangeProto range = 1;
+    optional double step = 2;
+}

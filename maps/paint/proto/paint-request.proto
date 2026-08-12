@@ -1,0 +1,78 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_generate_object_format.proto";
+import "maps/paint/proto/feature-options.proto";
+import "maps/paint/proto/label-placement-options.proto";
+import "maps/paint/proto/layer-description.proto";
+import "maps/paint/proto/output-options.proto";
+import "maps/paint/proto/paint-style-options.proto";
+import "maps/paint/proto/pipe-metadata.proto";
+import "maps/paint/proto/region-description.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "search/logging/propagation/logging_sensitivity.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "PaintRequestProto";
+option java_package = "com.google.maps.paint";
+
+message PaintRequest {
+    repeated RegionDescription region = 1;
+    repeated LayerDescription layer = 2;
+    optional FeatureOptions feature_options = 26;
+    optional PaintStyleOptions style_options = 3;
+    optional LabelPlacementOptions label_placement_options = 20;
+    
+    optional OutputType output_type = 4 [default = OUTPUT_IMAGE];
+    enum OutputType {
+        OUTPUT_IMAGE = 0;
+        OUTPUT_VECTOR = 1;
+        OUTPUT_KMZ = 2 [deprecated = true];
+        OUTPUT_FEATUREMAP = 3;
+        OUTPUT_PERTILE = 4;
+        OUTPUT_COPYRIGHTS = 5;
+        OUTPUT_SVG = 7;
+        OUTPUT_ROAD_GRAPH_TILE = 8;
+        OUTPUT_OGC_3D_TILES = 9;
+        OUTPUT_OGC_3D_TILES_SUBTREE = 10;
+    }
+    
+    optional ImageOptions image_options = 5;
+    optional VectorOptions vector_options = 6;
+    optional KmzOptions kmz_options = 9 [deprecated = true];
+    optional PerTileOptions pertile_options = 11;
+    optional FeaturemapOptions featuremap_options = 12;
+    optional CopyrightsOptions copyrights_options = 18;
+    optional SvgOptions svg_options = 24;
+    optional RoadGraphTileOptions road_graph_tile_options = 22;
+    optional GlbOptions glb_options = 30;
+    optional int32 private_caching_with_max_ttl = 25;
+    optional string debug_flags = 7;
+    optional int32 orientation = 13;
+    optional bool oblique = 14;
+    optional bool align_cn_satellite_imagery = 15;
+    optional bool client_is_authenticated = 16;
+    optional bytes original_sender = 17;
+    optional bool is_secure_channel = 19 [deprecated = true];
+    repeated int32 experiment_id = 23 [packed = true];
+    optional PipeMetadata pipe_metadata = 27;
+    optional int32 major_epoch = 28;
+    optional bool enable_sherlog = 29;
+    optional bool supports_invalid_epoch_status = 32;
+    
+    extensions 10000 to max;
+    
+    reserved 8, 21, 31;
+}
+
+extend PaintRequest {
+    optional string original_request = 36215051;
+    optional string current_request = 36390577;
+    optional PaintRequest pre_sanitized_request = 124155730;
+    optional search.logging.propagation.LoggingSensitivity logging_sensitivity = 208274895;
+}

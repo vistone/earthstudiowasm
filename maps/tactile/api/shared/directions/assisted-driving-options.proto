@@ -1,0 +1,54 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "AssistedDrivingOptionsProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message AssistedDrivingOptions {
+    optional DatasetInfo dataset_info = 1;
+    message DatasetInfo {
+        optional string dataset_id = 1;
+        optional string provider_id = 2;
+    }
+    
+    optional VehicleInfo vehicle_info = 2;
+    message VehicleInfo {
+        optional OemId oem_id = 1;
+        enum OemId {
+            UNKNOWN_OEM_ID = 0;
+            GENERAL_MOTORS = 1;
+            VOLVO = 2;
+            NISSAN = 3;
+        }
+        
+        optional string make = 2;
+        optional string model = 3;
+        optional string model_year = 4;
+        optional string assisted_driving_capability_version = 5;
+        optional string assisted_driving_capability_name = 6;
+    }
+    
+    optional AssistedDrivingStateInfo assisted_driving_state_info = 3;
+    message AssistedDrivingStateInfo {
+        repeated StateInfo state_info = 2;
+        message StateInfo {
+            optional State state = 1;
+        }
+        
+        enum State {
+            UNKNOWN_STATE = 0;
+            UNSUPPORTED = 1;
+            TEMPORARILY_UNAVAILABLE = 2;
+            AVAILABLE = 3;
+            IMMEDIATELY_ENGAGEABLE = 4;
+            ENGAGED = 5;
+            DRIVER_SUSPENDED = 6;
+            FORCE_DISENGAGED = 7;
+        }
+    }
+}

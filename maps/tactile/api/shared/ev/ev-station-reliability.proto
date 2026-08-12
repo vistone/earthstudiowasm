@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+package maps_tactile.shared.ev;
+
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHEVS";
+option java_multiple_files = true;
+option java_outer_classname = "EvStationReliabilityProto";
+option java_package = "com.google.maps.tactile.shared.ev";
+
+message EvStationReliability {
+    optional string title = 1;
+    optional string short_title = 8;
+    optional string subtitle = 2;
+    
+    optional Icon icon = 3;
+    enum Icon {
+        UNKNOWN_ICON = 0;
+        CHECK_CIRCLE = 1;
+        CANCEL = 2;
+        HIDE_SOURCE = 3;
+    }
+    
+    repeated Action action = 4;
+    message Action {
+        optional ActionType action_type = 1;
+        enum ActionType {
+            UNKNOWN_ACTION_TYPE = 0;
+            SHOW_ADD_REVIEW = 1;
+        }
+        
+        optional string title = 2;
+    }
+    
+    optional Priority priority = 5;
+    enum Priority {
+        UNKNOWN_PRIORITY = 0;
+        LOW = 1;
+        HIGH = 2;
+    }
+    
+    optional Sentiment sentiment = 9;
+    enum Sentiment {
+        UNKNOWN_SENTIMENT = 0;
+        POSITIVE = 1;
+        NEGATIVE = 2;
+    }
+    
+    optional int32 ve_type = 6 [default = 0x36f38];
+    optional string ved = 7;
+}

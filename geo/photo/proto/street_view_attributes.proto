@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "StreetViewAttributesProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message StreetViewAttributes {
+    optional string sequence_id = 1;
+}

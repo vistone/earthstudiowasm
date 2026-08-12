@@ -1,0 +1,283 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import public "maps/paint/proto/style-table-mapping.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_generate_object_format.proto";
+import "maps/paint/proto/fetchable-style-set.proto";
+import "maps/paint/proto/paint-request.proto";
+import "maps/paint/proto/styler-description.proto";
+import "maps/util/tile_coordinate.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "PaintParameterRequestProto";
+option java_package = "com.google.maps.paint";
+
+message RoadGraphTileClientProperties {
+    optional int32 reroutile_format_version = 1;
+    optional int32 snaptile_format_version = 2;
+    optional int32 cached_epoch = 3;
+}
+
+message NativeClientProperties {
+    optional string language_code = 1;
+    optional string client_platform = 2;
+    optional string distribution_channel = 4;
+    optional string os_version = 5;
+    optional string application_name = 6;
+    optional string api_application_version = 7 [deprecated = true];
+    optional string application_version = 12;
+    optional string maps_api_version = 13;
+    optional string renderer_version = 16;
+    optional string country_code = 8;
+    optional float dpi_ratio = 9;
+    repeated int32 experiment_id = 10;
+    repeated string server_token = 21;
+    optional bool include_copyrights = 11;
+    optional RoadGraphTileClientProperties road_graph_tile_client_properties = 14;
+    optional EpochResources.StyleTableFormat style_table_format_support = 15 [default = MULTIZOOM_STYLE_TABLE];
+    optional StylerDescription.StylerLegendSubtype styler_legend_subtype = 28;
+    optional FetchableStyleSet fetchable_style_set = 25 [default = FETCHABLE_STYLE_SET_STANDARD, deprecated = true];
+    optional string quickstyle_dir = 17;
+    repeated string optional_paint_feature = 18;
+    optional string based_on_gmm_version = 19;
+    optional bool is_zero_rated = 20;
+    optional bool zero_rate_style_tables = 23;
+    optional bool thick_tiles_supported = 22;
+    optional int32 device_tier = 24;
+    optional bool remove_indoor_default_level = 26;
+    optional bool satellite_in_vector_wrapper = 27;
+    optional bool include_epoch_in_request_template = 29;
+    optional bool use_fake_epoch = 30;
+}
+
+message WebClientProperties {
+    optional string language_code = 1;
+    optional string country_code = 2;
+    optional string client_name = 3;
+    optional EpochResources.StyleTableFormat style_table_format_support = 4 [default = MULTIZOOM_STYLE_TABLE];
+    optional StylerDescription.StylerLegendSubtype styler_legend_subtype = 10;
+    optional FetchableStyleSet fetchable_style_set = 8 [default = FETCHABLE_STYLE_SET_STANDARD, deprecated = true];
+    
+    optional MapCoreVersion map_core_version = 9;
+    enum MapCoreVersion {
+        MAPCORE_VERSION_UNKNOWN = 0;
+        VECTORTOWN = 1;
+        GEOXP = 2;
+    }
+    
+    repeated int32 experiment_id = 5;
+    
+    optional Environment environment = 6;
+    enum Environment {
+        ENVIRONMENT_UNKNOWN = 0;
+        ENVIRONMENT_DEV = 1;
+        ENVIRONMENT_FISHFOOD = 2;
+        ENVIRONMENT_DOGFOOD = 3;
+        ENVIRONMENT_PROD = 4;
+    }
+    
+    optional string quickstyle_dir = 7;
+    optional bool include_epoch_in_request_template = 11;
+}
+
+message PaintRequestTemplate {
+    optional PaintRequestTemplateTileType tile_type = 1;
+    optional PaintRequest paint_request = 2;
+    optional int32 request_batch_size = 3;
+    repeated int32 supported_tile_zooms = 4 [packed = true];
+    repeated int32 supported_s2_levels = 10 [packed = true];
+    repeated ZoomTableOverride supported_tile_zooms_regional_override = 5;
+    optional int32 expire_seconds = 6 [default = -1];
+    optional int32 refresh_seconds = 7 [default = -1];
+    optional LaunchAndDisableParameters launch_and_disable_parameters = 8;
+    optional string pipe_name = 9;
+    optional bool may_be_personalized = 11;
+}
+
+message LaunchAndDisableParameters {
+    optional bool is_dark_launch = 1;
+}
+
+message PaintRequestTemplateList {
+    repeated PaintRequestTemplate paint_template = 1;
+}
+
+message ZoomTableOverride {
+    repeated int32 supported_tile_zooms = 1 [packed = true];
+    repeated maps_util.TileCoordinateProto covering_tile = 2;
+}
+
+message PaintTemplateResponse {
+    optional PaintRequest vector_tile_request = 7;
+    optional PaintRequest vector_diff_tile_request = 8;
+    optional PaintRequest pertile_request = 9;
+    optional PaintRequest image_request = 10;
+    optional PaintRequest offline_vector_tile_request = 11;
+    repeated PaintRequestTemplate paint_request_template = 12;
+    repeated PaintRequestTemplate paint_request_3d_template = 13;
+    
+    reserved 1, 2, 3, 4, 5, 6;
+}
+
+message PaintParameterRequest {
+    optional NativeClientProperties native_client_properties = 1;
+    optional WebClientProperties web_client_properties = 2;
+    optional int64 preferred_epoch = 3;
+    optional bool prefer_canary_epoch = 5;
+    optional string custom_paint_host_url = 4;
+    optional bool is_edith_request = 6;
+    optional int64 keyhole_epoch_id = 7;
+    optional bool enable_client_legend_styling = 9;
+    
+    optional UpstreamExperimentOptions upstream_experiment_options = 8;
+    message UpstreamExperimentOptions {
+        optional bool disable_local_selection = 1;
+    }
+    
+    extensions 1000 to max;
+}
+
+message DebugSettings {
+    optional bool include_legend_dag = 1;
+    optional bool include_path_table = 2;
+    optional bool include_named_style_debug_data = 3;
+    optional bool include_api_categories = 4;
+    optional bool force_experiment_ids = 6;
+    
+    reserved 5;
+    
+    reserved "include_client_legend_dag";
+    
+    extend PaintParameterRequest {
+        optional DebugSettings debug_settings = 272242711;
+    }
+}
+
+message LabelRankParameters {
+    repeated uint32 min_rank = 1 [packed = true];
+    
+    repeated BoostOffset boost_offset = 2;
+    message BoostOffset {
+        optional int32 amount = 1;
+        optional int32 zoom_offset = 2;
+    }
+}
+
+message ResourceUrl {
+    optional string url = 1;
+}
+
+message EpochResources {
+    optional int32 current_paint_epoch = 1;
+    repeated StyleTableMapping style_table_mapping = 2;
+    optional string config_version = 4;
+    
+    optional StyleTableFormat style_table_format = 5 [default = MULTIZOOM_STYLE_TABLE];
+    enum StyleTableFormat {
+        MULTIZOOM_STYLE_TABLE = 0;
+        COMPACT_MULTIZOOM_STYLE_TABLE = 1;
+        COMPACT_MULTIZOOM_STYLE_TABLE_WITH_INLINING = 2 [deprecated = true];
+    }
+    
+    optional string common_style_data_url = 6;
+    optional LabelRankParameters label_rank_parameters = 7;
+    optional bytes style_table_consistency_key = 8;
+    repeated ResourceUrl prefetch_resources = 9;
+    
+    reserved 3;
+}
+
+message RoadGraphTileParameters {
+    optional int32 preferred_epoch = 1;
+}
+
+message PaintParameterResponse {
+    optional PaintTemplateResponse template_response = 1;
+    optional EpochResources epoch_resources = 2;
+    optional fixed32 tile_control_key = 3;
+    optional fixed32 request_signing_key = 4;
+    optional RoadGraphTileParameters road_graph_tile_parameters = 5;
+    optional string paint_server_base_url = 6;
+    repeated int32 experiment_id = 7;
+    repeated string server_token = 8;
+    
+    extensions 1000 to max;
+    
+    enum Status {
+        STATUS_OK = 0;
+        STATUS_UNKNOWN_CLIENT = 1;
+        STATUS_BAD_REQUEST = 2;
+        STATUS_SERVER_ERROR = 3;
+    }
+}
+
+enum PaintRequestTemplateTileType {
+    UNKNOWN = 0;
+    GMM_VECTOR_BASE = 1;
+    GMM_VECTOR_TRAFFIC_V2 = 2;
+    GMM_VECTOR_BICYCLING_OVERLAY = 3;
+    GMM_LABELS_ONLY = 4;
+    GMM_REALTIME = 5;
+    GMM_HIGHLIGHT_RAP = 6;
+    GMM_TRAFFIC_CAR = 7;
+    GMM_TRAFFIC_CAR_JAPAN = 54;
+    GMM_TRANSIT = 8;
+    GMM_INDOOR = 9;
+    GMM_MY_MAPS = 10;
+    GMM_EXPLORE_EAT_AND_DRINK = 11 [deprecated = true];
+    GMM_EXPLORE_PLAY = 12;
+    GMM_EXPLORE_SHOP = 13;
+    GMM_EXPLORE_SERVICES = 14;
+    GMM_SATELLITE = 15;
+    GMM_TERRAIN = 16;
+    GMM_TERRAIN_DARK = 26;
+    GMM_ROAD_GRAPH = 17;
+    GMM_SPOTLIGHT_PERSONALIZED_SMARTMAPS = 18 [deprecated = true];
+    GMM_SPOTLIGHT_PERSONALIZED_SMARTMAPS_PER_TILE = 19 [deprecated = true];
+    GMM_SPOTLIGHT_HIGHLIGHTING = 20;
+    GMM_BUILDING_3D = 21;
+    GMM_MAJOR_EVENT = 22;
+    GMM_STREET_VIEW = 23;
+    GMM_SEARCH_RESULTS = 24;
+    GMM_PERSONAL_SAFETY = 25 [deprecated = true];
+    GMM_TRAVEL_HIGHLIGHT = 27;
+    GMM_LOCAL_RECOMMENDATIONS = 29;
+    GMM_BASEMAP_PERSONALIZATION = 30;
+    GMM_CATEGORICAL_SEARCH = 31;
+    GMM_CATEGORICAL_SEARCH_RESULTS_INJECTION = 34;
+    GMM_HOTEL_CATEGORICAL_SEARCH = 36;
+    GMM_HOTEL_CATEGORICAL_SEARCH_INJECTION = 41;
+    GMM_COVID19 = 32 [deprecated = true];
+    GMM_BUSYNESS = 33;
+    GMM_WEATHER_POI_BASEMAP = 35;
+    GMM_AIR_QUALITY = 37 [deprecated = true];
+    GMM_AIR_QUALITY_HEATMAP = 51;
+    GMM_API_TILE_OVERLAY = 38;
+    GMM_CRISIS_AMBIENT_ALERTS_IN_ALL_ZOOMS_FOR_TESTING_OVERLAY = 47;
+    GMM_CRISIS_OVERLAY = 44;
+    GMM_CRISIS_WILDFIRES = 39;
+    GMM_AREA_BUSYNESS = 40;
+    GMM_BASEMAP_PHOTOS = 42;
+    GMM_RESTRICTIONS = 48;
+    GMM_SPOTLIT = 43;
+    GMM_IMMERSIVE_AUGMENTATIONS = 50;
+    GMM_IMMERSIVE_AUGMENTATIONS_SV = 55;
+    TRAVEL_MAP_REACHABILITY = 45;
+    MAPS_API_DDS_1P = 46;
+    MAPS_DIRECTIONS = 49;
+    STATIC_LABELS = 52;
+    MAPS_WAYFINDING = 53;
+    EVCS = 56;
+    ADDITIVE_STATIC_LABELS = 57;
+    INDOOR_DEFAULT = 58;
+    DESTINATIONS = 59;
+    CONTEXTUAL_MAP_NO_TRACE = 60;
+    SAVED_PLACES = 61;
+    MAP_ACTIONS = 62;
+    BANANA_PEEL = 63;
+}

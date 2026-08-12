@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package pathfinder.crp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+;
+option java_outer_classname = "RouteAttributesProto";
+
+message RouteAttributes {
+    optional bool is_internal = 1;
+    optional bool is_current = 2;
+    optional bool was_original = 7;
+    optional bool is_reference = 3;
+    optional bool is_risk_averse = 4;
+    optional bool is_toll_free_alternate = 5;
+    optional bool is_ferry_free_alternate = 6;
+}

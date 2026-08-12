@@ -1,0 +1,11 @@
+syntax = "editions";
+
+package maps_paint;
+
+enum FetchableStyleSet {
+    option features = enum_type: CLOSED
+    ;
+    FETCHABLE_STYLE_SET_UNKNOWN = 0;
+    FETCHABLE_STYLE_SET_STANDARD = 1;
+    FETCHABLE_STYLE_SET_SDK = 2;
+}

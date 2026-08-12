@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.compliance.proto;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedComplianceModelInput {
+    repeated LoggedNGramSummary summary = 1;
+}
+
+message LoggedNGramSummary {
+    optional int32 ngram_size = 1;
+    optional double compliance_probability = 2;
+    optional int32 session_count = 3;
+}

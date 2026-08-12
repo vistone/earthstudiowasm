@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package logs.proto.geo.transportation.locationsignals;
+
+import "logs/proto/maps/directions/mrp/affordances.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedAffordanceProto {
+    optional maps.directions.mrp.LoggedAffordanceEnums.Class affordance_class = 1;
+    
+    reserved 2;
+}
+
+message LoggedAffordanceVectorProto {
+    repeated LoggedAffordanceProto affordances = 1;
+}

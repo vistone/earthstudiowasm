@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/directions-common.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "RelatedLocationProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message RelatedLocation {
+    optional Relation relation = 1;
+    enum Relation {
+        RELATION_UNKNOWN = 0;
+        RELATION_OLD_ADDRESS = 1;
+        RELATION_NEW_ADDRESS = 2;
+        RELATION_MORE_SPECIFIC_LOCATION = 3;
+    }
+    
+    optional WaypointQuery waypoint_query = 2;
+    optional string ved = 3;
+    optional bool is_nearby_user = 4;
+}

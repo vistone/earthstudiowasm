@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package gmm.webview.common;
+
+import "maps/paint/proto/client-vector-label.proto";
+import "maps/paint/proto/client-vector-tile.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMMWX";
+option java_package = "com.google.maps.gmm.webview.common";
+
+message DrawMetadata {
+    optional bytes id = 1;
+    
+    extend maps_paint_client.LabelRenderOp {
+        optional DrawMetadata label_render_op_extension = 259960600;
+    }
+    
+    extend maps_paint_client.LineRenderOp {
+        optional DrawMetadata line_render_op_extension = 367504627;
+    }
+}

@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "GeoWholepageTypeProto";
+option java_package = "com.google.maps.tactile.shared";
+
+enum GeoWholepageType {
+    UNKNOWN_GEO_WHOLEPAGE_TYPE = 0;
+    EXPLORE_TAB = 1;
+    SCAVENGER_HUNT_LEAF_PAGE = 2;
+    POPULAR_AREAS_LEAF_PAGE = 3;
+    VIDEO_LEAF_PAGE = 4;
+    SHOPPING_IMMERSIVE_PAGE = 5;
+    SCENIC_WALKS_DETAILS_PAGE = 6 [deprecated = true];
+    MAPS_LHS_GEO_POLITICAL = 7;
+    GMM_PLACESHEET = 8;
+    CATEGORICAL_SEARCH = 9;
+}

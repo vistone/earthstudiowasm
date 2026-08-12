@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package pathfinder.crp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "CostTypeProto";
+
+enum CostType {
+    option features = enum_type: CLOSED
+    ;
+    COST_TYPE_UNSPECIFIED = 0;
+    COST_TYPE_REFERENCE = 5;
+    COST_TYPE_DEFAULT = 3;
+    COST_TYPE_TIME_DEPENDENT = 1;
+    COST_TYPE_FIRST_BUCKET = 2;
+    COST_TYPE_FIRST_BUCKET_WITH_FALLBACK_TO_DEFAULT = 4;
+}

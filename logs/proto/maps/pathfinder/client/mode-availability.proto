@@ -1,0 +1,29 @@
+syntax = "editions";
+
+package logs.proto.maps.pathfinder.client;
+
+import "logs/proto/maps/pathfinder/client/cost-model-options.proto";
+import "logs/proto/maps/pathfinder/client/waypoint.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ModeAvailabilityProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedAvailableMode {
+    optional LoggedCostModelOptions.LoggedTravelMode travel_mode = 1;
+}
+
+message LoggedModeAvailability {
+    repeated LoggedAvailableMode available_mode = 1;
+    optional bool success = 2 [default = true];
+}
+
+message LoggedModeAvailabilityRequest {
+    repeated LoggedWaypoint waypoint = 1;
+    optional LoggedCostModelOptions cost_model_options = 2;
+}
+
+message LoggedModeAvailabilityResponse {
+    optional LoggedModeAvailability mode_availability = 1;
+}

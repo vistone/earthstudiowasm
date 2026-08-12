@@ -1,0 +1,21 @@
+syntax = "editions";
+
+package maps_tactile.directions;
+
+import "maps/tactile/api/shared/placepreview/place-preview.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "DestinationLandmarkProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message DestinationLandmark {
+    optional maps_tactile.shared.placepreview.PlacePreview place_preview = 1;
+    optional int32 straight_line_distance_meters = 2;
+}

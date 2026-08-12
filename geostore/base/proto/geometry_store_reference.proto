@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/cityjson.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message GeometryStoreReferenceProto {
+    optional string geometry_id = 1;
+    optional CityJsonProto geometry = 2;
+    optional bytes footprint = 3;
+}

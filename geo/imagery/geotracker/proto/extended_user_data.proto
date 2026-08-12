@@ -1,0 +1,35 @@
+syntax = "editions";
+
+package geotracker;
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.imagery.geotracker.proto";
+
+message ExtendedUserData {
+    extensions 1 to max;
+}
+
+message ExtendedUserDataEdit {
+    optional EditType edit_type = 1;
+    enum EditType {
+        option features = enum_type: CLOSED
+        ;
+        DEFAULT_UNKNOWN = 0;
+        ADD_OR_OVERWRITE = 1;
+        REMOVE = 2;
+    }
+    
+    optional ExtendedUserData user_data = 2;
+}
+
+message ExtendedUserDataEdits {
+    repeated ExtendedUserDataEdit edit = 1;
+}
+
+message ExtendedUserDataDebugInfo {
+    optional bytes raw_data = 1;
+    
+    extend ExtendedUserData {
+        optional ExtendedUserDataDebugInfo extended_user_data = 433525193;
+    }
+}

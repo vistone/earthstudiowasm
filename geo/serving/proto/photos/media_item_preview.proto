@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "frameworks/client/data/data_annotation.proto";
+import "geo/serving/proto/photos/image_format.proto";
+import "geo/serving/proto/photos/image_frontend_type.proto";
+import "geo/serving/proto/photos/image_key.proto";
+import "geo/serving/proto/photos/image_size.proto";
+import "geo/serving/proto/photos/photo_entrypoint_type.proto";
+import "geo/serving/proto/photos/video_preview.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "MediaItemPreviewProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message MediaItemPreview {
+    optional string url = 1;
+    optional string low_res_url = 6;
+    optional ImageKey image_key = 2;
+    optional ReportAbuse report_abuse = 3 [deprecated = true];
+    optional ImageFormat image_format = 4;
+    optional ImageSize image_size = 5;
+    optional string photo_descriptor = 7;
+    optional string video_src_url = 8 [deprecated = true];
+    optional VideoPreview video_preview = 9;
+    optional ImageFrontendType frontend = 10;
+    optional string title = 11;
+    optional bool is_advertiser_asset_photo = 12 [deprecated = true];
+    optional PhotoEntrypointType photo_entrypoint_type = 13;
+}
+
+message ReportAbuse {
+    optional string report_url = 1;
+}

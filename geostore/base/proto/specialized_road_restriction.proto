@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/cellcovering.proto";
+import "net/proto2/proto/descriptor.proto";
+
+option java_package = "com.google.geostore.base.proto";
+
+message SpecializedRoadRestrictionProto {
+    enum RegionSpecificRestrictionIdentifier {
+        UNKNOWN_REGION_SPECIFIC_RESTRICTION = 0;
+        JAKARTA_ODD_EVEN = 1;
+        SAO_PAULO_RODIZIO = 2;
+        MEXICO_CITY_HOY_NO_CIRCULA = 3;
+        MANILA_NUMBER_CODING = 4;
+        SANTIAGO_NUMBER_CODING = 5;
+        BOGOTA_ODD_EVEN = 6;
+        COSTA_RICA_SAN_JOSE_VEHICLE_RESTRICTION = 7;
+        MADRID_ZERO_EMISSION_ZONE = 8;
+    }
+}
+
+extend .proto2.EnumValueOptions {
+    optional CellCoveringProto s2_covering = 205836935;
+}

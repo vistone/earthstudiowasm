@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package pathfinder.replay;
+
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message ReplayMetadata {
+    optional string replay_tag = 1;
+    optional string replay_id = 2;
+    optional google.protobuf.Timestamp runtime_timestamp = 3;
+    optional string requesting_username = 4;
+}

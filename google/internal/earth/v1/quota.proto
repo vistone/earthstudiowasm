@@ -1,0 +1,62 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.quota;
+
+import "google/internal/earth/v1/billing/plantype.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message GetUserAssetQuotaRequest {
+    repeated AccountingUnit accounting_units = 2 [packed = true];
+    
+    reserved 1, 3;
+}
+
+message UserAssetQuota {
+    optional AccountingUnit accounting_unit = 1;
+    optional int64 consumed_quota = 2;
+    optional int64 remaining_quota = 3;
+    optional int64 max_limit = 4;
+}
+
+message GetUserAssetQuotaResponse {
+    repeated UserAssetQuota quotas = 1;
+}
+
+message ValidateUserAssetQuotaRequest {
+    optional int64 gaia_id = 1;
+    repeated QuotaDelta deltas = 5;
+    
+    oneof quota_context {
+        int64 gcp_project_number = 3;
+        billing.PlanType plan = 4;
+    }
+}
+
+message QuotaDelta {
+    optional AccountingUnit accounting_unit = 1;
+    optional int64 amount = 2;
+}
+
+message QuotaValidationResult {
+    optional AccountingUnit accounting_unit = 1;
+    repeated ValidationStatus status = 2 [packed = true];
+}
+
+message ValidateUserAssetQuotaResponse {
+    repeated QuotaValidationResult results = 1;
+}
+
+enum AccountingUnit {
+    ACCOUNTING_UNIT_UNSPECIFIED = 0;
+    ACCOUNTING_UNIT_BYTES = 1;
+    ACCOUNTING_UNIT_ON_DEMAND_USAGE = 2;
+    ACCOUNTING_UNIT_IMAGE_GENERATION_USAGE = 3;
+}
+
+enum ValidationStatus {
+    QUOTA_VALIDATION_STATUS_UNSPECIFIED = 0;
+    QUOTA_VALIDATION_STATUS_ASSET_SIZE_BELOW_LIMIT = 1;
+    QUOTA_VALIDATION_STATUS_ASSET_SIZE_EXCEEDS_LIMIT = 2;
+    QUOTA_VALIDATION_STATUS_QUOTA_BELOW_LIMIT = 3;
+    QUOTA_VALIDATION_STATUS_QUOTA_EXCEEDS_LIMIT = 4;
+}

@@ -1,0 +1,73 @@
+syntax = "proto2";
+
+package gws.mothership;
+
+import "gws/mothership/http_endpoint_load_balancing_type.proto";
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MothershipOptionsProto";
+option java_package = "com.google.gws.mothership";
+
+message MothershipRpcOptions {
+    optional bool include_options_from_request_message = 1;
+    optional bool include_options_from_response_message = 2;
+    optional int32 maximum_streamed_requests = 3;
+    optional bool allow_gws_request_info_in_side_channel = 4;
+}
+
+message MothershipRequestOptions {
+    optional FieldPathCollection fields_propagated_to_request_context = 1;
+    optional OnePlatformHeadersToCopy one_platform_request_headers_to_copy = 2;
+    optional FieldPathCollection request_options_to_inherit = 3;
+    optional FieldPathCollection client_request_proto_fields = 4;
+    optional FieldPathCollection request_context_atom_fields = 5;
+    optional FieldPathCollection frontend_request_atom_fields = 6;
+}
+
+message MothershipResponseOptions {
+    optional FieldPathCollection fields_propagated_from_response_context = 1;
+    optional bool propagate_response_context_on_first_empty_response = 4;
+    optional OnePlatformHeadersToCopy one_platform_response_headers_to_set = 2;
+    optional FieldPathCollection response_options_to_inherit = 3;
+    optional string bidirectional_critical_path_field = 5;
+}
+
+message OnePlatformHeadersToCopy {
+    repeated HeaderAndFieldPath header_to_copy = 2;
+}
+
+message HeaderAndFieldPath {
+    optional string header = 1;
+    optional string path = 2;
+}
+
+message FieldPathCollection {
+    repeated string path = 1;
+    repeated string parent_wrapper_path = 2;
+}
+
+message HttpEndpointLoadBalancingTypes {
+    repeated HttpEndpointLoadBalancingType load_balancing_type = 1;
+}
+
+extend .proto2.ServiceOptions {
+    optional MothershipRpcOptions rpc_service_options = 168898604;
+    optional MothershipRequestOptions request_service_options = 123456789;
+    optional MothershipResponseOptions response_service_options = 123456790;
+}
+
+extend .proto2.MethodOptions {
+    optional MothershipRpcOptions rpc_method_options = 168767932;
+    optional MothershipRequestOptions request_method_options = 158530482;
+    optional MothershipResponseOptions response_method_options = 158999960;
+    optional HttpEndpointLoadBalancingTypes enabled_http_endpoint_load_balancing_types = 138221647;
+    optional bool inherit_request_options = 146072610 [deprecated = true];
+    optional bool inherit_response_options = 158728266 [deprecated = true];
+}
+
+extend .proto2.MessageOptions {
+    optional MothershipRequestOptions request_message_options = 158163332;
+    optional MothershipResponseOptions response_message_options = 158849971;
+}

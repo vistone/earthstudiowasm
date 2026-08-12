@@ -1,0 +1,107 @@
+syntax = "proto2";
+
+package earth.document;
+
+import "geo/earth/app/cpp/core/document/localizedmessage.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+
+message TemplateParameter {
+    optional string name = 1;
+    optional LocalizedMessage l10n_label = 2;
+    optional LocalizedMessage l10n_tooltip = 4;
+    
+    optional ParameterType type = 3;
+    enum ParameterType {
+        UNKNOWN_PARAMETER_TYPE = 0;
+        PLAIN_TEXT = 1;
+        RICH_TEXT = 3;
+        COLOR = 8;
+        BOOLEAN = 12;
+        DOUBLE = 13;
+    }
+    
+    optional string default_value = 7;
+    
+    oneof data {
+        ColorPalette color_palette = 5;
+    }
+    
+    message ColorPalette {
+        optional ColorTheme color_theme = 1;
+        enum ColorTheme {
+            UNKNOWN_COLOR = 0;
+            DARK_COLORS = 1;
+            LIGHT_COLORS = 2;
+            ALL_COLORS = 3;
+        }
+    }
+}
+
+message EarthBalloonTemplate {
+    optional string id = 1;
+    optional LocalizedMessage l10n_title = 2;
+    optional LocalizedMessage l10n_description = 9;
+    repeated TemplateParameter parameter = 3;
+    
+    repeated FeatureType allowed_feature_type = 4;
+    enum FeatureType {
+        UNKNOWN_FEATURE_TYPE = 0;
+        POINT = 1;
+        PATH = 2;
+        POLYGON = 4;
+        SLIDE = 3;
+        FOLDER = 5;
+        GROUND_OVERLAY = 6;
+        TILE_OVERLAY = 7;
+        MULTIGEOMETRY = 8;
+        MODEL = 9;
+    }
+    
+    optional PanelToolbarTheme panel_toolbar_theme = 5;
+    enum PanelToolbarTheme {
+        UNKNOWN = 0;
+        LIGHT_PLAIN = 1;
+        DARK_PLAIN = 2;
+        DARK_PROTECTED = 3;
+        LEGACY = 4;
+    }
+    
+    optional PanelType panel_type = 6;
+    enum PanelType {
+        UNKNOWN_PANEL_TYPE = 0;
+        PANEL_TYPE_POPUP_BALLOON = 1;
+        PANEL_TYPE_PANEL = 2;
+        PANEL_TYPE_FULLSCREEN = 3;
+        PANEL_TYPE_NONE = 4;
+    }
+    
+    optional int32 carousel_width_hint = 7;
+    
+    optional SupportedStatus supported_status = 8;
+    message SupportedStatus {
+        optional SupportType support_type = 1;
+        enum SupportType {
+            UNKNOWN_SUPPORT_TYPE = 0;
+            SUPPORTED_FOR_NEW_CONTENT = 1;
+            SUPPORTED_FOR_EXISTING_CONTENT = 2;
+        }
+    }
+    
+    optional bool user_selectable_background_color = 10;
+    optional bool read_only = 11;
+    
+    optional NativeTemplate native_template = 12;
+    enum NativeTemplate {
+        UNKNOWN_NATIVE_TEMPLATE = 0;
+        NATIVE_TEMPLATE_DEFAULT = 1;
+        NATIVE_TEMPLATE_NEW_BUILD_DESIGN = 2;
+        NATIVE_TEMPLATE_SOLAR_DESIGN = 3;
+    }
+}
+
+message EarthBalloonTemplateList {
+    repeated EarthBalloonTemplate earth_balloon_template = 1;
+    optional string default_template_id = 2;
+}

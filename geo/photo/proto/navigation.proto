@@ -1,0 +1,156 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/associated_feature.proto";
+import "geo/photo/proto/camera.proto";
+import "geo/photo/proto/date_time.proto";
+import "geo/photo/proto/description.proto";
+import "geo/photo/proto/image_format.proto";
+import "geo/photo/proto/image_key.proto";
+import "geo/photo/proto/image_size.proto";
+import "geo/photo/proto/location.proto";
+import "geo/photo/proto/route_annotation.proto";
+import "geo/photo/proto/view_parameters.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "NavigationProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message NavigationChannel {
+    optional NavigationChannelKey channel = 1;
+    optional LocationInfo location = 2;
+    optional TargetTable targets = 4;
+    optional CursorTable cursors = 5;
+    optional Overlays overlays = 6;
+    repeated NeighborTarget neighbor = 7;
+    repeated VerticalTarget vertical = 8;
+    repeated TimeTarget time = 9;
+    repeated AssociatedFeature associated_feature = 10;
+    optional Camera initial_camera = 11 [deprecated = true];
+    optional LatLngRectangle suggested_mercator_bounds = 12;
+    repeated RouteAnnotation route_annotation = 13;
+    optional ViewParameters initial_view = 14;
+    
+    reserved 3;
+}
+
+message NavigationChannelKey {
+    optional Channel channel = 1;
+    enum Channel {
+        UNKNOWN_CHANNEL = 0;
+        GLOBAL = 1;
+        STREET_VIEW_MAP = 2;
+        USER = 3;
+        LOCAL_CLUSTER = 4;
+        SEQUENCE = 5;
+    }
+    
+    reserved 2, 3, 4;
+}
+
+message TargetOverlayFormat {
+    optional Encoding encoding = 1;
+    enum Encoding {
+        UNKNOWN_ENCODING = 0;
+        OVERLAY_TARGET_TABLE_8BPP = 1;
+        LEGACY_STREET_VIEW_8BPP_TARGETS = 2;
+    }
+}
+
+message Target {
+    optional ImageKey image_key = 1;
+    optional Camera camera = 2;
+    optional LocationInfo location = 3;
+    optional Description description = 4;
+}
+
+message NeighborTarget {
+    optional int32 target_index = 1;
+    
+    optional DirectionHint direction_hint = 2;
+    message DirectionHint {
+        optional DirectionHintLocation location = 1;
+        enum DirectionHintLocation {
+            UNKNOWN_DIRECTION = 0;
+            APPEARS_LEFT_ON_DRAG = 1;
+            APPEARS_RIGHT_ON_DRAG = 2;
+            APPEARS_ABOVE_ON_DRAG = 3;
+            APPEARS_BELOW_ON_DRAG = 4;
+            NONE = 5;
+            EXPANDS_FOV = 6;
+            EXPANDS_FOV_UNDERLAY = 7;
+        }
+        
+        optional Rotation underlay_orientation = 2;
+        optional float overlay_horizontal_field_of_view_deg = 3;
+        optional float legacy_yaw_degrees = 4;
+    }
+}
+
+message VerticalTarget {
+    optional int32 target_index = 1;
+}
+
+message TimeTarget {
+    optional int32 target_index = 1;
+    optional DateTime capture_time = 2;
+    optional ImageFormat image_format = 6;
+}
+
+message TargetTable {
+    repeated Target target = 1;
+}
+
+message CursorOverlayFormat {
+    optional Encoding encoding = 1;
+    enum Encoding {
+        UNKNOWN_ENCODING = 0;
+        OVERLAY_CURSOR_TABLE_8BPP = 1;
+        LEGACY_STREET_VIEW_8BPP_PLANES = 2;
+    }
+}
+
+message Cursor {
+    optional Plane plane = 1;
+    optional int32 target_index = 3;
+}
+
+message Plane {
+    optional float normal_x = 1;
+    optional float normal_y = 2;
+    optional float normal_z = 3;
+    optional float distance_m = 4;
+}
+
+message CursorTable {
+    repeated Cursor cursor = 1;
+}
+
+message Overlay {
+    optional ImageSize size = 1;
+    optional int32 bytes_per_entry = 2 [default = 1];
+    optional bytes map = 3;
+}
+
+message Overlays {
+    optional CursorOverlayFormat cursor_format = 1;
+    optional Overlay cursor = 2;
+    optional TargetOverlayFormat target_format = 3;
+    optional Overlay target = 4;
+}
+
+message AssociatedFeatureFormat {
+    optional RenderFormat road_label_format = 1;
+    enum RenderFormat {
+        TEXT_ONLY = 1;
+        ANNOTATION_2D = 2;
+        ANNOTATION_3D = 3;
+    }
+    
+    optional RenderFormat semantic_label_format = 2;
+}

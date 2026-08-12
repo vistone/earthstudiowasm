@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "BoardedTransitVehicleProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message BoardedTransitVehicle {
+    optional int32 trip_dataset_id = 4;
+    optional fixed64 trip_realtime_gtfs_fprint = 5;
+    optional int64 trip_cookie = 2;
+    optional int32 position_in_trip = 3;
+    
+    reserved 1;
+}

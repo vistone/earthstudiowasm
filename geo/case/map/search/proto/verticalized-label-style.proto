@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geo.casemap.search;
+
+option objc_class_prefix = "CMR";
+option java_multiple_files = true;
+option java_package = "com.google.geo.casemap.search.proto";
+
+enum VerticalizedLabelStyle {
+    UNKNOWN_VERTICALIZED_LABEL_STYLE = 0;
+    CATEGORY_ICON_TEXT_SEARCH_RESULT_COLOR_CALLOUT = 12;
+    CATEGORY_ICON_TEXT_CATEGORICAL_COLOR_CALLOUT = 15;
+    BRAND_ICON_TEXT_SEARCH_RESULT_COLOR_CALLOUT = 13;
+    CATEGORY_ICON_TEXT_CALLOUT = 1 [deprecated = true];
+    SEARCH_RESULT_COLOR_CALLOUT = 3 [deprecated = true];
+    CATEGORICAL_COLOR_CALLOUT = 4 [deprecated = true];
+    BLANK_CANVAS_CALLOUT = 5 [deprecated = true];
+    RATING_STAR_VARIED_SATURATION = 6 [deprecated = true];
+    RATING_STAR_CATEGORICAL_COLOR_CALLOUT = 7 [deprecated = true];
+    RATING_STAR_SEARCH_RESULT_COLOR_CALLOUT = 8 [deprecated = true];
+    RATING_STAR_BLANK_CANVAS_CALLOUT = 9 [deprecated = true];
+    BRAND_TEXT_CALLOUT = 10 [deprecated = true];
+    COLOR_CODED_BRAND_PRICE_CALLOUT = 11 [deprecated = true];
+    HOTEL_PRICE_CALLOUT = 14 [deprecated = true];
+}

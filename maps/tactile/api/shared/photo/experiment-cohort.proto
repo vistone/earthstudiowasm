@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package maps_tactile.shared.photo;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHP";
+option java_multiple_files = true;
+option java_outer_classname = "ExperimentCohortProto";
+option java_package = "com.google.maps.tactile.shared.photo";
+
+message ExperimentCohort {
+    optional int32 ve_type_id = 1;
+}

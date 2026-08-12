@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+
+message Polygon {
+    optional bytes encoded = 1;
+    optional float base_meters = 2;
+    optional float height_meters = 3;
+    optional ReferenceLevel reference_level = 4;
+}
+
+message Point {
+    optional float latitude = 1;
+    optional float longitude = 2;
+    optional float altitude = 3;
+    optional float radius_m = 4;
+    optional ReferenceLevel reference_level = 5;
+}
+
+message Polyline {
+    repeated float latitude = 1 [packed = true];
+    repeated float longitude = 2 [packed = true];
+    repeated float altitude = 3 [packed = true];
+    repeated float width_m = 4 [packed = true];
+    optional ReferenceLevel reference_level = 5;
+}
+
+enum ReferenceLevel {
+    REFERENCE_LEVEL_UNSPECIFIED = 0;
+    RELATIVE_TO_GROUND = 1;
+    RELATIVE_TO_SURFACE_MODEL = 2;
+}

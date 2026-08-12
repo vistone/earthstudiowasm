@@ -1,0 +1,184 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "geo/enterprise/platform/proto/ares_type_annotations.proto";
+import "google/internal/earth/v1/builtenv/building_configuration.proto";
+import "google/internal/earth/v1/builtenv/common.proto";
+import "google/internal/earth/v1/builtenv/use_type_class.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message NewBuildRunInputs {
+    optional ZoningInputs zoning_inputs = 1;
+    message ZoningInputs {
+        repeated ZoningRulesPerParcel rules_per_parcel = 1;
+        message ZoningRulesPerParcel {
+            optional string parcel_id = 1;
+            optional ZoningRules zoning_rules = 2;
+            optional string zone_code = 3;
+            optional string zone_name = 4;
+            optional DefaultZoningState default_zoning_state = 5;
+        }
+        
+        message ZoningRules {
+            optional double max_building_coverage_ratio = 1;
+            optional double max_floor_area_ratio = 2;
+            optional double max_height_m = 3;
+            optional double min_open_green_space_ratio = 4;
+            optional double front_yard_setback_m = 5;
+            optional double side_yard_setback_m = 6;
+            optional double rear_yard_setback_m = 7;
+        }
+        
+        enum DefaultZoningState {
+            DEFAULT_ZONING_UNSPECIFIED = 0;
+            DEFAULT_ZONING_APPLIED = 1;
+            DEFAULT_ZONING_OVERRIDDEN = 2;
+        }
+    }
+    
+    repeated UseTypeInput use_type_inputs = 2;
+    message UseTypeInput {
+        optional string use_type_id = 1;
+        optional string display_name = 2;
+        optional UseTypeClass use_type_class = 3;
+        
+        optional TargetGFAAllocated target_gfa_allocated = 4;
+        enum TargetGFAAllocated {
+            TARGET_GFA_ALLOCATED_UNSPECIFIED = 0;
+            REQUIRED = 1;
+            NOT_REQUIRED = 2;
+        }
+    }
+    
+    optional UnitMixInputs unit_mix_inputs = 3;
+    message UnitMixInputs {
+        repeated UnitMixPerUseType unit_mixes = 1;
+        message UnitMixPerUseType {
+            optional string use_type_id = 1;
+            repeated UnitTypeDistribution distributions = 2;
+        }
+        
+        message UnitTypeDistribution {
+            optional UnitType unit_type = 1;
+            optional int32 mix_percent = 2;
+        }
+        
+        message UnitType {
+            optional string unit_type_id = 1;
+            optional string display_name = 2;
+            optional double average_residents_count = 3;
+            optional double min_area_sq_m = 4;
+        }
+    }
+    
+    optional ProgramInputs program_inputs = 4;
+    message ProgramInputs {
+        optional TargetGFA gfa = 1;
+        message TargetGFA {
+            oneof target {
+                SitewideTargetGFA sitewide = 1;
+                ParcelsTargetGFA per_parcel = 2;
+            }
+            
+            message SitewideTargetGFA {
+                optional ValueOrRange target_sq_m = 1;
+                repeated GfaPerUseType proportions = 2;
+            }
+            
+            message ParcelsTargetGFA {
+                repeated TargetGFAPerParcel targets = 1;
+                message TargetGFAPerParcel {
+                    optional string parcel_id = 1;
+                    repeated GfaPerUseType targets_sq_m = 2;
+                }
+            }
+            
+            message GfaPerUseType {
+                optional string use_type_id = 1;
+                optional ValueOrRange target = 2;
+            }
+        }
+        
+        optional TargetGreenSpace green_space = 2;
+        message TargetGreenSpace {
+            oneof target {
+                SitewideGreenSpace sitewide = 1;
+                ParcelsGreenSpace per_parcel = 2;
+            }
+            
+            message SitewideGreenSpace {
+                optional Range target_proportion = 1;
+            }
+            
+            message ParcelsGreenSpace {
+                repeated GreenspaceTargetPerParcel targets = 1;
+                message GreenspaceTargetPerParcel {
+                    optional string parcel_id = 1;
+                    optional Range target_proportion = 2;
+                }
+            }
+        }
+        
+        optional TargetParking parking = 3;
+        message TargetParking {
+            optional double parking_spot_size_sq_m = 1;
+            
+            repeated ParkingRatioPerUseType parking_ratios = 2;
+            message ParkingRatioPerUseType {
+                optional string use_type_id = 1;
+                
+                oneof parking_ratio {
+                    double spots_per_100_sq_m = 3;
+                    double spots_per_unit = 4;
+                }
+                
+                reserved 2;
+            }
+            
+            optional ParkingStrategies strategies = 3;
+            message ParkingStrategies {
+                optional bool surface_parking_enabled = 1;
+                optional bool basement_parking_enabled = 2;
+            }
+        }
+    }
+    
+    optional SustainabilityInputs sustainability_inputs = 5;
+    message SustainabilityInputs {
+        optional bool rooftop_solar_panels_enabled = 1;
+        optional bool heating_electrification_enabled = 2;
+        
+        optional BuildingMaterialSourcing building_material_sourcing = 3;
+        enum BuildingMaterialSourcing {
+            BUILDING_MATERIAL_SOURCING_UNSPECIFIED = 0;
+            BEST_PRACTICE = 1;
+            CONSERVATIVE = 2;
+        }
+        
+        optional bool parking_reduction_enabled = 4;
+    }
+    
+    optional MetricsInputs metrics_inputs = 6;
+    message MetricsInputs {
+        optional RaycastingInputs raycasting_inputs = 1;
+        message RaycastingInputs {
+            optional bool enabled = 1;
+        }
+        
+        optional WalkabilityInputs walkability_inputs = 2;
+        message WalkabilityInputs {
+            optional bool enabled = 1;
+        }
+        
+        optional FinancialInputs financial_inputs = 3;
+        message FinancialInputs {
+            optional bool enabled = 1;
+        }
+    }
+    
+    repeated BuildingInput building_inputs = 7;
+}

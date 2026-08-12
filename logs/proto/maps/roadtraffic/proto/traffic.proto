@@ -1,0 +1,13 @@
+syntax = "editions";
+
+package logs.proto.maps.roadtraffic.proto;
+
+import "maps/roadtraffic/proto/trafficproperty.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedTripSummaryForTrafficFlavor {
+    optional int64 elapsed_time_ms = 1;
+    optional int32 traffic_covered_trip_length_m = 2;
+    optional maps_roadtraffic.TrafficProperty.DelayCategory delay_category = 3 [default = DELAY_NODATA];
+    optional maps_roadtraffic.TrafficProperty.TrafficLevelUsualness traffic_level_usualness = 4 [default = UNKNOWN_USUALNESS];
+}

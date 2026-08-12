@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package pathfinder;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AlternatesMethodOuterClass";
+
+enum AlternatesMethod {
+    ALTERNATE_NONE = 0;
+    ALTERNATE_CH = 1;
+    ALTERNATE_CRP = 3;
+    ALTERNATE_CRP_TOLL_FREE = 4;
+    ALTERNATE_CRP_FERRY_FREE = 5;
+}

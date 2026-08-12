@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "ElevationCategoryProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+enum ElevationCategory {
+    UNKNOWN_ELEVATION_CATEGORY = 0;
+    ELEVATION_NORMAL = 1;
+    ELEVATION_BRIDGE = 2;
+    ELEVATION_TUNNEL = 3;
+    ELEVATION_SKYWAY = 4;
+    ELEVATION_STAIRWAY = 5;
+    ELEVATION_ESCALATOR = 6;
+    ELEVATION_ELEVATOR = 7;
+    ELEVATION_SLOPEWAY = 8;
+    ELEVATION_MOVING_WALKWAY = 9;
+}

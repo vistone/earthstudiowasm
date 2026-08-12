@@ -1,0 +1,40 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit;
+
+import "maps/transit/api/fare.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedFareNameProto {
+    optional string text = 1;
+    optional string language = 2;
+}
+
+message LoggedFareProto {
+    optional LoggedBaseFareType base_fare_type = 1;
+    enum LoggedBaseFareType {
+        NORMAL_FARE = 0;
+        CHILD_FARE = 1;
+    }
+    
+    optional LoggedSurchargeType surcharge_type = 2;
+    enum LoggedSurchargeType {
+        NO_SURCHARGE = 0;
+        NON_RESERVED_SEAT = 1;
+        RESERVED_SEAT = 2;
+        FIRST_CLASS_SEAT = 3;
+        SUITE_CLASS_SEAT = 9;
+        SLEEPER_SEAT = 4;
+        EXPRESS_TICKET = 5;
+        STANDING_SEAT = 8;
+        DISCOUNTED_EXPRESS_TICKET = 6;
+        OTHER_TICKET = 7;
+    }
+    
+    repeated LoggedFareNameProto name = 3;
+    optional double amount = 4;
+    optional string currency = 5;
+    optional .maps_transit.api.FareType fare_type = 6;
+    optional double min_amount = 7;
+    optional double max_amount = 8;
+}

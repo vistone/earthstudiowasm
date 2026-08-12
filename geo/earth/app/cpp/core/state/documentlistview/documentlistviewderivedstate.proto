@@ -1,0 +1,20 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Documentlistviewderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derivedstate";
+
+message DocumentListViewDerivedState {
+    optional int32 document_key = 1 [default = -1];
+    optional bool is_persistent_local_storage_available = 2;
+    optional bool is_my_maps_enabled = 3;
+    optional bool search_panel_visible = 4;
+    optional bool search_panel_suppressed_sui = 5;
+    optional bool homescreen_visible = 6;
+    optional bool pinned_projects_dialog_visible = 7;
+}

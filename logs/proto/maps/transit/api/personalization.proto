@@ -1,0 +1,40 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "geostore/base/proto/transitline.proto";
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/shared/geometry_e7.proto";
+import "logs/proto/maps/shared/name.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedPersonalizedRoutePattern {
+    repeated LoggedStation station = 1;
+    message LoggedStation {
+        optional logs_maps_shared.PointE7 location = 1;
+        optional logs_maps_shared.PointE7 root_location = 3;
+        optional logs_maps.FeatureIdProto root_station_id = 4;
+        repeated logs_maps_shared.LoggedNameProto station_name = 2;
+    }
+    
+    repeated LoggedTransitLeg leg = 2;
+    message LoggedTransitLeg {
+        repeated LoggedTransitStep step = 2;
+        message LoggedTransitStep {
+            optional geostore.TransitLineProto.VehicleTypeCategory vehicle_type = 1;
+        }
+        
+        optional int32 expected_duration_seconds = 3;
+        repeated fixed64 line_fprints = 5 [packed = true];
+    }
+}
+
+message LoggedPersonalizedOptions {
+    repeated LoggedPersonalizedRoutePattern route = 1;
+    
+    optional LoggedMatchingMode matching_mode = 2 [default = SOFT_MATCHING];
+    enum LoggedMatchingMode {
+        SOFT_MATCHING = 0;
+        STRICT_MATCHING = 1;
+    }
+}

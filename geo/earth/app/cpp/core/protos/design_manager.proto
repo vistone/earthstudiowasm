@@ -1,0 +1,75 @@
+syntax = "proto2";
+
+package earth.design;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "google/internal/earth/v1/builtenv/built_entity.proto";
+import "google/internal/earth/v1/builtenv/built_environment.proto";
+import "google/internal/earth/v1/builtenv/design_content.proto";
+import "google/internal/earth/v1/builtenv/metrics.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.design";
+
+message DesignResult {
+    optional string design_id = 1;
+    optional string design_name = 9;
+    optional google.internal.earth.v1.builtenv.DesignContent.DesignState state = 2;
+    optional google.internal.earth.v1.builtenv.Design.DesignType type = 3;
+    optional google.internal.earth.v1.builtenv.SummarizedMetrics summarized_metrics = 4;
+    optional string design_generation_input_id = 5;
+    optional string thumbnail_url = 6;
+    repeated google.internal.earth.v1.builtenv.BuiltEntity built_entities = 7;
+    repeated google.internal.earth.v1.builtenv.DownloadableFile downloadable_files = 12;
+    repeated google.internal.earth.v1.builtenv.Design.DesignTag design_tags = 10 [packed = true];
+    optional bool saved = 11;
+    
+    reserved 8;
+}
+
+message DesignMapResult {
+    optional string design_id = 1;
+    optional string design_name = 2;
+    optional google.internal.earth.v1.builtenv.DesignContent content = 3;
+    optional google.internal.earth.v1.builtenv.Design.DesignType type = 4;
+}
+
+message Sort {
+    optional SortField sort_field = 1;
+    enum SortField {
+        SORT_FIELD_UNSPECIFIED = 0;
+        SORT_FIELD_UPDATE_TIME = 1;
+        SORT_FIELD_OVERALL_SCORE = 2;
+    }
+    
+    optional SortOrder sort_order = 2;
+    enum SortOrder {
+        SORT_ORDER_UNSPECIFIED = 0;
+        SORT_ORDER_ASCENDING = 1;
+        SORT_ORDER_DESCENDING = 2;
+    }
+}
+
+message Filter {
+    optional FilterField filter_field = 1;
+    enum FilterField {
+        FILTER_FIELD_UNSPECIFIED = 0;
+        FILTER_FIELD_DESIGN_GENERATION_INPUT_ID = 1;
+        FILTER_FIELD_SAVED = 2;
+        FILTER_FIELD_DESIGN_STATE = 3;
+    }
+    
+    repeated string filter_values = 2;
+}
+
+message Query {
+    repeated Sort sorts = 1;
+    repeated Filter filters = 2;
+}
+
+message QueryKey {
+    optional string map_id = 1;
+    optional Query query = 2;
+}

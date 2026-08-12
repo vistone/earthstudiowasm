@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "RoutingSignalsProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedRoutingSignals {
+    optional LoggedTransitVehiclePreferences transit_preferences = 1;
+    message LoggedTransitVehiclePreferences {
+        optional double bus = 1;
+        optional double ferry = 2;
+        optional double rail = 3;
+        optional double subway = 4;
+        optional double train = 5;
+        optional double tram = 6;
+    }
+    
+    optional LoggedNonTransitModePreferences non_transit_preferences = 2;
+    message LoggedNonTransitModePreferences {
+        optional double walking = 1;
+        optional double driving = 2;
+        optional double offline_taxi = 3;
+        optional double online_taxi = 4;
+        optional double cycling = 5;
+        optional double two_wheeler = 6;
+    }
+    
+    optional double vehicle_preferences_penalty_factor = 3 [default = 0.5];
+}

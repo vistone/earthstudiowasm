@@ -1,0 +1,154 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "geo/serving/proto/electricvehicle/charging_architecture_spec.proto";
+import "geo/serving/proto/electricvehicle/external_station_id_source.proto";
+import "geo/serving/proto/electricvehicle/predicted_availability.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/shared/ev/ev-station-reliability.proto";
+import "maps/tactile/api/shared/ev/oem-payment-id.proto";
+import "maps/tactile/api/shared/ev/predicted-availability-per-eta.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "EvInfoProto";
+option java_package = "com.google.maps.tactile";
+
+message EvInfo {
+    optional PlaceType place_type = 5 [default = UNKNOWN];
+    enum PlaceType {
+        UNKNOWN = 0;
+        STATION = 1;
+        HOST = 2;
+    }
+    
+    repeated StationGroup station_group = 2;
+    optional string ved = 4;
+    optional maps_tactile.shared.ev.EvStationReliability ev_station_reliability = 6;
+    
+    reserved 1, 3;
+}
+
+message StationGroup {
+    optional string name = 1;
+    optional string description = 2;
+    repeated ChargingPortGroup charging_port_group = 3;
+    optional string feature_id = 4;
+    
+    repeated PaymentOption payment_option = 5;
+    message PaymentOption {
+        optional PaymentType payment_type = 3;
+        enum PaymentType {
+            UNKNOWN_PAYMENT_TYPE = 0;
+            PAYMENT_NETWORK = 1;
+            CREDIT_CARD = 2;
+            DEBIT_CARD = 3;
+            OEM_PAYMENT_NETWORK = 4;
+        }
+        
+        optional string payment_network_name = 1;
+        optional string payment_info_uri = 2;
+        optional string payment_app_install_uri = 4;
+        optional string mid = 5;
+        repeated string replaced_mid = 6;
+        repeated maps_tactile.shared.ev.OemPaymentId oem_payment_id = 7;
+    }
+    
+    optional FirmwareCompatibility firmware_compatibility = 6;
+    enum FirmwareCompatibility {
+        UNKNOWN_FIRMWARE_COMPATIBILITY = 0;
+        COMPATIBLE = 1;
+        INCOMPATIBLE = 2;
+    }
+    
+    optional PlugAndChargeCompatibility plug_and_charge_compatibility = 7;
+    enum PlugAndChargeCompatibility {
+        UNKNOWN_PLUG_AND_CHARGE_COMPATIBILITY = 0;
+        PLUG_AND_CHARGE_COMPATIBLE = 1;
+        PLUG_AND_CHARGE_INCOMPATIBLE = 2;
+    }
+    
+    optional geo_serving_proto.electricvehicle.ExternalStationIdSource external_station_id_source = 8;
+    optional string external_station_id = 9;
+    optional geo_serving_proto.electricvehicle.PredictedAvailability predicted_availability_at_arrival = 10;
+    repeated maps_tactile.shared.ev.PredictedAvailabilityPerEta predicted_availability_per_eta = 13;
+}
+
+message ChargingPortGroup {
+    optional ConnectorType connector_type = 6;
+    enum ConnectorType {
+        option deprecated = true;
+        UNKNOWN_CONNECTOR_TYPE = 0;
+        OTHER = 1;
+        J_1772 = 2;
+        MENNEKES = 3;
+        CHADEMO = 4;
+        CCS_COMBO_1 = 5;
+        CCS_COMBO_2 = 6;
+        DEPRECATED_TESLA_ROADSTER = 7 [deprecated = true];
+        DEPRECATED_TESLA_S_HPWC = 8 [deprecated = true];
+        TESLA = 9;
+        GB_T = 10;
+        WALL_OUTLET = 11;
+        LECCS = 12;
+        TYPE_6 = 13;
+        NACS = 14;
+    }
+    
+    optional string connector_name = 1;
+    optional float speed_kw = 7;
+    optional string icon_url = 9;
+    
+    optional PricingScheme pricing_scheme = 8 [default = UNKNOWN_PRICING_SCHEME];
+    enum PricingScheme {
+        UNKNOWN_PRICING_SCHEME = 0;
+        FREE = 1;
+        PAID = 2;
+    }
+    
+    repeated ChargingPort charging_port = 4;
+    optional int32 num_charging_ports = 5;
+    
+    optional SpeedBucket speed_bucket = 10;
+    message SpeedBucket {
+        optional string label = 1;
+    }
+    
+    optional SpeedRange speed_range = 11;
+    message SpeedRange {
+        optional float minimum_speed_kw = 1;
+        optional float maximum_speed_kw = 2;
+    }
+    
+    optional geo_serving_proto.electricvehicle.ChargingArchitectureSpec max_charging_architecture_spec = 14;
+    optional geo_serving_proto.electricvehicle.PredictedAvailability predicted_availability_at_arrival = 12 [deprecated = true];
+    repeated maps_tactile.shared.ev.PredictedAvailabilityPerEta predicted_availability_per_eta = 13;
+    
+    reserved 2, 3;
+}
+
+message ChargingPort {
+    optional Availability availability = 1 [default = UNKNOWN_AVAILABILITY];
+    enum Availability {
+        UNKNOWN_AVAILABILITY = 0;
+        AVAILABLE = 1;
+        IN_USE = 2;
+        OUT_OF_SERVICE = 3;
+    }
+    
+    optional bool is_user_car_compatible = 2 [default = true, deprecated = true];
+    
+    optional Compatibility user_car_compatibility = 3;
+    enum Compatibility {
+        UNKNOWN_COMPATIBILITY = 0;
+        COMPATIBLE = 1;
+        INCOMPATIBLE = 2;
+        COMPATIBLE_WITH_ADAPTER = 3;
+    }
+    
+    optional int64 last_used_successfully_seconds = 4;
+}

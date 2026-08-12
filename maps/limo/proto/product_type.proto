@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package maps_limo;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ProductTypeOuterClass";
+option java_package = "com.google.maps.limo";
+
+enum ProductType {
+    UNKNOWN_PRODUCT_TYPE = 0;
+    RANGE_BOUNDED_PRODUCT = 1;
+    REGION_BOUNDED_PRODUCT = 2;
+}

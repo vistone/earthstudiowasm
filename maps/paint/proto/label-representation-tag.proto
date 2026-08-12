@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package maps_paint_client;
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint.client";
+
+enum LabelRepresentationTag {
+    option features = enum_type: CLOSED
+    ;
+    LABEL_REPRESENTATION_TAG_DEFAULT = 0;
+    LABEL_REPRESENTATION_TAG_PIN_REQUIRED = 8;
+    LABEL_REPRESENTATION_TAG_TINY = 1;
+    LABEL_REPRESENTATION_TAG_SEARCH_TINY = 2;
+    LABEL_REPRESENTATION_TAG_TINY_REQUIRED = 3;
+    LABEL_REPRESENTATION_TAG_BOOSTMAPS_TINY = 4;
+    LABEL_REPRESENTATION_TAG_SELECTED_3D_POI = 5;
+    LABEL_REPRESENTATION_TAG_GLOBAL_ORIENTATION_CUE = 6;
+    LABEL_REPRESENTATION_TAG_AREA_MODE = 7;
+    LABEL_REPRESENTATION_TAG_ICON_ONLY = 9;
+}

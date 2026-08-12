@@ -1,0 +1,50 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "geo/serving/proto/ads/ad_ref.proto";
+import "geo/serving/proto/ads/ad_type.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "AdsSpotlightProto";
+option java_package = "com.google.maps.tactile";
+
+message AdsEntity {
+    optional geo_serving_proto.ads.AdRef ad_ref = 1;
+    optional maps_tactile.shared.LatLng point = 2;
+    optional string line1 = 3;
+    optional string line2 = 4;
+    optional string ad_caption = 13;
+    optional bool promoted = 7;
+    optional int32 prominence_tier = 8;
+    optional bool suppressed = 9;
+    optional string feature_id = 10;
+    optional geo_serving_proto.ads.AdType ad_type = 11 [default = SEARCH_AD];
+    optional AdStyle ad_style = 12;
+    optional string hotel_ad_formatted_price_per_night = 14;
+    
+    reserved 5, 6;
+}
+
+enum AdColor {
+    UNKNOWN_COLOR = 0;
+    YELLOW = 1;
+    PURPLE = 2;
+    RED = 3;
+    GREEN = 4;
+}
+
+enum AdStyle {
+    TACTILE_SEARCH_AD = 1;
+    GMM_SEARCH_AD = 2;
+    GMM_LEGACY_SEARCH_AD = 5;
+    GMM_QUERYLESS_AD = 3;
+    EMBED_QUERYLESS_AD = 4;
+    TACTILE_PROMOTED_LISTING = 6;
+    TACTILE_CHAIN_AD = 7;
+    MAPS_LITE_SEARCH_AD = 8;
+    LU_SEARCH_AD = 9;
+}

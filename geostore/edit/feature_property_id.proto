@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/fieldtype.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.edit.proto";
+
+message FeaturePropertyIdProto {
+    optional fieldtype.Type field_type = 1 [default = NONE];
+    
+    oneof sub_field {
+        string attribute_id = 2;
+        uint64 attachment_type_id = 3;
+        string kg_property_id = 4;
+        string name_language = 5;
+    }
+}
+
+message FeaturePropertyIdList {
+    repeated FeaturePropertyIdProto feature_property_ids = 1;
+}

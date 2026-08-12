@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "logs/proto/maps/transit/api/attribute_status.proto";
+import "logs/proto/maps/transit/api/occupancy_status.proto";
+import "logs/proto/maps/transit/api/position.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "VehicleAttributesProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedVehicleAttributes {
+    optional LoggedOccupancyStatus vehicle_occupancy = 1 [deprecated = true];
+    optional LoggedPositionSeries position = 2;
+    repeated LoggedAttributeStatus attribute_status = 3;
+    repeated LoggedCarriageAttributes carriage_attributes = 4;
+}
+
+message LoggedCarriageAttributes {
+    optional string label = 1;
+    repeated LoggedAttributeStatus attribute_status = 2;
+}

@@ -1,0 +1,58 @@
+syntax = "editions";
+
+package logs;
+
+import "maps/tactile/api/shared/maps-activity-place-list-common.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "LOG";
+option java_multiple_files = true;
+option java_outer_classname = "PlaceListDataProto";
+option java_package = "com.google.common.logging";
+
+message PlaceListData {
+    optional string list_id = 1;
+    optional maps_tactile.shared.placelist.PlaceListType list_type = 2;
+    optional maps_tactile.shared.placelist.SharingState sharing_state = 3;
+    optional bool user_is_owner = 4;
+    optional bool user_is_follower = 5;
+    optional bool user_added_item = 10;
+    
+    optional UserAddedItemInfo user_added_item_info = 11;
+    message UserAddedItemInfo {
+        optional UserAddedItem user_added_item = 1;
+        enum UserAddedItem {
+            UNKNOWN = 0;
+            USER_ADDED_ITEM = 1;
+            USER_DID_NOT_ADD_ITEM = 2;
+        }
+    }
+    
+    optional PublishInfo publish_info = 6;
+    message PublishInfo {
+        optional PublishSource publish_source = 1;
+        enum PublishSource {
+            UNKNOWN_PUBLISH_SOURCE = 0;
+            CREATOR_ZONE = 1;
+            LIST_VIEW = 2;
+            LIST_SHARING_OPTIONS = 3;
+            SAVE_MENU = 4;
+        }
+    }
+    
+    optional ListEntrypointInfo list_entrypoint_info = 7;
+    message ListEntrypointInfo {
+        optional ListEntrypoint list_entrypoint = 1;
+        enum ListEntrypoint {
+            UNKNOWN_ENTRYPOINT = 0;
+            SEARCH_RESULTS_LIST = 1;
+            PLACESHEET_TOP_LISTS = 2;
+        }
+    }
+    
+    optional maps_tactile.shared.placelist.JustificationType list_justification_type = 8;
+    optional bool user_is_collaborator = 9;
+}

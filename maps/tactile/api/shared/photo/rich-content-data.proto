@@ -1,0 +1,80 @@
+syntax = "proto2";
+
+package maps_tactile.shared.photo;
+
+import "geo/serving/proto/icon/icon_resource.proto";
+import "geo/serving/proto/text/annotated_text.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHP";
+option java_multiple_files = true;
+option java_outer_classname = "RichContentDataProto";
+option java_package = "com.google.maps.tactile.shared.photo";
+
+message RichContentData {
+    optional ContentType content_type = 1;
+    enum ContentType {
+        UNKNOWN_CONTENT_TYPE = 0;
+        CONTENT_TYPE_GENERIC_LABELED_PHOTO = 2;
+        CONTENT_TYPE_FUSED_TOPIC = 1;
+        CONTENT_TYPE_THINGS_TO_DO_PHOTO = 3;
+        CONTENT_TYPE_MERCHANT_POST = 4;
+        CONTENT_TYPE_GEOSPATIAL_CONTENT = 5;
+        CONTENT_TYPE_IMMERSIVE_VIEW = 6;
+        CONTENT_TYPE_ASPECT_SUMMARY = 7;
+        CONTENT_TYPE_VOLUMETRIC_IMAGE = 8;
+    }
+    
+    optional ContentLabel content_label = 2;
+    message ContentLabel {
+        optional geo_serving_proto.text.AnnotatedText auxiliary_label_text = 1;
+        
+        optional LabelImage auxiliary_label_icon = 2;
+        message LabelImage {
+            repeated ImageData image_data = 1;
+            message ImageData {
+                oneof image_data {
+                    geo_serving_proto.icon.IconResource icon_resource = 1;
+                    string user_avatar = 2;
+                }
+            }
+        }
+        
+        optional geo_serving_proto.text.AnnotatedText detailed_snippet_text = 3;
+        optional geo_serving_proto.text.AnnotatedText content_source_label_text = 4;
+        optional LabelImage content_source_label_icon = 5;
+    }
+    
+    oneof content_metadata {
+        FusedTopicData fused_topic_data = 3;
+        VolumetricImageData volumetric_image_data = 4;
+    }
+    
+    message FusedTopicData {
+        optional string concept_id = 8;
+        optional string mid = 1;
+        optional string title = 4;
+        optional bytes collection_id = 6;
+        optional bytes ugc_post_filter_logic_token = 7;
+        optional int32 num_reviews = 3;
+        optional int32 num_photos = 9;
+        optional string compact_ugc_evidence_number = 10;
+        optional string snippet_review_id = 5;
+        
+        optional StarRating star_rating = 11;
+        message StarRating {
+            optional int32 rating = 1;
+        }
+        
+        optional string report_a_problem_url = 12;
+        
+        reserved 2;
+    }
+    
+    message VolumetricImageData {
+        optional GsplatData gsplat_data = 1;
+        message GsplatData {
+            optional string media_custom_key = 1;
+        }
+    }
+}

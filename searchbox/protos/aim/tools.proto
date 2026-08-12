@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package searchbox.aim;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = ;
+option objc_class_prefix = "SBAIM";
+option java_multiple_files = true;
+option java_package = "com.google.searchbox.protos";
+
+enum ToolMode {
+    TOOL_MODE_UNSPECIFIED = 0;
+    TOOL_MODE_DEEP_SEARCH = 1;
+    TOOL_MODE_CANVAS = 2;
+    TOOL_MODE_IMAGE_GEN = 4;
+    TOOL_MODE_DEEP_BROWSE = 5;
+    TOOL_MODE_IMAGE_GEN_SELFIE = 6;
+    TOOL_MODE_IMAGE_GEN_UPLOAD = 7;
+    TOOL_MODE_AIM = 9;
+    TOOL_MODE_DISABLE_SUGGEST = 8;
+    TOOL_MODE_AIM_GEN_PROMPT = 10;
+    TOOL_MODE_GEMINI_PRO = 3;
+}

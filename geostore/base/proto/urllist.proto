@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/url.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message UrlListProto {
+    repeated UrlProto url = 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional UrlListProto message_set_extension = 14251185;
+    }
+}

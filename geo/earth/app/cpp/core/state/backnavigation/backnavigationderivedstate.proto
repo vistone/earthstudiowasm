@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/state/state.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Backnavigationderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derivedstate";
+
+message BackNavigationDerivedState {
+    optional bool is_in_street_view_pano = 1;
+    optional bool is_coverage_overlay_active = 2;
+    optional bool is_layers_panel_visible = 3;
+    optional bool is_search_visible = 5;
+    optional bool is_time_machine_enabled = 6;
+    optional bool is_timelapse_enabled = 7;
+    optional bool is_homescreen_visible = 8;
+    optional NonRestorableAppRootData.DefaultLoadingDestination default_loading_destination = 9;
+    optional bool is_immersive_mode_active = 10;
+    
+    reserved 4;
+}

@@ -1,0 +1,114 @@
+syntax = "proto2";
+
+package earth.documentimport;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/proto/contentcreation/data_import_errors.proto";
+import "geo/earth/proto/error_response.proto";
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.android.apps.earth.documentimport";
+
+message DriveFileMetadata {
+    optional string resource_id = 1;
+    optional string resource_key = 2;
+    optional string title = 3;
+    optional string mime_type = 4;
+    optional string url = 5;
+    optional bool is_owned_by_user = 6;
+    optional bool is_team_drive_item = 7;
+}
+
+message DriveImportDialogData {
+    optional string user_id = 1;
+    optional string user_email = 2;
+    optional string dialog_title = 3;
+}
+
+message PendingImport {
+    optional int32 id = 1;
+    optional string name = 2;
+    optional ImportStatus import_status = 3;
+    optional ImportFailureSource failure_source = 4;
+    optional string failure_message = 5;
+    optional document.protos.ErrorResponse data_import_error_response = 6;
+    optional ImportFailures import_failures = 7;
+    optional float progress = 8;
+    optional UserImportOutputType user_import_output_type = 9;
+    optional google.protobuf.Timestamp import_start_time = 10;
+}
+
+message ImportFailures {
+    optional FeatureErrorSummary document_errors = 5;
+    map<string, FeatureErrorSummary> feature_errors = 6;
+    optional int32 number_of_features_dropped_due_to_max_reached = 7;
+    repeated document.protos.UnsupportedElement unsupported_elements = 8;
+    map<string, int64> style_error_reference_map = 9;
+    map<string, int64> schema_error_reference_map = 10;
+}
+
+message FeatureErrorSummary {
+    repeated Group error_groups = 1;
+    message Group {
+        repeated document.protos.FeatureError errors = 1;
+        optional int32 total_error_count = 2;
+    }
+}
+
+message SelectedImportFile {
+    optional UserImportInputType import_input_type = 3;
+    
+    oneof file {
+        LocalFileMetadata local_file_metadata = 1;
+        DriveFileMetadata drive_file_metadata = 2;
+    }
+    
+    message LocalFileMetadata {
+        optional string path = 1;
+        optional string name = 2;
+        optional string mime_type = 3;
+    }
+}
+
+enum ImportStatus {
+    IMPORT_STATUS_NOT_STARTED = 0;
+    IMPORT_STATUS_PENDING_DOCUMENT_CREATION = 1;
+    IMPORT_STATUS_IN_PROGRESS = 2;
+    IMPORT_STATUS_COMPLETED = 3;
+    IMPORT_STATUS_CANCELLED = 4;
+    IMPORT_STATUS_FAILED = 5;
+}
+
+enum ImportFailureSource {
+    IMPORT_FAILURE_SOURCE_UNKNOWN = 0;
+    IMPORT_FAILURE_SOURCE_INTERNAL = 1;
+    IMPORT_FAILURE_SOURCE_BACKEND_COMMUNICATION = 2;
+    IMPORT_FAILURE_SOURCE_REQUEST_TIMED_OUT = 3;
+    IMPORT_FAILURE_SOURCE_IMPORT = 4;
+    IMPORT_FAILURE_SOURCE_NO_FEATURES = 5;
+}
+
+enum ActionAfterLoad {
+    ACTION_AFTER_LOAD_UNKNOWN = 0;
+    ACTION_AFTER_LOAD_NO_ACTION = 1;
+    ACTION_AFTER_LOAD_FOCUS = 2;
+    ACTION_AFTER_LOAD_FLY_TO = 3;
+    ACTION_AFTER_LOAD_FOCUS_AND_FLY_TO = 4;
+}
+
+enum UserImportInputType {
+    USER_IMPORT_TYPE_UNKNOWN = 0;
+    USER_IMPORT_TYPE_EARTH_DOCUMENT = 1;
+    USER_IMPORT_TYPE_THREED_MODEL = 2;
+}
+
+enum UserImportOutputType {
+    UNKNOWN_OUTPUT_TYPE = 0;
+    DATA_LAYER_OUTPUT_TYPE = 1;
+    MAP_FEATURES_OUTPUT_TYPE = 2;
+    THREED_MODEL_OUTPUT_TYPE = 3;
+}

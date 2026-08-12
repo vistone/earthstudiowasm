@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package travel.transport.proto.shared;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.travel.transport.proto.shared";
+
+enum ClientDeviceType {
+    CLIENT_DEVICE_TYPE_UNSPECIFIED = 0;
+    DESKTOP = 1;
+    MOBILE = 2;
+    TABLET = 3;
+}
+
+enum ClientPlatform {
+    CLIENT_PLATFORM_UNSPECIFIED = 0;
+    WEB = 1;
+    ANDROID = 2;
+    IOS = 3;
+}
+
+enum BookingSurface {
+    BOOKING_SURFACE_UNSPECIFIED = 0;
+    BOOKING_SURFACE_SEARCH_UNIMODAL_UNIT = 1;
+    BOOKING_SURFACE_SEARCH_FLIGHTS_MODE_NUDGE = 2;
+    BOOKING_SURFACE_MAPS_TACTILE = 3;
+    BOOKING_SURFACE_FLIGHTS_IMMERSIVE_MODE_NUDGE = 4;
+    BOOKING_SURFACE_MAPS_GMM = 5;
+    BOOKING_SURFACE_SEARCH_DIRECTIONS = 6;
+    BOOKING_SURFACE_NONE = 1000;
+}

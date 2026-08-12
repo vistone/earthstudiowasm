@@ -1,0 +1,217 @@
+syntax = "editions";
+
+package logs_maps_shared;
+
+import "google/protobuf/timestamp.proto";
+import "logs/gws/public/tags/tag_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option objc_class_prefix = "LOGMS";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps.mobile";
+
+message AutomotiveContext {
+    optional Platform platform = 1;
+    enum Platform {
+        UNKNOWN = 0;
+        ANDROID_AUTO_PROJECTED = 1;
+        ANDROID_AUTO_PHONE_SCREEN = 2;
+        EMBEDDED = 3;
+        APPLE_CARPLAY = 4;
+        EMBEDDED_ADAS = 5;
+        GEO_APIS_FOR_AUTOMOTIVE = 6;
+    }
+    
+    optional HeadUnit head_unit = 2;
+    message HeadUnit {
+        optional string make = 1;
+        optional string model = 2;
+        optional string software_version = 3;
+        optional string software_build = 4;
+    }
+    
+    optional Car car = 3;
+    message Car {
+        optional string make = 1;
+        optional string model = 2;
+        optional string model_year = 3;
+        
+        optional DriverPosition driver_position = 4;
+        enum DriverPosition {
+            UNKNOWN_DRIVER_POSITION = 0;
+            DRIVER_POSITION_LEFT = 1;
+            DRIVER_POSITION_RIGHT = 2;
+            DRIVER_POSITION_CENTER = 3;
+        }
+        
+        optional Powertrain powertrain = 5;
+        enum Powertrain {
+            UNKNOWN_POWERTRAIN = 0;
+            OTHER = 1;
+            BEV = 2;
+            PHEV = 3;
+        }
+        
+        optional VehicleType vehicle_type = 6;
+        enum VehicleType {
+            UNKNOWN_VEHICLE_TYPE = 0;
+            VEHICLE_TYPE_CAR = 1;
+            VEHICLE_TYPE_TRUCK = 2;
+            VEHICLE_TYPE_MOTORCYCLE = 3;
+        }
+    }
+    
+    optional CarInputInfo car_input_info = 4;
+    message CarInputInfo {
+        optional bool has_rotary_controller = 1;
+        optional bool has_touch_screen = 2;
+        optional bool has_dpad = 3;
+        optional bool has_touchpad = 4;
+        optional bool has_touchpad_for_ui_navigation = 5;
+        optional bool has_focusing_device = 6;
+        optional int32 touchpad_size_in_pixels_x = 7;
+        optional int32 touchpad_size_in_pixels_y = 8;
+    }
+    
+    optional UiRestrictions ui_restrictions = 5;
+    message UiRestrictions {
+        optional bool is_keyboard_restricted = 1;
+    }
+    
+    optional AndroidAutoInfo android_auto_info = 6;
+    message AndroidAutoInfo {
+        optional bool is_boardwalk_enabled = 1;
+        repeated int32 experiment_ids = 2;
+        optional bool is_widescreen_enabled = 3;
+        optional bool is_car_connected = 5;
+        optional bool is_projected_display_active = 4;
+    }
+    
+    repeated ActivityContext activity_context = 7;
+    message ActivityContext {
+        optional ActivityType activity_type = 1;
+        enum ActivityType {
+            UNKNOWN_ACTIVITY_TYPE = 0;
+            MAIN_ACTIVITY = 1;
+            LIMITED_ACTIVITY = 2;
+            CLUSTER_ACTIVITY = 4;
+            PHONE_ACTIVITY = 3;
+        }
+        
+        optional ActivityState activity_state = 2;
+        enum ActivityState {
+            UNKNOWN_ACTIVITY_STATE = 0;
+            FOREGROUND_ACTIVE = 1;
+            FOREGROUND_INACTIVE = 2;
+            BACKGROUND = 3;
+        }
+    }
+    
+    repeated ActivityContext all_activity_context = 18;
+    optional bool is_embedded_guest_user = 8;
+    
+    optional UiInfo ui_info = 9;
+    message UiInfo {
+        optional PinSide side_main_cards_are_pinned_to = 1;
+        enum PinSide {
+            UNKNOWN_PIN_SIDE = 0;
+            START = 1;
+            END = 2;
+            LEFT = 3;
+            RIGHT = 4;
+        }
+        
+        optional bool is_main_display_unreachable = 2;
+    }
+    
+    optional DataSubscriptionStatus data_subscription_status = 10;
+    message DataSubscriptionStatus {
+        optional SubscriptionState subscription_state = 1;
+        enum SubscriptionState {
+            UNKNOWN_SUBSCRIPTION_STATE = 0;
+            INACTIVE = 1;
+            TRIAL = 2;
+            PAID = 3;
+        }
+    }
+    
+    optional bool is_assisted_driving_capable = 11;
+    optional bool is_trailer_connected = 19;
+    
+    optional PrivacySettingsStatus privacy_settings_status = 12;
+    message PrivacySettingsStatus {
+        optional int64 trip_personalization_opt_in_weeks = 1;
+    }
+    
+    optional CarPlayInfo car_play_info = 13;
+    message CarPlayInfo {
+        optional int32 screen_width_pixels = 1;
+        optional int32 screen_height_pixels = 2;
+    }
+    
+    optional NavigationType navigation_type = 14;
+    enum NavigationType {
+        UNKNOWN_NAVIGATION_TYPE = 0;
+        FREE_NAV = 1;
+        GUIDED_NAV = 2;
+    }
+    
+    optional AllDisplaysInfo all_displays_info = 15;
+    message AllDisplaysInfo {
+        repeated DisplayInfo display_info = 1;
+        message DisplayInfo {
+            optional DisplayType type = 1;
+            enum DisplayType {
+                UNKNOWN_DISPLAY_TYPE = 0;
+                MAIN = 1;
+                LIMITED = 2;
+                CLUSTER = 3;
+                TURNCARD = 4;
+            }
+            
+            optional DisplayDimensions dimensions = 2;
+            message DisplayDimensions {
+                optional int32 width_pixels = 1;
+                optional int32 height_pixels = 2;
+                optional int32 raw_dpi = 5;
+                optional float display_scaling = 4 [default = 1];
+                optional float effective_dpi = 3;
+                
+                optional SafeArea safe_area = 6;
+                message SafeArea {
+                    optional int32 left = 1;
+                    optional int32 top = 2;
+                    optional int32 right = 3;
+                    optional int32 bottom = 4;
+                }
+                
+                optional SafeArea route_view_safe_area = 7;
+            }
+            
+            optional TouchScreenType touch_screen_type = 3;
+            enum TouchScreenType {
+                UNKNOWN_TOUCH_SCREEN_TYPE = 0;
+                NONE = 1;
+                CAPACITIVE = 2;
+                RESISTIVE = 3;
+                INFRARED = 4;
+            }
+        }
+    }
+    
+    optional InstrumentClusterSettings instrument_cluster_settings = 16;
+    message InstrumentClusterSettings {
+        optional FeatureSet feature_set = 1;
+        enum FeatureSet {
+            UNKNOWN_FEATURE_SET = 0;
+            DEFAULT_MAP_ONLY = 1;
+            MAP_AND_NAVIGATION_STATE = 2;
+        }
+    }
+    
+    optional google.protobuf.Timestamp gmm_first_online_date = 17;
+}

@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package geo_serving_proto.hotels;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GSPH";
+option java_multiple_files = true;
+option java_outer_classname = "ClientItinerarySourceProto";
+option java_package = "com.google.geo.serving.proto.hotels";
+
+enum ClientItinerarySource {
+    SOURCE_UNSPECIFIED = 0;
+    MANUALLY_SELECTED = 1;
+    USER_HISTORY = 2;
+}

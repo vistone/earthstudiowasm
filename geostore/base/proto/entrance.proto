@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/languagetaggedtext.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/travel_pattern.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message EntranceProto {
+    optional EntranceAllowance allowance = 4 [default = ENTER_AND_EXIT];
+    enum EntranceAllowance {
+        ENTER_AND_EXIT = 0;
+        ENTER_ONLY = 1;
+        EXIT_ONLY = 2;
+    }
+    
+    optional bool can_enter = 2 [deprecated = true];
+    optional bool can_exit = 3 [deprecated = true];
+    
+    repeated EntryRuleProto entry_rule = 5;
+    message EntryRuleProto {
+        optional TravelPatternProto travel_pattern = 1;
+    }
+    
+    repeated LanguageTaggedTextProto qualifier_text = 6;
+    
+    reserved 1;
+}

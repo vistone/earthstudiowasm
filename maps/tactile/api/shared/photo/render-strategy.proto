@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package maps_tactile.shared.photo;
+
+import "geo/serving/proto/photos/image_format.proto";
+import "geo/serving/proto/photos/image_frontend_type.proto";
+import "geo/serving/proto/photos/volumetric_image_format.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHP";
+option java_multiple_files = true;
+option java_outer_classname = "RenderStrategyProto";
+option java_package = "com.google.maps.tactile.shared.photo";
+
+message RenderStrategy {
+    optional geo_serving_proto.photos.ImageFrontendType frontend = 1;
+    optional bool tiled = 2;
+    optional geo_serving_proto.photos.ImageFormat image_format = 3;
+    optional geo_serving_proto.photos.VolumetricImageFormat volumetric_image_format = 4;
+}

@@ -1,0 +1,69 @@
+syntax = "proto2";
+
+package maps_directions_customization_logs;
+
+import "maps/roadtraffic/proto/travel_mode.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedAnnotationConfig {
+    optional string domain = 1;
+    optional string name = 2;
+    
+    oneof annotation_subtype {
+        LoggedSegmentPropertyAnnotationConfig segment_property_annotation_config = 3;
+        LoggedSegmentTraversalTimeAnnotationConfig segment_traversal_time_annotation_config = 4;
+        LoggedSegmentLengthAnnotationConfig segment_length_annotation_config = 5;
+        LoggedSegmentTrafficAnnotationConfig segment_traffic_annotation_config = 6;
+        LoggedTripAnchorTimeAnnotationConfig trip_anchor_time_annotation_config = 7;
+        LoggedTripDoubleAnnotationConfig trip_double_annotation_config = 8;
+        LoggedSegmentFuelConsumptionAnnotationConfig segment_fuel_consumption_annotation_config = 9;
+    }
+}
+
+message LoggedSegmentPropertyAnnotationConfig {
+    optional string name = 1;
+    
+    reserved 2;
+    
+    reserved "property_type";
+}
+
+message LoggedSegmentTraversalTimeAnnotationConfig {
+    oneof traversal_time_annotation_type {
+        LoggedTrafficAwareSpeeds traffic_aware_speeds = 1;
+        LoggedStaticSpeeds static_speeds = 2;
+    }
+    
+    message LoggedTrafficAwareSpeeds {
+        optional maps_roadtraffic.TravelMode travel_mode = 1 [default = TRAVEL_MODE_UNSPECIFIED];
+        optional bool fallback_to_static_speeds = 2 [default = false];
+    }
+    
+    message LoggedStaticSpeeds {
+        
+    }
+    
+    message LoggedStandardTraversalModel {
+        
+    }
+}
+
+message LoggedSegmentLengthAnnotationConfig {
+    
+}
+
+message LoggedSegmentTrafficAnnotationConfig {
+    optional maps_roadtraffic.TravelMode travel_mode = 1;
+}
+
+message LoggedTripAnchorTimeAnnotationConfig {
+    
+}
+
+message LoggedTripDoubleAnnotationConfig {
+    
+}
+
+message LoggedSegmentFuelConsumptionAnnotationConfig {
+    
+}

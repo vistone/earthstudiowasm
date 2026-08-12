@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package geo_moderation;
+
+import "geo/moderation/service/proto/ugcs_content_id.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.geo.moderation.proto1api";
+
+message ContributedContentPieceReference {
+    oneof kind {
+        UgcsContentId ugcs_content_id = 1;
+    }
+}

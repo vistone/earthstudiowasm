@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "google/internal/earth/v1/builtenv/common.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message EstimatedBuildingInputFarRange {
+    optional string building_input_id = 1;
+    optional EstimatedBuildingFarRange estimated_building_far_range = 2;
+}
+
+message EstimatedBuildingFarRange {
+    optional Range far_range = 1;
+    
+    repeated UseTypeFar far_range_per_use_type = 2;
+    message UseTypeFar {
+        optional string use_type_id = 1;
+        optional Range far_range = 2;
+    }
+}
+
+message EstimatedBuildingTemplateFarRange {
+    optional string building_template_id = 1;
+    optional EstimatedBuildingFarRange estimated_building_far_range = 2;
+}

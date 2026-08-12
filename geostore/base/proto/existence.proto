@@ -1,0 +1,54 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/datetime.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message ExistenceProto {
+    optional bool removed = 2 [default = false];
+    
+    optional RemoveReason removed_reason = 3 [default = UNKNOWN];
+    enum RemoveReason {
+        UNKNOWN = 0;
+        BOGUS = 1;
+        PRIVATE = 2;
+        PRIVATE_MUST_PURGE = 11;
+        SPAM = 3;
+        UNSUPPORTED = 4;
+        PENDING = 5;
+        DUPLICATE = 6;
+        OLD_SCHEMA = 8;
+        REPLACED = 9;
+        ROLLED_BACK = 10;
+        LEGAL_TRADEMARK = 12;
+        LEGAL_OTHER = 13;
+    }
+    
+    optional bool closed = 1 [default = false];
+    
+    optional CloseReason close_reason = 5 [default = CLOSED];
+    enum CloseReason {
+        CLOSED = 0;
+        MOVED = 1;
+        REBRANDED = 2;
+    }
+    
+    optional DateTimeProto start_date = 6;
+    optional DateTimeProto end_date = 7;
+    optional DateTimeProto end_as_of_date = 11;
+    optional bool prevent_revival = 12 [default = false];
+    
+    reserved 4, 8, 9, 10;
+    
+    extend .proto2.bridge.MessageSet {
+        optional ExistenceProto message_set_extension = 1321489;
+    }
+}

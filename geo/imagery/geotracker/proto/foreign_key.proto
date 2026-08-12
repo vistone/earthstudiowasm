@@ -1,0 +1,76 @@
+syntax = "editions";
+
+package geotracker;
+
+import "cityblock/pose/service/version.proto";
+import "geo/imagery/lerna/panstore/panstore_instance.proto";
+import "geostore/base/proto/featureid.proto";
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_package = "com.google.geo.imagery.geotracker.proto";
+
+message ForeignKeyProto {
+    optional string viewcode_id = 1;
+    optional geostore.FeatureIdProto feature_id = 3;
+    optional CbdbKeyProto cbdb_key = 4;
+    optional PanStoreKeyProto panstore_key = 5;
+    optional UsvStoreKeyProto usv_store_key = 7;
+    optional UgcStoreKeyProto ugc_store_key = 9;
+    optional GPixKeyProto gpix_key = 8;
+    optional cityblock.pose.service.VersionProto pose_version = 6;
+    optional CrowdComputeKeyProto crowd_compute_key = 10;
+    optional SvdaKeyProto svda_key = 11;
+    optional GumiKeyProto gumi_key = 12;
+    optional string contract_id = 13;
+    
+    reserved 2;
+}
+
+message CbdbKeyProto {
+    optional string image_id = 1;
+    optional string pano_id = 2;
+    optional string pano_key = 3;
+}
+
+message PanStoreKeyProto {
+    optional .lerna.panstore.PanStoreInstanceProto instance = 5;
+    optional bytes row_key = 3;
+    optional string encoded_sub_item_path = 4;
+    optional string application_id = 6;
+    
+    reserved 1, 2;
+}
+
+message UsvStoreKeyProto {
+    optional string unique_id = 1;
+    optional google.protobuf.Timestamp capture_time = 2;
+    optional int32 frame_id = 3;
+}
+
+message UgcStoreKeyProto {
+    optional string content_id = 1;
+    optional string media_key = 2;
+}
+
+message GPixKeyProto {
+    optional string image_id = 1;
+    optional string flight_id = 2;
+}
+
+message CrowdComputeKeyProto {
+    optional string question_id = 1;
+}
+
+message SvdaKeyProto {
+    optional string collect_id = 1;
+    optional string data_stream_id = 2;
+    optional string capture_id = 3;
+    optional string image_id = 4;
+}
+
+message GumiKeyProto {
+    optional string gumi = 1;
+}

@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "MapStateEnumsProto";
+option java_package = "com.google.maps.tactile.shared";
+
+enum MapContentType {
+    option deprecated = true;
+    UNKNOWN_MAP_CONTENT_TYPE = 0;
+    MAP_CONTENT_EXPLORE = 1;
+    MAP_CONTENT_DRIVING = 2;
+    MAP_CONTENT_TRANSIT = 3;
+    MAP_CONTENT_SEARCH = 8;
+    MAP_CONTENT_BROWSE = 9;
+    MAP_CONTENT_DIRECTIONS_OVERVIEW = 10;
+    MAP_CONTENT_PLACE_DETAILS = 11;
+    MAP_CONTENT_ACTIVE_NAVIGATION = 16;
+    MAP_CONTENT_BIKE = 4;
+    MAP_CONTENT_TERRAIN = 5;
+    MAP_CONTENT_SATELLITE = 6;
+    MAP_CONTENT_INDOOR = 7;
+    MAP_CONTENT_SAFETY = 12;
+    MAP_CONTENT_THREE_DIMENSIONAL = 13;
+    MAP_CONTENT_STREET_VIEW = 15;
+    MAP_CONTENT_COVID19 = 14;
+    MAP_CONTENT_AIR_QUALITY = 17;
+    MAP_CONTENT_WILDFIRES = 18;
+}
+
+enum NavigationMode {
+    UNKNOWN_NAVIGATION_MODE = 0;
+    NAVIGATION_MODE_DRIVING = 1;
+    NAVIGATION_MODE_WALKING = 2;
+    NAVIGATION_MODE_BIKING = 3;
+}
+
+enum MapMetadataFlag {
+    UNKNOWN_MAP_METADATA_FLAG = 0;
+    MAP_ELIGIBLE_FOR_PROMOTED = 1;
+}

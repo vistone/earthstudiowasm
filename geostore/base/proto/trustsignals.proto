@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message SourceTrustProto {
+    optional TrustLevel level = 1 [default = UNKNOWN];
+    enum TrustLevel {
+        UNKNOWN = 0;
+        BLOCKED = 16;
+        NOT_TRUSTED = 32;
+        YP_FEEDS = 40;
+        TRUSTED = 48;
+        SUPER_TRUSTED = 64;
+    }
+}
+
+message TrustSignalsProto {
+    optional SourceTrustProto source_trust = 1;
+    
+    reserved 2, 3, 4, 5;
+    
+    extend .proto2.bridge.MessageSet {
+        optional TrustSignalsProto message_set_extension = 24882046;
+    }
+}

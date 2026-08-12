@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geo.earth.proto.earth_mate;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.proto";
+
+message EarthMateAttribution {
+    oneof attribution_type {
+        EarthMateWebAttribution web_attribution = 1;
+        EarthMateGeoAttribution geo_attribution = 2;
+    }
+}
+
+message EarthMateWebAttribution {
+    optional string url_source = 1;
+    optional string source_title = 2;
+    optional string site_name = 3;
+}
+
+message EarthMateGeoAttribution {
+    
+}

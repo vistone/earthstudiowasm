@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "geo/photo/proto/image_frontend_type.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ImageKeyProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message ImageKey {
+    optional ImageFrontendType frontend = 1;
+    optional string id = 2;
+}

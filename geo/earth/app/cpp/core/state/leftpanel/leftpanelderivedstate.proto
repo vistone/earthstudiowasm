@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Leftpanelderivedstate";
+option java_package = "com.google.geo.earth.app.common.state.derivedstate";
+
+message LeftPanelDerivedState {
+    optional bool is_design_viewer_active = 3;
+    optional bool is_design_details_active = 4;
+    optional bool show_search_results = 5;
+    optional bool is_immersive_mode_active = 6;
+    optional bool is_in_street_view_pano = 7;
+    optional bool is_search_visible = 9;
+    optional bool are_search_results_available = 10;
+    optional bool is_map_styles_session_active = 11;
+    
+    reserved 2;
+}

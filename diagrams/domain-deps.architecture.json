@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Earth Studio WASM — 38-Domain Dependency Map",
+    "subtitle": "Based on 4,195 import edges across 1,316 .proto files",
+    "output": "domain-deps.html"
+  },
+  "layout": {
+    "mode": "grid",
+    "cols": 7,
+    "origin": [40, 100],
+    "gapX": 24,
+    "gapY": 28,
+    "cellW": 130,
+    "cellH": 52
+  },
+  "components": [
+    { "id": "geostore", "type": "database", "label": "geostore/", "sublabel": "162 files", "row": 1, "col": 0, "size": [130, 58], "tag": "Geo Storage" },
+    { "id": "google_int", "type": "cloud", "label": "google/internal/", "sublabel": "48 files", "row": 1, "col": 1, "size": [140, 58], "tag": "Internal API" },
+    { "id": "google_api", "type": "cloud", "label": "google/api/", "sublabel": "11 ★208", "row": 1, "col": 2, "size": [120, 52], "tag": "Annotations" },
+    { "id": "google_proto", "type": "cloud", "label": "google/protobuf/", "sublabel": "7 files", "row": 1, "col": 3, "size": [130, 52], "tag": "Std Types" },
+    { "id": "java", "type": "external", "label": "java/com/", "sublabel": "20 ★208", "row": 1, "col": 4, "size": [120, 52], "tag": "JSPB" },
+    { "id": "net", "type": "cloud", "label": "net/proto2/", "sublabel": "7 + bridge", "row": 1, "col": 5, "size": [120, 52], "tag": "Descriptor" },
+    { "id": "storage", "type": "security", "label": "storage/datapol/", "sublabel": "9 ★890", "row": 1, "col": 6, "size": [130, 58], "tag": "Data Policy" },
+    { "id": "geo", "type": "frontend", "label": "geo/", "sublabel": "411 files ★", "row": 0, "col": 3, "size": [130, 62], "tag": "EARTH CORE" },
+    { "id": "maps", "type": "frontend", "label": "maps/", "sublabel": "344 files", "row": 0, "col": 4, "size": [130, 62], "tag": "MAPS" },
+    { "id": "logs", "type": "database", "label": "logs/", "sublabel": "181 files", "row": 0, "col": 5, "size": [130, 62], "tag": "Analytics" },
+    { "id": "privacy", "type": "security", "label": "privacy/", "sublabel": "8 files", "row": 2, "col": 0, "size": [110, 52] },
+    { "id": "knowledge", "type": "backend", "label": "knowledge/", "sublabel": "11 files", "row": 2, "col": 1, "size": [110, 52] },
+    { "id": "gws", "type": "cloud", "label": "gws/", "sublabel": "15 files", "row": 2, "col": 2, "size": [100, 52] },
+    { "id": "travel", "type": "backend", "label": "travel/", "sublabel": "8 files", "row": 2, "col": 3, "size": [100, 52] },
+    { "id": "search", "type": "backend", "label": "search/", "sublabel": "8 files", "row": 2, "col": 4, "size": [100, 52] },
+    { "id": "cityblock", "type": "backend", "label": "cityblock/", "sublabel": "6 files", "row": 2, "col": 5, "size": [100, 52] },
+    { "id": "third_party", "type": "external", "label": "third_party/", "sublabel": "5 files", "row": 2, "col": 6, "size": [100, 52] },
+    { "id": "geo_photo", "type": "backend", "label": "geo/photo/", "sublabel": "111 internal", "row": 3, "col": 2, "size": [120, 50] },
+    { "id": "geo_serving", "type": "backend", "label": "geo/serving/", "sublabel": "195 cross ⚡", "row": 3, "col": 3, "size": [130, 56], "tag": "Bridge" },
+    { "id": "geo_earth", "type": "frontend", "label": "geo/earth/", "sublabel": "175 edges", "row": 3, "col": 4, "size": [130, 56], "tag": "App Core" },
+    { "id": "maps_tactile", "type": "frontend", "label": "maps/tactile/", "sublabel": "241 internal ⚡", "row": 3, "col": 5, "size": [130, 56], "tag": "Tactile UI" },
+    { "id": "maps_paint", "type": "backend", "label": "maps/paint/", "sublabel": "107 internal", "row": 3, "col": 6, "size": [120, 50] },
+    { "id": "geo_imagery", "type": "backend", "label": "geo/imagery/", "sublabel": "27 edges", "row": 4, "col": 2, "size": [120, 50] },
+    { "id": "maps_path", "type": "backend", "label": "maps/pathfinder/", "sublabel": "37 edges", "row": 4, "col": 3, "size": [130, 50] },
+    { "id": "maps_spot", "type": "backend", "label": "maps/spotlight/", "sublabel": "19 edges", "row": 4, "col": 4, "size": [120, 50] },
+    { "id": "maps_transit", "type": "backend", "label": "maps/transit/", "sublabel": "9 edges", "row": 4, "col": 5, "size": [120, 50] },
+    { "id": "wireless", "type": "external", "label": "wireless/", "sublabel": "3 files", "row": 4, "col": 6, "size": [90, 50] },
+    { "id": "i18n", "type": "cloud", "label": "i18n/", "sublabel": "1 file", "row": 4, "col": 0, "size": [80, 50] },
+    { "id": "devtools", "type": "cloud", "label": "devtools/", "sublabel": "2 files", "row": 4, "col": 1, "size": [100, 50] }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "Foundation (L0-L1): 0 external deps", "wraps": ["google_proto", "google_api", "java", "net", "storage", "privacy", "i18n", "wireless", "devtools"] },
+    { "kind": "region", "label": "Core Geo + Maps (L3-L5)", "wraps": ["geo_photo", "geo_serving", "geo_earth", "maps_tactile", "maps_paint", "maps_path", "geo_imagery", "maps_spot", "maps_transit"] },
+    { "kind": "security-group", "label": "Internal APIs (L2)", "wraps": ["google_int", "gws", "knowledge"] }
+  ],
+  "connections": [
+    { "from": "geo_earth", "to": "geo_photo", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "from": "geo_earth", "to": "geo_serving", "variant": "emphasis", "fromSide": "left", "toSide": "right" },
+    { "from": "geo_serving", "to": "maps", "label": "94⇄94", "variant": "emphasis", "fromSide": "right", "toSide": "left", "labelDy": 86 },
+    { "from": "maps", "to": "geostore", "label": "50", "fromSide": "bottom", "toSide": "top", "route": "orthogonal-v" },
+    { "from": "geo_earth", "to": "google_int", "label": "23", "fromSide": "bottom", "toSide": "top", "route": "orthogonal-v", "labelDy": 48 },
+    { "from": "maps", "to": "logs", "label": "101", "variant": "emphasis", "labelDy": 135 },
+    { "from": "geo_earth", "to": "logs", "label": "22", "variant": "dashed", "fromSide": "right", "toSide": "left", "labelDy": 86 },
+    { "from": "logs", "to": "maps_tactile", "label": "28", "variant": "dashed", "fromSide": "bottom", "toSide": "right" },
+    { "from": "geostore", "to": "google_api", "label": "155", "fromSide": "right", "toSide": "bottom", "labelDy": 41 },
+    { "from": "geostore", "to": "knowledge", "fromSide": "right", "toSide": "left" },
+    { "from": "google_int", "to": "geo_earth", "fromSide": "right", "toSide": "bottom" },
+    { "from": "maps_tactile", "to": "maps_paint", "fromSide": "bottom", "toSide": "right" },
+    { "from": "maps_paint", "to": "maps_spot", "fromSide": "bottom", "toSide": "top" },
+    { "from": "maps_paint", "to": "maps_path", "fromSide": "left", "toSide": "top" },
+    { "from": "cityblock", "to": "geo_imagery", "fromSide": "top", "toSide": "left" },
+    { "from": "cityblock", "to": "geostore", "fromSide": "right", "toSide": "bottom" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "Scale", "items": ["1,316 .proto files", "4,195 import edges", "8 topological layers", "38 top-level domains"] },
+    { "dot": "violet", "title": "Most Depended On", "items": ["storage/datapol: 890", "java/com/JSPB: 208", "google/api: 208", "logs_annotations: 137"] },
+    { "dot": "amber", "title": "Biggest Subgraphs", "items": ["geostore/base: 408", "maps/tactile: 241", "logs/proto: 223", "geo/serving: 195"] }
+  ]
+}

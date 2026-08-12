@@ -1,0 +1,72 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "geostore/base/proto/fieldmetadata.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "geostore/base/proto/options.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message NameProto {
+    required string text = 1;
+    optional string language = 2;
+    
+    repeated FlagCategory flag = 3;
+    enum FlagCategory {
+        FLAG_ANY = 0;
+        FLAG_IN_LOCAL_LANGUAGE = 1;
+        FLAG_PREFERRED = 2;
+        FLAG_OFFICIAL = 3 [deprecated = true];
+        FLAG_OBSCURE = 4;
+        FLAG_ON_SIGNS = 5;
+        FLAG_EXIT_NAME_NUMBER = 81;
+        FLAG_EXIT_NAME = 1297;
+        FLAG_INTERCHANGE_NAME = 20753;
+        FLAG_EXIT_NUMBER = 1298;
+        FLAG_INTERCHANGE_NUMBER = 20769;
+        FLAG_TRANSIT_HEADSIGN = 82;
+        FLAG_CONNECTS_DIRECTLY = 83;
+        FLAG_CONNECTS_INDIRECTLY = 84;
+        FLAG_INTERSECTION_NAME = 85;
+        FLAG_VANITY = 6 [deprecated = true];
+        FLAG_ROUTE_NUMBER = 7;
+        FLAG_COUNTRY_CODE_2 = 129;
+        FLAG_ABBREVIATED = 9;
+        FLAG_ID = 10;
+        FLAG_DESIGNATED_MARKET_AREA_ID = 161;
+        FLAG_IATA_ID = 163;
+        FLAG_ICAO_ID = 164;
+        FLAG_ISO_3166_2 = 165;
+        FLAG_COUNTRY_SPECIFIC_ID = 166;
+        FLAG_LANGUAGE_CODE = 167 [deprecated = true];
+        FLAG_TIMEZONE_ID = 168;
+        FLAG_PHONE_NUMBER_PREFIX = 169;
+        FLAG_PHONE_NUMBER_AREA_CODE = 2705;
+        FLAG_TRANSLITERATED = 11 [deprecated = true];
+        FLAG_NOT_ON_SIGNS = 12 [deprecated = true];
+        FLAG_NOT_IN_LOCAL_LANGUAGE = 209;
+        FLAG_ROUNDABOUT_ROUTE = 211;
+        FLAG_NEVER_DISPLAY = 212;
+        FLAG_BICYCLE_ROUTE = 213;
+        FLAG_MACHINE_GENERATED = 215;
+        FLAG_SUSPICIOUS = 216 [deprecated = true];
+        FLAG_TRADITIONAL = 217;
+    }
+    
+    optional string raw_text = 5 [deprecated = true];
+    optional string short_text = 6;
+    optional FieldMetadataProto metadata = 500;
+    optional .proto2.bridge.MessageSet temporary_data = 15;
+    
+    reserved 4, 8, 100;
+    
+    extend .proto2.bridge.MessageSet {
+        optional NameProto message_set_extension = 308676116;
+    }
+}

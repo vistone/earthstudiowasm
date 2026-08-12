@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "ParkingEnumsProto";
+option java_package = "com.google.maps.tactile.shared";
+
+enum ParkingAvailabilityCategory {
+    UNKNOWN_PARKING_AVAILABILITY_CATEGORY = 0;
+    LIMITED = 1;
+    MEDIUM = 2;
+    PLENTIFUL = 3;
+}
+
+enum ParkingPredictionType {
+    UNKNOWN_PARKING_PREDICTION_TYPE = 0;
+    REALTIME = 1;
+    HISTORICAL = 2;
+}

@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geo_enterprise.platform;
+
+import "net/proto2/proto/descriptor.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AresTypeAnnotationsProto";
+option java_package = "com.google.geo.enterprise.platform.proto";
+
+enum MyMapsAresType {
+    option features = enum_type: CLOSED
+    ;
+    MYMAPS_ARES_UNKNOWN_TYPE = 0;
+    MYMAPS_ARES_TEXT = 1;
+    MYMAPS_ARES_HTML = 2;
+    MYMAPS_ARES_URL = 3;
+    MYMAPS_ARES_YOUTUBE_VIDEO_ID = 5;
+    MYMAPS_ARES_HOSTED_IMAGE_BLOB_INFO = 6;
+}
+
+extend .proto2.FieldOptions {
+    optional MyMapsAresType mymaps_ares_type = 275875138 [default = MYMAPS_ARES_UNKNOWN_TYPE];
+}

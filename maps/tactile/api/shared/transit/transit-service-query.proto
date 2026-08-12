@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package maps_tactile.shared.transit;
+
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHTR";
+option java_multiple_files = true;
+option java_outer_classname = "TransitServiceQueryProto";
+option java_package = "com.google.maps.tactile.shared.transit";
+
+message TransitServiceQuery {
+    repeated VehicleTypeCategory vehicle_type_category = 1;
+    message VehicleTypeCategory {
+        optional int32 vehicle_type_category = 1;
+    }
+    
+    optional int32 index = 2;
+}

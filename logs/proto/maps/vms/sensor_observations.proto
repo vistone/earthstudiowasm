@@ -1,0 +1,563 @@
+syntax = "proto2";
+
+package logs.vms.databack;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "logs/proto/maps/vms/lane_element_detail.proto";
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.logging.geo.vms.databack";
+
+message SensorObservation {
+    optional string oem_sensor_configuration_version = 2;
+    
+    oneof observation {
+        RoadSignObservation road_sign_observation = 1;
+        MapPatchObservation map_patch_observation = 3;
+        DrivenCurvatureObservation driven_curvature_observation = 4;
+    }
+}
+
+message RoadSignObservation {
+    repeated RoadSignObservationComponent components = 1;
+    optional Predicate predicate = 2;
+    optional EcefPosition position = 4;
+    optional EcefPosition raw_gps_based_position = 10;
+    optional ObservingVehicleRoadSegmentId segment_id = 5;
+    optional ObservingVehicleOrientation vehicle_orientation = 6;
+    optional ObservingVehicleRelativeSignPosition relative_sign_position = 7;
+    optional ObservingVehicleRelativeSignOrientation relative_sign_orientation = 12;
+    optional VolvoSignDetectionPacket volvo_sign_detection_packet = 8;
+    optional string oem_sensor_configuration_version = 9 [deprecated = true];
+    optional RoadSignObservationProbability probability = 11;
+    
+    reserved 3;
+}
+
+message RoadSignObservationProbability {
+    optional google.protobuf.FloatValue existence = 1;
+    optional google.protobuf.FloatValue classification = 2;
+    optional google.protobuf.FloatValue joint_existence_and_classification = 3;
+}
+
+message RoadSignObservationComponent {
+    optional RoadSignObservationType type = 1;
+    enum RoadSignObservationType {
+        UNSPECIFIED = 0;
+        SPEED_LIMIT = 1;
+        STOP = 2;
+        YIELD = 3;
+        SCHOOL_ZONE = 4;
+        RAMP = 5;
+        END = 6;
+        ROAD_WORK = 7;
+        MONITORED_ZONE = 8;
+        YIELD_TO_ONCOMING_VEHICLES = 9;
+        TWO_WAY = 10;
+        THREE_WAY = 11;
+        FOUR_WAY = 12;
+        ALL_WAY = 13;
+        PRIORITY_ROAD = 15;
+        PRIORITY_OVER_ONCOMING_VEHICLES = 16;
+        EXPRESSWAY = 17;
+        MOTORWAY = 18;
+        BUILT_UP_AREA = 19;
+        RESIDENTIAL = 20;
+        NO_HEAVY_VEHICLE_OVERTAKING = 22;
+        NO_STOPPING = 24;
+        TWO_WAY_TRAFFIC = 25;
+        OPENING_BRIDGE = 26;
+        TRAM_CROSSING = 27;
+        SOFT_VERGE = 28;
+        PARKING = 30;
+        ONE_WAY = 31;
+        WARNING = 34;
+        ZONE = 35;
+        NAMED_AREA = 36;
+        FIRE_LANE = 38;
+        BICYCLE_LANE = 40;
+        PRIVATE_PROPERTY = 42;
+        NO_TRESPASSING = 43;
+        OVERTAKING_PASSING = 44;
+        END_ALL_RESTRICTIONS = 45;
+        APPLIES_AHEAD = 46;
+        APPLIES_LEFT = 47;
+        APPLIES_RIGHT = 48;
+        PROHIBITED = 49;
+        ACCESS_BY = 50;
+        RAIL_CROSSING = 51;
+        SINGLE_TRACK = 52;
+        THREE_TRACK = 53;
+        MULTI_TRACK = 54;
+        APPLIES_LEFT_AHEAD = 55;
+        APPLIES_RIGHT_AHEAD = 56;
+        APPLIES_ACROSS_ROAD = 57;
+        APPLIES_ACROSS_ROAD_LEFT = 58;
+        APPLIES_ACROSS_ROAD_RIGHT = 59;
+        ONLY = 60;
+        RIGHT_TURN_MANEUVER = 61;
+        LEFT_TURN_MANEUVER = 62;
+        STRAIGHT_AHEAD_MANEUVER = 63;
+        U_TURN_MANEUVER = 64;
+        TWO_WAY_CROSSING_TRAFFIC = 65;
+        REST_AREA = 66;
+        EXIT_LEFT = 67;
+        EXIT_RIGHT = 68;
+        EV_CHARGING = 69;
+        CHILDREN = 70;
+        PEDESTRIAN = 71;
+        RIGHT_HAND_PRIORITY_INTERSECTION = 72;
+        GATED = 73;
+        UNGATED = 74;
+        CROSSING = 75;
+        LANE_FROM_LEFT = 76;
+        LANE_FROM_RIGHT = 77;
+        EXIT = 78;
+        FOGGY_CONDITION = 79;
+        ICY_CONDITION = 80;
+        SNOWY_CONDITION = 81;
+        TRAFFIC_LIGHT = 82;
+        FLASHING = 85;
+        RED = 83;
+        YELLOW = 84;
+        TOLL_BOOTH = 86;
+    }
+    
+    repeated RoadSignObservationComponentDetail details = 2;
+    optional google.protobuf.FloatValue probability = 3;
+}
+
+message RoadSignObservationComponentDetail {
+    oneof subcomponent {
+        SpeedLimit speed_limit = 1;
+        NamedArea named_area = 2;
+        AppliesAhead applies_ahead = 3;
+        LaneFromSide lane_from_side = 4;
+        MonitoredZoneDetail monitored_zone_detail = 5;
+    }
+}
+
+message MonitoredZoneDetail {
+    optional MonitoredZoneType monitored_zone_type = 1;
+    enum MonitoredZoneType {
+        MONITORED_ZONE_TYPE_UNSPECIFIED = 0;
+        MONITORED_ZONE_TYPE_SPEED_CAMERA = 1;
+        MONITORED_ZONE_TYPE_SPEED_CONTROLLED = 2;
+    }
+    
+    optional MonitoringSensorType monitoring_sensor_type = 2;
+    enum MonitoringSensorType {
+        MONITORING_SENSOR_TYPE_UNSPECIFIED = 0;
+        MONITORING_SENSOR_TYPE_SPEED_CAMERA = 1;
+    }
+}
+
+message SpeedLimit {
+    optional SpeedLimitType type = 1;
+    enum SpeedLimitType {
+        UNSPECIFIED = 0;
+        LEGAL_MAXIMUM = 1;
+        LEGAL_MINIMUM = 2;
+        ADVISED_MAXIMUM = 3;
+    }
+    
+    optional google.protobuf.FloatValue value = 2;
+}
+
+message NamedArea {
+    optional string area_name_raw_text = 1;
+}
+
+message AppliesAhead {
+    optional float start_distance = 1;
+    optional float end_distance = 2;
+    
+    optional DistanceUnit unit = 3;
+    enum DistanceUnit {
+        UNSPECIFIED = 0;
+        METERS = 1;
+        KILOMETERS = 2;
+        MILES = 3;
+    }
+}
+
+message LaneFromSide {
+    optional int32 lane_number_from_side = 1;
+}
+
+message EcefPosition {
+    optional google.protobuf.FloatValue ecef_x_meters = 1;
+    optional google.protobuf.FloatValue ecef_y_meters = 2;
+    optional google.protobuf.FloatValue ecef_z_meters = 3;
+}
+
+message ObservingVehicleRoadSegmentId {
+    optional int32 data_version = 1;
+    optional int32 tile_x = 2;
+    optional int32 tile_y = 3;
+    optional int32 offset = 4;
+}
+
+message Predicate {
+    repeated Predicate and_predicates = 1;
+    repeated Predicate or_predicates = 2;
+    repeated Predicate not_predicates = 3;
+    optional google.protobuf.FloatValue probability = 4;
+    
+    oneof predicate {
+        RoadWeatherPredicate road_weather_predicate = 5;
+        LocalTimePredicate local_time_predicate = 6;
+        VehiclePredicate vehicle_predicate = 7;
+    }
+}
+
+message RoadWeatherPredicate {
+    oneof weather_predicate {
+        RoadWeatherCondition condition = 1;
+    }
+}
+
+message VehiclePredicate {
+    optional VehicleWeight vehicle_weight = 4;
+    message VehicleWeight {
+        optional VehicleWeightUnit vehicle_weight_unit = 1;
+        enum VehicleWeightUnit {
+            WEIGHT_UNIT_UNSPECIFIED = 0;
+            WEIGHT_UNIT_TONS = 1;
+        }
+        
+        optional google.protobuf.FloatValue vehicle_maximum_weight_value = 2;
+    }
+    
+    optional VehicleLength vehicle_length = 6;
+    message VehicleLength {
+        optional VehicleSizeUnit vehicle_length_unit = 1;
+        optional google.protobuf.FloatValue vehicle_maximum_length_value = 2;
+    }
+    
+    optional VehicleWidth vehicle_width = 7;
+    message VehicleWidth {
+        optional VehicleSizeUnit vehicle_width_unit = 1;
+        optional google.protobuf.FloatValue vehicle_maximum_width_value = 2;
+    }
+    
+    optional VehicleHeight vehicle_height = 8;
+    message VehicleHeight {
+        optional VehicleSizeUnit vehicle_height_unit = 1;
+        optional google.protobuf.FloatValue vehicle_maximum_height_value = 2;
+    }
+    
+    optional VehiclePredicateType vehicle_type = 5;
+    enum VehiclePredicateType {
+        UNSPECIFIED = 0;
+        ALL_VEHICLE_TYPES = 1;
+        IS_VEHICLE_WITH_TRAILER = 2;
+        VEHICLE_MAXIMUM_WEIGHT = 3;
+        MOTOR_VEHICLE = 4;
+        AUTO = 65;
+        HOV = 66;
+        MOTORCYCLE = 67;
+        BUS = 68;
+        TRUCK = 69;
+        DELIVERY = 70;
+        TAXI = 71;
+        EMERGENCY = 72;
+        THROUGH_TRAFFIC = 73;
+        TRACTOR = 74;
+        PEDESTRIAN = 5;
+        BICYCLE = 6;
+        VEHICLE_LOADING = 7;
+        VEHICLE_MAXIMUM_SIZE = 8;
+        VEHICLE_MAXIMUM_HEIGHT = 129;
+        VEHICLE_MAXIMUM_WIDTH = 130;
+        VEHICLE_MAXIMUM_LENGTH = 131;
+        VEHICLE_MAXIMUM_AXLE_WEIGHT = 9;
+        VEHICLE_MAXIMUM_SINGLE_AXLE_WEIGHT = 145;
+        VEHICLE_MAXIMUM_TANDEM_AXLE_WEIGHT = 146;
+    }
+    
+    oneof vehicle_predicate {
+        bool vehicle_with_trailer = 1;
+        bool truck = 2;
+        bool vehicle_maximum_weight = 3;
+    }
+    
+    enum VehicleSizeUnit {
+        SIZE_UNIT_UNSPECIFIED = 0;
+        SIZE_UNIT_METERS = 1;
+        SIZE_UNIT_FEET = 2;
+    }
+}
+
+message LocalTimePredicate {
+    oneof local_time_predicate {
+        LocalTimeInterval local_time_interval = 1;
+        LocalTimePeriod local_time_period = 2;
+    }
+}
+
+message LocalTimePeriod {
+    optional LocalTimePeriodType local_time_period_type = 1;
+    enum LocalTimePeriodType {
+        LOCAL_TIME_PERIOD_TYPE_UNSPECIFIED = 0;
+        LOCAL_TIME_PERIOD_TYPE_HOURS = 1;
+        LOCAL_TIME_PERIOD_TYPE_DUSK_TO_DAWN = 257;
+    }
+}
+
+message LocalTimeInterval {
+    optional LocalTimeEndpoint begin = 1;
+    optional LocalTimeEndpoint end = 2;
+}
+
+message LocalTimeEndpoint {
+    optional google.protobuf.Int32Value second_of_minute = 1;
+    optional google.protobuf.Int32Value minute_of_hour = 2;
+    optional google.protobuf.Int32Value hour_of_day = 3;
+    
+    optional MonthOfYear month_of_year = 9;
+    enum MonthOfYear {
+        MONTH_UNSPECIFIED = 0;
+        JANUARY = 1;
+        FEBRUARY = 2;
+        MARCH = 3;
+        APRIL = 4;
+        MAY = 5;
+        JUNE = 6;
+        JULY = 7;
+        AUGUST = 8;
+        SEPTEMBER = 9;
+        OCTOBER = 10;
+        NOVEMBER = 11;
+        DECEMBER = 12;
+        NEXT_JANUARY = 13;
+    }
+    
+    optional google.protobuf.Int32Value year = 10;
+    
+    oneof day {
+        DayOfWeek day_of_week = 4;
+        google.protobuf.Int32Value day_of_month = 5;
+        google.protobuf.Int32Value day_of_year = 6;
+    }
+    
+    oneof week {
+        google.protobuf.Int32Value week_of_month = 7;
+        google.protobuf.Int32Value week_of_year = 8;
+    }
+    
+    enum DayOfWeek {
+        DAY_OF_WEEK_UNSPECIFIED = 0;
+        SUNDAY = 1;
+        MONDAY = 2;
+        TUESDAY = 3;
+        WEDNESDAY = 4;
+        THURSDAY = 5;
+        FRIDAY = 6;
+        SATURDAY = 7;
+        NEXT_SUNDAY = 8;
+    }
+}
+
+message ObservingVehicleRelativeSignPosition {
+    optional google.protobuf.FloatValue x_meters = 1;
+    optional google.protobuf.FloatValue y_meters = 2;
+    optional google.protobuf.FloatValue z_meters = 3;
+}
+
+message ObservingVehicleRelativeSignOrientation {
+    optional google.protobuf.FloatValue yaw_radians = 1;
+    optional google.protobuf.FloatValue pitch_radians = 2;
+    optional google.protobuf.FloatValue roll_radians = 3;
+}
+
+message ObservingVehicleOrientation {
+    optional google.protobuf.FloatValue yaw_radians = 1;
+    optional google.protobuf.FloatValue pitch_radians = 2;
+    optional google.protobuf.FloatValue roll_radians = 3;
+}
+
+message UniqueRoadSignObservation {
+    optional google.protobuf.Timestamp timestamp = 1;
+    optional ObservingVehicleRelativeSignPosition relative_position = 2;
+    optional ObservingVehicleRelativeSignOrientation relative_orientation = 3;
+    repeated RoadSignObservationComponent components = 4;
+}
+
+message VolvoSignDetectionPacket {
+    repeated VolvoSignDetection sign_detections = 1;
+}
+
+message VolvoSignDetection {
+    optional VolvoPrimarySign primary_sign = 1;
+    repeated VolvoSupplementarySign supplementary_signs = 2;
+    optional google.protobuf.BoolValue is_electronic = 3;
+    
+    optional SignPlacementRelativeToRoad sign_placement_relative_to_road = 4;
+    enum SignPlacementRelativeToRoad {
+        UNKNOWN_RELATIVE_LOCATION = 0;
+        ABOVE_ROAD = 1;
+        NOT_ABOVE_BUT_VALID_FOR_CURRENT_ROAD = 2;
+        INVALID_FOR_CURRENT_ROAD = 3;
+    }
+}
+
+message VolvoPrimarySign {
+    optional PrimarySignType primary_sign_type = 1;
+    enum PrimarySignType {
+        UNSPECIFIED = 0;
+        SPEED_LIMIT_5 = 1;
+        SPEED_LIMIT_10 = 2;
+        SPEED_LIMIT_15 = 3;
+        SPEED_LIMIT_20 = 4;
+        SPEED_LIMIT_25 = 5;
+        SPEED_LIMIT_30 = 6;
+        SPEED_LIMIT_35 = 7;
+        SPEED_LIMIT_40 = 8;
+        SPEED_LIMIT_45 = 9;
+        SPEED_LIMIT_50 = 10;
+        SPEED_LIMIT_55 = 11;
+        SPEED_LIMIT_60 = 12;
+        SPEED_LIMIT_65 = 13;
+        SPEED_LIMIT_70 = 14;
+        SPEED_LIMIT_75 = 15;
+        SPEED_LIMIT_80 = 16;
+        SPEED_LIMIT_85 = 17;
+        SPEED_LIMIT_90 = 18;
+        SPEED_LIMIT_95 = 19;
+        SPEED_LIMIT_100 = 20;
+        SPEED_LIMIT_105 = 21;
+        SPEED_LIMIT_110 = 22;
+        SPEED_LIMIT_115 = 23;
+        SPEED_LIMIT_120 = 24;
+        SPEED_LIMIT_125 = 25;
+        SPEED_LIMIT_130 = 26;
+        SPEED_LIMIT_135 = 27;
+        SPEED_LIMIT_140 = 28;
+        EXPRESSWAY = 68;
+        END_OF_EXPRESSWAY = 69;
+        HIGHWAY = 70;
+        END_OF_HIGHWAY = 71;
+        CITY_ENTRY = 74;
+        CITY_EXIT = 75;
+        ROADWORK = 76;
+        CHICANE = 78;
+        LANE_CLOSURE = 79;
+        SPEED_BUMP = 97;
+        TRAFFIC_LIGHT = 98;
+        STOP_SIGN = 99;
+        SHOULDER_OPEN = 104;
+        SHOULDER_CLOSED = 105;
+        KEEP_RIGHT = 106;
+        KEEP_LEFT = 107;
+        GIVE_RIGHT_OF_WAY = 116;
+        NO_PARKING = 118;
+        NO_STOPPING = 119;
+        ADVISORY_SPEED_5 = 129;
+        ADVISORY_SPEED_10 = 130;
+        ADVISORY_SPEED_15 = 131;
+        ADVISORY_SPEED_20 = 132;
+        ADVISORY_SPEED_25 = 133;
+        ADVISORY_SPEED_30 = 134;
+        ADVISORY_SPEED_35 = 135;
+        ADVISORY_SPEED_40 = 136;
+        ADVISORY_SPEED_45 = 137;
+        ADVISORY_SPEED_50 = 138;
+        ADVISORY_SPEED_55 = 139;
+        ADVISORY_SPEED_60 = 140;
+        ADVISORY_SPEED_65 = 141;
+        ADVISORY_SPEED_70 = 142;
+        ADVISORY_SPEED_75 = 143;
+        ADVISORY_SPEED_80 = 144;
+        ADVISORY_SPEED_85 = 145;
+        ADVISORY_SPEED_90 = 146;
+        ADVISORY_SPEED_95 = 147;
+        ADVISORY_SPEED_100 = 148;
+        ADVISORY_SPEED_105 = 149;
+        ADVISORY_SPEED_110 = 150;
+        ADVISORY_SPEED_115 = 151;
+        ADVISORY_SPEED_120 = 152;
+        ADVISORY_SPEED_125 = 153;
+        ADVISORY_SPEED_130 = 154;
+        ADVISORY_SPEED_135 = 155;
+        ADVISORY_SPEED_140 = 156;
+        ADVISORY_SPEED_145 = 157;
+        ADVISORY_SPEED_150 = 158;
+        ADVISORY_SPEED_155 = 159;
+        ADVISORY_SPEED_160 = 160;
+        END_OF_SPEED_LIMIT = 193;
+        END_OF_RESTRICTIONS = 195;
+        RESIDENTIAL_AREA = 196;
+        END_OF_RESIDENTIAL_AREA = 197;
+        SCHOOL = 198;
+        WILD_ANIMALS = 199;
+        DOMESTIC_ANIMALS = 200;
+        NO_PASSING = 202;
+        END_OF_NO_PASSING = 203;
+        NO_ENTRY = 204;
+        PEDESTRIAN_CROSSING = 205;
+        NO_PASSING_TRUCKS = 206;
+        END_OF_NO_PASSING_TRUCKS = 207;
+        ICY = 215;
+    }
+    
+    optional google.protobuf.FloatValue confidence = 2;
+}
+
+message VolvoSupplementarySign {
+    optional SupplementarySignType supplementary_sign_type = 1;
+    enum SupplementarySignType {
+        UNSPECIFIED = 0;
+        ICY_ROAD = 1;
+        WET_ROAD = 2;
+        TIME_RESTRICTION = 3;
+        FOGGY = 4;
+        RESTRICTED = 5;
+        ON_RIGHT_EXIT = 6;
+        ON_LEFT_EXIT = 7;
+        SPEED_ZONE = 8;
+        PASSENGER_CAR_WITH_TRAILER = 9;
+        SCHOOL_ZONE = 10;
+        NIGHT = 11;
+        RAMP = 12;
+        END = 13;
+        ICY_OR_WET = 14;
+        EXCEPT_TRACTORS = 15;
+        TRUCKS = 16;
+        DISTANCE_IN = 17;
+        DISTANCE_FOR = 18;
+        WEIGHT_LIMITATION = 19;
+    }
+    
+    optional google.protobuf.FloatValue confidence = 2;
+}
+
+message MapPatchObservation {
+    optional google.protobuf.Duration duration = 5;
+    repeated LaneElementDetail lane_element = 1;
+    repeated RoadSignObservation road_sign_observation = 4;
+    optional EcefPosition vehicle_location = 2;
+    optional ObservingVehicleOrientation vehicle_orientation = 3;
+    optional BodyFrameCoordinateSequence vehicle_trajectory = 6;
+}
+
+message DrivenCurvatureObservation {
+    repeated CurvatureSpan spans = 1;
+    message CurvatureSpan {
+        optional google.protobuf.Duration span_duration = 1;
+        optional float span_distance_meters = 2;
+        optional float curvature_value = 3;
+    }
+}
+
+enum RoadWeatherCondition {
+    ROAD_WEATHER_CONDITION_UNSPECIFIED = 0;
+    ROAD_WEATHER_CONDITION_WET = 1;
+    ROAD_WEATHER_CONDITION_ICY = 2;
+    ROAD_WEATHER_CONDITION_FOGGY = 3;
+    ROAD_WEATHER_CONDITION_RAIN = 4;
+    ROAD_WEATHER_CONDITION_SNOW = 5;
+}

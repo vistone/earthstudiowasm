@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option go_package = "telephonenumber";
+option java_package = "com.google.location.country";
+
+message TelephoneNumber {
+    optional int32 country_code = 1;
+    optional string national_prefix = 2;
+    optional string area_code = 3;
+    repeated string number = 4;
+    optional string extension = 5;
+    
+    extend .proto2.bridge.MessageSet {
+        optional TelephoneNumber message_set_extension = 3546500;
+    }
+}

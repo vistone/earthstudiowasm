@@ -1,0 +1,65 @@
+syntax = "proto2";
+
+package earth.math;
+
+option java_multiple_files = true;
+
+message RgbColor {
+    optional uint32 red = 1;
+    optional uint32 green = 2;
+    optional uint32 blue = 3;
+}
+
+message LatLng {
+    optional double latitude = 1;
+    optional double longitude = 2;
+}
+
+message LatLngAlt {
+    optional double latitude = 1;
+    optional double longitude = 2;
+    optional double altitude = 3;
+}
+
+message Matrix4 {
+    repeated double data = 1 [packed = true];
+}
+
+message Vector3 {
+    optional double x = 1;
+    optional double y = 2;
+    optional double z = 3;
+}
+
+message BoundingBox2d {
+    optional double x_min = 1;
+    optional double x_max = 2;
+    optional double y_min = 3;
+    optional double y_max = 4;
+}
+
+message BoundingBox3d {
+    optional double x_min = 1;
+    optional double x_max = 2;
+    optional double y_min = 3;
+    optional double y_max = 4;
+    optional double z_min = 5;
+    optional double z_max = 6;
+}
+
+message Orientation {
+    optional double heading = 1;
+    optional double tilt = 2;
+    optional double roll = 3;
+}
+
+message Scale3d {
+    optional double x = 1;
+    optional double y = 2;
+    optional double z = 3;
+}
+
+message Size2d {
+    optional double width = 1;
+    optional double height = 2;
+}

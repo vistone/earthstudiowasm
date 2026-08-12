@@ -1,0 +1,10 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+option java_multiple_files = true;
+
+message TrafficSimOptions {
+    optional float elevation_offset_meters = 1;
+    optional float depth_texture_elevation_adjustment_meters = 2;
+}

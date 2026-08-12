@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_outer_classname = "ColorDetectionResultsProto";
+option java_package = "com.google.geo.photo";
+
+message ColorDetectionResults {
+    optional Type type = 1;
+    enum Type {
+        CUSTOM = 0;
+        FOREGROUND = 1;
+        UNIFORM = 2;
+        BACKGROUND = 3;
+    }
+    
+    repeated uint32 rgb = 2;
+}

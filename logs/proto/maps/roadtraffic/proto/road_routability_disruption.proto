@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package logs.proto.maps.roadtraffic.proto;
+
+import "geostore/base/proto/timeschedule.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+
+message LoggedRoadRoutabilityDisruptionInfo {
+    repeated LoggedRoadRoutabilityDisruption routability_disruption = 1;
+    message LoggedRoadRoutabilityDisruption {
+        repeated LoggedRouteOverlap route_overlap = 1;
+        message LoggedRouteOverlap {
+            repeated int64 overlap_segment_fprint = 1 [deprecated = true];
+            repeated uint64 unsigned_overlap_segment_fprint = 4;
+            optional int32 first_segment_skip_m = 2;
+            optional int32 last_segment_skip_m = 3;
+        }
+        
+        optional geostore.TimeScheduleProto schedule = 2;
+        optional bool in_serving_road_index = 3;
+    }
+}

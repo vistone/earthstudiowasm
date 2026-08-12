@@ -1,0 +1,2215 @@
+syntax = "proto2";
+
+package logs_gmm.navigation;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "google/type/latlng.proto";
+import "logs/proto/geo/ar/pose.proto";
+import "logs/proto/maps/directions/customization/config/customization_config_combined.proto";
+import "logs/proto/maps/directions/customization/config/decorations/decoration_config_combined.proto";
+import "logs/proto/maps/directions/mrp/logging.proto";
+import "logs/proto/maps/directions/mrp/measure.proto";
+import "logs/proto/maps/directions/mrp/mrp_processing_metadata.proto";
+import "logs/proto/maps/directions/mrp/query_plan.proto";
+import "logs/proto/maps/directions/mrp/trip_set.proto";
+import "logs/proto/maps/mobile/map_versus_sensor_inconsistency.proto";
+import "logs/proto/maps/mobile/transportation/navigation_guider_event.proto";
+import "logs/proto/maps/pathfinder/client/find-path-input.proto";
+import "logs/proto/maps/pathfinder/client/tripset.proto";
+import "logs/proto/maps/pathfinder/replay/proto/replay_metadata.proto";
+import "logs/proto/maps/shared/automotive-context.proto";
+import "logs/proto/maps/shared/geo_doc_fetch_key.proto";
+import "logs/proto/maps/tactile/directions-common.proto";
+import "logs/proto/maps/tactile/directions.proto";
+import "logs/proto/maps/vms/roadview_metrics.proto";
+import "logs/proto/maps/vms/sensor_observations.proto";
+import "maps/gmm/camera/proto/camera-fallback-status.proto";
+import "maps/roadtraffic/proto/traffic_model_type.proto";
+import "maps/tactile/api/shared/directions/elevation-description.proto";
+import "net/proto2/contrib/output_source_markup/options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "geo/serving/proto/directions/maneuver_type.proto";
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "java/com/google/wireless/googlenav/proto/user_event3_enums.proto";
+import "logs/proto/geo/transportation/analytics/triplogs/common.proto";
+import "logs/proto/maps/tactile/directions-counterfactual-recommended-filtering-results.proto";
+import "logs/proto/maps/tactile/directions-counterfactual-trip-ranking.proto";
+import "logs/proto/maps/tactile/recommended-filtering-results.proto";
+import "maps/gmm/api/network_type_enums.proto";
+import "maps/pathfinder/client/anchor_position.proto";
+import "maps/pathfinder/client/anchor_type.proto";
+import "maps/pathfinder/client/distance_unit.proto";
+import "maps/pathfinder/client/request-source.proto";
+import "maps/roadtraffic/proto/travel_mode.proto";
+import "maps/tactile/api/directions-common.proto";
+import "maps/tactile/api/directions-request.proto";
+import "maps/tactile/api/directions-result-common.proto";
+import "maps/tactile/api/directions-step.proto";
+import "maps/tactile/api/directions-summary.proto";
+import "maps/tactile/api/directions/trip-update-action.proto";
+import "maps/tactile/api/directions/waypoint-result.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "maps/tactile/api/shared/directions/problem-type.proto";
+import "maps/tactile/api/shared/road-priority.proto";
+import "maps/tactile/api/shared/user-incident-report.proto";
+import "maps/tactile/api/traffic.proto";
+
+option objc_class_prefix = "LOGGMMN";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps.mobile.navigation";
+
+message NavigationSessionEvents {
+    optional SessionInformation session_information = 1;
+    
+    repeated Event events = 2;
+    message Event {
+        oneof details {
+            LocationSamplesEvent location_samples = 1;
+            ClientNavigationEvent client_navigation = 2;
+            ServerNavigationEvent server_navigation = 3;
+            SensorObservationEvent sensor_observation = 4;
+        }
+    }
+    
+    optional int32 sequence_number = 3;
+    
+    reserved 4;
+    
+    message LocationSamplesEvent {
+        repeated LocationSample location_samples = 1;
+        repeated DifferentialLocationSample differential_location_samples = 2;
+    }
+    
+    message ServerNavigationEvent {
+        optional .google.protobuf.Timestamp timestamp = 1;
+        
+        optional LogSource log_source = 4;
+        enum LogSource {
+            UNKNOWN = 0;
+            GWS_INITIAL_DIRECTIONS = 1;
+            MRP = 2;
+        }
+        
+        optional bool offline = 5;
+        optional .pathfinder.RequestSource.Source request_source = 6;
+        optional string request_id = 7;
+        
+        oneof details {
+            TripsAndTrafficSentEvent trips_and_traffic_sent = 3;
+        }
+        
+        reserved 2;
+    }
+    
+    message ClientNavigationEvent {
+        optional bool in_scrubbing_zone = 1;
+        optional .google.protobuf.Timestamp timestamp = 2;
+        optional StepPointer step_pointer = 4;
+        
+        oneof details {
+            LocationPipelineEvent location_pipeline = 5;
+            GuidanceSelectedEvent guidance_selected = 76;
+            GuidanceStartedEvent guidance_started = 6;
+            GuidanceStoppedEvent guidance_stopped = 7;
+            StepChangedEvent step_changed = 8;
+            ActiveTripChangedEvent active_trip_changed = 9;
+            TrafficDataUpdatedEvent traffic_updated = 10;
+            AlternateTripOfferedEvent alternate_trip_offered = 11;
+            AlternateTripAcceptedEvent alternate_trip_accepted = 12;
+            AlternateTripSelectedEvent alternate_trip_selected = 13;
+            RerouteRequestedEvent reroute_requested = 14;
+            DroveOntoAlternateEvent drove_onto_alternative = 15;
+            PromptShownEvent prompt_shown = 16;
+            ArrivedEvent arrived = 17;
+            DeviceEvent device = 18;
+            GpsAvailabilityEvent gps_availability = 19;
+            ForegroundEvent foreground = 20;
+            SessionEndedEvent session_ended = 21;
+            StartRecordingEvent start_recording = 22;
+            StopRecordingEvent stop_recording = 23;
+            FeedbackEvent feedback = 24;
+            PickupEvent pickup = 25;
+            DropoffEvent dropoff = 26;
+            AndroidActivityRecognitionEvent android_activity_recognition = 27;
+            TransitTripStartedEvent transit_trip_started = 28;
+            AssistantVoiceActionEvent assistant_voice_action = 29;
+            AssistantStateEvent assistant_state = 30;
+            TrafficRadarStateEvent traffic_radar_state = 31;
+            IncidentReportEvent incident_report = 32;
+            MapVersusSensorInconsistencyEvent map_versus_sensor_inconsistency = 33;
+            AccelerationEvent acceleration_event = 34;
+            UiModeStateEvent ui_mode_state = 35;
+            TransactionIdsChangedEvent transaction_ids_change = 36;
+            ProjectedSensorState projected_sensor_state = 37;
+            PostTripUgcAnswerEvent post_trip_ugc_answer = 38;
+            AssistedDrivingEvent assisted_driving_event = 39;
+            ChargingPortConnectedEvent charging_port_connected_event = 40;
+            NavigationAdEvent navigation_ad_event = 41;
+            WeatherStateEvent weather_state_event = 42 [deprecated = true];
+            VehicleStateEvent vehicle_state_event = 43;
+            SensorObservationEvent sensor_observation_event = 44;
+            PredictedCurvatureEvent predicted_curvature_event = 45;
+            PathUpdateEvent most_probable_path_update_event = 46;
+            PathUpdateEvent least_surprising_path_update_event = 47;
+            ArModeStateEvent ar_mode_state_event = 48;
+            ArLocalizationChangeEvent ar_localization_change_event = 49;
+            ArIndoorStateEvent ar_indoor_state_event = 50;
+            ArElementPlacedEvent ar_element_placed_event = 51;
+            BaselineBatteryUsageEvent baseline_battery_usage_event = 52;
+            BatteryConsumptionEvent battery_consumption_event = 53;
+            SemanticLocationEvent semantic_location_event = 54;
+            CameraPositionDeltaEvent camera_position_delta_event = 55;
+            CameraFramingChangedEvent camera_framing_changed_event = 56;
+            RoadViewMetricEvent road_view_metric_event = 57;
+            RawGnssMeasurementEvent raw_gnss_measurement_event = 58;
+            FeatureChangedEvent feature_changed_event = 59;
+            AndroidThermalStateEvent android_thermal_state_event = 60;
+            IosThermalStateEvent ios_thermal_state_event = 61;
+            CpuUsageStateEvent cpu_usage_state_event = 62;
+            FpsStateEvent fps_state_event = 63;
+            LiteNavTransitUsageEvent lite_nav_transit_usage_event = 64;
+            LapSummaryEvent lap_summary_event = 65;
+            StopEvent stop_event = 66;
+            StopReasonEvent stop_reason_event = 67;
+            CustomChevronUsageEvent custom_chevron_usage_event = 68;
+            LiveActivityContentAppliedEvent live_activity_content_applied_event = 69;
+            DisplayAlternatesEvent display_alternates_event = 70;
+            GeminiInNavInvocationEvent gemini_in_nav_invocation_event = 71;
+            GeminiInNavQueryEvent gemini_in_nav_query_event = 72;
+            GeminiInNavResponseEvent gemini_in_nav_response_event = 73;
+            GeminiInNavUserCancelEvent gemini_in_nav_user_cancel_event = 74;
+            DroppedFramesStateEvent dropped_frames_state_event = 75;
+        }
+        
+        reserved 3;
+    }
+    
+    message CameraPositionDeltaEvent {
+        optional float target_legacy_camera_tilt = 1;
+        optional float target_legacy_camera_zoom = 2;
+        optional float target_legacy_camera_bearing = 3;
+        optional float target_legacy_camera_x_look_ahead = 4;
+        optional float target_legacy_camera_y_look_ahead = 5;
+        optional float target_legacy_camera_lat_e7 = 6;
+        optional float target_legacy_camera_lng_e7 = 7;
+        optional float target_shared_camera_tilt = 8;
+        optional float target_shared_camera_zoom = 9;
+        optional float target_shared_camera_bearing = 10;
+        optional float target_shared_camera_x_look_ahead = 11;
+        optional float target_shared_camera_y_look_ahead = 12;
+        optional float target_shared_camera_lat_e7 = 13;
+        optional float target_shared_camera_lng_e7 = 14;
+        optional CameraState.Mode mode = 15;
+        optional CameraState.Moment moment = 16;
+        optional CameraState.CameraOrientation orientation = 17;
+    }
+    
+    message SensorObservationEvent {
+        optional .google.protobuf.Timestamp timestamp = 1 [deprecated = true];
+        optional string pseudonymous_user_id = 2 [deprecated = true];
+        optional logs.vms.databack.SensorObservation sensor_observation = 3;
+        optional string vehicle_configuration_id = 4;
+    }
+}
+
+message NavigationSessionLocations {
+    optional SessionInformation session_information = 1;
+    repeated DifferentialLocationSample differential_location_samples = 2 [deprecated = true];
+    optional bool enable_forwarding = 3 [deprecated = true];
+    optional bool prefer_snapped_forwarding = 4 [deprecated = true];
+    optional int32 upload_interval_seconds = 5 [deprecated = true];
+    optional int32 sequence_number = 6 [deprecated = true];
+}
+
+message SessionInformation {
+    optional fixed64 session_id = 1;
+    optional string extended_session_id = 16;
+    optional string parent_extended_session_id = 21;
+    optional string software_version = 2;
+    optional string client_version = 12;
+    optional string platform_id = 3;
+    
+    optional PlatformType platform_type = 13;
+    enum PlatformType {
+        UNKNOWN_PLATFORM = 0;
+        ANDROID = 1;
+        IOS = 2;
+    }
+    
+    optional string application_name = 4;
+    optional logs.geo_transportation_analytics.triplogs.LrdVertical lrd_vertical = 30;
+    optional string referrer_name = 8;
+    repeated int32 experiment_ids = 5 [packed = true];
+    repeated int32 all_experiment_ids = 23 [packed = true];
+    repeated string transaction_ids = 17;
+    optional int64 project_number = 19;
+    optional bool user_clicked_through_rt_navdata_disclosure = 20 [deprecated = true];
+    optional bool user_shown_navdata_disclosure = 22;
+    
+    optional ClientSideDeviceTier client_side_device_tier = 24;
+    enum ClientSideDeviceTier {
+        UNKNOWN_CLIENT_SIDE_DEVICE_TIER = 0;
+        LOW = 1;
+        MID = 2;
+        HIGH = 3;
+    }
+    
+    optional int32 google_terms_of_service_version = 25;
+    
+    oneof pseudonymous {
+        string zwieback_cookie = 6 [deprecated = true];
+        uint64 zwieback_uid = 15 [deprecated = true];
+        string pseudonym_id = 18;
+    }
+    
+    reserved 7, 9, 10, 11, 14;
+}
+
+message LocationSample {
+    optional LocationSource source = 1;
+    optional bool in_scrubbing_zone = 2;
+    optional .google.protobuf.Timestamp timestamp = 3;
+    optional .google.type.LatLng lat_lng = 6;
+    optional int64 tile_version = 27;
+    optional int32 radius_decimeters = 7;
+    optional int32 confidence_percent = 8;
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 9;
+    optional bool snapped_tunnel = 10;
+    optional int32 bearing_degrees = 12;
+    optional int32 device_heading_degrees = 29;
+    optional int32 device_heading_uncertainty_degrees = 30;
+    optional int32 indoor_probability = 31;
+    optional string indoor_level_name = 32;
+    optional int32 speed_decimeters_per_second = 13;
+    optional sint32 altitude_meters = 14;
+    optional int32 altitude_range_meters = 15;
+    optional sint32 relative_barometric_altitude_decimeters = 28;
+    optional StepPointer step_pointer = 16;
+    optional int32 forwarding_trip_version = 17;
+    
+    reserved 4;
+}
+
+message DifferentialLocationSample {
+    optional LocationSource source = 1;
+    optional bool in_scrubbing_zone = 2;
+    optional int64 timestamp_ms = 3;
+    optional sint32 lat_e7 = 5;
+    optional sint32 lng_e7 = 6;
+    optional int64 tile_version = 28;
+    optional sint32 radius_decimeters = 7;
+    optional sint32 confidence_percent = 8;
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 9;
+    optional bool snapped_tunnel = 10;
+    optional sint32 bearing_degrees = 11;
+    optional sint32 device_heading_degrees = 30;
+    optional sint32 device_heading_uncertainty_degrees = 31;
+    optional sint32 indoor_probability = 32;
+    optional string indoor_level_name = 33;
+    optional sint32 speed_decimeters_per_second = 12;
+    
+    optional AltitudeSign altitude_sign = 13;
+    enum AltitudeSign {
+        GROUND = 0;
+        ABOVE = 1;
+        BELOW = 2;
+    }
+    
+    optional sint32 altitude_meters = 14;
+    optional sint32 altitude_range_meters = 15;
+    optional sint32 relative_barometric_altitude_decimeters = 29;
+    optional StepPointer step_pointer = 16;
+    optional int32 forwarding_trip_version = 17;
+}
+
+message StepPointer {
+    optional Source source = 1;
+    enum Source {
+        UNKNOWN = 0;
+        ONLINE = 1;
+        REROUTING_OFFLINE = 2;
+        OFFLINE = 3;
+    }
+    
+    optional int32 trip_version = 2;
+    optional int32 traffic_version = 3;
+    optional fixed32 ei_hash = 4;
+    optional int32 trip_index = 5;
+    optional fixed32 step_hash = 6;
+    optional int32 step_group_index = 7;
+    optional int32 step_number = 8;
+    optional string trip_id = 9;
+}
+
+message LoggedSpeedReading {
+    optional int32 offset_meters = 1;
+    optional int64 elapsed_time_seconds = 2;
+}
+
+message LoggedTrafficReportProblem {
+    optional int64 incident_id = 1;
+    optional maps_tactile.directions.IncidentType incident_type = 2;
+    optional maps_tactile.shared.directions.ProblemType problem_type = 5;
+    optional int64 last_update_timestamp_seconds = 3;
+    
+    optional TrafficProblemStatus traffic_problem_status = 4;
+    enum TrafficProblemStatus {
+        STATUS_UNKNOWN = 0;
+        STATUS_ON_ROUTE = 1;
+        STATUS_OFF_ROUTE = 2;
+    }
+}
+
+message LoggedTrafficData {
+    repeated LoggedSpeedReading speed_readings = 1;
+    optional .google.protobuf.Timestamp traffic_information_timestamp = 2;
+    optional maps_tactile.directions.TrafficData.DelayCategory delay_category = 3;
+    repeated LoggedTrafficReportProblem traffic_report_problem = 4;
+    
+    optional LoggedVisualTrafficReportPolylineRendering visual_traffic_report_polyline_rendering = 5;
+    message LoggedVisualTrafficReportPolylineRendering {
+        repeated LoggedRoadStretch road_stretch = 1;
+        message LoggedRoadStretch {
+            optional maps_tactile.directions.TrafficData.VisualTrafficReportPolylineRendering.RoadStretch.Style style = 1;
+            optional int32 offset_meters = 2;
+            optional int32 length_meters = 3;
+        }
+    }
+}
+
+message LoggedDirectionsStepCueProto {
+    optional maps_tactile.directions.DirectionsStepCueProto.StepCueType type = 1;
+    optional string name = 2;
+    optional string spoken_name = 3;
+}
+
+message LoggedLaneTurn {
+    optional maps_tactile.directions.LaneTurn.Shape shape = 1 [default = STRAIGHT];
+    optional bool is_right_turn = 2;
+}
+
+message LoggedLaneGuidance {
+    optional maps_tactile.directions.LaneGuidance.Guidance guidance = 1;
+    repeated LoggedLaneTurn lane_turn = 2;
+}
+
+message LoggedCannedMessage {
+    optional int32 canned_message_id = 4;
+    
+    oneof canned_message {
+        LoggedManeuverMessage maneuver_message = 1;
+        LoggedDistanceMessage distance_message = 2;
+        LoggedPredefinedMessage predefined_message = 3;
+    }
+    
+    message LoggedManeuverMessage {
+        optional int32 maneuver_id = 1;
+    }
+    
+    message LoggedDistanceMessage {
+        optional int32 max_meters = 3;
+    }
+    
+    message LoggedPredefinedMessage {
+        optional string name = 4;
+    }
+}
+
+message LoggedVoiceGuidanceTextAnnotation {
+    optional LoggedRealWorldAnchor anchor = 1;
+    message LoggedRealWorldAnchor {
+        optional .pathfinder.AnchorType type = 1;
+        optional .pathfinder.AnchorPosition position = 2;
+    }
+    
+    optional LoggedTranslationDetails translation_details = 2;
+    message LoggedTranslationDetails {
+        optional int64 root_message_id = 1;
+    }
+    
+    optional LoggedDistance distance = 3;
+    message LoggedDistance {
+        optional bool is_present = 1;
+        optional .pathfinder.DistanceUnit unit = 2;
+        optional float value = 3;
+    }
+    
+    optional bool immediate = 4;
+    optional int32 relative_ordinal = 5;
+    
+    optional LoggedVoiceLaneGuidance lane_guidance = 6;
+    message LoggedVoiceLaneGuidance {
+        optional bool is_present = 1;
+    }
+    
+    repeated LoggedNamedRoadway named_roadway = 7;
+    message LoggedNamedRoadway {
+        optional bool is_present = 1;
+    }
+}
+
+message LoggedGuidanceSpokenText {
+    repeated LoggedCannedMessage canned_message = 1;
+    optional string text = 2;
+    optional fixed32 text_hash = 3;
+    repeated LoggedVoiceGuidanceTextAnnotation text_annotation = 4;
+}
+
+message LoggedGuidanceWithDistance {
+    optional int32 min_distance_meters = 1;
+    optional int32 max_distance_meters = 2;
+    optional LoggedGuidanceSpokenText text = 3;
+    optional bool strict_range = 4;
+}
+
+message LoggedGuidanceEventProto {
+    required maps_tactile.directions.GuidanceEventProto.EventTypeEnum type = 1;
+    optional sint32 relevance_range_end_meters = 2;
+    optional int32 min_relevance_seconds = 7;
+    optional int32 min_relevance_meters = 3;
+    optional bool next_step_relevant = 4;
+    optional int32 canned_message_id = 6;
+    repeated LoggedGuidanceWithDistance guidance_with_distance = 5;
+}
+
+message LoggedDrivingSummary {
+    optional int32 duration_with_traffic_seconds = 1;
+    optional maps_tactile.directions.TrafficData.DelayCategory delay_category = 2;
+    optional int32 freeflow_duration_seconds = 3;
+    optional int32 duration_confidence_interval_low_seconds = 4;
+    optional int32 duration_confidence_interval_high_seconds = 5;
+    optional int32 duration_with_historical_traffic_only_seconds = 6;
+    
+    repeated LoggedLabel label_compared_to_tripset = 7;
+    message LoggedLabel {
+        optional maps_tactile.directions.DrivingSummary.Label.Type type = 1;
+    }
+    
+    repeated LoggedLabel label_compared_to_current_trip = 8;
+    
+    repeated LoggedRelativeLabel trip_id_to_relative_label = 9;
+    message LoggedRelativeLabel {
+        optional string compared_to_traffic_report_trip_id = 4;
+        repeated LoggedLabel relative_label = 2;
+        
+        reserved 3;
+    }
+}
+
+message LoggedSummary {
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 1;
+    optional string text = 2;
+    optional int32 distance_meters = 3;
+    optional .google.protobuf.Duration nominal_duration = 4;
+    optional LoggedDrivingSummary driving = 5;
+    repeated LoggedNotice notice = 6;
+    optional maps_tactile.shared.directions.ElevationDescription cycling_elevation_description = 7;
+}
+
+message LoggedNotice {
+    optional maps_tactile.directions.Notice.Severity severity = 1;
+    optional maps_tactile.directions.Notice.Type type = 2;
+}
+
+message LoggedSpokenText {
+    optional bool is_muted = 1;
+    optional string text = 2;
+    optional fixed32 text_hash = 3;
+}
+
+message LoggedStep {
+    optional LoggedSummary summary = 1;
+    optional LoggedSpokenText spoken_text = 2;
+    optional geo_serving_proto.directions.ManeuverType maneuver_type = 3 [default = MANEUVER_UNKNOWN];
+    optional maps_tactile.directions.Step.TurnType turn_type = 4 [default = TURN_UNKNOWN];
+    optional maps_tactile.directions.Step.HeadingType heading_type = 5 [default = HEADING_UNKNOWN];
+    optional int32 maneuver_turn_number = 6;
+    optional int32 roundabout_turn_angle = 7;
+    repeated LoggedDirectionsStepCueProto step_cues = 8;
+    repeated LoggedLaneGuidance lane_guidances = 9;
+    repeated LoggedGuidanceEventProto guidance_events = 10;
+    optional int32 compact_polyline_vertex_offset = 11;
+    optional bool synthetic_polyline = 12;
+    optional bool highway_interchange = 13;
+    optional fixed32 step_hash = 14;
+    optional maps_tactile.directions.Step.TurnSide turn_side = 15 [default = SIDE_UNSPECIFIED];
+}
+
+message LoggedStepGroup {
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 1;
+    repeated LoggedStep steps = 2;
+    optional LoggedTransitVehicleGroup transit_vehicle_group = 3;
+    optional LoggedTransitVehicleDetails transit = 4;
+}
+
+message LoggedTransitVehicleDetails {
+    optional LoggedTransitStop departure_stop = 1;
+    message LoggedTransitStop {
+        optional int64 arrival_utc_seconds = 1;
+        optional int64 departure_utc_seconds = 2;
+        optional int64 scheduled_arrival_utc_seconds = 3;
+        optional int64 scheduled_departure_utc_seconds = 4;
+        optional maps_tactile.directions.RealtimeStatus realtime_status = 5 [default = UNKNOWN];
+    }
+    
+    optional LoggedTransitStop arrival_stop = 2;
+    optional int32 num_transit_stops = 3;
+    optional maps_tactile.directions.ExpressType express_type = 4;
+    optional int32 vehicle_type = 5;
+    repeated LoggedTransitStop intermediate_stop = 6;
+    optional string vehicle_token = 7;
+    
+    optional LoggedRealtimeData realtime_data = 8;
+    message LoggedRealtimeData {
+        optional maps_tactile.directions.RealtimeStatus realtime_status = 1 [default = UNKNOWN];
+        optional int32 realtime_delay_seconds = 2;
+        optional maps_tactile.directions.RealtimeSource realtime_source = 3 [default = SOURCE_UNKNOWN];
+        optional int64 realtime_update_epoch_millis = 4;
+    }
+    
+    optional int32 duration_seconds = 9;
+}
+
+message LoggedTransitVehicleGroup {
+    optional int32 periodicity_seconds = 1;
+    
+    repeated LoggedNextDeparture departure = 2;
+    message LoggedNextDeparture {
+        optional int64 time_utc_seconds = 1;
+        optional maps_tactile.directions.RealtimeStatus realtime_status = 2 [default = UNKNOWN];
+        optional bool estimated_from_frequency = 3;
+        optional int64 scheduled_time_utc_seconds = 4;
+        optional string vehicle_token = 5;
+    }
+    
+    optional bool same_vehicle_type = 3;
+    optional bool same_num_transit_stops = 4;
+    optional bool same_intermediate_stops = 5;
+}
+
+message LoggedSegmentEnergyUsage {
+    optional float length_meters = 1;
+    optional float time_sec = 2;
+    optional float energy_wh = 3;
+    optional float ml_based_energy_wh = 5;
+    optional float delta_altitude_meters = 4;
+    optional maps_tactile.shared.Priority priority = 6;
+    optional int64 end_s2_cell_id = 7;
+    optional float temperature_celsius = 8;
+    optional float relative_humidity = 9;
+    optional float windu_meters_per_sec = 10;
+    optional float windv_meters_per_sec = 11;
+    
+    optional Heading travel_direction = 12;
+    message Heading {
+        optional float v_unit_component = 1;
+        optional float u_unit_component = 2;
+    }
+}
+
+message LoggedCounterfactualEnergyUsage {
+    optional string counterfactual_id = 1;
+    repeated LoggedSegmentEnergyUsage segment_energy_usage = 2;
+}
+
+message LoggedRoadsideFacilityInfo {
+    optional .google.type.LatLng location = 1;
+    optional int32 offset_meters = 2;
+    optional int32 elapsed_time_seconds = 3;
+    optional string name = 4;
+    
+    optional FacilityType facility_type = 5;
+    enum FacilityType {
+        UNKNOWN_FACILITY_TYPE = 0;
+        FACILITY_TYPE_HIGHWAY_EXIT = 1;
+        FACILITY_TYPE_JUNCTION = 2;
+        FACILITY_TYPE_TOLL_STATION = 3;
+        FACILITY_TYPE_HIGHWAY_REST_STOP = 4;
+    }
+    
+    repeated LoggedService available_service = 6;
+    message LoggedService {
+        optional ServiceType type = 1;
+    }
+    
+    enum ServiceType {
+        UNKNOWN_SERVICE_TYPE = 0;
+        SERVICE_TYPE_GAS_STATION = 1;
+        SERVICE_TYPE_RESTAURANT = 2;
+    }
+}
+
+message LoggedPath {
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 1;
+    repeated LoggedStepGroup step_groups = 2;
+    repeated LoggedSegmentEnergyUsage segment_energy_usage = 3;
+    repeated LoggedCounterfactualEnergyUsage counterfactal_energy_usage = 8;
+    repeated LoggedRoadsideFacilityInfo roadside_facility_info = 7;
+    
+    reserved 4, 5, 6;
+    
+    reserved "path_annotations_proto", "segments", "compact_vertex_data";
+}
+
+message LoggedTrip {
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 2;
+    repeated LoggedPath paths = 3;
+    optional LoggedTrafficData traffic_data = 4;
+    optional int32 compact_polyline_index = 5;
+    optional bool is_reconstructed_from_requery_token = 6;
+    optional LoggedSummary summary = 7;
+    optional fixed64 requery_token_fingerprint = 8;
+    optional string trip_id = 10;
+    optional int32 traffic_report_trip_id = 11;
+    
+    reserved 9;
+    
+    reserved "mrp_trip";
+}
+
+message LoggedAssistedDrivingOptions {
+    optional DatasetInfo dataset_info = 1;
+    message DatasetInfo {
+        optional string dataset_id = 1;
+        optional string provider_id = 2;
+    }
+}
+
+message LoggedBetterRoutePromptDetails {
+    optional maps_tactile.shared.directions.RerouteType reroute_type = 1;
+    optional maps_tactile.directions.TripUpdateAction.BetterRoutePromptDetails.DefaultValue default_value = 2;
+}
+
+message LoggedTripUpdateAction {
+    optional maps_tactile.directions.TripUpdateAction.Type type = 1;
+    optional LoggedBetterRoutePromptDetails better_route_prompt_details = 2;
+    optional bool polyline_fingerprint_matches = 3;
+}
+
+message LoggedWaypointQuery {
+    optional string feature_id = 1;
+    optional .google.type.LatLng position = 2;
+    optional string display_text = 3;
+    optional maps_tactile.directions.WaypointQuery.EntityType entity_type = 4 [default = ENTITY_TYPE_DEFAULT];
+    optional maps_tactile.directions.WaypointQuery.QueryType query_type = 5;
+    optional string navigation_point_token = 6;
+}
+
+message LoggedAddress {
+    repeated string line = 1;
+}
+
+message LoggedWaypointLocation {
+    optional LoggedWaypointQuery waypoint_query = 1;
+    optional LoggedAddress address = 2;
+    optional LoggedEntity entity = 3;
+}
+
+message LoggedEntity {
+    optional logs_maps_shared.GeoDocFetchKey geo_doc_fetch_key = 1;
+}
+
+message LoggedWaypointResult {
+    optional LoggedWaypointLocation waypoint = 1;
+    repeated LoggedWaypointLocation alternative_waypoint = 2;
+    optional maps_tactile.directions.WaypointResult.Status status = 3;
+}
+
+message LoggedExperimentTripSetData {
+    optional bool is_dynacore_route_removed = 1 [deprecated = true];
+    optional int32 rank_of_dynacore_route = 2 [deprecated = true];
+    repeated LoggedTripData trip_data = 3;
+    optional LoggedCrpData crp_data = 4;
+    optional LoggedFindPathLatency latencies = 5;
+    optional int64 mapfacts_timestamp_ms = 6;
+    optional string friendly_shard_name = 7;
+    optional bool processed_by_classic = 8;
+}
+
+message LoggedFindPathLatency {
+    optional int32 total_latency_ms = 1;
+    optional int32 describer_latency_ms = 2;
+}
+
+message LoggedCrpStatus {
+    optional int32 code = 1;
+    optional string space = 2;
+    optional string message = 3;
+    optional int32 canonical_code = 6;
+    
+    optional CrpStatusType type = 7;
+    enum CrpStatusType {
+        NONE = 0;
+        ROUTE_NOT_FOUND = 1;
+        SLOW = 2;
+        ENDPOINT_FAILED = 3;
+        DESCRIBER_FAILED = 4 [deprecated = true];
+        CRP_GRAPH_MISMATCH = 5;
+        INPUT_INVALID = 6;
+        OTHER = 7;
+        HAS_ACTIVE_TIMEBASED_RESTRICTION = 8 [deprecated = true];
+        AVOID_HIGHWAYS = 9 [deprecated = true];
+        AVOID_FERRIES = 10 [deprecated = true];
+        AVOID_TOLLS = 11 [deprecated = true];
+        AVOID_LICENSE_PLATE_RESTRICTIONS = 12 [deprecated = true];
+        INPUT_HAS_DYNAMIC_CLOSURE = 13 [deprecated = true];
+        TOO_MANY_WAY_POINTS = 14;
+        UNKNOWN = 15 [deprecated = true];
+        ENDPOINT_FRACTION_INVALID = 16;
+        RPC_TO_CRP_FAILED = 17;
+        UNEXPECTED_PGRAPH_INCONSISTENCY = 18;
+        CRP_RETURNED_UNKNOWN_ENDPOINT = 19;
+        QUERY_NOT_SENT_UNKNOWN_OPTION = 20;
+        QUERY_NOT_SENT_AVOID_HIGHWAYS = 21 [deprecated = true];
+        QUERY_NOT_SENT_AVOID_TOLLS = 22 [deprecated = true];
+        QUERY_NOT_SENT_AVOID_FERRIES = 23 [deprecated = true];
+        QUERY_NOT_SENT_ALLOW_INDOOR = 24;
+        QUERY_NOT_SENT_AVOID_LICENSE_PLATE_RESTRICTIONS = 25;
+        QUERY_NOT_SENT_AVOID_INACCESSIBLE = 26;
+        QUERY_NOT_SENT_PREFER_INDOOR_WALKING = 27;
+        QUERY_NOT_SENT_PREFER_TAXI_LANES = 28 [deprecated = true];
+        QUERY_NOT_SENT_USE_ENERGY_CONSCIOUS_ROUTING = 29;
+        QUERY_NOT_SENT_USE_FUEL_CONSUMPTION_ROUTING = 30;
+        QUERY_NOT_SENT_IS_API_REQUEST = 32;
+        QUERY_NOT_SENT_IS_ENTERPRISE_API_REQUEST = 33 [deprecated = true];
+        QUERY_NOT_SENT_INTERNAL_TRAFFIC_MODEL = 34;
+        QUERY_NOT_SENT_USE_TRAFFIC = 35;
+        QUERY_NOT_SENT_IS_INTERNAL_REQUEST = 36;
+        QUERY_NOT_SENT_IS_TRUSTED_PARTNER_REQUEST = 37;
+        QUERY_NOT_SENT_USE_DISTANCE_COST = 38;
+        QUERY_NOT_SENT_INTERNAL_MODIFIED_RESTRICTIONS = 39;
+        QUERY_NOT_SENT_TWO_WHEELER = 40;
+        QUERY_NOT_SENT_OTHER_NON_DRIVE = 41;
+        QUERY_NOT_SENT_WAYPOINTS_NOT_COVERED = 42;
+        QUERY_NOT_SENT_INTERNAL_ERROR = 43 [deprecated = true];
+        QUERY_NOT_SENT_SHARDS_USE_TOO_MANY_BOOLEAN_OPTIONS = 44 [deprecated = true];
+        QUERY_NOT_SENT_UNALLOWED_CONDITIONAL_COST_MODIFIERS = 48 [deprecated = true];
+        OK_RPC_WITH_SIDE_CHANNEL_FAILURE_NOTE = 45;
+        OK_RPC_WITH_EMPTY_PATH = 46;
+        QUERY_WITH_DEPARTURE_TIME = 47 [deprecated = true];
+        CRP_BACKUP_SEARCH_SUCCEEDED = 49;
+        IS_FALLBACK_TO_CH = 50;
+        QUERY_NOT_SENT_USE_CRP_FALSE = 51;
+        NO_ENDPOINTS_FOUND = 52;
+        DYNAMIC_ROUTING_DISABLED = 53;
+        QUERY_NOT_SENT_WRONG_TRAVEL_MODE_FOR_TWO_WHEELER_SHARDS = 54;
+    }
+}
+
+message LoggedHeuristicPostprocessorData {
+    repeated LoggedHeuristicRepair.RepairType triggered_repairs = 1 [packed = true, deprecated = true];
+    
+    repeated LoggedHeuristicRepair applied_repairs = 2;
+    message LoggedHeuristicRepair {
+        optional RepairType repair_type = 1 [default = UNKNOWN_REPAIR];
+        enum RepairType {
+            UNKNOWN_REPAIR = 0;
+            OFF_ON_HIGHWAY_REPAIR_V1 = 1;
+            OFF_ON_HIGHWAY_REPAIR_V2 = 2;
+        }
+        
+        optional float removed_length_meters = 3;
+        optional float added_length_meters = 4;
+        optional string added_from_segment = 5;
+        optional string added_to_segment = 6;
+        optional string removed_from_segment = 7;
+        optional string removed_to_segment = 8;
+    }
+    
+    repeated LoggedHeuristicRepair shadow_repairs = 3;
+}
+
+message LoggedCrpData {
+    optional int32 crp_latency = 1 [default = -1];
+    optional int32 dynacore_latency = 2 [default = -1];
+    optional bool crp_succeeded = 3 [default = true, deprecated = true];
+    repeated LoggedCrpStatus crp_output_status = 4;
+    repeated LoggedCrpStatus crp_input_status = 5;
+    optional int32 shadow_node_num = 6;
+    optional int32 crp_dijkstra_run_ms = 7;
+    optional int32 crp_dijkstra_state_settled = 8;
+    optional string crp_shard_name = 9;
+    optional int32 num_hints_accepted = 10;
+    optional int32 num_hints_rejected = 11;
+    optional int32 hint_loading_latency_ms = 12;
+    optional int32 initial_search_duration_ms = 13;
+    optional int32 num_edges_seen_initial_search = 14;
+    optional int32 num_nodes_visited_initial_search = 15;
+    optional int32 num_nodes_settled_initial_search = 16;
+    optional int32 num_hints_visited_initial_search = 17 [deprecated = true];
+    optional int32 num_hints_settled_initial_search = 18 [deprecated = true];
+    optional int32 num_restrictions_in_route = 19;
+    optional int32 num_h1_partitions_with_hints = 20;
+    optional int32 num_h1_partitions_with_hints_encountered = 21 [deprecated = true];
+    optional string l2_alg_used = 22;
+    optional bool opt_l2_route_included = 23;
+    optional LoggedHeuristicPostprocessorData heuristic_postprocessor_data = 24;
+}
+
+message LoggedMrpData {
+    optional logs.proto.maps.directions.mrp.LoggedLogProto log_proto = 9;
+    optional logs.proto.maps.directions.mrp.LoggedQueryPlanProto query_plan = 7;
+    repeated logs.proto.maps.directions.mrp.LoggedMrpMeasureProto mrp_measure = 8;
+    optional logs.proto.maps.pathfinder.replay.LoggedReplayMetadata replay_metadata = 10;
+    
+    reserved 1, 2, 3, 6;
+    
+    reserved "logged_entry", "logged_phase_timings", "measures", "query_plan_proto";
+}
+
+message LoggedCustomizationDataFirstOrThirdParty {
+    oneof customization_data {
+        maps_directions_customization_logs.LoggedCustomizationData first_party = 1;
+        maps_directions_customization_logs.LoggedCustomizationData third_party = 2;
+    }
+}
+
+message LoggedDecorationCustomizationDataFirstOrThirdParty {
+    oneof decoration_customization_data {
+        maps_rdp_logs.LoggedDecorationCustomizationData first_party = 1;
+        maps_rdp_logs.LoggedDecorationCustomizationData third_party = 2;
+    }
+}
+
+message LoggedTripData {
+    optional SearchMethod search_method = 1;
+    enum SearchMethod {
+        NONE = 0;
+        CH = 1;
+        DYNACORE = 2;
+        REQUERY = 3;
+        CRP = 4;
+    }
+    
+    optional bool is_alternate = 2;
+    optional double ch_similarity_score = 7;
+    optional double dynacore_similarity_score = 3;
+    optional bool is_non_toll_alternate = 4;
+    optional LoggedPathCosts path_costs = 5;
+    optional LoggedTrafficDataServerLogData traffic_data_server_log_data = 14;
+    optional bool is_precomputed_alternate = 6;
+    optional bool route_contains_dynamic_penalties = 8;
+    optional double roadtraffic_traffic_coverage = 9;
+    optional double roadtraffic_traffic_duration_seconds = 10;
+    optional double cost_with_traffic_seconds = 11;
+    optional double alternates_ranker_score = 12;
+    optional float debug_route_dynamic_penalties_seconds = 13;
+    optional double total_path_search_duration_seconds = 16;
+}
+
+message LoggedVehicleEnergyModel {
+    optional VehicleInfo vehicle_info = 1;
+    message VehicleInfo {
+        optional int32 battery_level_wh = 1;
+        
+        optional HvacStatus hvac_status = 2;
+        enum HvacStatus {
+            UNKNOWN_HVAC_STATUS = 0;
+            OFF_HVAC_STATUS = 1;
+            ON_HVAC_STATUS = 2;
+        }
+        
+        optional float reference_air_density = 3;
+        optional float external_temp_celsius = 4;
+    }
+    
+    optional ModelProviderClientInfo client_info = 2;
+    message ModelProviderClientInfo {
+        optional string content_provider_package_name = 1;
+    }
+    
+    optional RoadLoadForce road_load = 3;
+    message RoadLoadForce {
+        optional float constant = 1;
+        optional float linear = 2;
+        optional float quadratic = 3;
+    }
+}
+
+message TripsAndTrafficSentEvent {
+    optional maps_tactile.UpdateRouteParams.UpdateType update_type = 1;
+    optional int32 selected_trip_index = 2;
+    optional LoggedTripUpdateAction trip_update_action = 3;
+    optional int32 trip_version = 4;
+    optional int32 traffic_version = 5;
+    optional fixed32 ei_hash = 6;
+    optional LocationSample location_sample = 7;
+    repeated logs_tactile.LoggedCompactPolyline compact_polylines = 8;
+    repeated LoggedTrip trips = 9;
+    optional int32 previous_active_trip_index = 10;
+    repeated LoggedWaypointResult waypoint_result = 11;
+    
+    optional CounterfactualTag counterfactual_tag = 12 [deprecated = true];
+    enum CounterfactualTag {
+        NONE = 0;
+        COUNTERFACTUAL = 1;
+    }
+    
+    optional LoggedExperimentTripSetData experiment_log_data = 13;
+    optional LoggedMrpData mrp_data = 16;
+    optional fixed64 request_requery_token_fingerprint = 17;
+    optional string request_requery_trip_id = 31;
+    optional LoggedAssistedDrivingOptions.DatasetInfo assisted_driving_dataset_info = 18;
+    optional logs.proto.maps.pathfinder.client.LoggedTripSet trip_set = 19;
+    optional logs.proto.maps.directions.mrp.MrpProcessingMetadata mrp_processing_metadata = 20;
+    optional logs.proto.maps.directions.mrp.LoggedTripSetProto mrp_trip_set = 21;
+    optional logs.proto.maps.pathfinder.client.LoggedFindPathInput find_path_input = 22;
+    optional LoggedVehicleEnergyModel vehicle_energy_model = 23;
+    optional LoggedCustomizationDataFirstOrThirdParty customization_data = 24;
+    optional logs_tactile.DrivingOptions tactile_driving_options = 25;
+    optional LoggedDecorationCustomizationDataFirstOrThirdParty decoration_data = 26;
+    optional logs_tactile.TravelModeOptions travel_mode_options = 27;
+    repeated logs_tactile.DirectionsCounterfactualTripRanking counterfactual_trip_ranking = 28;
+    optional logs_tactile.LoggedRecommendedFilteringResults recommended_filtering_results = 29;
+    repeated logs_tactile.DirectionsCounterfactualRecommendedFilteringResults counterfactual_recommended_filtering_results = 30;
+    
+    reserved 14, 15;
+}
+
+message LocationPipelineEvent {
+    optional int64 tile_version = 1;
+    optional bool jump = 2;
+    optional bool spin = 3;
+    optional bool failsafes = 4;
+}
+
+message GuidanceSelectedEvent {
+    optional maps_tactile.directions.GuidanceEventProto.EventTypeEnum guidance_event_type = 1;
+    optional int32 distance_to_maneuver_meters = 2;
+    optional .google.protobuf.Duration duration_to_maneuver = 3;
+    optional int32 percent_probability_of_relevance = 4;
+}
+
+message GuidanceStartedEvent {
+    optional fixed32 spoken_text_hash = 1;
+    optional string spoken_text = 2;
+    optional .google.protobuf.Duration duration = 3;
+    optional GuidanceAlertType guidance_alert_type = 4;
+    optional bool is_strict = 5;
+    optional int32 distance_to_maneuver_meters = 6;
+    optional int32 percent_probability_of_being_strict = 7;
+    optional string voice_name = 8;
+    optional bool prefetch_tts = 9;
+}
+
+message GuidanceStoppedEvent {
+    optional fixed32 spoken_text_hash = 1;
+    
+    optional Reason reason = 2;
+    enum Reason {
+        UNKNOWN = 0;
+        NEVER_PLAYED = 1;
+        CANCELLED = 2;
+        CANCELLED_NEVER_PLAYED = 6;
+        FINISHED_AUDIO = 3;
+        FINISHED_NON_AUDIO = 4;
+        SUPPRESSED = 5;
+    }
+    
+    optional string spoken_text = 3;
+    optional GuidanceAlertType guidance_alert_type = 4;
+    optional bool is_strict = 5;
+    optional int32 distance_to_maneuver_meters = 6;
+    optional int32 percent_probability_of_being_strict = 7;
+    optional string voice_name = 8;
+    optional bool is_prefetched = 9 [deprecated = true];
+    optional bool prefetch_tts = 10;
+}
+
+message StepChangedEvent {
+    optional bool is_successive_step = 1;
+    
+    reserved 2;
+}
+
+message TripChangedDetails {
+    optional .google.protobuf.Duration typical_eta_change = 1;
+    optional .google.protobuf.Duration traffic_eta_change = 2;
+    optional sint32 length_change_meters = 3;
+    optional maps_tactile.directions.TrafficData.DelayCategory previous_delay_category = 4;
+    optional maps_tactile.directions.TrafficData.DelayCategory new_delay_category = 5;
+}
+
+message ActiveTripChangedEvent {
+    optional TripChangedDetails trip_changed_details = 1;
+    
+    optional Cause cause = 2;
+    enum Cause {
+        UNKNOWN = 0;
+        REROUTE = 1;
+        ALTERNATE = 2;
+    }
+    
+    optional int32 sequence_number = 3;
+}
+
+message TrafficDataUpdatedEvent {
+    optional int32 previous_trip_version = 1;
+    optional int32 previous_traffic_version = 2;
+    optional int32 previous_trip_index = 3;
+    optional int32 sequence_number = 4;
+}
+
+message AlternateTripOfferedEvent {
+    optional TripChangedDetails trip_changed_details = 1;
+    optional maps_tactile.shared.directions.RerouteType reroute_type = 2;
+}
+
+message AlternateTripAcceptedEvent {
+    optional Action action = 1;
+    enum Action {
+        UNKNOWN = 0;
+        STALE = 1;
+        TIMEOUT_ACCEPTED = 2;
+        TIMEOUT_REJECTED = 3;
+        ACCEPTED = 4;
+        REJECTED = 5;
+    }
+    
+    optional maps_tactile.shared.directions.RerouteType reroute_type = 2;
+}
+
+message AlternateTripSelectedEvent {
+    
+}
+
+message RerouteRequestedEvent {
+    optional Cause cause = 1;
+    enum Cause {
+        REQUERY_FAILED = 0;
+        OFFROUTE_REROUTE = 1;
+        OPTIONS_CHANGED = 2;
+    }
+}
+
+message DroveOntoAlternateEvent {
+    
+}
+
+message PromptShownEvent {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN = 0;
+        BETTER_ROUTE = 1;
+        FREE_NAV_DESTINATION_EXPLICIT = 2;
+        FREE_NAV_DESTINATION_OPPORTUNISTIC = 3 [deprecated = true];
+        FREE_NAV_ONBOARDING = 4 [deprecated = true];
+        JRNY_PENDING = 5;
+        NAVIGATION_AD = 6;
+        NAVIGATION_POI = 7;
+        NAVIGATION_POPUP = 8;
+        NAVIGATION_SEARCH = 9;
+        OFFLINE_TO_ONLINE_TRANSITION = 10;
+        OPTIONS_CHANGE = 11;
+        SHGN = 12;
+        SUGGEST_TRAVEL_MODE_CHANGE = 13;
+        TRAFFIC_INCIDENT = 14;
+        TRAFFIC_REPORT = 15;
+        WAYPOINT_ALERT = 16;
+        PARKING = 17;
+        REPORT_INCIDENT = 18;
+        ENROUTE_SEARCH_RESULT_UPGRADE = 19;
+        JRNY_PEOPLE_PICKER = 20;
+        INCIDENT_CALLOUT = 21;
+        JRNY_CONFIRMATION = 22;
+        LOW_RANGE = 23;
+        NAV_CORE_ARRIVAL = 24;
+        NAV_CORE_EXIT = 25;
+        MODERATABLE_TRAFFIC_INCIDENT = 26;
+        CHEVRON_PICKER = 27;
+        SPEED_LIMIT_MODERATION = 28;
+        ASSISTANT_ROUTINE = 29;
+        ENROUTE_SEARCH_RESULT_LIST = 30;
+        ASSISTIVE_PICKUP_SHARING_CONFIRMATION = 31;
+        ASSISTIVE_PICKUP_SHARING_NAV_EXIT = 32;
+        REMOVE_WAYPOINT_OR_EXIT_NAVIGATION = 33;
+        ASSISTIVE_PICKUP_SHARING_NOTICE = 34;
+        BETTER_TRIP_PLAN = 35;
+        THERMAL_NIGHT_MODE = 36;
+        MAPS_SUGGESTS_CHARGING_WHEN_BATTERY_IS_LOW = 37;
+        HOV_ROUTE_SUGGESTION = 38;
+        NAVATARS_SAFETY_ALERT = 39;
+        EXTERNAL_TRIP_SHARING_NOTICE = 40;
+        NAV_SEARCH_ZERO_STATE = 41;
+        REOPEN_ROAD_CLOSURE = 42;
+        WAYPOINT_ADDED = 43;
+        ENTERPRISE_ACTION_NAVIGATION_CONNECT_NOTICE = 44;
+        DESTINATION_INFO = 45;
+    }
+    
+    optional maps_tactile.directions.Notice.Severity notice_severity = 2;
+    optional maps_tactile.directions.Notice.Type notice_type = 3;
+    optional maps_tactile.directions.IncidentType incident_type = 4;
+    optional bool is_incident_prompt_scheduled = 5;
+    optional bool is_incident_prompt_suppressed = 6;
+    
+    optional SuppressionReason incident_prompt_suppression_reason = 7;
+    enum SuppressionReason {
+        SUPPRESSION_REASON_UNKNOWN = 0;
+        USER_EXPLICITLY_DISMISSED = 1;
+        USER_IGNORED_PROMPTS = 2;
+        USER_SESSION_LIMIT_REACHED = 3;
+        USER_IN_COOLOFF = 4;
+        HIGH_HISTORICAL_DISMISS_RATE = 5;
+        LOW_HISTORICAL_VOTE_RATE = 6;
+        INCIDENT_THROTTLED = 7;
+        USER_TOO_CLOSE_TO_MANEUVER = 8;
+        USER_TOO_CLOSE_TO_VOICE_GUIDANCE = 9;
+    }
+}
+
+message SpeedLimitStartedShowingEvent {
+    
+}
+
+message SpeedLimitStoppedShowingEvent {
+    
+}
+
+message ArrivedEvent {
+    
+}
+
+message DeviceEvent {
+    optional .gmm.ExternalPowerSource external_power_source = 1;
+    optional .gmm.NetworkType network_type = 2;
+    optional int32 device_volume_percent = 3;
+    optional bool wired_headset_connected = 4;
+    optional bool bluetooth_headset_connected = 5;
+    
+    optional ScreenConfiguration screen_configuration = 6;
+    enum ScreenConfiguration {
+        UNKNOWN_SCREEN = 0;
+        PHONE_PORTRAIT = 1;
+        PHONE_LANDSCAPE = 2;
+        TABLET_PORTRAIT = 3;
+        TABLET_LANDSCAPE = 4;
+    }
+    
+    optional LocationProviderState gps_state = 7;
+    enum LocationProviderState {
+        UNKNOWN_LOCATION = 0;
+        HARDWARE_MISSING = 1;
+        ENABLED = 2;
+        DISABLED_BY_SETTING = 3;
+        DISABLED_BY_SECURITY = 4;
+    }
+    
+    optional LocationProviderState cell_state = 8;
+    optional LocationProviderState wifi_state = 9;
+    
+    optional MuteLevel mute_level = 10;
+    enum MuteLevel {
+        UNKNOWN_MUTE_LEVEL = 0;
+        UNMUTED = 1;
+        MINIMAL = 2;
+        MUTED = 3;
+    }
+    
+    optional bool north_up = 11;
+    optional bool is_projected = 12;
+    optional logs_maps_shared.AutomotiveContext automotive_context = 13;
+    optional bool is_tethered_navigation = 14;
+    optional .gmm.BatteryChargingState battery_charging_state = 15;
+}
+
+message ForegroundEvent {
+    optional bool foreground = 1;
+}
+
+message GpsAvailabilityEvent {
+    optional bool gps_valid_for_navigation = 1;
+    optional bool is_gps_lost = 2;
+}
+
+message StartRecordingEvent {
+    optional bool enable_forwarding = 1;
+    optional bool enable_logging = 2;
+    optional int32 tick_interval_ms = 3;
+    optional int32 collection_ticks = 4;
+    optional int32 upload_interval_seconds = 5;
+    optional int32 max_data_age_seconds = 6;
+    optional int32 min_scrubbing_distance_meters = 7;
+    optional int32 max_scrubbing_distance_meters = 8;
+    optional int32 projected_route_sampling_interval_seconds = 9;
+    optional int32 projected_route_maximum_duration_seconds = 10;
+    optional int32 projected_route_maximum_number_of_routes = 11;
+    optional int32 timestamp_quantization_seconds = 12;
+    optional int32 maximum_gap_ticks = 13;
+    optional bool log_raw_locations = 14;
+    optional bool log_snapped_locations = 15;
+    optional bool prefer_snapped_user_tracks = 16;
+    optional int32 min_high_confidence_percent = 17;
+    optional int32 low_confidence_collection_ticks = 18;
+    optional bool sample_mid_segments = 19;
+    optional int32 min_trustworthy_ticks = 20;
+    optional bool enable_personal_logging = 21;
+    optional int32 first_trip_update_interval_seconds = 30;
+    optional int32 trip_update_interval_seconds = 22;
+    optional bool signed_in = 23;
+    optional bool waa_udc_enabled = 24;
+    optional bool lh_udc_enabled = 25;
+    optional bool lr_udc_enabled = 26;
+    optional bool ulr_active = 27;
+    
+    optional NavigationMode navigation_mode = 28;
+    enum NavigationMode {
+        UNKNOWN_MODE = 0;
+        GUIDED_NAV_MODE = 1;
+        FREE_NAV_MODE = 2;
+        LIVE_TRIP_MODE = 3;
+    }
+    
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 29;
+    optional int32 max_gws_inflight_rpcs = 31;
+    optional int32 max_gws_reply_delay_ms = 32;
+    optional int32 shutdown_grace_period_ms = 33;
+    optional bool always_send_locations_with_navigation_session_events = 34;
+    optional int32 android_activity_recognition_period_seconds = 35;
+    optional int32 android_activity_recognition_max_activities = 36;
+    optional bool enable_free_nav_logging = 37;
+    optional bool enable_waa_off_logging = 38;
+    optional logs_maps_shared.AutomotiveContext automotive_context = 39;
+    optional bool enable_high_acceleration_logging = 40;
+    optional float high_acceleration_sample_probability_projected_unavailable = 41;
+    optional float high_acceleration_sample_probability_projected_available = 42;
+    optional float high_acceleration_phone_threshold_mps2 = 43;
+    optional float high_acceleration_vehicle_threshold_mps2 = 44;
+    
+    optional NavBarInteractionMode nav_bar_interaction_mode = 45;
+    enum NavBarInteractionMode {
+        UNKNOWN_INTERACTION_MODE = 0;
+        THREE_BUTTON = 1;
+        TWO_BUTTON = 2;
+        GESTURAL = 3;
+    }
+    
+    optional int32 max_queued_nav_session_event_bytes = 46;
+    optional bool enable_offline_backend_logging = 47;
+    optional bool high_acceleration_use_dynamically_sized_data_buffer = 48 [default = false];
+    optional int32 high_acceleration_sensor_logging_before_first_threshold_crossing_millis = 49 [default = 3000];
+    optional int32 high_acceleration_sensor_logging_after_last_threshold_crossing_millis = 50 [default = 3000];
+    optional int32 high_acceleration_dynamically_sized_data_buffer_limit_millis = 51 [default = 25000];
+    optional .google.protobuf.Duration time_since_boot = 52;
+}
+
+message StopRecordingEvent {
+    optional .google.protobuf.Duration duration = 1;
+    optional int32 num_bytes = 2;
+    optional int32 num_client_events = 3;
+    optional int32 num_location_samples = 4;
+}
+
+message SessionEndedEvent {
+    optional bool session_aborted = 1;
+}
+
+message StopReasonEvent {
+    optional StopReason stop_reason = 1;
+    enum StopReason {
+        UNKNOWN = 0;
+        USER_STOPPED_FROM_APP = 1;
+        USER_STOPPED_FROM_NOTIFICATION = 2;
+        OTHER_NAVS_STARTED = 3;
+        TIMEOUT = 4;
+        ARRIVED = 5;
+        INSUFFICIENT_LOCATION_PERMISSIONS = 6;
+        GUIDER_ERROR = 7;
+        UNSUPPORTED_TRAVEL_MODE = 8;
+        FRAGMENT_DESTROYED = 9;
+        TRIPS_NOT_TRACKABLE = 10;
+        APP_TERMINATED = 11;
+        RESTART_WITH_NEW_PARAMS = 12;
+        OTHER_DIRECTIONS_STARTED = 13;
+    }
+}
+
+message CustomChevronUsageEvent {
+    optional int32 custom_chevron_ve_type = 1;
+}
+
+message FeedbackEvent {
+    optional NavigationExperience navigation_experience = 1;
+    enum NavigationExperience {
+        UNKNOWN_NAV_EXPERIENCE = 0;
+        THUMBS_UP = 1;
+        THUMBS_DOWN = 2;
+    }
+}
+
+message TransactionIdsChangedEvent {
+    repeated string previous_transaction_ids = 1;
+    repeated string new_transaction_ids = 2;
+}
+
+message PickupEvent {
+    repeated string transaction_id = 1;
+    optional fixed64 session_id = 2;
+}
+
+message DropoffEvent {
+    repeated string transaction_id = 1;
+    optional fixed64 session_id = 2;
+}
+
+message AndroidActivityRecognitionEvent {
+    repeated DetectedActivityType detected_activity_type = 1;
+    enum DetectedActivityType {
+        IN_VEHICLE = 0;
+        ON_BICYCLE = 1;
+        ON_FOOT = 2;
+        STILL = 3;
+        UNKNOWN = 4;
+        TILTING = 5;
+        EXITING_VEHICLE = 6;
+        WALKING = 7;
+        RUNNING = 8;
+        OFF_BODY = 9;
+        TRUSTED_GAIT = 10;
+        FLOOR_CHANGE = 11;
+        ON_STAIRS = 12;
+        ON_ESCALATOR = 13;
+        IN_ELEVATOR = 14;
+        SLEEPING = 15;
+        IN_ROAD_VEHICLE = 16;
+        IN_RAIL_VEHICLE = 17;
+        IN_TWO_WHEELER_VEHICLE = 18;
+        IN_FOUR_WHEELER_VEHICLE = 19;
+        IN_CAR = 20;
+        IN_BUS = 21;
+        IN_AIRPLANE = 23;
+    }
+    
+    repeated int32 confidence = 2;
+    optional int32 detector_id = 3;
+}
+
+message TransitTripStartedEvent {
+    repeated Ride ride = 1;
+    message Ride {
+        optional string departure_station_feature_id = 1;
+        optional string arrival_station_feature_id = 2;
+        repeated string line_and_pois_fprint = 3;
+        repeated string vehicle_token = 4;
+    }
+}
+
+message AssistantVoiceActionEvent {
+    
+}
+
+message AssistantStateEvent {
+    optional bool assistant_enabled = 1;
+    optional bool morris_enabled = 2;
+    optional bool assistant_driving_mode_eligible = 3;
+    optional bool gemini_in_nav_enabled = 4;
+}
+
+message UiModeStateEvent {
+    optional bool is_ui_started = 1;
+    optional bool is_in_pip_mode = 2;
+}
+
+message TrafficRadarStateEvent {
+    optional bool traffic_radar_active = 1;
+}
+
+message IncidentReportEvent {
+    optional maps_tactile.shared.UserIncidentType incident_type = 1;
+    optional maps_tactile.shared.UserIncidentReportType user_incident_report_type = 2;
+    
+    repeated Segment segment = 4;
+    message Segment {
+        optional string fprint = 1;
+    }
+    
+    reserved 3;
+}
+
+message LoggedPathCost {
+    optional int32 start_offset_meters = 1;
+    optional int32 end_offset_meters = 2;
+    
+    repeated LoggedCost cost = 3;
+    message LoggedCost {
+        optional LoggedCostType cost_type = 1;
+        enum LoggedCostType {
+            UNKNOWN = 0;
+            STATIC_SEGMENT_DURATION = 1;
+            STATIC_TURN_DURATION = 2;
+            STATIC_SEGMENT_PENALTY = 3;
+            STATIC_TURN_PENALTY = 4;
+            DYNAMIC_SEGMENT_PENALTY = 5;
+            DYNAMIC_TURN_PENALTY = 6;
+        }
+        
+        optional float value_seconds = 2;
+    }
+}
+
+message LoggedSpeedInfo {
+    optional int32 speed_kph = 1;
+    optional int32 max_speed_kph = 2;
+    optional maps_roadtraffic.TrafficModelType traffic_model_type = 3;
+    optional int32 offset_m = 4;
+}
+
+message LoggedTrafficDataServerLogData {
+    optional double path_model_time_stretch_factor = 1;
+    repeated LoggedSpeedReading historical_speed_reading = 2;
+    repeated LoggedSpeedReading optimistic_historical_speed_reading = 3;
+    repeated LoggedSpeedReading pessimistic_historical_speed_reading = 4;
+    repeated LoggedSpeedReading pre_path_model_speed_reading = 10;
+    optional string country_code = 5;
+    optional string start_locality = 6;
+    optional string end_locality = 7;
+    optional int32 start_minute_of_the_week = 8;
+    optional int32 end_minute_of_the_week = 9;
+    optional maps_roadtraffic.TravelMode travel_mode = 11;
+}
+
+message LoggedPathCosts {
+    repeated LoggedPathCost path_cost = 1;
+    repeated LoggedSpeedInfo speed_info = 2;
+}
+
+message MapVersusSensorInconsistencyEvent {
+    optional MapVersusSensorInconsistency inconsistency = 1;
+}
+
+message AccelerationEvent {
+    repeated StampedLinearAcceleration phone_linear_acceleration = 1;
+    message StampedLinearAcceleration {
+        optional int32 duration_millis = 1;
+        optional Vector3d linear_mps2 = 2;
+    }
+    
+    repeated StampedAngularVelocity phone_angular_velocity = 2;
+    message StampedAngularVelocity {
+        optional int32 duration_millis = 1;
+        optional Vector3d angular_rps = 2;
+    }
+    
+    repeated StampedLinearAcceleration vehicle_linear_acceleration = 3;
+    
+    repeated StampedSpeed vehicle_speed = 4;
+    message StampedSpeed {
+        optional int32 duration_millis = 1;
+        optional float speed_mps = 2;
+    }
+    
+    repeated StampedSpeed phone_speed = 5;
+    
+    optional ModeledAccelerationStatistics modeled_acceleration_statistics = 6;
+    message ModeledAccelerationStatistics {
+        optional float inferred_max_vehicle_acceleration_from_phone_sensors = 1 [deprecated = true];
+        optional float model_version_number = 2;
+        
+        optional ModelInferenceLog model_inference_log = 3;
+        enum ModelInferenceLog {
+            UNKNOWN = 0;
+            SUCCESS = 1;
+            SENSOR_INPUT_TOO_SHORT = 2;
+            MODEL_INFERENCE_ERROR = 3;
+        }
+        
+        optional float inferred_min_vehicle_acceleration_from_phone_sensors = 4;
+    }
+    
+    repeated StampedLinearAcceleration wheel_acceleration = 7;
+    repeated StampedLinearAcceleration phone_raw_acceleration = 8;
+    
+    repeated StampedRawMagneticField phone_raw_magnetic_field = 9;
+    message StampedRawMagneticField {
+        optional int32 duration_millis = 1;
+        optional Vector3d field = 2;
+        optional Vector3d bias = 3;
+    }
+    
+    repeated StampedGravity phone_gravity = 10;
+    message StampedGravity {
+        optional int32 duration_millis = 1;
+        optional Vector3d gravity_mps2 = 2;
+    }
+    
+    optional EventType event_type = 11;
+    enum EventType {
+        UNKNOWN_EVENT_TYPE = 0;
+        HARD_BRAKE = 1;
+        WHEEL_IMPACT = 2;
+    }
+    
+    message Vector3d {
+        optional float x = 1;
+        optional float y = 2;
+        optional float z = 3;
+    }
+}
+
+message AssistedDrivingEvent {
+    optional AssistedDrivingState ad_state = 1;
+    enum AssistedDrivingState {
+        UNKNOWN_STATE = 0;
+        UNSUPPORTED = 1;
+        TEMPORARILY_UNAVAILABLE = 2;
+        AVAILABLE = 3;
+        IMMEDIATELY_ENGAGEABLE = 4;
+        ENGAGED = 5;
+        DRIVER_SUSPENDED = 6;
+        FORCE_DISENGAGED = 7;
+    }
+}
+
+message ProjectedSensorState {
+    optional bool accelerometer_x_available = 1;
+    optional bool accelerometer_y_available = 2;
+    optional bool accelerometer_z_available = 3;
+    optional bool wheel_speed_available = 4;
+}
+
+message PostTripUgcAnswerEvent {
+    optional Question question = 1;
+    message Question {
+        optional int32 question_type = 1;
+    }
+    
+    optional Notification notification = 2;
+    message Notification {
+        optional int32 notification_id = 1;
+        optional EntryPoint entry_point = 2;
+    }
+    
+    optional Answer answer = 3;
+    message Answer {
+        oneof answer {
+            int32 multiple_choice_answer = 1;
+            int32 qualitative_scale_answer = 2;
+            int32 vertical_multiple_choice_answer = 3;
+            int32 vertical_multiple_select_button_answer = 6;
+            int32 free_text_question_button_answer = 4;
+            int32 below_card_button_answer = 5;
+            int32 selected_location_answer = 7;
+        }
+    }
+    
+    optional bool skipped_in_v2_ui = 4;
+    
+    repeated MultiSelectOption multi_select_option = 5;
+    message MultiSelectOption {
+        optional int32 vertical_multiple_select_answer = 1;
+    }
+    
+    optional string free_text_input = 6;
+    optional .google.type.LatLng selected_location = 10;
+    
+    repeated SelectedLocation select_multiple_location_answer = 7;
+    message SelectedLocation {
+        optional Answer option_id = 1;
+        optional .google.type.LatLng lat_lng = 2;
+    }
+    
+    optional bool is_driving_sentiment_notification_edit_approved = 8;
+    optional bool is_driving_chip_notification = 9;
+    
+    enum EntryPoint {
+        UNKNOWN_ENTRY_POINT = 0;
+        ARRIVAL_CARD = 1;
+        ARRIVAL_CARD_INLINE = 9;
+        CARGO_ARRIVAL_CARD = 11;
+        DIRECTIONS = 2;
+        DIRECTIONS_INLINE = 10;
+        POST_TRIP_NOTIFICATION = 4;
+    }
+}
+
+message ChargingPortConnectedEvent {
+    
+}
+
+message NavigationAdEvent {
+    oneof details {
+        PromotedPinImpression promoted_pin_impression = 1;
+        PromotedPinClick promoted_pin_click = 2;
+        PromotedPinPromptAction promoted_pin_prompt_action = 3;
+    }
+    
+    message PromotedPinImpression {
+        optional string feature_id = 1;
+        optional AdType ad_type = 2;
+        optional float zoom_level = 3;
+        optional LabelVisibilityType visibility_type = 4;
+        optional .google.protobuf.Duration visible_duration = 5;
+    }
+    
+    message PromotedPinClick {
+        optional string feature_id = 1;
+        optional AdType ad_type = 2;
+        optional float zoom_level = 3;
+        optional LabelVisibilityType visibility_type = 4;
+    }
+    
+    message PromotedPinPromptAction {
+        optional string feature_id = 1;
+        optional AdType ad_type = 2;
+        
+        optional ActionType action_type = 3;
+        enum ActionType {
+            UNKNOWN_ACTION_TYPE = 0;
+            TIMEOUT_REJECTED = 1;
+            ACCEPTED = 2;
+            REJECTED = 3;
+            WHY_THIS_AD = 4;
+        }
+    }
+    
+    enum AdType {
+        UNKNOWN_AD_TYPE = 0;
+        FIRST_PARTY = 1;
+        AGGREGATOR = 2;
+        MANUFACTURER = 3;
+        FIRST_PARTY_LOGOLESS = 4;
+        SHOPPING = 5;
+        KEYWORD_AD = 6;
+        TRAVEL_AD = 7;
+        TRAVEL_AD_LOGOLESS = 8;
+        TRAVEL_ACTIVITY_AD = 9;
+    }
+    
+    enum LabelVisibilityType {
+        UNKNOWN_LABEL_VISIBILITY_TYPE = 0;
+        REGULAR = 1;
+        REPRESSED = 2;
+    }
+}
+
+message WeatherStateEvent {
+    option deprecated = true;
+    
+    repeated PrecipitationType precipitation_types = 1;
+    enum PrecipitationType {
+        PRECIPITATION_UNSPECIFIED = 0;
+        RAIN = 1;
+    }
+    
+    optional int32 external_temperature_celsius = 2;
+    optional float confidence = 3;
+}
+
+message VehicleStateEvent {
+    optional WiperState front_wiper_state = 1;
+    enum WiperState {
+        WIPER_STATE_UNKNOWN = 0;
+        STOPPED = 1;
+        LOW_SPEED = 2;
+        HIGH_SPEED = 3;
+    }
+    
+    optional bool anti_lock_braking_engaged = 2;
+    optional bool motor_slip_regulation_engaged = 3;
+    optional bool active_yaw_control_engaged = 4;
+    optional float confidence = 5;
+}
+
+message PredictedCurvatureEvent {
+    repeated Path paths = 1;
+    message Path {
+        repeated PredictedCurvature predicted_curvatures = 1;
+        optional bool is_most_probable_path = 2;
+        optional bytes preceding_branch_id = 3;
+    }
+    
+    message PredictedCurvature {
+        optional bytes vms_segment_id = 1;
+        optional bytes branch_id = 2;
+        
+        repeated CurvatureSpan spans = 3;
+        message CurvatureSpan {
+            optional float span_begin_meters = 1;
+            optional float span_end_meters = 2;
+            optional float curvature_value = 3;
+        }
+    }
+}
+
+message PathUpdateEvent {
+    optional int32 snaptile_version = 1;
+    
+    repeated PathSection sections = 2;
+    message PathSection {
+        oneof section {
+            PolylineSequence polylines = 1;
+            WindowOfPrev window_of_prev = 2;
+        }
+        
+        message WindowOfPrev {
+            optional int32 start_index = 1;
+            optional int32 end_index = 2;
+        }
+        
+        message PolylineSequence {
+            repeated int64 polyline_id_diffs = 1 [packed = true];
+            repeated int32 connection_count = 2 [packed = true];
+        }
+    }
+    
+    optional uint32 sequence_number = 3;
+}
+
+message ArModeStateEvent {
+    optional bool is_in_ar_mode = 1;
+}
+
+message ArLocalizationChangeEvent {
+    optional bool is_localized = 1;
+}
+
+message ArIndoorStateEvent {
+    optional string venue_feature_id = 1;
+    optional string building_feature_id = 2;
+    optional string level_feature_id = 3;
+    optional float level_number = 4;
+}
+
+message ArElementPlacedEvent {
+    optional ArElementType type = 1;
+    enum ArElementType {
+        TYPE_UNKNOWN = 0;
+        TYPE_ORIENTATION_ARROW = 1;
+        TYPE_NAVIGATION_ARROW = 2;
+        TYPE_DESTINATION = 3;
+        TYPE_LEVEL_CHANGE_UP = 4;
+        TYPE_LEVEL_CHANGE_DOWN = 5;
+    }
+    
+    optional logs.proto.geo.ar.RigidTransformProto ecef_t_element = 2;
+}
+
+message BaselineBatteryUsageEvent {
+    optional BatteryUsageStat screen_on_battery_consumption = 1;
+    message BatteryUsageStat {
+        optional int32 battery_consumption_percentage = 1;
+        optional int32 battery_consumption_microamperehours = 2;
+        optional .google.protobuf.Duration duration = 3;
+    }
+    
+    optional BatteryUsageStat screen_off_battery_consumption = 2;
+    
+    optional BatteryHealthStatus battery_health = 3;
+    enum BatteryHealthStatus {
+        BATTERY_HEALTH_UNKNOWN = 0;
+        BATTERY_HEALTH_COLD = 1;
+        BATTERY_HEALTH_DEAD = 2;
+        BATTERY_HEALTH_GOOD = 3;
+        BATTERY_HEALTH_OVERHEAT = 4;
+        BATTERY_HEALTH_OVER_VOLTAGE = 5;
+        BATTERY_HEALTH_UNSPECIFIED_FAILURE = 6;
+    }
+    
+    optional int32 battery_total_capacity = 4;
+}
+
+message BatteryConsumptionEvent {
+    optional int32 battery_level_percentage = 1;
+    optional int32 battery_level_microamperehours = 2;
+    optional int32 battery_temperature = 3;
+    optional bool screen_on = 4;
+    optional float screen_brightness = 5;
+    optional bool dark_mode = 6;
+}
+
+message PlaceEnterEvent {
+    optional float probability = 1;
+}
+
+message PlaceExitEvent {
+    optional float probability = 1;
+}
+
+message PlaceOngoingEvent {
+    optional float probability = 1;
+}
+
+message ActivityCandidate {
+    optional int32 type = 1;
+    optional float probability = 2;
+    
+    enum Type {
+        UNKNOWN_ACTIVITY_TYPE = 0;
+        STILL = 1;
+        WALKING = 2;
+        CYCLING = 3;
+        IN_PASSENGER_VEHICLE = 29;
+        FLYING = 5;
+        RUNNING = 6;
+        IN_BUS = 7;
+        IN_TRAIN = 8;
+        IN_SUBWAY = 9;
+        IN_TRAM = 10;
+        IN_FERRY = 11;
+        SAILING = 18;
+        SKIING = 20;
+        MOTORCYCLING = 30;
+    }
+}
+
+message ActivityStartEvent {
+    optional float probability = 1;
+    optional ActivityCandidate top_candidate = 2;
+}
+
+message ActivityEndEvent {
+    optional float probability = 1;
+    optional ActivityCandidate top_candidate = 2;
+}
+
+message ActivityOngoingEvent {
+    optional float probability = 1;
+    optional ActivityCandidate top_candidate = 2;
+}
+
+message SemanticLocationEvent {
+    optional SemanticLocationEventType event = 1;
+    message SemanticLocationEventType {
+        oneof event {
+            PlaceEnterEvent enter_place = 1;
+            PlaceExitEvent exit_place = 2;
+            PlaceOngoingEvent ongoing_place = 3;
+            ActivityStartEvent activity_start = 4;
+            ActivityEndEvent activity_end = 5;
+            ActivityOngoingEvent activity_ongoing = 6;
+        }
+    }
+}
+
+message CameraState {
+    optional float tilt = 1;
+    optional float zoom = 2;
+    optional float target_tilt = 7;
+    optional float target_zoom = 8;
+    
+    optional CameraOrientation camera_orientation = 9;
+    enum CameraOrientation {
+        UNKNOWN_CAMERA_TYPE = 0;
+        CAMERA_3D = 1;
+        CAMERA_2D_NORTH_UP = 2;
+        CAMERA_2D_HEADING_UP = 3;
+    }
+    
+    optional bool satellite = 10;
+    
+    optional Mode mode = 11;
+    enum Mode {
+        UNKNOWN_MODE = 0;
+        FOLLOW = 1;
+        INSPECT_STEP = 2;
+        INSPECT_ROUTE = 3;
+        SEARCH_RESULTS = 4;
+        OVERRIDE_MODE = 5;
+        OVERVIEW_MODE = 6;
+        FREE_MOVEMENT = 7;
+        ARRIVAL = 8;
+    }
+    
+    optional Moment moment = 12;
+    enum Moment {
+        UNKNOWN_MOMENT = 0;
+        FAR_VIEW = 1;
+        NORMAL = 2;
+        APPROACH = 3;
+        LIMITED_CONTROLLED_ACCESS_MANEUVER = 4;
+        LIMITED_CONTROLLED_ACCESS_APPROACH = 5;
+        LIMITED_CONTROLLED_ACCESS_DEFAULT = 6;
+        DENSE_DEFAULT = 7;
+        DENSE_MANEUVER = 8;
+        SPARSE_DEFAULT = 9;
+        SPARSE_MANEUVER = 10;
+        TUNNEL = 11;
+    }
+    
+    optional bool shared_camera = 13;
+    optional float bearing = 14;
+    
+    optional LookAhead lookahead = 15;
+    message LookAhead {
+        optional float x = 1;
+        optional float y = 2;
+    }
+}
+
+message CameraFramingChangedEvent {
+    optional CameraState camera_state = 1;
+    optional bool camera_fallback_eligible = 2;
+    optional bool camera_fallback_enabled = 4;
+    
+    optional CameraFallbackStatus camera_fallback_status = 3;
+    message CameraFallbackStatus {
+        repeated maps_gmm_camera.CameraFallbackReason fallback_reasons = 1 [packed = true];
+    }
+}
+
+message RoadViewMetricEvent {
+    optional logs.vms.roadview.RoadViewMetric road_view_metric = 1;
+}
+
+message RawGnssMeasurementEvent {
+    optional bytes encoded_measurements = 1;
+}
+
+message LiveActivityContentAppliedEvent {
+    optional string os_version = 1;
+    optional int32 time_since_earlist_pending_update_millis = 2;
+    optional int32 content_ve_type = 3;
+    optional bool has_alert_configuration = 4;
+}
+
+message FeatureChangedEvent {
+    repeated FeatureChange feature_changes = 1;
+    message FeatureChange {
+        optional Feature feature = 1;
+        optional ChangeType change_type = 2;
+    }
+    
+    optional Reason reason = 2;
+    enum Reason {
+        UNKNOWN_REASON = 0;
+        THERMAL_STATE = 1;
+        LOW_FRAME_RATE = 2;
+        LOW_BATTERY_LEVEL = 3;
+        LOW_POWER_MODE = 4;
+        NAV_STARTED = 5;
+        LOW_MAP_VIEWPORT_QUALITY = 6;
+        SUPPORTED_AREA = 7;
+        TRAFFIC_LAYER = 8;
+        SATELLITE_MODE = 9;
+        USER_INTERACTION = 10;
+    }
+    
+    enum Feature {
+        UNKNOWN_FEATURE = 0;
+        LAYER_3D = 1;
+        NAVIGATION_3D = 2;
+    }
+    
+    enum ChangeType {
+        UNKNOWN_CHANGE_TYPE = 0;
+        TURNED_OFF = 1;
+        TURNED_ON = 2;
+    }
+}
+
+message AndroidThermalStateEvent {
+    optional State state = 1;
+    enum State {
+        UNKNOWN_STATE = 0;
+        ERROR = 1;
+        NONE = 2;
+        LIGHT = 3;
+        MODERATE = 4;
+        SEVERE = 5;
+        CRITICAL = 6;
+        EMERGENCY = 7;
+        SHUTDOWN = 8;
+    }
+}
+
+message IosThermalStateEvent {
+    optional State state = 1;
+    enum State {
+        UNKNOWN_STATE = 0;
+        NOMINAL = 1;
+        FAIR = 2;
+        SERIOUS = 3;
+        CRITICAL = 4;
+    }
+}
+
+message CpuUsageStateEvent {
+    optional State state = 1;
+    enum State {
+        UNKNOWN_STATE = 0;
+        NORMAL = 1;
+        HIGH = 2;
+    }
+}
+
+message FpsStateEvent {
+    optional State state = 1;
+    enum State {
+        UNKNOWN_STATE = 0;
+        NORMAL = 1;
+        LOW = 2;
+    }
+}
+
+message DroppedFramesStateEvent {
+    optional int64 dropped_frames = 1;
+}
+
+message LiteNavTransitUsageEvent {
+    optional LiteNavTransitUsageEventType event = 1;
+    message LiteNavTransitUsageEventType {
+        oneof event {
+            RerouteCauseEvent reroute_cause = 1;
+            TopErrorStatusEvent top_error_status = 2;
+            InteractionEvent interaction = 3;
+            RerouteActionEvent reroute_action = 4;
+            logs_gmm.transportation.NavigationGuiderEvent navigation_guider = 5;
+        }
+    }
+}
+
+message RerouteCauseEvent {
+    optional RerouteCause reroute_cause = 1;
+    enum RerouteCause {
+        UNKNOWN = 0;
+        OFF_ROUTE = 1;
+        TRIP_INFEASIBLE = 2;
+        EARLIER_DEPARTURE = 3;
+        LATER_DEPARTURE = 4;
+    }
+}
+
+message TopErrorStatusEvent {
+    optional TopErrorStatus top_error_status = 1;
+    enum TopErrorStatus {
+        UNKNOWN = 0;
+        OFFLINE = 1;
+        NO_GPS = 2;
+        REROUTE = 3;
+    }
+}
+
+message InteractionEvent {
+    optional InteractionType interaction_type = 1;
+    enum InteractionType {
+        UNKNOWN = 0;
+        EXPAND_DEPARTURE_PICKER = 1;
+        SELECT_EARLIER_DEPARTURE = 2;
+        SELECT_LATER_DEPARTURE = 3;
+        EXPLICIT_START = 4;
+    }
+    
+    optional int32 step_group_index = 2;
+}
+
+message RerouteActionEvent {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN = 0;
+        SELECT_NEXT_FEASIBLE_DEPARTURE = 1;
+        SELECT_EARLIER_DEPARTURE = 2;
+        SELECT_LATER_DEPARTURE = 3;
+    }
+    
+    optional int32 step_group_index = 2;
+    optional bool failed = 4;
+    optional int32 departure_diff_seconds = 3;
+    optional string original_vehicle_token = 5;
+    optional .google.protobuf.Timestamp original_time = 6;
+    optional string updated_vehicle_token = 7;
+    optional .google.protobuf.Timestamp updated_time = 8;
+}
+
+message LapSummaryEvent {
+    repeated RollingLapCoverage rolling_lap_coverages = 1;
+    message RollingLapCoverage {
+        optional LaneGeometryType supported_lane_geometry_type = 1;
+        enum LaneGeometryType {
+            UNKNOWN = 0;
+            LACA = 1;
+            MAJOR_ROAD = 2;
+            EXPLICIT = 3;
+            LACA_INTERNAL = 4;
+            MAJOR_ROAD_INTERNAL = 5;
+        }
+        
+        optional int32 covered_lap_count = 2;
+        optional int32 total_maneuver_count = 3;
+    }
+    
+    optional int32 generation_status_code = 2 [deprecated = true];
+    optional int32 lane_decoration_status_code = 3;
+    repeated int32 lap_generation_status_codes = 4 [packed = true];
+}
+
+message StopEvent {
+    optional .google.protobuf.Timestamp stop_begin_time = 1;
+    optional .google.protobuf.Duration stop_duration = 2;
+    optional float min_speed_mps = 3;
+}
+
+message DisplayAlternatesEvent {
+    repeated AlternateTripInfo alternate_trip_infos = 1;
+    message AlternateTripInfo {
+        optional int32 trip_index = 1;
+        
+        optional SuppressReason suppress_reason = 2;
+        enum SuppressReason {
+            NONE = 0;
+            SUPPRESS_ALL_BY_LAP_ON_MAJOR_ROAD = 1;
+            SIMILAR_ETA_BUT_BETTER_TRAFFIC_CONDITION_IN_PRIMARY_TRIP = 2;
+            SIMILAR_ETA_AND_DISTANCE_COMPARED_TO_PRIMARY_TRIP = 3;
+            ALTERNATES_DEVIATE_AT_SAME_POINT = 4;
+        }
+    }
+}
+
+message GeminiInNavInvocationEvent {
+    optional EntryPoint entry_point = 1;
+    enum EntryPoint {
+        ENTRY_POINT_UNKNOWN = 0;
+        MIC_ICON_TAP = 1;
+        HOTWORD = 2;
+        PHYSICAL_SHORTCUT = 3;
+        AUTOMATIC_CONTINUATION = 4;
+    }
+    
+    optional bool is_barge_in = 2;
+    optional bool triggered_on_lockscreen = 3;
+}
+
+message GeminiInNavQueryEvent {
+    
+}
+
+message GeminiInNavResponseEvent {
+    
+}
+
+message GeminiInNavUserCancelEvent {
+    optional ConversationTurnStatus conversation_turn_status = 1;
+    enum ConversationTurnStatus {
+        UNKNOWN_STATUS = 0;
+        LISTENING = 1;
+        THINKING = 2;
+        RESPONDING = 3;
+        OTHERS = 4;
+    }
+    
+    optional TriggerType trigger_type = 2;
+    enum TriggerType {
+        UNKNOWN_TRIGGER_TYPE = 0;
+        MIC_ICON_TAP = 1;
+        NO_SPEECH = 2;
+        LOCKSCREEN = 3;
+    }
+}
+
+enum LocationSource {
+    UNKNOWN = 0;
+    RAW = 1;
+    RAW_ONLY = 2;
+    CLIENT_SNAPPED = 3;
+    CLIENT_SNAPPED_ONLY = 6;
+}
+
+enum GuidanceAlertType {
+    GUIDANCE_ALERT_TYPE_UNKNOWN = 0;
+    GUIDANCE_ALERT_TYPE_CHIME = 1;
+    GUIDANCE_ALERT_TYPE_CANNED = 2;
+    GUIDANCE_ALERT_TYPE_LOCAL_TTS = 3;
+    GUIDANCE_ALERT_TYPE_NETWORK_TTS = 4;
+    GUIDANCE_ALERT_TYPE_NETWORK_PREFETCHED_TTS = 5;
+    GUIDANCE_ALERT_TYPE_VIBRATION = 6;
+}

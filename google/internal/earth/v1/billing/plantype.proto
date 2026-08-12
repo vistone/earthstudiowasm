@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.billing;
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.billing";
+
+enum PlanType {
+    PLAN_TYPE_UNSPECIFIED = 0;
+    STANDARD = 1;
+    PROFESSIONAL = 2;
+    PROFESSIONAL_ADVANCED = 3;
+}

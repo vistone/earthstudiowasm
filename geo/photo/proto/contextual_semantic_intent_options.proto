@@ -1,0 +1,62 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "geostore/base/proto/featureid.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ContextualSemanticIntentProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message CompressedQbicaModel {
+    optional bytes data = 1;
+    optional float weight_multiplier = 2;
+    optional bytes uncompressed_phrase_info = 3;
+    optional string query = 4;
+    optional int32 language = 5;
+}
+
+message QueryEmbedding {
+    repeated float values = 1 [packed = true];
+    optional bytes data = 4;
+    optional CompressedQbicaModel sparse_data = 5;
+    
+    optional EmbeddingSource source = 2;
+    enum EmbeddingSource {
+        UNKNOWN_SOURCE = 0;
+        STARBURST_TEXT = 1;
+        CLIENT_MODEL = 2;
+        FOOD_SCALABLE_ATTRIBUTES = 3;
+        QUERY_IMAGE_STARBURST = 4;
+        GEO_OPEN_VOCAB = 5;
+        SEMANTIC_RANKING_INTENT = 6;
+    }
+    
+    optional string version = 3;
+}
+
+message ContextualSemanticIntentOptions {
+    repeated string mid = 1;
+    optional int32 num_to_uprank = 2;
+    optional CompressedQbicaModel qbica = 5;
+    repeated QueryEmbedding query_embeddings = 6;
+    repeated string unused_mids = 4;
+    
+    reserved 3;
+}
+
+message ContextualSemanticIntentOptionsForFeatures {
+    repeated ContextualSemanticIntentOptionsForFeature contextual_semantic_intent_options_for_feature = 1;
+    message ContextualSemanticIntentOptionsForFeature {
+        optional geostore.FeatureIdProto feature_id = 1;
+        optional string mid = 3;
+        optional ContextualSemanticIntentOptions contextual_semantic_intent_options = 2;
+    }
+    
+    extend .proto2.bridge.MessageSet {
+        optional ContextualSemanticIntentOptionsForFeatures message_set_extension = 434901337;
+    }
+}

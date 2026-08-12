@@ -1,0 +1,351 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "geostore/base/proto/segment.proto";
+import "logs/maps/featureid.proto";
+import "logs/proto/geo/transportation/locationsignals/affordance_vector.proto";
+import "logs/proto/maps/directions/copilot/traffic_report.proto";
+import "logs/proto/maps/directions/customization/config/serving_protos/trip_property_inputs.proto";
+import "logs/proto/maps/directions/customization/restricted_zones/navlog_restricted_zone_info.proto";
+import "logs/proto/maps/directions/mrp/affordances.proto";
+import "logs/proto/maps/directions/mrp/money.proto";
+import "logs/proto/maps/directions/tolls/proto/pricing_factors.proto";
+import "logs/proto/maps/pathfinder/compliance/proto/compliance_prediction_server.proto";
+import "logs/proto/maps/roadtraffic/proto/path_traffic_flavor.proto";
+import "logs/proto/maps/roadtraffic/proto/road_routability_disruption.proto";
+import "maps/pathfinder/client/generator-traffic-usage.proto";
+import "maps/pathfinder/client/travel_advisory.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedTripAnnotationsProto {
+    optional LoggedLatLngTripAnnotationProto lat_lngs = 1;
+    optional LoggedTravelTimeTripAnnotationProto static_travel_time = 3;
+    optional LoggedTrafficAwareTravelTimeTripAnnotationProto road_traffic_travel_time = 23;
+    optional LoggedDescriptionTripAnnotationProto description = 5;
+    optional LoggedIncidentsTripAnnotationProto incidents = 6 [deprecated = true];
+    optional LoggedTrafficReportTripAnnotationProto traffic_report = 7;
+    optional LoggedElectricVehicleTripAnnotationProto electric_vehicle = 8;
+    optional LoggedSegmentPropertiesTripAnnotationProto segment_properties = 9;
+    optional LoggedTollCostTripAnnotationProto toll_cost = 10;
+    optional LoggedAssistedDrivingTripAnnotationProto assisted_driving = 11;
+    optional LoggedMostAccurateTravelTimeTripAnnotationsProto most_accurate_travel_times = 12;
+    optional LoggedManeuverTripAnnotationProto maneuver = 16;
+    optional LoggedRelevantRestrictionsTripAnnotationProto relevant_restrictions = 17;
+    optional LoggedActiveRestrictionsTripAnnotationProto active_restrictions = 18;
+    optional LoggedComplianceTripAnnotationProto compliance = 21;
+    optional LoggedRequeryTripAnnotationProto requery = 24;
+    optional LoggedOfflineTestTripAnnotationProto offline_test = 26;
+    optional LoggedFuelConsumptionTripAnnotationProto fuel_consumption = 27;
+    optional LoggedRestrictedZonesTripAnnotationProto restricted_zones = 28;
+    optional LoggedAffordancesTripAnnotationProto affordances = 31 [deprecated = true];
+    optional LoggedRelevantAffordancesTripAnnotationProto relevant_affordances = 32;
+    optional LoggedActiveAffordancesTripAnnotationProto active_affordances = 33;
+    optional LoggedTravelTimeExternalityTripAnnotationProto travel_time_externality = 34;
+    optional maps_directions_customization_logs_serving_protos.LoggedTripPropertyInputs trip_property_inputs = 35;
+    optional LoggedDisruptionsTripAnnotationProto disruptions = 38;
+    
+    reserved 2, 29;
+}
+
+message LoggedPathAnnotationsProto {
+    optional LoggedTravelTimePathAnnotationProto static_travel_time = 3;
+    optional LoggedTrafficAwareTravelTimePathAnnotationProto road_traffic_travel_time = 23;
+    optional LoggedDescriptionPathAnnotationProto description = 5;
+    optional LoggedIncidentsPathAnnotationProto incidents = 6 [deprecated = true];
+    optional LoggedElectricVehiclePathAnnotationProto electric_vehicle = 8;
+    optional LoggedSegmentPropertiesPathAnnotationProto segment_properties = 9;
+    optional LoggedTollCostPathAnnotationProto toll_cost = 10;
+    optional LoggedRelevantRestrictionsPathAnnotationProto relevant_restrictions = 17;
+    optional LoggedActiveRestrictionsPathAnnotationProto active_restrictions = 18;
+    optional LoggedSearchPropertiesPathAnnotationProto search_properties = 19;
+    optional LoggedCompliancePathAnnotationProto compliance = 21;
+    optional LoggedOfflineTestPathAnnotationProto offline_test = 26;
+    optional LoggedFuelConsumptionPathAnnotationProto fuel_consumption = 27;
+    optional LoggedRestrictedZonesPathAnnotationProto restricted_zones = 28;
+    optional LoggedAffordancesPathAnnotationProto affordances = 31 [deprecated = true];
+    optional LoggedRelevantAffordancesPathAnnotationProto relevant_affordances = 32;
+    optional LoggedActiveAffordancesPathAnnotationProto active_affordances = 33;
+    optional LoggedTravelTimeExternalityPathAnnotationProto travel_time_externality = 34;
+    optional VoiceGuidancePathAnnotationProto voice_guidance = 35;
+    optional GuidancePathAnnotationProto guidance = 36;
+    optional LoggedDisruptionsPathAnnotationProto disruptions = 37;
+}
+
+message LoggedVertexAnnotationsProto {
+    optional LoggedTravelTimeVertexAnnotationProto static_cumulative_travel_time = 3;
+    optional LoggedTrafficAwareTravelTimeVertexAnnotationProto road_traffic_travel_time = 23;
+    optional LoggedSegmentPropertiesVertexAnnotationProto segment_properties = 9;
+    optional LoggedAssistedDrivingVertexAnnotationProto assisted_driving = 11;
+    optional LoggedManeuverVertexAnnotationProto maneuver = 16;
+    optional LoggedActiveRestrictionsVertexAnnotationProto active_restrictions = 18;
+    optional LoggedAffordancesVertexAnnotationProto affordances = 31 [deprecated = true];
+    optional LoggedRelevantAffordancesVertexAnnotationProto relevant_affordances = 32;
+    optional LoggedActiveAffordancesVertexAnnotationProto active_affordances = 33;
+    
+    reserved 2, 29;
+}
+
+message LoggedLatLngTripAnnotationProto {
+    
+}
+
+message LoggedTrafficAwareTravelTimeTripAnnotationProto {
+    
+}
+
+message LoggedTrafficAwareTravelTimePathAnnotationProto {
+    repeated LoggedTravelTimePathAnnotationProto travel_times_by_blending = 1;
+}
+
+message LoggedTrafficAwareTravelTimeVertexAnnotationProto {
+    
+}
+
+message LoggedTravelTimeTripAnnotationProto {
+    optional int64 elapsed_time_milliseconds = 2;
+    optional int64 raw_penalty_milliseconds = 3;
+    optional int32 traffic_covered_trip_length_millimeters = 4;
+}
+
+message LoggedTravelTimePathAnnotationProto {
+    optional roadtraffic.proto.LoggedBlendingSpecifier blending_specifier = 10;
+    optional int64 elapsed_time_milliseconds = 2;
+    optional int64 raw_penalty_milliseconds = 3;
+    optional int64 high_percentile_elapsed_time_milliseconds = 4;
+    optional int64 traffic_information_timestamp_milliseconds = 5;
+    optional int64 traffic_covered_path_length_millimeters = 6;
+    optional int64 departure_time_milliseconds = 9;
+}
+
+message LoggedTravelTimeVertexAnnotationProto {
+    
+}
+
+message LoggedDescriptionTripAnnotationProto {
+    optional string summary = 1;
+    repeated LoggedTravelAdvisory travel_advisories = 4;
+    optional bool has_road_beacons = 6;
+    optional bool has_closures = 7;
+    optional bool has_seasonal_closures = 8;
+}
+
+message LoggedTravelAdvisory {
+    optional string text = 1;
+    optional .pathfinder.TravelAdvisory.TravelAdvisoryCategory category = 3 [default = UNKNOWN];
+}
+
+message LoggedDescriptionPathAnnotationProto {
+    
+}
+
+message LoggedIncidentsTripAnnotationProto {
+    
+}
+
+message LoggedIncidentsPathAnnotationProto {
+    
+}
+
+message LoggedDisruptionsTripAnnotationProto {
+    
+}
+
+message LoggedDisruptionsPathAnnotationProto {
+    optional roadtraffic.proto.LoggedRoadRoutabilityDisruptionInfo disruption_info = 1;
+}
+
+message LoggedTrafficReportTripAnnotationProto {
+    optional copilot.LoggedTrafficReport traffic_report = 1;
+}
+
+message LoggedRelevantRestrictionsTripAnnotationProto {
+    
+}
+
+message LoggedRelevantRestrictionsPathAnnotationProto {
+    
+}
+
+message LoggedActiveRestrictionsTripAnnotationProto {
+    optional int64 penalty_delta_milliseconds = 1;
+    optional bool has_restricted_zone = 2;
+    optional bool has_active_closures = 3;
+    optional bool has_active_disruption_closures = 4;
+    optional bool has_active_dynamic_closures = 6;
+    optional double distance_on_dynamic_closures_meters = 7;
+    repeated logs_maps.FeatureIdProto actively_disrupted_segment_ids = 5;
+}
+
+message LoggedActiveRestrictionsPathAnnotationProto {
+    optional bool has_active_closures = 1;
+    optional bool has_active_disruption_closures = 5;
+    optional bool has_active_dynamic_closures = 6;
+    optional double distance_on_dynamic_closures_meters = 7;
+}
+
+message LoggedActiveRestrictionsVertexAnnotationProto {
+    optional bool has_active_closures = 1;
+    optional bool has_active_disruption_closures = 5;
+}
+
+message LoggedElectricVehicleTripAnnotationProto {
+    
+}
+
+message LoggedElectricVehiclePathAnnotationProto {
+    
+}
+
+message LoggedSegmentPropertiesTripAnnotationProto {
+    
+}
+
+message LoggedSegmentPropertiesPathAnnotationProto {
+    
+}
+
+message LoggedSegmentPropertiesVertexAnnotationProto {
+    optional geostore.SegmentProto.UsageCategory usage = 1;
+    optional geostore.SegmentProto.Priority priority = 2;
+    optional double length_meters = 12;
+}
+
+message LoggedTollCostAnnotationProto {
+    optional LoggedStatus status = 1;
+    enum LoggedStatus {
+        UNKNOWN_STATUS = 0;
+        UNKNOWN = 1;
+        KNOWN = 2;
+        INFEASIBLE = 3 [deprecated = true];
+    }
+    
+    optional LoggedMoneyVector price = 2;
+    optional tolls.proto.LoggedPricingFactors pricing_factors = 3;
+}
+
+message LoggedTollCostTripAnnotationProto {
+    optional LoggedTollCostAnnotationProto toll_cost = 1;
+}
+
+message LoggedTollCostPathAnnotationProto {
+    optional LoggedTollCostAnnotationProto toll_cost = 1;
+}
+
+message LoggedAssistedDrivingTripAnnotationProto {
+    
+}
+
+message LoggedAssistedDrivingVertexAnnotationProto {
+    
+}
+
+message LoggedMostAccurateTravelTimeTripAnnotationsProto {
+    
+}
+
+message LoggedManeuverTripAnnotationProto {
+    
+}
+
+message LoggedManeuverVertexAnnotationProto {
+    
+}
+
+message LoggedManeuverIdProto {
+    
+}
+
+message LoggedSearchPropertiesPathAnnotationProto {
+    optional .pathfinder.GeneratorTrafficUsage generator_traffic_usage = 3 [deprecated = true];
+}
+
+message LoggedComplianceTripAnnotationProto {
+    
+}
+
+message LoggedCompliancePathAnnotationProto {
+    optional double log_compliance_probability = 1;
+    optional double compliance_probability = 2;
+    optional pathfinder.compliance.proto.LoggedComplianceModelInput model_input = 3;
+}
+
+message LoggedRequeryTripAnnotationProto {
+    
+}
+
+message LoggedOfflineTestTripAnnotationProto {
+    
+}
+
+message LoggedOfflineTestPathAnnotationProto {
+    
+}
+
+message LoggedFuelConsumptionTripAnnotationProto {
+    optional int64 fuel_consumption_microliters = 1;
+}
+
+message LoggedFuelConsumptionPathAnnotationProto {
+    optional int64 fuel_consumption_microliters = 1;
+}
+
+message LoggedTravelTimeExternalityTripAnnotationProto {
+    optional int64 travel_time_externality_milliseconds = 1;
+}
+
+message LoggedTravelTimeExternalityPathAnnotationProto {
+    optional int64 travel_time_externality_milliseconds = 1;
+}
+
+message LoggedRestrictedZonesTripAnnotationProto {
+    optional geo_restricted_zones.LoggedZoneInfo zone_info = 1;
+}
+
+message LoggedRestrictedZonesPathAnnotationProto {
+    optional geo_restricted_zones.LoggedZoneInfo zone_info = 1;
+}
+
+message LoggedAffordancesTripAnnotationProto {
+    
+}
+
+message LoggedAffordancesPathAnnotationProto {
+    
+}
+
+message LoggedAffordancesVertexAnnotationProto {
+    repeated LoggedAffordanceEnums.Class affordance_class = 1 [packed = true];
+}
+
+message LoggedRelevantAffordancesTripAnnotationProto {
+    
+}
+
+message LoggedRelevantAffordancesPathAnnotationProto {
+    
+}
+
+message LoggedRelevantAffordancesVertexAnnotationProto {
+    repeated geo.transportation.locationsignals.LoggedAffordanceProto affordances = 1;
+}
+
+message LoggedActiveAffordancesTripAnnotationProto {
+    
+}
+
+message LoggedActiveAffordancesPathAnnotationProto {
+    
+}
+
+message LoggedActiveAffordancesVertexAnnotationProto {
+    repeated geo.transportation.locationsignals.LoggedAffordanceProto affordances = 1;
+}
+
+message VoiceGuidancePathAnnotationProto {
+    
+}
+
+message GuidancePathAnnotationProto {
+    
+}

@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Loggingderivedstate";
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message LoggingDerivedState {
+    optional bool is_search_open = 1;
+    optional bool is_searching = 2;
+    optional bool is_homescreen_visible = 3;
+    optional bool is_explore_ui_visible = 4;
+    optional bool is_in_project_ui_visible = 5;
+    optional bool is_earth_mate_chat_open = 6;
+    optional bool is_measure_tool_active = 7;
+    optional bool is_drawing_line_active = 8;
+    optional bool is_dropping_placemark_active = 9;
+}

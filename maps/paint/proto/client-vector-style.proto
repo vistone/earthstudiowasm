@@ -1,0 +1,747 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_generate_object_format.proto";
+import "maps/paint/proto/client-vector-label.proto";
+import "maps/paint/proto/client-vector-style-info.proto";
+import "maps/paint/proto/font-family.proto";
+import "maps/paint/proto/style-table-mapping.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint.client";
+
+message MultiZoomStyle {
+    optional fixed64 id = 1;
+    optional bool global = 4 [default = true];
+    optional string config_set = 3 [deprecated = true];
+    repeated KeyZoom key_zoom = 2;
+    
+    repeated MapStyleKeyZooms map_style_key_zooms = 5 [deprecated = true];
+    message MapStyleKeyZooms {
+        repeated maps_paint.StyleTableMapping.VersatileMapStyle map_style = 1;
+        repeated KeyZoom key_zoom = 2;
+    }
+    
+    optional SubStyles sub_styles = 6;
+    optional int32 z_plane_for_sorting = 1000 [deprecated = true];
+    
+    extensions 25000000 to max;
+}
+
+message LegendNamedStyleMapping {
+    optional int32 named_style_id = 1;
+    optional int32 global_style_id = 2;
+    optional ClientVectorStyleInfo client_vector_style_info = 3;
+}
+
+message SubStyles {
+    repeated int32 sub_style_tag = 1 [packed = true];
+    repeated int32 global_style_id = 2 [packed = true];
+}
+
+message AnnotationRankingOptions {
+    repeated int32 ordered_use_cases = 1 [packed = true];
+}
+
+message MultiZoomStyleTable {
+    repeated MultiZoomStyle multi_zoom_style = 1;
+    repeated LegendNamedStyleMapping named_style = 2;
+    optional int32 style_table_id = 3;
+    optional bytes style_table_consistency_key = 4;
+}
+
+message KeyZoom {
+    optional int32 zoom = 1;
+    optional AreaStyle area_style = 2;
+    optional LabelStyle label_style = 3;
+    optional LineStyle line_style = 4;
+    optional ShaderOpStyle shader_op_style = 5 [deprecated = true];
+    optional VolumeStyle volume_style = 6;
+    optional RasterStyle raster_style = 8;
+    optional PointStyle point_style = 9;
+    optional ModelStyle model_style = 10;
+    optional InstanceModelStyle instance_model_style = 11;
+    optional DepthAlphaStyle depth_alpha_style = 12;
+    optional ShadowStyle shadow_style = 13;
+    optional EnvironmentalStyle environmental_style = 14;
+    optional EdgeOutlineStyle edge_outline_style = 15;
+    optional UnlitStyle unlit_style = 16;
+    optional MeshGradientStyle mesh_gradient_style = 17;
+    optional ExtentCompressionStyle extent_compression_style = 18;
+    
+    extensions 1000 to max;
+}
+
+message CompactMultiZoomStyle {
+    optional int64 id = 1;
+    repeated CompactKeyZoom key_zoom = 2;
+    optional int32 sub_styles = 3;
+}
+
+message CompactMultiZoomStyleTable {
+    repeated CompactMultiZoomStyle multi_zoom_style = 1;
+    repeated AreaStyle area_style_table = 2;
+    repeated LabelStyle label_style_table = 3;
+    repeated LineStyle line_style_table = 4;
+    repeated ShaderOpStyle shader_op_style_table = 5 [deprecated = true];
+    repeated VolumeStyle volume_style_table = 6;
+    repeated RasterStyle raster_style_table = 7;
+    repeated SubStyles sub_styles_style_table = 17;
+    repeated ModelStyle model_style_table = 20;
+    repeated InstanceModelStyle instance_model_style_table = 21;
+    repeated DepthAlphaStyle depth_alpha_style_table = 22;
+    repeated ShadowStyle shadow_style_table = 24;
+    repeated EnvironmentalStyle environmental_style_table = 27;
+    repeated EdgeOutlineStyle edge_outline_style_table = 28;
+    repeated UnlitStyle unlit_style_table = 29;
+    repeated MeshGradientStyle mesh_gradient_style_table = 30;
+    repeated ExtentCompressionStyle extent_compression_style_table = 31;
+    repeated StrokeStyle stroke_style_table = 8;
+    repeated IconStyle icon_style_table = 9;
+    repeated AnnotationRankingOptions annotation_ranking_options_style_table = 16;
+    repeated GltfMaterialStyle gltf_material_style_table = 19;
+    repeated EntityPoseStrategies entity_pose_strategies_table = 23;
+    repeated string url_table = 10;
+    optional string url_prefix = 11;
+    optional string url_suffix = 12;
+    repeated LegendNamedStyleMapping named_style = 13;
+    optional bytes style_table_consistency_key = 15;
+    repeated Animation animation_table = 18;
+    optional int64 environmental_style_id = 26;
+}
+
+message CompactKeyZoom {
+    optional int32 zoom = 1;
+    optional int32 area_style = 2;
+    optional int32 label_style = 3;
+    optional int32 line_style = 4;
+    optional int32 shader_op_style = 5 [deprecated = true];
+    optional int32 volume_style = 6;
+    optional int32 raster_style = 7;
+    optional int32 gltf_material_style = 8 [deprecated = true];
+    optional int32 model_style = 9;
+    optional int32 instance_model_style = 10;
+    optional int32 depth_alpha_style = 11;
+    optional int32 shadow_style = 12;
+    optional int32 environmental_style = 13;
+    optional int32 edge_outline_style = 14;
+    optional int32 unlit_style = 15;
+    optional int32 mesh_gradient_style = 16;
+    optional int32 extent_compression_style = 17;
+}
+
+message AreaStyle {
+    repeated StrokeStyle stroke_style = 1;
+    repeated int32 stroke_style_index = 6;
+    optional int32 stroke_rendering_attributes = 9;
+    optional fixed32 fill_color_argb = 2;
+    optional int32 z_plane = 3;
+    optional bool stroke_off = 4;
+    optional bool fill_off = 5;
+    optional string texture_url = 7 [deprecated = true];
+    optional int32 texture_url_prefix_index = 8 [deprecated = true];
+    optional string configurable_texture_url = 10;
+    optional int32 configurable_texture_url_prefix_index = 11;
+    
+    optional TextureType texture_type = 12;
+    enum TextureType {
+        TEXTURE_UNKNOWN = 0;
+        TEXTURE_UV_MAPPED = 1 [deprecated = true];
+        TEXTURE_PATTERN = 2;
+        TEXTURE_GRAIN = 3;
+    }
+    
+    optional TextureBlendMode texture_blend_mode = 13;
+    enum TextureBlendMode {
+        BLEND_NORMAL = 0;
+        BLEND_MULTIPLY = 1;
+        BLEND_SCREEN = 2;
+    }
+    
+    optional TextureOffsetMode texture_offset_mode = 14;
+    enum TextureOffsetMode {
+        OFFSET_NONE = 0;
+        OFFSET_HALF_VERTICAL = 1;
+        OFFSET_HALF_HORIZONTAL = 2;
+    }
+    
+    optional int32 texture_minimum_version = 15;
+    optional float texture_super_sample_ratio = 16 [default = 4];
+}
+
+message LabelPositionOptions {
+    optional LabelRenderOp.TiePointPosition secondary_tie_point = 1 [default = CENTER_LEFT_TO_CENTER_RIGHT];
+    optional LabelGroup.Justification justification = 2 [default = LEFT_JUSTIFY];
+}
+
+message EntityPoseStrategy {
+    oneof strategy {
+        TerrainAnchorScreenSpace terrain_anchor_screen_space = 1;
+        WorldAnchorOrientTowardsUser world_anchor_user_facing = 2;
+        TerrainAnchorExplicitOrientation terrain_anchor_explicit_orientation = 3;
+    }
+    
+    message TerrainAnchorScreenSpace {
+        optional float fixed_elevation_meters = 1;
+    }
+    
+    message WorldAnchorOrientTowardsUser {
+        
+    }
+    
+    message TerrainAnchorExplicitOrientation {
+        optional float fixed_elevation_meters = 1;
+        optional float device_independent_pixels_per_meter = 2;
+    }
+}
+
+message EntityPoseStrategies {
+    repeated EntityPoseStrategy strategy = 1;
+}
+
+message LabelStyle {
+    optional fixed32 text_color = 1;
+    optional uint32 text_color_data_binding_key = 34;
+    optional fixed32 text_outline_color = 2;
+    repeated IconStyle icon = 3;
+    repeated int32 icon_index = 8 [packed = true];
+    optional InstanceModelStyle element_model = 24;
+    optional int32 element_model_index = 25;
+    optional FontStyle font = 4;
+    optional TextBoxStyle text_box_style = 5;
+    optional TextBoxWithInnerBoxStyle text_box_with_inner_box_style = 35;
+    optional int32 z_plane = 6;
+    optional AbsoluteLabelPosition.AnchorPoint primary_group_anchor_point = 9;
+    
+    optional ProjectionBehavior projection_behavior = 10 [default = PROJECTION_SCREEN_ALIGNED];
+    enum ProjectionBehavior {
+        UNKNOWN_PROJECTION_BEHAVIOR = 0;
+        PROJECTION_SCREEN_ALIGNED = 1;
+        PROJECTION_WORLD_ALIGNED = 2;
+    }
+    
+    optional bool off = 7;
+    optional sint32 anchor_offset_x = 11;
+    optional sint32 anchor_offset_y = 12;
+    optional sint32 inter_group_padding = 13;
+    optional sint32 inter_element_horizontal_padding = 28;
+    
+    optional LabelElementDirection label_element_direction = 29;
+    enum LabelElementDirection {
+        LABEL_ELEMENT_DIRECTION_DEFAULT = 0;
+        LABEL_ELEMENT_DIRECTION_REVERSE = 1;
+    }
+    
+    optional SubtitleAnnotationDirective subtitle_annotate = 14;
+    enum SubtitleAnnotationDirective {
+        SUBTITLE_ANNOTATE_UNKNOWN = 0;
+        SUBTITLE_ANNOTATE_AFTER_LAST_ELEMENT = 1;
+    }
+    
+    optional AnnotationRankingOptions annotation_ranking_options = 15;
+    optional int32 num_annotation_subtitles = 17;
+    optional int32 annotation_ranking_options_index = 16;
+    optional Animation animation = 18;
+    optional int32 animation_index = 19;
+    optional int32 animation_class = 21;
+    repeated LabelPositionOptions secondary_group_positions = 20;
+    optional EntityPoseStrategies pose_strategies = 22;
+    optional int32 pose_strategies_index = 23;
+    optional float max_distance_from_camera_target_meters = 26 [deprecated = true];
+    optional float max_culling_distance_meters = 32;
+    optional int32 min_pixels_between_repeats_eighths = 27;
+    optional bool enable_polyline_avoidance = 30 [default = false];
+    optional bool disable_exclusion_zone_avoidance = 31 [default = false];
+    optional int32 label_extra_collision_margin_dp = 33;
+}
+
+message IconStyle {
+    optional string icon_url = 1;
+    optional uint32 icon_url_data_binding_key = 8;
+    optional int32 icon_url_prefix_index = 5 [default = -1];
+    optional int32 icon_scale = 2 [default = 1];
+    optional float icon_scale_float = 14 [default = 1];
+    optional int32 icon_width = 3;
+    optional int32 icon_height = 4;
+    optional int32 icon_padding_top = 9;
+    optional int32 icon_padding_bottom = 10;
+    optional int32 icon_padding_left = 11;
+    optional int32 icon_padding_right = 12;
+    optional fixed32 highlight_color_rgb = 6 [default = 0xff000000];
+    optional uint32 highlight_color_rgb_data_binding_key = 13;
+    optional fixed32 color_filter_argb = 7;
+    
+    optional IconLayerSemantic icon_layer_semantic = 15;
+    enum IconLayerSemantic {
+        ICON_LAYER_SEMANTIC_UNSPECIFIED = 0;
+        ICON_LAYER_SEMANTIC_PICTOGRAM = 1;
+        ICON_LAYER_SEMANTIC_CONTAINER = 2;
+        ICON_LAYER_SEMANTIC_OUTLINE = 3;
+        ICON_LAYER_SEMANTIC_HIGHLIGHT = 4;
+    }
+    
+    extensions 1000000 to max;
+}
+
+message FontStyle {
+    optional int32 text_size = 1;
+    optional uint32 text_size_data_binding_key = 8;
+    optional int32 text_flags = 2;
+    optional int32 text_leading_percent = 3;
+    optional int32 text_tracking_permille = 4;
+    optional string font_name = 5 [deprecated = true];
+    optional FontFamily font_family = 7;
+    optional int32 outline_width = 6;
+    
+    enum FontFlags {
+        BOLD = 1;
+        ITALIC = 2;
+        ALLOW_VERTICAL_ORIENTATION = 4;
+        MEDIUM = 8;
+        LIGHT = 16;
+    }
+}
+
+message TextBoxStyle {
+    optional fixed32 text_box_outline_color = 1;
+    optional int32 text_box_outline_width = 2;
+    optional fixed32 text_box_fill_color = 3;
+    optional int32 caret_height = 4;
+    optional int32 caret_corner_offset_distance = 10;
+    optional int32 caret_height_corner = 11;
+    optional int32 caret_radius = 23;
+    repeated AbsoluteLabelPosition.AnchorPoint supported_anchor_points = 12;
+    optional int32 drop_shadow_offset = 5;
+    optional int32 drop_shadow_offset_minor_axis = 16;
+    optional fixed32 drop_shadow_color = 17;
+    optional int32 drop_shadow_blur_radius = 13;
+    optional int32 secondary_drop_shadow_offset = 24;
+    optional int32 secondary_drop_shadow_offset_minor_axis = 25;
+    optional fixed32 secondary_drop_shadow_color = 26;
+    optional int32 secondary_drop_shadow_blur_radius = 27;
+    optional int32 corner_radius = 14;
+    
+    optional ShapeType shape_type = 15 [default = RECT];
+    enum ShapeType {
+        RECT = 1;
+        ROUNDED_RECT = 2;
+        PILL = 3;
+    }
+    
+    optional bool allow_icon_nestling = 18 [default = false];
+    repeated IconStyle label_box_raster = 6;
+    repeated int32 label_box_raster_index = 9 [packed = true];
+    optional float major_axis_padding = 7;
+    optional float minor_axis_padding = 8;
+    optional float extra_padding_top = 19;
+    optional float extra_padding_right = 20;
+    optional float extra_padding_bottom = 21;
+    optional float extra_padding_left = 22;
+}
+
+message BoxStyle {
+    optional fixed32 outline_color = 1;
+    optional int32 outline_width = 2;
+    optional fixed32 fill_color = 3;
+    optional int32 corner_radius = 4;
+    
+    optional ShapeType shape_type = 5;
+    enum ShapeType {
+        SHAPE_TYPE_UNKNOWN = 0;
+        SHAPE_TYPE_RECT = 1;
+        SHAPE_TYPE_ROUNDED_RECT = 2;
+        SHAPE_TYPE_PILL = 3;
+    }
+    
+    optional bool allow_icon_nestling = 6 [default = false];
+    repeated IconStyle label_box_raster = 7;
+    repeated int32 label_box_raster_index = 8 [packed = true];
+    optional float major_axis_padding = 9;
+    optional float minor_axis_padding = 10;
+    optional float extra_padding_top = 11;
+    optional float extra_padding_right = 12;
+    optional float extra_padding_bottom = 13;
+    optional float extra_padding_left = 14;
+}
+
+message TextBoxWithInnerBoxStyle {
+    optional TextBoxStyle text_box_style = 1;
+    optional BoxStyle inner_box_style = 2;
+}
+
+message StrokeStyle {
+    optional fixed32 color_argb = 1;
+    optional uint32 color_argb_data_binding_key = 16;
+    optional fixed32 end_color_argb = 15;
+    optional int32 width = 2;
+    optional float min_width_scale = 20 [default = 1];
+    repeated int32 dash = 3;
+    optional int32 bevel_width = 6;
+    optional sint32 orthogonal_offset = 8;
+    optional string stamp_texture_url = 4;
+    optional int32 stamp_texture_url_prefix_index = 9;
+    optional int32 stamp_spacing_eighth_dp = 12;
+    optional int32 stamp_offset_eighth_dp = 14;
+    repeated fixed32 stamp_channel_colors = 5 [packed = true];
+    optional CustomCapStyle start_cap_style = 10;
+    optional CustomCapStyle end_cap_style = 11;
+    optional float animation_duration = 13;
+    optional float pbr_roughness_factor = 17 [default = 1];
+    optional fixed32 emissive_color_factor_rgb = 18 [default = 0xff000000];
+    optional fixed32 base_color_argb = 19;
+}
+
+message LineStyle {
+    repeated StrokeStyle stroke_style = 1;
+    repeated int32 stroke_style_index = 6 [packed = true];
+    repeated StrokeStyle extra_stroke_style = 14;
+    repeated int32 extra_stroke_style_index = 15 [packed = true];
+    optional fixed32 arrow_color_argb = 2 [deprecated = true];
+    optional int32 arrow_width = 3 [deprecated = true];
+    optional int32 z_plane = 4;
+    optional bool off = 5;
+    optional string start_cap_texture_url = 7 [deprecated = true];
+    optional int32 start_cap_texture_url_prefix_index = 8 [deprecated = true];
+    optional string end_cap_texture_url = 9 [deprecated = true];
+    optional int32 end_cap_texture_url_prefix_index = 10 [deprecated = true];
+    optional float cap_width_ratio = 11 [deprecated = true];
+    optional float cap_height_ratio = 13 [deprecated = true];
+    optional int32 stroke_rendering_attributes = 12 [default = 0];
+}
+
+message CustomCapStyle {
+    optional string alpha_mask_url = 1;
+    optional int32 alpha_mask_url_prefix_index = 3;
+    
+    reserved 2;
+}
+
+message WaterGradientStyle {
+    option deprecated = true;
+    optional fixed32 blur_color_rgb = 1;
+    optional fixed32 fill_color_rgb = 2;
+}
+
+message ShaderOpStyle {
+    option deprecated = true;
+    optional WaterGradientStyle water_gradient_style = 1;
+    optional int32 z_plane = 2;
+    optional bool off = 3;
+}
+
+message VolumeStyle {
+    optional fixed32 highlighted_edge_color_argb = 1;
+    optional int32 highlighted_edge_width = 2;
+    optional fixed32 fill_color_argb = 3;
+    optional fixed32 base_color_argb = 11;
+    optional float color_gradient_offset = 13;
+    optional int32 z_plane = 4;
+    optional bool off = 5;
+    optional float light_diffuse_factor = 6;
+    optional float light_ambient = 7;
+    optional fixed32 light_color = 8;
+    optional float light_azimuth = 9;
+    optional float light_altitude = 10;
+}
+
+message RasterStyle {
+    repeated float color_transform_matrix = 4 [packed = true];
+    optional int32 z_plane = 2 [default = -1];
+    optional bool off = 3;
+}
+
+message PointStyle {
+    optional fixed32 fill_color_argb = 1;
+    optional int32 radius = 2;
+    optional fixed32 stroke_color_argb = 3;
+    optional int32 stroke_width = 4;
+    optional int32 z_plane = 5;
+}
+
+message Animation {
+    optional IconAnimation icon_animation = 1;
+    optional TextAnimation text_animation = 3;
+    optional int32 version = 2;
+}
+
+message IconAnimation {
+    repeated IconLayerAnimation animations_in = 1;
+    repeated IconLayerAnimation animations_out = 2;
+    repeated IconLayerAnimation animations_steady_state = 3;
+    optional IconCompositeAnimation composite_in = 4;
+    optional IconCompositeAnimation composite_out = 5;
+    optional IconCompositeAnimation composite_steady_state = 6;
+}
+
+message IconLayerAnimation {
+    optional int32 duration_ms = 1;
+    optional float anchor_x = 2;
+    optional float anchor_y = 3;
+    optional AnimationCurve offset_x = 4;
+    optional AnimationCurve offset_y = 5;
+    optional AnimationCurve scale_x = 6;
+    optional AnimationCurve scale_y = 7;
+    optional AnimationCurve rotation = 8;
+    optional AnimationCurve opacity = 9;
+}
+
+message IconCompositeAnimation {
+    optional int32 duration_ms = 1;
+    optional AnimationCurve opacity = 2;
+}
+
+message TextAnimation {
+    optional TextElementAnimation animation_in = 1;
+    optional TextElementAnimation animation_out = 2;
+    optional TextElementAnimation animation_steady_state = 3;
+}
+
+message TextElementAnimation {
+    optional int32 duration_ms = 1;
+    optional AnimationCurve opacity = 2;
+}
+
+message TransitionAnimation {
+    optional IconTransitionAnimation icon_animation = 1;
+    optional TextTransitionAnimation text_animation = 3;
+    optional int32 version = 2;
+}
+
+message IconTransitionAnimation {
+    repeated IconLayerAnimation source_layer_transition = 2;
+    repeated IconLayerAnimation destination_layer_transition = 3;
+    repeated int32 cut_over_time_ms = 4;
+    
+    reserved 1;
+}
+
+message TextTransitionAnimation {
+    optional TextElementAnimation source_transition = 1;
+    optional TextElementAnimation destination_transition = 2;
+}
+
+message AnimationCurve {
+    repeated float values = 1 [packed = true];
+}
+
+message UnlitStyle {
+    optional float unlit_blend_factor = 1;
+}
+
+message MeshGradientStyle {
+    optional bool is_off = 1;
+    optional fixed32 base_color = 2;
+    optional float gradient_intensity = 3;
+    optional float color_gradient_offset = 4;
+}
+
+message GltfMaterialStyle {
+    optional bool is_off = 1;
+    optional fixed32 pbr_base_color_factor_argb = 2 [default = 0xffffffff];
+    optional float pbr_metallic_factor = 3 [default = 1];
+    optional float pbr_roughness_factor = 4 [default = 1];
+    optional float pbr_specular_factor = 16 [default = 1];
+    optional fixed32 emissive_color_factor_rgb = 5 [default = 0xff000000];
+    
+    optional AlphaMode alpha_mode = 6;
+    enum AlphaMode {
+        GLTF_ALPHA_MODE_UNKNOWN = 0;
+        GLTF_ALPHA_MODE_OPAQUE = 1;
+        GLTF_ALPHA_MODE_MASK = 2;
+        GLTF_ALPHA_MODE_BLEND = 3;
+    }
+    
+    optional float alpha_cutoff = 7 [default = 0.5];
+    optional bool double_sided = 8 [deprecated = true];
+    
+    optional TextureInfo normal_texture = 9;
+    message TextureInfo {
+        optional TextureUrl texture_url = 1;
+        optional uint32 url_data_binding_key = 2;
+        optional float scale = 3 [default = 1];
+    }
+    
+    optional TextureInfo occlusion_texture = 10;
+    optional TextureInfo emissive_texture = 11;
+    optional TextureInfo base_color_texture = 12;
+    optional TextureInfo metallic_roughness_texture = 13;
+    optional int32 animation_class = 14;
+    optional int32 z_plane = 15;
+    
+    message TextureUrl {
+        optional string url = 1;
+        optional int32 url_prefix_index = 2;
+    }
+}
+
+message ModelStyle {
+    optional GltfMaterialStyle gltf_material_style = 1;
+    optional int32 gltf_material_style_index = 2;
+    
+    optional TransparencyMode transparency_mode = 3 [default = TRANSPARENCY_MODE_DEFAULT];
+    enum TransparencyMode {
+        TRANSPARENCY_MODE_UNKNOWN = 0;
+        TRANSPARENCY_MODE_DEFAULT = 1;
+        TRANSPARENCY_MODE_TWO_PASSES_ONE_SIDE = 2;
+        TRANSPARENCY_MODE_DEPTH_WRITE = 3;
+    }
+    
+    optional OpacityModulation opacity_modulation = 4;
+    enum OpacityModulation {
+        OPACITY_MODULATION_UNKNOWN = 0;
+        OPACITY_MODULATION_CAMERA_TARGET_GRADIENT = 1;
+    }
+}
+
+message NamedModelStyles {
+    repeated Entry entries = 1;
+    message Entry {
+        optional string name = 1;
+        optional ModelStyle model_style = 2;
+        optional int32 model_style_index = 3;
+    }
+}
+
+message InstanceModelStyle {
+    repeated string gltf_model_url = 1;
+    repeated int32 gltf_model_url_prefix_index = 2 [packed = true];
+    
+    repeated Transform3D model_transform = 3;
+    message Transform3D {
+        repeated double scale = 1 [packed = true];
+        repeated double rotation = 2 [packed = true];
+        repeated double translation = 3 [packed = true];
+    }
+    
+    optional NamedModelStyles model_style_overrides = 4;
+    optional bool is_off = 5;
+}
+
+message DepthAlphaStyle {
+    optional Mode mode = 1 [default = MODE_NONE];
+    enum Mode {
+        MODE_UNKNOWN = 0;
+        MODE_NONE = 1;
+        MODE_DEPTH_ALPHA = 2;
+        MODE_OCCLUDER = 3;
+        MODE_DEPTH_ALPHA_OCCLUDER = 4;
+        MODE_PHYSICALLY_ORDERED = 5;
+        MODE_OCCLUDER_PHYSICALLY_ORDERED = 6;
+    }
+    
+    optional float min_alpha = 2;
+    optional float max_depth_meters = 3;
+    optional uint32 max_depth_meters_data_binding_key = 4;
+    optional float min_depth_meters = 5;
+    optional uint32 min_depth_meters_data_binding_key = 6;
+    optional float physical_order_offset_meters = 7;
+    optional uint32 physical_order_offset_meters_data_binding_key = 8;
+}
+
+message ShadowStyle {
+    optional ShadowMode mode = 1 [default = MODE_NONE];
+    enum ShadowMode {
+        MODE_UNKNOWN = 0;
+        MODE_NONE = 1;
+        MODE_CAST = 2;
+        MODE_RECEIVE = 3;
+        MODE_CAST_AND_RECEIVE = 4;
+    }
+    
+    optional float shadow_receiving_strength = 2 [default = 1];
+}
+
+message EnvironmentalStyle {
+    optional float directional_intensity = 1;
+    optional fixed32 directional_color_rgb = 2;
+    optional float directional_bearing = 3;
+    optional float directional_tilt = 4;
+    optional float directional_shadow_bearing = 14;
+    optional float directional_shadow_tilt = 15;
+    optional float ambient_intensity = 5;
+    optional float ambient_bearing = 6;
+    optional string ambient_cubemap = 16;
+    optional float ambient_flat_intensity = 7 [deprecated = true];
+    optional float fog_start_distance_multiplier = 8;
+    optional float fog_max_opacity = 13;
+    optional fixed32 fog_color_rgb = 9;
+    optional float fog_density_falloff_factor = 10;
+    optional bool fog_color_from_ibl = 11;
+    optional bool fog_enabled = 12;
+    optional string fog_cubemap = 17;
+    optional string skybox_cubemap = 18;
+    optional float max_draw_distance_meters = 19 [deprecated = true];
+    optional float max_draw_distance_from_target_meters = 20;
+    optional bool ssao_enabled = 21;
+    optional float ssao_strength = 22;
+    optional float ssao_strength_tilted = 23;
+    optional float ssao_strength_tilt_degrees = 24;
+    optional float ssao_power = 25;
+    optional float ssao_kernel_radius_meters = 26;
+    optional float ssao_bias_meters = 27;
+    optional float ssao_min_falloff_distance_meters = 28;
+    optional float ssao_max_falloff_distance_meters = 29;
+    optional int32 ssao_blur_kernel_radius_pixels = 30;
+    optional float ssao_blur_bilateral_distance_meters = 31;
+    optional bool camera_target_gradient_enabled = 32;
+    optional float camera_target_gradient_start_distance_meters = 33;
+    optional float camera_target_gradient_end_distance_meters = 34;
+}
+
+message EdgeOutlineStyle {
+    optional bool is_off = 1;
+    optional fixed32 outline_color_argb = 2 [deprecated = true];
+    optional float outline_width = 3 [deprecated = true];
+    optional fixed32 outer_outline_color_argb = 4;
+    optional float outer_outline_width = 5;
+    optional fixed32 inner_outline_color_argb = 6;
+    optional float inner_outline_width = 7;
+}
+
+message ExtentCompressionStyle {
+    optional float strength = 1;
+    optional float min_height_meters = 2;
+    
+    optional CompressionStrategy strategy = 3;
+    enum CompressionStrategy {
+        STRATEGY_UNKNOWN = 0;
+        STRATEGY_SQUASH = 1;
+    }
+    
+    optional float height_cap_meters = 4;
+}
+
+enum StrokeRenderingAttributes {
+    STROKE_RENDERING_UNKNOWN = 0;
+    STROKE_RENDERING_WITH_POINT_SPRITES = 1;
+    STROKE_RENDERING_MIN_WIDTH = 2;
+    STROKE_RENDERING_STAMP_TEXTURE_NO_REPEAT = 4;
+    STROKE_RENDERING_STAMP_TEXTURE_ANCHOR_END = 8;
+}
+
+enum AnimationClass {
+    UNKNOWN_ANIMATION_CLASS = 0;
+    ANIMATION_CLASS_BASEMAP_POI = 1;
+    ANIMATION_CLASS_BASEMAP_TINY_POI = 4;
+    ANIMATION_CLASS_LOCATION_SHARING_POI = 7;
+    ANIMATION_CLASS_LOCATION_SHARING_SELECTED_POI = 8;
+    ANIMATION_CLASS_SAVED_PLACES_POI = 14;
+    ANIMATION_CLASS_SEARCH_RESULT_PIN = 3;
+    ANIMATION_CLASS_SEARCH_RESULT_TINY_PIN = 5;
+    ANIMATION_CLASS_SEARCH_RESULT_EXTENDED_PIN = 6;
+    ANIMATION_CLASS_SPOTLIGHT_PIN = 2;
+    ANIMATION_CLASS_DEFAULT_PHOTO_PIN = 9;
+    ANIMATION_CLASS_MEDIUM_PHOTO_PIN = 13;
+    ANIMATION_CLASS_LARGE_PHOTO_PIN = 10;
+    ANIMATION_CLASS_ENTRANCE_PIN = 11;
+    ANIMATION_CLASS_ENTRANCE_TINY = 12;
+    ANIMATION_CLASS_MATERIAL_BASEMAP_POI = 15;
+    ANIMATION_CLASS_MATERIAL_BASEMAP_TINY_POI = 16;
+    ANIMATION_CLASS_SEARCH_NEARBY_PIN = 17;
+    ANIMATION_CLASS_DYNAMIC_EXTENDED_PIN_POI = 18;
+    ANIMATION_CLASS_DYNAMIC_EXTENDED_PIN_TINY_POI = 19;
+}

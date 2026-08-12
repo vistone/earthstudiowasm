@@ -1,0 +1,47 @@
+syntax = "proto2";
+
+package maps_spotlight;
+
+import "maps/tactile/api/ads-spotlight.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMSL";
+option java_multiple_files = true;
+option java_outer_classname = "DummySpotlightFlags";
+option java_package = "com.google.maps.spotlight";
+
+message SpotlightFlags {
+    optional string p13n_params = 2;
+    
+    optional DirectionsFlags directions_flags = 18;
+    message DirectionsFlags {
+        optional bool request_new_roundabout_semantics = 5 [default = false, deprecated = true];
+        optional bool enable_bikesharing = 20;
+        optional bool enable_ridesharing = 21;
+        optional bool suppress_taxi_promo_results = 6 [default = false];
+        optional bool enable_flight_prices = 9 [default = true];
+        
+        optional DirectionsPersonalizationCounterfactualTreatment directions_personalization_counterfactual_treatment = 14 [default = OMIT_PERSONAL_AND_MAYBE_LOG];
+        enum DirectionsPersonalizationCounterfactualTreatment {
+            OMIT_PERSONAL_AND_MAYBE_LOG = 0;
+            IGNORE_PERSONAL_AND_ALWAYS_LOG = 1;
+        }
+        
+        reserved 2, 7, 8, 10 to 13, 15 to 19, 22;
+    }
+    
+    optional bool from_maps_api_client = 14;
+    
+    optional PersonalizationFlags personalization_flags = 21;
+    message PersonalizationFlags {
+        optional bool disable_stars = 1;
+        optional bool disable_alias_pois = 2;
+    }
+    
+    optional AdsFlags ads_flags = 22;
+    message AdsFlags {
+        optional maps_tactile.AdColor ad_background_color = 6;
+        optional maps_tactile.AdColor ad_pin_color = 7;
+        optional maps_tactile.AdColor promoted_hotel_ad_background_color = 8;
+    }
+}

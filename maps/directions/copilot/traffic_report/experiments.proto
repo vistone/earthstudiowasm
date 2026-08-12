@@ -1,0 +1,62 @@
+syntax = "proto2";
+
+package maps_directions.copilot;
+
+import "maps/tactile/api/shared/internal/mendel-options.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TrafficReportExperiments";
+option java_package = "com.google.maps.directions.copilot.proto";
+
+message TrafficReportExperimentalParameters {
+    optional bool force_trend_in_traffic_report = 10 [default = false, deprecated = true];
+    optional bool force_urgent_traffic_report = 13 [default = false, deprecated = true];
+    
+    optional DepartureTimeType use_departure_time_in_commute_notifications = 16 [default = DEFAULT, deprecated = true];
+    enum DepartureTimeType {
+        DEFAULT = 0;
+        LEAVE_SOON = 1;
+        LEAVE_NOW = 3;
+    }
+    
+    optional string traffic_report_genx_migration_variant = 89 [default = "GENX_MIGRATION_UNSPECIFIED"];
+    optional string speed_camera_visible_countries = 19;
+    optional bool disable_stalled_vehicle = 83;
+    optional string police_presence_visible_countries = 54;
+    optional string mobile_speed_camera_visible_countries = 56;
+    optional bool enable_user_reported_crashes = 20;
+    optional bool enable_suspected_road_closures = 21 [default = false];
+    optional bool enable_on_route_suspected_closure = 30 [default = false];
+    optional bool enable_user_reported_construction = 27;
+    optional bool enable_lane_closure = 33;
+    optional bool enable_stalled_vehicle = 34 [deprecated = true];
+    optional bool enable_object_on_road = 35 [deprecated = true];
+    optional bool enable_snow = 37 [deprecated = true];
+    optional bool enable_fog = 38 [deprecated = true];
+    optional bool enable_flood = 39 [deprecated = true];
+    optional bool enable_non_jam_accidents_and_construction = 40;
+    optional bool enable_user_reported_lane_closure = 41;
+    optional bool enable_user_reported_stalled_vehicle = 42;
+    optional bool enable_user_reported_object_on_road = 43;
+    optional bool enable_user_reported_police_presence = 53;
+    optional bool enable_non_user_reported_police_presence = 51;
+    optional bool enable_user_reported_snow = 62;
+    optional bool enable_user_reported_fog = 63;
+    optional bool enable_user_reported_flood = 64;
+    optional bool enable_on_route_problem_audio = 28 [deprecated = true];
+    optional bool enable_crises_in_traffic_reports = 31 [default = false];
+    optional bool enable_test_crises_in_traffic_reports = 32 [default = false];
+    optional bool enable_road_closure_problem_items = 50 [default = false];
+    optional bool serve_midtrip_ugc_from_pdstore_launch = 71 [default = false];
+    optional bool enable_road_closures_in_ambient_traffic_reports = 84 [default = false];
+    optional bool enable_originator_details = 88 [default = false];
+    
+    reserved 1 to 5, 7 to 9, 12, 14, 15, 17, 18, 22 to 26, 29, 36, 44 to 49, 52, 55, 57 to 61, 65 to 70, 72 to 78, 79, 80 to 82, 85, 86, 87;
+    
+    enum GenXMigrationVariant {
+        GENX_MIGRATION_UNSPECIFIED = 0;
+        GENX_MIGRATION_NOOP = 1;
+        GENX_MIGRATION_STATIC_MESSAGES = 2;
+        GENX_MIGRATION_DYNAMIC_MESSAGES_WITHOUT_INFLECTION = 3;
+    }
+}

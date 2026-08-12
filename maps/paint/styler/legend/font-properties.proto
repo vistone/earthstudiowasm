@@ -1,0 +1,33 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "net/proto2/proto/descriptor.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+
+message FontProperties {
+    enum FontStyle {
+        STYLE_NORMAL = 0;
+        STYLE_ITALIC = 1;
+    }
+    
+    enum FontWeight {
+        WEIGHT_THIN = 100;
+        WEIGHT_EXTRA_LIGHT = 200;
+        WEIGHT_LIGHT = 300;
+        WEIGHT_NORMAL = 400;
+        WEIGHT_MEDIUM = 500;
+        WEIGHT_SEMI_BOLD = 600;
+        WEIGHT_BOLD = 700;
+        WEIGHT_EXTRA_BOLD = 800;
+        WEIGHT_ULTRA_BOLD = 900;
+    }
+    
+    extend .proto2.EnumValueOptions {
+        optional string font_name_prefix = 62561565;
+    }
+}

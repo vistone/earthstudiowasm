@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "Geometry3DProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message Point3d {
+    optional double x = 1 [default = 0];
+    optional double y = 2 [default = 0];
+    optional double z = 3 [default = 0];
+}
+
+message Vector3d {
+    optional double x = 1 [default = 0];
+    optional double y = 2 [default = 0];
+    optional double z = 3 [default = 0];
+}
+
+message Point3dWithNormal {
+    optional Point3d point = 1;
+    optional Vector3d normal = 2;
+}
+
+message Quaternion {
+    optional double x = 1;
+    optional double y = 2;
+    optional double z = 3;
+    optional double w = 4;
+}

@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "maps/pathfinder/client/mrp-cost-function-specification.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "MRPSelectorSpecificationProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message MRPSelectorSpecification {
+    optional MRPCostFunctionSpecification cost_function_spec = 1;
+    optional double better_route_cost_tolerance = 2;
+}

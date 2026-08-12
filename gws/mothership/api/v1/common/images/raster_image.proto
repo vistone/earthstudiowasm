@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package gws.mothership.api.v1.common.images;
+
+import "google/type/color.proto";
+import "gws/mothership/api/v1/common/net/url.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "MSPI";
+option java_multiple_files = true;
+option java_outer_classname = "RasterImageProto";
+option java_package = "com.google.gws.mothership.api.v1.common.images";
+
+message RasterImage {
+    Data data = 1;
+    message Data {
+        bytes raw_bytes = 1;
+        Encoding encoding = 2;
+    }
+    
+    net.Url url = 2;
+    int32 width = 3;
+    int32 height = 4;
+    google.type.Color background_color = 5;
+    string encrypted_docid = 6;
+    
+    enum Encoding {
+        UNSPECIFIED = 0;
+        JPEG = 1;
+        PNG = 2;
+        WEBP = 3;
+    }
+}

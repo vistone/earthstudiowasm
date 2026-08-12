@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package maps_roadtraffic;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GMRTC";
+option java_multiple_files = true;
+option java_outer_classname = "TrafficModelTypeProto";
+option java_package = "com.google.maps.roadtraffic.proto";
+
+enum TrafficModelType {
+    UNKNOWN_MODEL = 0;
+    PER_SEGMENT_REGRESSION_MODEL = 1;
+    GLOBAL_CAR_GLASSBOX_MODEL = 2;
+    GLOBAL_TWO_WHEELER_GLASSBOX_MODEL = 3;
+    REMOTE_PREDICTION_SINGLE_SEGMENT_MODEL = 4;
+    SUPERSEGMENT_MODEL = 5;
+    BLENDING_MODEL = 6;
+    TRAFFIC2VEC_MODEL = 7;
+}
+
+enum RoadIndexPresence {
+    UNKNOWN_ROAD_INDEX_PRESENCE = 0;
+    NOT_IN_ROAD_INDEX = 1;
+    IN_ROAD_INDEX = 2;
+}

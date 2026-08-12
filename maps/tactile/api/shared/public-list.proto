@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "PublicListProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message ListCategory {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN_TYPE = 0;
+        FOOD_AND_DRINK = 1;
+        THINGS_TO_DO = 2;
+        TRAVEL = 3;
+    }
+}
+
+message PublicListParams {
+    optional bool enable_scavenger_hunt_carousel = 1;
+    repeated ListCategory list_category = 2;
+    
+    repeated ListItemType list_item_type_restriction = 3;
+    enum ListItemType {
+        UNKNOWN_LIST_ITEM_TYPE = 0;
+        PLACE = 1;
+        EXPERIENCE = 2;
+    }
+}

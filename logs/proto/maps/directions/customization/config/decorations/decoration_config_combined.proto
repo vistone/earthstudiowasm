@@ -1,0 +1,12 @@
+syntax = "editions";
+
+package maps_rdp_logs;
+
+import "logs/proto/maps/directions/customization/config/decorations/decoration_config.proto";
+import "logs/proto/maps/directions/customization/config/domain_config.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedDecorationCustomizationData {
+    optional maps_directions_customization_logs.LoggedDomainConfig domain_config = 1;
+    optional LoggedDecorationConfig decoration_config = 2;
+}

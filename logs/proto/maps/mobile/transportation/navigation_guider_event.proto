@@ -1,0 +1,107 @@
+syntax = "editions";
+
+package logs_gmm.transportation;
+
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "google/type/latlng.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "LOGGMMT";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps.mobile.transportation";
+
+message NavigationGuiderEvent {
+    optional string trip_id = 1;
+    optional GuiderTripProgressEvent guider_trip_progress_event = 2;
+    repeated GuiderErrorEvent guider_error_event = 3;
+    optional GuiderProjectionOnPolyline last_good_projection_on_polyline = 4;
+    repeated GuiderRerouteEvent guider_reroute_event = 5;
+}
+
+message GuiderProjectionOnPolyline {
+    optional google.type.LatLng position = 1;
+    optional double bearing = 2;
+    optional double distance_meters = 3;
+    optional int32 polyline_index = 4;
+}
+
+message GuiderTripProgressEvent {
+    optional google.protobuf.Timestamp estimated_arrival_time_at_destination = 3;
+    optional google.protobuf.Duration estimated_duration_to_destination = 4;
+    optional int32 current_step_group_index = 5;
+    optional bool has_departed = 6;
+    optional google.protobuf.Duration estimated_duration_to_step_group_end_point = 8;
+    
+    optional HasDepartedSource has_departed_source = 10;
+    enum HasDepartedSource {
+        HAS_DEPARTED_SOURCE_UNKNOWN = 0;
+        HAS_DEPARTED_SOURCE_LOCATION = 1;
+        HAS_DEPARTED_SOURCE_YODAS_ACTIVITY_STATE = 2;
+    }
+    
+    optional GuiderYodasState yoda_state = 9;
+    
+    oneof details {
+        GuiderWalkingStepGroupProgressEvent walking_step_group_progress_event = 1;
+        GuiderTransitStepGroupProgressEvent transit_step_group_progress_event = 2;
+    }
+}
+
+message GuiderYodasState {
+    optional bool is_yodas_enabled = 1;
+}
+
+message GuiderWalkingStepGroupProgressEvent {
+    optional double remaining_distance_meters = 1;
+}
+
+message GuiderTransitStepGroupProgressEvent {
+    optional string vehicle_token = 1;
+    optional int32 current_stop_index = 2;
+    optional int32 remaining_stops = 3;
+}
+
+message GuiderErrorEvent {
+    oneof details {
+        DeviceOfflineError device_offline = 1;
+        NoGpsSignalError no_gps_signal = 2;
+    }
+    
+    message DeviceOfflineError {
+        
+    }
+    
+    message NoGpsSignalError {
+        
+    }
+}
+
+message GuiderRerouteEvent {
+    oneof details {
+        BetterMatchingEarlierDeparture better_matching_earlier_departure = 1;
+        BetterMatchingLaterDeparture better_matching_later_departure = 2;
+        OffRoute off_route = 3;
+        TripInfeasible trip_infeasible = 4;
+    }
+    
+    message BetterMatchingEarlierDeparture {
+        
+    }
+    
+    message BetterMatchingLaterDeparture {
+        
+    }
+    
+    message OffRoute {
+        optional int32 off_route_distance_meters = 1;
+        optional int32 step_group_index = 2;
+    }
+    
+    message TripInfeasible {
+        
+    }
+}

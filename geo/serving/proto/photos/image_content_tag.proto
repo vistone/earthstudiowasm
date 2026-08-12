@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "ImageContentTagProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+enum ImageContentTag {
+    UNKNOWN_IMAGE_CONTENT_TAG = 0;
+    COVER_PHOTO = 5;
+    INTERIOR = 1;
+    EXTERIOR = 2;
+    PRODUCT = 3;
+    BUSINESS_LOGO = 4;
+    MENU = 6;
+    PEOPLE = 7;
+    FOOD_AND_DRINK = 8;
+    STORE_INTERIOR = 9;
+    MAYBE_RECEIPT = 10;
+    RECEIPT = 11;
+    OUTDOOR_SEATING_AREA = 12;
+    PLACE_HIGHLIGHT_TAG = 13;
+    BUSINESS_HOURS = 14;
+}

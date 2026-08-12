@@ -1,0 +1,21 @@
+syntax = "editions";
+
+package geo_serving_proto.address;
+
+import "geo/serving/proto/address/formatted_address_type.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+;
+option objc_class_prefix = "GSPADR";
+option java_multiple_files = true;
+option java_outer_classname = "AddressOptionsProto";
+option java_package = "com.google.geo.serving.proto.address";
+
+message AddressOptions {
+    repeated FormattedAddressType address_types = 1;
+    optional bool include_address_components = 2;
+    optional bool include_open_location_code = 3;
+    optional int32 max_address_lines = 4 [default = 4];
+}

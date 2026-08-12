@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "logs/proto/maps/shared/geometry_e7.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "PolylineCodecProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedPolylineCodecOptions {
+    optional bool omit = 1;
+    optional float tolerance_meters = 2;
+    optional logs_maps_shared.RectE7 viewport = 3;
+    optional bool include_altitudes = 4;
+    optional LoggedEncodedPolyline.LoggedAltitudeMeasurementModel altitude_model = 9 [default = EGM_96];
+    optional bool include_annotations = 6;
+    
+    repeated LoggedAnnotationOption annotation_option = 7 [packed = true];
+    enum LoggedAnnotationOption {
+        ANNOTATE_ELEVATION_TYPE = 0;
+        ANNOTATE_BUILDING_LEVEL = 1;
+        ANNOTATE_ON_RIGHT = 2;
+        ANNOTATE_PRIORITY = 3;
+        ANNOTATE_SEGMENT_ID = 4;
+        ANNOTATE_SPEED_LIMIT = 5;
+        ANNOTATE_LOW_QUALITY_SPEED_LIMIT = 6;
+    }
+    
+    optional int32 soft_vertex_limit = 8;
+}
+
+message LoggedEncodedPolyline {
+    enum LoggedAltitudeMeasurementModel {
+        ALTITUDE_MEASUREMENT_MODEL_UNDEFINED = 0;
+        WGS_84 = 1;
+        EGM_96 = 2;
+    }
+}
+
+message LoggedEncodedPolylineWithData {
+    optional bytes data = 2;
+    optional bytes altitudes = 3;
+}

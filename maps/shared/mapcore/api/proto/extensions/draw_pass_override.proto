@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package mapcore;
+
+option objc_class_prefix = "SMC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.shared";
+
+message DrawPassOverride {
+    optional DrawPassID draw_pass_id = 1;
+    enum DrawPassID {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN = 0;
+        OCCLUDED_ROUTES = 1;
+        TRAFFIC = 2;
+        ROUTES = 3;
+        TURN_ARROWS = 4;
+        MY_LOCATION_DOT = 5;
+        RULER = 6;
+        BASEMAP = 7;
+    }
+}

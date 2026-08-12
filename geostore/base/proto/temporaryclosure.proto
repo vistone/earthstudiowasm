@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/datetime.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message TemporaryClosureProto {
+    oneof start {
+        DateTimeProto start_date = 1;
+        DateTimeProto start_as_of_date = 3;
+    }
+    
+    oneof end {
+        DateTimeProto end_date = 2;
+        DateTimeProto end_as_of_date = 4;
+    }
+}

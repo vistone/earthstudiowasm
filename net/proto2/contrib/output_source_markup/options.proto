@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package proto2.contrib.output_source_markup;
+
+import "net/proto2/proto/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.protobuf.contrib.output_source_markup.proto";
+
+extend FieldOptions {
+    optional bool flaky = 35519340 [default = false];
+    optional bool ignore = 39676381 [default = false];
+    optional bool ignore_order = 40841688 [default = false];
+    optional string serialized_proto_type = 289009870;
+}

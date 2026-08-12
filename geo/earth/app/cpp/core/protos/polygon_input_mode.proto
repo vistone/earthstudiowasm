@@ -1,0 +1,37 @@
+syntax = "editions";
+
+package earth.core.protos;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "PolygonInputModeProto";
+option java_package = "com.google.android.apps.earth.core.protos";
+
+message ProtoRequiresAtLeastOneMessageInFilePolygonInputMode {
+    
+}
+
+message InputModeState {
+    optional InputMode input_mode = 1;
+    optional InputModeRequester requester = 2;
+}
+
+enum InputMode {
+    INPUT_MODE_UNSPECIFIED = 0;
+    INPUT_MODE_DRAWING = 1;
+    INPUT_MODE_SELECTING = 2;
+}
+
+enum InputModeRequester {
+    INPUT_MODE_REQUESTER_UNSPECIFIED = 0;
+    CLIP_VIEW_MODEL = 1;
+    SLOPE_ANALYSIS_VIEW_MODEL = 2;
+    CUT_AND_FILL_ANALYSIS_VIEW_MODEL = 3;
+    CONTOUR_ANALYSIS_VIEW_MODEL = 4;
+    ASPECT_ANALYSIS_VIEW_MODEL = 5;
+    CLASSIFICATION_LAYER_VIEW_MODEL = 6;
+    IMAGERY_UPDATE_VIEW_MODEL = 7;
+    POLYGON_SELECTOR_VIEW_MODEL = 8;
+    CHANGE_DETECTION_VIEW_MODEL = 9;
+}

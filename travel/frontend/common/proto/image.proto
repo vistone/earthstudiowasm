@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package travel.frontend.common.proto;
+
+import "geo/photo/proto/image_key.proto";
+import "google/protobuf/timestamp.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/feature/tree_ref.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.travel.frontend.common.proto";
+
+message Image {
+    optional geo_photo_service.ImageKey image_key = 5;
+    optional string url = 1;
+    optional string high_resolution_url = 7;
+    optional int32 height = 2;
+    optional int32 width = 3;
+    optional string placeholder_url = 4 [deprecated = true];
+    optional logs.feature.TreeRef tree_ref = 6;
+    optional float score = 8;
+    
+    optional OwnerProfile owner_profile = 9;
+    message OwnerProfile {
+        optional string owner_name = 1;
+        optional string owner_photo_url = 2;
+        optional string owner_link = 3;
+    }
+    
+    optional .google.protobuf.Timestamp upload_time = 10;
+    
+    extensions 373080928;
+}

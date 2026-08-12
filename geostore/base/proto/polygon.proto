@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/polyline.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message PolygonProto {
+    repeated PolyLineProto loop = 1 [deprecated = true];
+    optional bytes encoded = 5;
+    optional float base_meters = 2;
+    optional float height_meters = 3;
+    optional uint64 cell_id = 4 [deprecated = true];
+    optional bool unsuitable_for_display = 6;
+    optional FieldMetadataProto metadata = 500;
+    optional .proto2.bridge.MessageSet temporary_data = 15;
+    
+    reserved 7;
+    
+    extend .proto2.bridge.MessageSet {
+        optional PolygonProto message_set_extension = 5464057;
+    }
+}

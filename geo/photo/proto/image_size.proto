@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ImageSizeProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message ImageSize {
+    optional int32 height = 1;
+    optional int32 width = 2;
+}

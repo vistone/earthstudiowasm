@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package maps_tactile.shared.placepreview;
+
+import "maps/shared/common/geom/geom.proto";
+import "maps/tactile/api/shared/photo/render-strategy.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPP";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoPreviewOptionsProto";
+option java_package = "com.google.maps.tactile.shared.placepreview";
+
+message PhotoPreviewOptions {
+    optional maps_shared.geom.Size photo_size = 1;
+    repeated maps_tactile.shared.photo.RenderStrategy supported_render_strategy = 2;
+    optional bool allow_3p_photo = 3;
+    optional bool allow_crawled_photo = 4;
+}

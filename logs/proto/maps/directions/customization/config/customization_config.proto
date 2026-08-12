@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package maps_directions_customization_logs;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedCustomizationConfig {
+    optional string domain = 1;
+    optional string name = 2;
+    repeated LoggedTripPropertyDependency trip_property_dependencies = 3;
+    
+    optional LoggedTravelMode travel_mode = 4;
+    enum LoggedTravelMode {
+        TRAVEL_MODE_UNSPECIFIED = 0;
+        TRAVEL_MODE_DRIVE = 1;
+        TRAVEL_MODE_BICYCLE = 2;
+        TRAVEL_MODE_WALK = 3;
+    }
+}
+
+message LoggedTripPropertyDependency {
+    optional string name = 1;
+    optional bool is_required = 2;
+}

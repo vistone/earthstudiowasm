@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package travel.transport.proto.price;
+
+import "frameworks/testing/rpcreplay/processors/rpc_replay_field_option.proto";
+import "google/protobuf/duration.proto";
+import "logs/eventid/eventid.proto";
+import "travel/transport/proto/shared/request_live_pricing_mode.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.travel.transport.proto.price.proto1api";
+
+message BookingModuleOptions {
+    optional bool is_cache_fill_like_client = 1;
+    optional bool is_accuracy_client = 2;
+    optional bool generate_live_keys = 3;
+    optional shared.RequestLivePricingMode request_live_pricing_mode = 18 [default = DISABLED];
+    optional bool return_detailed_availability = 4;
+    optional bool return_internal_statistics = 5;
+    optional bool return_debug_data = 6;
+    optional bool return_logs_price_info = 17;
+    optional bool wait_for_write = 7;
+    optional bool ignore_local_transfer_legs_heuristic = 8;
+    optional bool drop_local_subway_legs_heuristic = 9;
+    optional bool do_not_find_likely_priced_subtrip = 10;
+    optional EventIdMessage logs_event_id = 11;
+    optional google.protobuf.Duration cache_ttl_override = 12;
+    optional int32 crow_flight_distance_km_override = 13;
+    optional bool return_booking_itineraries = 14;
+    optional bool allow_simple_split_tickets = 15;
+    optional bool allow_multiple_service_classes = 16;
+}

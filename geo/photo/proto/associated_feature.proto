@@ -1,0 +1,71 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/freeform_annotation.proto";
+import "geo/photo/proto/object_id.proto";
+import "geostore/base/proto/openingstatus.proto";
+import "i18n/localization/proto/localized_text.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "AssociatedFeatureOuterClass";
+option java_package = "com.google.geo.photo.proto1api";
+
+message NormalizedPixelPoint {
+    optional float x = 1;
+    optional float y = 2;
+    optional float distance_from_camera = 3;
+}
+
+message Point3D {
+    optional float x = 1;
+    optional float y = 2;
+    optional float z = 3;
+}
+
+message Polygon3D {
+    repeated Point3D point = 1;
+    
+    enum Limits {
+        MIN_NUM_POINTS = 3;
+        MAX_NUM_POINTS = 10;
+    }
+}
+
+message Polygon {
+    repeated NormalizedPixelPoint point = 1;
+    
+    enum Limits {
+        MIN_NUM_POINTS = 3;
+        MAX_NUM_POINTS = 10;
+    }
+}
+
+message Geometry {
+    repeated NormalizedPixelPoint point = 1;
+    repeated Polygon polygon = 2;
+    repeated Polygon3D polygon_3d = 3;
+    
+    enum Limits {
+        option allow_alias = true;
+        MAX_NUM_POINTS = 10;
+        MAX_NUM_POLYGONS = 10;
+    }
+}
+
+message AssociatedFeature {
+    optional ObjectId object_id = 1;
+    optional Geometry geometry = 2;
+    optional i18n.localization.LocalizedTextProto name = 3;
+    optional i18n.localization.LocalizedTextProto category = 4;
+    optional string category_icon_url = 5;
+    optional FreeformAnnotation freeform_annotation = 6;
+    optional geostore.OpeningStatus opening_status = 8;
+    
+    reserved 7;
+}

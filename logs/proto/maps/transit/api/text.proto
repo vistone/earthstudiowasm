@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TextProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedLabel {
+    optional string long_text = 1;
+    optional string short_text = 2;
+    optional string language = 3;
+    
+    optional LoggedStyle style = 4;
+    enum LoggedStyle {
+        STYLE_UNKNOWN = 0;
+        STYLE_DEFAULT = 1;
+        STYLE_COLOR_TEXT = 2;
+        STYLE_TEXT_INSIDE_BOX = 3;
+        STYLE_TEXT_AFTER_BOX = 4;
+    }
+    
+    optional fixed32 text_color = 5;
+    optional fixed32 background_color = 6;
+}
+
+message LoggedText {
+    optional string summary_text = 1;
+    optional string full_text = 2;
+    optional string language = 3;
+}

@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geo_serving_proto.electricvehicle;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option objc_class_prefix = "GSPEV";
+option java_multiple_files = true;
+option java_outer_classname = "ChargingArchitectureProto";
+option java_package = "com.google.geo.serving.proto.electricvehicle";
+
+enum ChargingArchitecture {
+    UNKNOWN_CHARGING_ARCHITECTURE = 0;
+    AC = 1;
+    DC_V400 = 2;
+    DC_V800 = 3;
+    DC_V1000 = 4;
+}

@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package maps_util;
+
+import "maps/util/tile_coordinate.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMU";
+option java_multiple_files = true;
+option java_outer_classname = "TileBitmapProto";
+option java_package = "com.google.maps.util";
+
+message TileBitmap {
+    optional TileCoordinateProto top_left = 1;
+    optional int32 num_tiles_in_row = 2;
+    repeated fixed32 bitmap = 3;
+}

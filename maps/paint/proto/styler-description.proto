@@ -1,0 +1,75 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_disable_randomization.proto";
+import "maps/paint/proto/feature-selector.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "StylerDescriptionProto";
+option java_package = "com.google.maps.paint";
+
+message StylerDescription {
+    required StylerType type = 1;
+    enum StylerType {
+        STYLER_API = 37;
+        STYLER_BIKE = 27 [deprecated = true];
+        STYLER_CLICKABLE_REGIONS = 1 [deprecated = true];
+        STYLER_CUSTOM_MAP_API = 26;
+        STYLER_DRIVEABOUT = 13 [deprecated = true];
+        STYLER_FEATURE_SELECTOR = 25 [deprecated = true];
+        STYLER_GLOBE = 50;
+        STYLER_HIGH_DPI = 2;
+        STYLER_INDOOR_BLANKING = 55;
+        STYLER_INDOOR_BUILDING_DEEP_ZOOM = 79;
+        STYLER_LABELS_ONLY = 18;
+        STYLER_LAYERED_MAP_DEBUG = 29 [deprecated = true];
+        STYLER_LEGEND = 68;
+        STYLER_MOBILE_VECTOR = 35 [deprecated = true];
+        STYLER_MOBILE = 6 [deprecated = true];
+        STYLER_NO_LABELS = 3;
+        STYLER_OVERLAY = 30;
+        STYLER_OYSTER_FEATURE_BLANKING = 39;
+        STYLER_PLAIN_TERRAIN_BLANKING = 64 [deprecated = true];
+        STYLER_SATELLITE = 4 [deprecated = true];
+        STYLER_SPOTLIGHT = 52 [deprecated = true];
+        STYLER_SPOTLIGHT_GMM_V1 = 56 [deprecated = true];
+        STYLER_SPOTLIGHT_TERRAIN = 81 [deprecated = true];
+        STYLER_STREETVIEW_OVERLAY = 40;
+        STYLER_TACTILE = 47;
+        STYLER_TACTILE_TERRAIN = 63;
+        STYLER_TERRAIN = 5 [deprecated = true];
+        STYLER_TERRAIN_RASTER = 67;
+        STYLER_TRAFFIC = 14 [deprecated = true];
+        STYLER_TRAFFIC_OVERLAY = 15;
+        STYLER_TRANSIT = 19 [deprecated = true];
+        STYLER_TRANSIT_LAYER = 21;
+        STYLER_VECTOR = 20 [deprecated = true];
+        STYLER_VECTOR_TOWN = 38 [deprecated = true];
+        STYLER_NO_IMPLICIT_TILE_BACKGROUND = 91;
+        STYLER_IMPLICIT_MAPSEARCH = 1001;
+        STYLER_IMPLICIT_TERRAIN_NO_LABELS = 1013;
+    }
+    
+    repeated Parameter param = 2;
+    message Parameter {
+        required string key = 1;
+        optional string value = 2;
+    }
+    
+    optional FeatureSelectorList custom_map_styles = 3;
+    
+    optional StylerLegendSubtype styler_legend_subtype = 4;
+    enum StylerLegendSubtype {
+        STYLER_LEGEND_SUBTYPE_UNKNOWN = 0;
+        STYLER_LEGEND_SUBTYPE_3D = 1;
+        STYLER_LEGEND_SUBTYPE_SDK = 2;
+    }
+    
+    optional bool enable_client_applied_legend_styling = 5;
+    
+    extensions 100000 to max;
+}

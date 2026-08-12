@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package geo_serving_proto.health;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "Covid19VaccineParamsProto";
+option java_package = "com.google.geo.serving.proto.health";
+
+message Covid19VaccineParams {
+    optional VaccineCategory vaccine_category = 1;
+    enum VaccineCategory {
+        UNKNOWN_VACCINE_CATEGORY = 0;
+        ADULT = 1;
+        CHILDREN = 2;
+        BABY = 3;
+    }
+    
+    optional VaccineType vaccine_type = 2;
+    enum VaccineType {
+        UNKNOWN_VACCINE_TYPE = 0;
+        COVAXIN = 1;
+        JOHNSON_AND_JOHNSON = 2;
+        MODERNA = 3;
+        OXFORD_ASTRAZENECA = 4;
+        PFIZER = 5;
+        SPUTNIK = 6;
+        ZYCOV_D = 7;
+        COVISHIELD = 8 [deprecated = true];
+    }
+}

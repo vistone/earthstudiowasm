@@ -1,0 +1,254 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/contentflows/proto/content_reference.proto";
+import "geo/photo/metadata/proto/pano_semantic_map.proto";
+import "geo/photo/proto/attribution.proto";
+import "geo/photo/proto/client_capabilities.proto";
+import "geo/photo/proto/date_time.proto";
+import "geo/photo/proto/description.proto";
+import "geo/photo/proto/experimental.proto";
+import "geo/photo/proto/feature_set.proto";
+import "geo/photo/proto/image_attribute.proto";
+import "geo/photo/proto/image_key.proto";
+import "geo/photo/proto/internal_feature_description.proto";
+import "geo/photo/proto/localization_context.proto";
+import "geo/photo/proto/location.proto";
+import "geo/photo/proto/navigation.proto";
+import "geo/photo/proto/ocr_info.proto";
+import "geo/photo/proto/offering_contribution.proto";
+import "geo/photo/proto/photo_annotation.proto";
+import "geo/photo/proto/photo_by_feature_query.proto";
+import "geo/photo/proto/photo_by_lat_lng_query.proto";
+import "geo/photo/proto/photo_label.proto";
+import "geo/photo/proto/photo_query_options.proto";
+import "geo/photo/proto/publication_info.proto";
+import "geo/photo/proto/render_info.proto";
+import "geo/photo/proto/request_context.proto";
+import "geo/photo/proto/similarity_options.proto";
+import "geo/photo/proto/statistics.proto";
+import "geo/photo/proto/street_view_attributes.proto";
+import "geo/photo/proto/takedown.proto";
+import "geo/photo/proto/thumbnail_info.proto";
+import "geo/photo/proto/thumbnail_options.proto";
+import "geo/photo/proto/view_parameters.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "util/task/contrib/proto_status/proto_status.proto";
+import "util/task/status.proto";
+
+option features = enum_type: CLOSED
+repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "MetadataServiceProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+service MetadataService {
+    rpc GetMetadata(MetadataRequest) returns (MetadataResponse);
+    rpc GetConnectivity(AreaConnectivityRequest) returns (AreaConnectivityResponse);
+    rpc GetConnectivityZoomLevel(AreaConnectivityZoomLevelRequest) returns (AreaConnectivityZoomLevelResponse);
+    rpc SingleImageSearch(SingleImageSearchRequest) returns (SingleImageSearchResponse);
+}
+
+message MetadataRequest {
+    optional RequestContext context = 1;
+    optional LocalizationContext localization_context = 2;
+    repeated MetadataQuery query = 3;
+    optional MetadataResponseSpecification response_specification = 4;
+    optional string referrer_url = 5;
+}
+
+message MetadataResponse {
+    optional util.StatusProto status = 1;
+    repeated PhotoMetadata photo = 2;
+}
+
+message MetadataQuery {
+    optional ImageKey image_key = 1;
+    optional FeatureSet context_feature = 2;
+}
+
+message MetadataResponseSpecification {
+    repeated ResponseComponents component = 1;
+    enum ResponseComponents {
+        UNKNOWN_COMPONENT = 0;
+        RENDER_INFO = 1;
+        DESCRIPTION = 2;
+        ATTRIBUTION = 3;
+        GEOLOCATION = 4;
+        ASSOCIATED_FEATURES = 5;
+        NAVIGATION_LINKS = 6;
+        STATISTICS = 7;
+        ROUTE_ANNOTATIONS = 8;
+        EXPERIMENTAL = 9;
+        PUBLICATION_INFO = 10;
+        OFFERING_CONTRIBUTION = 11;
+        STREET_VIEW = 12;
+        OCR_INFO = 13;
+        LABELS = 14;
+        STARBURST = 15;
+        PHOTO_ANNOTATIONS = 16;
+        THUMBNAIL = 17;
+        PANO_SEMANTIC_MAP = 18;
+    }
+    
+    repeated NavigationChannelKey navigation_channel = 2;
+    
+    optional ProtoFormat http_response_format = 3 [default = JSPB];
+    enum ProtoFormat {
+        UNKNOWN_FORMAT = 0;
+        BINARY = 1;
+        JSPB = 2;
+    }
+    
+    optional AttributionOptions attribution = 4;
+    message AttributionOptions {
+        optional int32 thumbnail_size = 1 [default = 100];
+    }
+    
+    repeated CursorOverlayFormat cursor_format = 5;
+    repeated TargetOverlayFormat target_overlay_format = 6;
+    repeated AssociatedFeatureFormat annotation_label_format = 8;
+    optional ClientCapabilities client_capabilities = 9;
+    
+    optional PhotoAnnotationProperties photo_annotation_properties = 10;
+    message PhotoAnnotationProperties {
+        optional IconType icon_type = 1 [default = THUMBNAIL];
+        enum IconType {
+            UNKNOWN_ICON_TYPE = 0;
+            THUMBNAIL = 1;
+            MULTISTATE_CATEGORY = 2;
+        }
+        
+        optional ThumbnailCropType thumbnail_crop_type = 2 [default = CIRCLE];
+        enum ThumbnailCropType {
+            UNKNOWN_CROP_TYPE = 0;
+            CIRCLE = 1;
+            SQUARE = 2;
+        }
+        
+        optional int32 thumbnail_crop_size = 3 [default = 100];
+    }
+    
+    optional ThumbnailOptions thumbnail_options = 11;
+    
+    reserved 7;
+}
+
+message PhotoMetadata {
+    optional ResponseStatus status = 1;
+    optional ImageKey image_key = 2;
+    optional geo_content_flows.ContentReferenceProto content_reference = 20;
+    optional RenderInfo render_info = 3;
+    optional Description description = 4;
+    optional Attribution attribution = 5;
+    repeated NavigationChannel navigation_channel = 6;
+    optional ImageAttributes attributes = 7;
+    optional Takedown takedown = 8;
+    optional Statistics statistics = 9;
+    optional Experimental experimental = 10;
+    optional PublicationInfo publication_info = 11;
+    optional OfferingContributions offering_contributions = 12;
+    optional StreetViewAttributes street_view_attributes = 13;
+    optional OcrInfo ocr_info = 14;
+    repeated PhotoLabel labels = 15;
+    repeated geo_photo.VersionedDescriptor starburst = 16;
+    repeated PhotoAnnotation photo_annotation = 17;
+    repeated ThumbnailInfo thumbnail = 18;
+    optional UgcsContentInfo ugcs_content_info = 19;
+    optional geo_photo.metadata.PanoSemanticMap pano_semantic_map = 21;
+}
+
+message UgcsContentInfo {
+    optional geo_content_flows.ContentReferenceProto photo_content_reference = 1;
+    optional geo_content_flows.ContentReferenceProto group_content_reference = 2;
+}
+
+message ResponseStatus {
+    optional ResponseCode code = 1 [default = UNKNOWN_RESPONSE];
+    enum ResponseCode {
+        UNKNOWN_RESPONSE = 0;
+        OK = 1;
+        NOT_FOUND = 2;
+        PARTIAL_RESULT = 3;
+        ERROR = 4;
+    }
+}
+
+message AreaConnectivityRequest {
+    optional RequestContext context = 1;
+    
+    optional LatLngPolygon polygon = 2;
+    message LatLngPolygon {
+        repeated LatLng point = 1;
+    }
+    
+    optional LatLng first_point = 3;
+    optional string continuation_token = 4;
+    optional DateTime date = 5;
+    optional MercatorTile mercator_tile = 6;
+    optional NavigationChannelKey.Channel navigation_channel = 7 [default = GLOBAL];
+    optional bool include_target_orientation = 8;
+}
+
+message AreaConnectivityResponse {
+    optional util.StatusProto status = 1;
+    
+    optional ConnectivityGraph graph = 2;
+    message ConnectivityGraph {
+        repeated ConnectedVertex vertex = 2;
+        message ConnectedVertex {
+            optional Target image_info = 1;
+            repeated uint32 image_connection = 2;
+        }
+    }
+    
+    repeated ContinuationToken token = 3;
+    message ContinuationToken {
+        optional string token = 1;
+        optional LatLngRectangle region = 2;
+    }
+    
+    optional LatLngRectangle region = 4;
+    optional string self_reference_token = 5;
+    optional int32 index_of_first_external_vertex = 6;
+}
+
+message SingleImageSearchRequest {
+    optional RequestContext context = 1;
+    optional PhotoByLatLngQuery location = 2;
+    optional PhotoByFeatureQuery feature = 8;
+    optional FeatureDescription gps_feature_description_internal = 7 [deprecated = true];
+    optional ImageKey image_key = 5;
+    optional PhotoQueryOptions query_options = 3;
+    optional MetadataResponseSpecification response_specification = 4;
+    optional PixelResponseSpecification pixel_specification = 6;
+    optional string referrer_url = 9;
+}
+
+message SingleImageSearchResponse {
+    optional util.StatusProto status = 1;
+    optional PhotoMetadata metadata = 2;
+    optional ViewParameters view = 3;
+    optional SingleImageTile tile = 4;
+}
+
+message PixelResponseSpecification {
+    
+}
+
+message SingleImageTile {
+    optional int32 zoom_level = 1;
+    optional bytes tile_jpeg = 2 [ctype = CORD];
+}
+
+message AreaConnectivityZoomLevelRequest {
+    optional RequestContext context = 1;
+}
+
+message AreaConnectivityZoomLevelResponse {
+    repeated int32 zoom_level = 1;
+}

@@ -1,0 +1,522 @@
+syntax = "editions";
+
+package maps_versatile;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/paint/proto/interactivity.proto";
+import "maps/paint/proto/label-representation-tag.proto";
+import "maps/util/geometry-transform.proto";
+import "maps/versatile/proto/data-bound-value.proto";
+import "maps/versatile/proto/experimental_render_op_enums.proto";
+import "maps/versatile/proto/intent.proto";
+import "maps/versatile/proto/vector-feature.proto";
+import "maps/versatile/proto/vector-snapping.proto";
+import "maps/versatile/proto/vector-style.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option java_package = "com.google.maps.versatile";
+
+message VectorRenderOpProto {
+    optional Type type = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    enum Type {
+        TYPE_POLYLINE = 0;
+        TYPE_POLYGON = 1;
+        TYPE_MESH = 3;
+        TYPE_POINT = 14;
+        TYPE_LABEL_CANDIDATE = 2;
+        TYPE_PLACED_LABEL = 8;
+        TYPE_RASTER = 9;
+        TYPE_EXTRUDED_AREA = 10;
+        TYPE_SHADER_DATA = 11;
+        TYPE_GLTF_MODEL = 12;
+        TYPE_INSTANCE_MODEL = 13;
+        TYPE_POLYLINE_3D = 15;
+        TYPE_MESH_3D = 16;
+        TYPE_TILE_BACKGROUND = 4;
+    }
+    
+    optional VectorStyleProto style = 4;
+    optional bytes polyline = 5;
+    optional bytes polygon = 6;
+    optional MeshProto mesh = 20;
+    optional LabelCandidateSet label_candidate_set = 21;
+    optional RasterProto raster = 25;
+    optional ExtrudedAreaProto extruded_area = 26;
+    optional PointProto point = 34;
+    optional GltfModelProto gltf_model = 32;
+    optional InstanceModelProto instance_model = 33;
+    optional Polyline3DProto polyline_3d = 35;
+    optional Mesh3DProto mesh_3d = 37;
+    optional int32 feature_index = 13;
+    optional .proto2.bridge.MessageSet temp_data = 14;
+    optional int32 id = 15 [default = -1];
+    optional .proto2.bridge.MessageSet extended_data = 9;
+    optional maps_paint.InteractivityProto interactivity_data = 22;
+    optional int32 z_grade = 23;
+    optional float z_within_grade = 24;
+    optional bool do_not_clip = 27;
+    optional int32 min_additional_zoom = 28 [default = 0];
+    optional int32 max_additional_zoom = 29 [default = -1];
+    optional DataBoundValues data_bound_values = 31;
+    optional bool disable_client_logging = 36 [deprecated = true];
+    optional VectorLabelProto label = 7 [deprecated = true];
+    optional VectorLabelGroup label_group = 11 [deprecated = true];
+    
+    repeated ExperimentalTriggerCondition required_trigger_condition = 38;
+    message ExperimentalTriggerCondition {
+        repeated ExperimentalRenderOpTriggerId show_if_any_active = 1;
+        repeated ExperimentalRenderOpTriggerId suppress_if_any_active = 2;
+    }
+    
+    optional bool remove_in_additive_maps_filter = 39 [deprecated = true];
+    
+    repeated AdditiveMapsDropTag additive_maps_drop_tags = 41;
+    enum AdditiveMapsDropTag {
+        ADDITIVE_MAPS_DROP_TAG_UNKNOWN = 0;
+        ADDITIVE_MAPS_DROP_TAG_ZERO_STATE_GMM = 1;
+        ADDITIVE_MAPS_DROP_TAG_TBM_RASTER = 2;
+    }
+    
+    optional bool use_global_intents = 40;
+    
+    extensions 1000 to max;
+    
+    reserved 3, 10, 12, 16, 17, 18, 19, 30;
+    
+    reserved "polygon_base_meters", "polygon_height_meters", "end_of_layer", "min_zoom_level", "max_zoom_level", "style_index", "dynamic_label", "data_bound_style_value";
+    
+    enum ZGradeConstants {
+        VSTORE_Z_GRADE_DELTA = 10;
+    }
+}
+
+message DataBoundValues {
+    repeated DataBoundValue data_bound_value = 1;
+}
+
+message AbsolutePointPosition {
+    optional float reference_x = 1;
+    optional float reference_y = 2;
+    optional float offset_x = 3;
+    optional float offset_y = 4;
+    optional float rotation_degrees = 5;
+}
+
+message AbsolutePolylinePosition {
+    optional bytes reference_line = 1;
+    optional float inset = 2 [default = 0];
+    optional float orthogonal_offset = 3 [default = 0];
+    optional bool straighten = 4 [default = false, deprecated = true];
+}
+
+message RelativePosition {
+    optional Point reference_point = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    enum Point {
+        POINT_TOP_LEFT = 1;
+        POINT_TOP = 2;
+        POINT_TOP_RIGHT = 3;
+        POINT_LEFT = 4;
+        POINT_CENTER = 5;
+        POINT_RIGHT = 6;
+        POINT_BOTTOM_LEFT = 7;
+        POINT_BOTTOM = 8;
+        POINT_BOTTOM_RIGHT = 9;
+    }
+    
+    optional Point contact_point = 2 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional float offset_x = 3;
+    optional float offset_y = 4;
+}
+
+message LabelPosition {
+    optional AbsolutePointPosition point = 1;
+    optional AbsolutePolylinePosition polyline = 2;
+    optional RelativePosition relative = 3;
+}
+
+message TextDescription {
+    optional int32 feature_name_index = 1 [default = 0];
+    optional string language = 2;
+    optional string text = 3;
+    optional int32 wrap_width = 6;
+    optional int32 wrap_overrun = 7;
+    
+    reserved 4, 5;
+    
+    reserved "bound_width", "bound_height";
+}
+
+message VectorLabelProto {
+    optional LabelPosition position = 1;
+    optional TextDescription text = 2;
+}
+
+message VectorLabelGroup {
+    repeated VectorRenderOpProto render_op = 1;
+    optional LabelPosition position = 2;
+}
+
+message MeshDataProto {
+    optional bytes encoded_shape = 1;
+    optional bytes triangle_edge_strength = 2;
+}
+
+message GltfOpStyleInputs {
+    optional int32 material_index = 1;
+    repeated IntentProto intent = 2;
+    optional int32 feature_index = 3;
+}
+
+message GltfModelProto {
+    optional bytes serialized_model = 1 [ctype = CORD, deprecated = true];
+    repeated GltfOpStyleInputs style_inputs = 2;
+    optional maps_util.Transform3D transform = 3 [deprecated = true];
+    optional bool is_terrain_model = 4;
+    optional int32 gltf_node_index = 5;
+}
+
+message InstanceModelProto {
+    optional maps_util.Transform3D transform = 1;
+}
+
+message Polyline3DProto {
+    optional bytes polyline = 1 [ctype = CORD];
+    repeated int32 vertex_break = 2;
+    optional maps_util.Transform3D local_t_model = 3;
+}
+
+message Styled3DMesh {
+    optional bytes mesh_data = 1 [ctype = CORD];
+    repeated IntentProto intent = 2;
+    optional int32 feature_index = 3;
+}
+
+message Mesh3DProto {
+    repeated Styled3DMesh mesh = 1;
+    optional maps_util.Transform3D local_t_model = 2;
+    optional bool is_terrain_model = 3;
+    repeated float vertical_extents_begin_xyz = 4;
+    repeated float vertical_extents_end_xyz = 5;
+}
+
+message MeshProto {
+    optional MeshDataProto mesh_data = 1;
+    optional float scale = 2 [default = 1];
+    optional float offset_x = 3;
+    optional float offset_y = 4;
+    optional float offset_z = 5;
+}
+
+message RasterProto {
+    optional bytes data = 1 [ctype = CORD];
+    optional double render_scale = 2 [default = 1];
+    optional int32 translation_x_pixels = 3 [default = 0];
+    optional int32 translation_y_pixels = 4 [default = 0];
+    optional int32 width_pixels = 5;
+    optional int32 height_pixels = 6;
+}
+
+message LabelCandidateSet {
+    optional LabelCandidateGeometry geometry = 1;
+    repeated LabelCandidate candidate = 2;
+    optional bool exclusion_only = 3 [default = false];
+    repeated ExperimentalGeometry experimental_geometry = 4 [deprecated = true];
+    optional bool in_tile_only_when_user_in_geometry_experiment = 5 [default = false];
+}
+
+message LineLabelSeedPoint {
+    optional float priority = 1;
+    optional double inset = 2;
+    optional CandidatePosition position = 4;
+}
+
+message LabelCandidateGeometry {
+    optional GeometryType type = 1 [default = TYPE_NONE];
+    enum GeometryType {
+        TYPE_NONE = 0;
+        TYPE_POINT = 1;
+        TYPE_LINE = 2;
+        TYPE_AREA = 3;
+        TYPE_POINT_LOCAL_ST = 4;
+        TYPE_POINT_LOCAL_XYZ = 5;
+        TYPE_LINE_LOCAL_XYZ = 6;
+    }
+    
+    optional float point_x = 2;
+    optional float point_y = 3;
+    optional double point_x_double = 13;
+    optional double point_y_double = 14;
+    optional bytes polyline = 4;
+    optional double clipped_front_double = 11;
+    optional double clipped_back_double = 12;
+    optional double total_length = 22;
+    repeated LineLabelSeedPoint seed = 10;
+    optional bytes line_local_xyz = 18 [ctype = CORD];
+    repeated LineLabelSeedPoint seed_3d = 19;
+    optional maps_util.Transform3D line_local_t_model = 23;
+    optional bytes polygon = 6;
+    repeated float s2_relative_point_st = 15;
+    repeated float point_local_xyz = 16;
+    repeated float local_q_label = 17;
+    
+    oneof geometry_modifier {
+        GeometrySnapParameters geometry_snap_parameters = 20;
+        GeometryProjectionParameters geometry_projection_parameters = 21;
+    }
+    
+    reserved 5, 7, 8, 9;
+    
+    reserved "min_grade_level", "max_grade_level";
+}
+
+message ExperimentalZoom {
+    optional int32 zoom = 1;
+    optional uint32 experiment_id = 2;
+    
+    reserved 3;
+}
+
+message ExperimentalRank {
+    optional float rank = 1;
+    optional uint32 experiment_id = 2;
+}
+
+message ExperimentBoostable {
+    optional uint32 experiment_id = 1;
+    optional int32 min_boostable_zoom = 2;
+}
+
+message ExperimentalGeometry {
+    option deprecated = true;
+    optional uint32 experiment_id = 1;
+    optional LabelCandidateGeometry geometry = 2;
+    optional bool in_experiment_tile_bounds = 3 [default = false];
+}
+
+message RepresentationZoomsAndRank {
+    optional maps_paint_client.LabelRepresentationTag representation_tag = 1;
+    optional float rank = 2;
+    optional float min_zoom = 3;
+    optional float max_zoom = 4;
+}
+
+message ExperimentalRepresentationZoomsAndRanks {
+    option deprecated = true;
+    optional uint32 experiment_id = 1;
+    repeated RepresentationZoomsAndRank zooms_and_ranks = 2;
+}
+
+message LabelCandidate {
+    optional float rank = 1;
+    optional int32 min_zoom = 2;
+    optional int32 max_zoom = 3;
+    repeated ExperimentalZoom experimental_min_zoom = 5;
+    repeated ExperimentalRank experimental_rank = 7;
+    repeated ExperimentBoostable experimental_boost = 8;
+    optional LabelCandidateTemplate layout_template = 4;
+    optional int32 boostable_min_zoom = 9;
+    optional bool experiment_only = 10;
+    optional bool unplaced_in_pre_labeling = 11 [default = false];
+    
+    optional PassthroughDecision passthrough_decision = 12 [default = PASSTHROUGH_DECISION_UNKNOWN];
+    enum PassthroughDecision {
+        PASSTHROUGH_DECISION_UNKNOWN = 0;
+        KEEP_FOR_POI_PASSTHROUGH = 1;
+    }
+    
+    repeated RepresentationZoomsAndRank representation_zooms_and_rank = 14;
+    repeated ExperimentalRepresentationZoomsAndRanks experimental_representation_zooms_and_rank = 15 [deprecated = true];
+    optional fixed64 feature_id_fprint = 16;
+    
+    reserved 6;
+}
+
+message LabelCandidateTemplate {
+    repeated LabelTemplatePiece primary = 1;
+    repeated LabelTemplatePiece secondary = 2;
+    optional PrimaryPositionStrategy primary_position_strategy = 3;
+    optional SecondaryPositionStrategy secondary_position_strategy = 4;
+    optional VectorStyleProto primary_group_style = 6;
+    optional VectorStyleProto secondary_group_style = 7;
+    
+    reserved 5;
+    
+    reserved "outer_style";
+    
+    enum LabelClass {
+        UNKNOWN_LABEL_CLASS = 0;
+        LABEL_CLASS_TEXT = 1;
+        LABEL_CLASS_ICON = 2;
+        LABEL_CLASS_GROUP = 3;
+    }
+    
+    enum TextSubclass {
+        UNKNOWN_TEXT_SUBCLASS = 0;
+        TEXT_SUBCLASS_TITLE = 1;
+        TEXT_SUBCLASS_SUBTITLE = 2;
+        TEXT_SUBCLASS_AD_BADGE = 3 [deprecated = true];
+        TEXT_SUBCLASS_ROUTE_SNIPPET = 4 [deprecated = true];
+    }
+    
+    enum IconSubclass {
+        UNKNOWN_ICON_SUBCLASS = 0;
+        ICON_SUBCLASS_PRIMARY = 1;
+        ICON_SUBCLASS_PIN = 2;
+    }
+    
+    enum GroupSubclass {
+        UNKNOWN_GROUP_SUBCLASS = 0;
+        GROUP_SUBCLASS_OVERALL = 1;
+        GROUP_SUBCLASS_PRIMARY = 2;
+        GROUP_SUBCLASS_SECONDARY = 3;
+    }
+}
+
+message CandidatePosition {
+    optional Position relative_position = 1;
+    enum Position {
+        CENTER = 1;
+        LEFT = 2;
+        RIGHT = 3;
+        TOP = 4;
+        TOP_LEFT = 5;
+        TOP_RIGHT = 6;
+        BOTTOM = 7;
+        BOTTOM_LEFT = 8;
+        BOTTOM_RIGHT = 9;
+    }
+    
+    optional Justification justification = 3;
+    enum Justification {
+        CENTER_JUSTIFY = 1;
+        LEFT_JUSTIFY = 2;
+        RIGHT_JUSTIFY = 3;
+    }
+    
+    reserved 2;
+    
+    reserved "priority";
+}
+
+message CandidateTextWrapOptions {
+    optional float ideal_line_length = 1;
+    optional float max_line_overrun = 2 [default = 20];
+    optional int32 max_num_lines = 3;
+    
+    reserved 4, 5;
+}
+
+message CandidateJiggleOptions {
+    optional LabelingMode allowed_labeling_mode = 1;
+    enum LabelingMode {
+        ALL_MODES = 1;
+        VIEWPORT_AWARE = 2;
+    }
+    
+    optional int32 jiggle_radius = 2;
+}
+
+message LabelPieceSemanticInfo {
+    optional bool one_way_arrow = 1;
+    optional bool transit_line_icon_on_station = 2;
+}
+
+message PrimaryPositionStrategy {
+    optional CandidateJiggleOptions jiggle_options = 20;
+    
+    optional PointPositioningMode point_positioning_mode = 21 [default = FIXED];
+    enum PointPositioningMode {
+        FIXED = 0;
+        RELATIVE = 1;
+    }
+    
+    optional int32 close_label_threshold = 2;
+    optional int32 max_label_density = 3;
+    optional int32 max_type_label_density = 4;
+    optional int32 max_rendering_type_label_density = 22;
+    optional bool is_repeated = 5;
+    optional int32 label_margin = 8 [default = 2];
+    optional int32 label_margin_minor_axis = 19;
+    
+    optional PolylineAlignmentMode polyline_alignment_mode = 7 [default = NONE];
+    enum PolylineAlignmentMode {
+        NONE = 0;
+        OVER = 1;
+        LEFT = 2;
+        RIGHT = 3;
+        BOTH_SIDES = 4;
+    }
+    
+    optional StraighteningStrategy straightening_strategy = 14;
+    enum StraighteningStrategy {
+        NO_STRAIGHTENING = 0;
+        AVERAGE = 1;
+    }
+    
+    optional float inset = 15;
+    optional float orthogonal_offset = 17;
+    repeated CandidatePosition position = 9;
+    optional bool is_required = 11;
+    optional bool clobbering = 12;
+    optional CandidateTextWrapOptions text_wrap_options = 13;
+    optional bool suddenly_important = 16;
+    optional bool participate_in_implicit_exclusions = 18;
+    optional float rotation_degrees = 23;
+    
+    reserved 1, 6;
+    
+    reserved "align_to_polyline", "jiggle_radius";
+}
+
+message SecondaryPositionStrategy {
+    repeated CandidatePosition position = 2;
+    optional bool can_be_dropped = 3;
+    optional CandidateTextWrapOptions text_wrap_options = 4;
+    
+    reserved 1;
+    
+    reserved "relative_position";
+}
+
+message LabelTemplatePiece {
+    optional LabelCandidateTemplate.LabelClass label_class = 9;
+    optional int32 name_index = 1;
+    optional FeatureNameProto text = 13;
+    optional string language = 2;
+    optional string localization_policy_id = 8;
+    optional VectorStyleProto style = 3;
+    optional bool preceded_by_line_break = 6;
+    optional CandidateTextWrapOptions text_wrap_options = 7;
+    optional LabelPieceSemanticInfo semantic_info = 12;
+    
+    oneof label_subclass {
+        LabelCandidateTemplate.TextSubclass text_subclass = 10;
+        LabelCandidateTemplate.IconSubclass icon_subclass = 11;
+    }
+    
+    extensions 1000 to max;
+    
+    reserved 4, 5;
+    
+    reserved "style_index", "text_modifier";
+}
+
+message ExtrudedAreaProto {
+    repeated float min_z = 1 [features = repeated_field_encoding: EXPANDED
+    ];
+    repeated float max_z = 2 [features = repeated_field_encoding: EXPANDED
+    ];
+    optional bytes polygons = 3;
+}
+
+message PointProto {
+    optional double position_x = 1;
+    optional double position_y = 2;
+}

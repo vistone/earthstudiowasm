@@ -1,0 +1,56 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/ranksignal.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message RankDetailsProto {
+    repeated RankSignalProto signal = 13;
+    
+    optional SignalMixerType signal_mixer_type = 16 [default = MIXER_INVALID];
+    enum SignalMixerType {
+        MIXER_INVALID = 0;
+        MIXER_MISSING = 1;
+        MIXER_ADDRESS_AREA = 2;
+        MIXER_ROUTE_SEGMENT_INTERSECTION = 3;
+        MIXER_POLITICAL_EUROPA = 4;
+        MIXER_POLITICAL_AREA = 5;
+        MIXER_POLITICAL = 6;
+        MIXER_COUNTRY_EUROPA = 7;
+        MIXER_COUNTRY_AREA = 8;
+        MIXER_COUNTRY = 9;
+        MIXER_LOCALITY = 10;
+        MIXER_LOCALITY_GEOWIKI = 11;
+        MIXER_LOCALITY_EUROPA = 12;
+        MIXER_LOCALITY_AREA = 13;
+        MIXER_RIVER = 14;
+        MIXER_LENGTH_WEBSCORE = 15;
+        MIXER_SKENERGY = 16;
+        MIXER_GEOCENTRE_GEOCODED_ADDRESS = 17;
+        MIXER_PLACERANK = 18;
+        MIXER_TRANSIT = 19;
+        MIXER_LOCALITY_EUROPA_AREA = 20;
+        MIXER_WEBSCORE = 21;
+        MIXER_LOCALITY_MAPDATA_SCIENCES = 22;
+        MIXER_SUBLOCALITY_MAPDATA_SCIENCES = 23;
+        MIXER_PEAK = 24;
+        MIXER_BUILDING = 27;
+        MIXER_RESERVATION = 28;
+        MIXER_AIRPORT = 29;
+        MIXER_AREA = 30;
+        MIXER_MANAGER = 10000;
+        MIXER_TEST_1 = 10001;
+        MIXER_TEST_2 = 10002;
+        MIXER_TEST_3 = 10003;
+        MIXER_TEST_4 = 10004;
+        MIXER_TEST_5 = 10005;
+    }
+    
+    reserved 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 17;
+}

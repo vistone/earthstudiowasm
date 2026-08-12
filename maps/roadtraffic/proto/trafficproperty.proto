@@ -1,0 +1,49 @@
+syntax = "editions";
+
+package maps_roadtraffic;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option features = enum_type: CLOSED
+;
+option java_package = "com.google.roadtraffic.proto";
+
+message TrafficProperty {
+    enum SpeedCategory {
+        SPEED_NODATA = 0;
+        SPEED_STOPPED = 1;
+        SPEED_STOP_AND_GO = 2;
+        SPEED_SLOW = 3;
+        SPEED_NORMAL = 4;
+    }
+    
+    enum DisruptionCategory {
+        DISRUPTION_UNKNOWN = 0;
+        DISRUPTION_ROAD_CLOSED = 1;
+        DISRUPTION_JAMCIDENT = 2;
+        DISRUPTION_POSSIBLE_ROAD_CLOSED = 3;
+    }
+    
+    enum DelayCategory {
+        DELAY_NODATA = 0;
+        DELAY_HEAVY = 1;
+        DELAY_MEDIUM = 2;
+        DELAY_LIGHT = 3;
+    }
+    
+    enum TrafficLevelUsualness {
+        UNKNOWN_USUALNESS = 0;
+        MUCH_WORSE_THAN_USUAL = 1;
+        WORSE_THAN_USUAL = 2;
+        SAME_AS_USUAL = 3;
+        BETTER_THAN_USUAL = 4;
+    }
+    
+    enum LevelOfServiceCategory {
+        TRAFFIC_NODATA = 0;
+        TRAFFIC_STOPPED = 1;
+        TRAFFIC_STOP_AND_GO = 2;
+        TRAFFIC_SLOW = 3;
+        TRAFFIC_NORMAL = 4;
+    }
+}

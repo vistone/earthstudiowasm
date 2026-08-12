@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/durationbasedrate.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/timeschedule.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message TimeBasedRateProto {
+    repeated DurationBasedRateProto duration_based_rate = 1;
+    optional TimeScheduleProto valid_start_within = 2;
+    optional TimeScheduleProto valid_end_within = 3;
+    optional bool tax_included = 4 [default = false];
+}

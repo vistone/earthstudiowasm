@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "AdsProto";
+option java_package = "com.google.maps.tactile.shared";
+
+enum PlacesheetCreativeFormat {
+    UNKNOWN_PLACESHEET_CREATIVE_FORMAT = 0;
+    DEFAULT_CREATIVE_FORMAT = 1;
+}
+
+enum AdSubType {
+    UNKNOWN_AD_SUB_TYPE = 0;
+    SEARCH_AD_OLA = 1;
+    SEARCH_AD_WITH_CREATIVE = 2;
+    LOCAL_INVENTORY_AD = 3;
+    PLACE_TILE_AD = 4;
+}
+
+enum ATTManagerAuthorizationStatus {
+    UNKNOWN_ATT_MANAGER_AUTHORIZATION_STATUS = 0;
+    RESTRICTED = 1;
+    DENIED = 2;
+    AUTHORIZED = 3;
+    NOT_DETERMINED = 4;
+    NOT_CONFIGURED = 5;
+}

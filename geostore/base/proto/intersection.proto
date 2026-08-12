@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message IntersectionProto {
+    repeated FeatureIdProto segment = 1;
+    repeated FeatureIdProto out_segment = 2;
+    optional FeatureIdProto intersection_group = 3;
+    optional FeatureIdProto toll_cluster = 5;
+    
+    reserved 4;
+}

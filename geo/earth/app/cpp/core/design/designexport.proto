@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package earth.designexport;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.android.apps.earth.designexport";
+
+message PendingExport {
+    optional int32 export_id = 1;
+    optional int32 document_key = 2 [default = -1];
+    optional string design_name = 3;
+    
+    optional DesignExportStatus status = 4;
+    enum DesignExportStatus {
+        option features = enum_type: CLOSED
+        ;
+        DESIGN_EXPORT_STATUS_UNSPECIFIED = 0;
+        PENDING = 1;
+        SUCCESS = 2;
+        FAILED = 3;
+    }
+}

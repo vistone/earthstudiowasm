@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package maps_tactile.shared.transit;
+
+import "maps/tactile/api/shared/transit/transit-attribute-status.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHTR";
+option java_multiple_files = true;
+option java_outer_classname = "CarriageInfoProto";
+option java_package = "com.google.maps.tactile.shared.transit";
+
+message CarriageInfo {
+    optional string label = 1;
+    repeated TransitAttributeStatus attribute_status = 2;
+}

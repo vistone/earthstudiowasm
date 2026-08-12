@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package earth.document;
+
+import "geo/earth/proto/storage_restrictions.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "RoleProto";
+option java_package = "com.google.android.apps.earth.document";
+
+message ProtoRequiresAtLeastOneMessageInFileRole {
+    
+}
+
+enum Role {
+    ROLE_UNKNOWN = 0;
+    ROLE_REGULAR_DOCUMENT = 1;
+}

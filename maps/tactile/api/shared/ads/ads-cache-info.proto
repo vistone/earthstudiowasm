@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package maps_tactile.shared.ads;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option objc_class_prefix = "GMTTSHADS";
+option java_multiple_files = true;
+option java_outer_classname = "AdsCacheInfoProto";
+option java_package = "com.google.maps.tactile.shared.ads";
+
+message AdsCacheInfo {
+    repeated PreviousS2CellId previous_s2cell_id = 1;
+    message PreviousS2CellId {
+        optional int64 s2cell_id = 1 [jstype = JS_STRING];
+    }
+    
+    optional int64 response_timestamp_ms = 2 [jstype = JS_STRING];
+}

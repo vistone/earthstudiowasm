@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "photos/fife/logs_types.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "FullSizeFifeUrlOptionsProto";
+option java_package = "com.google.geo.photo";
+
+message FullSizeFifeUrlOptions {
+    optional photos.ClientType.Code photos_client = 1;
+    optional photos.ClientType.Code photos_client_no_caching = 2;
+}

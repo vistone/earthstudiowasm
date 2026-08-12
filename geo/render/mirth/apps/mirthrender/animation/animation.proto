@@ -1,0 +1,81 @@
+syntax = "proto2";
+
+package mirth_apps_mirthrender;
+
+import public "geo/render/mirth/apps/mirthrender/mirthrender.proto";
+
+option objc_class_prefix = "MTHR";
+
+message Animation {
+    optional string id = 1;
+    optional double frames_per_second = 2 [default = 30];
+    optional AttributeAnimation camera_animation = 4;
+    repeated Kml kml = 3;
+    repeated TextBox text_box = 5;
+}
+
+message AttributeAnimation {
+    repeated AttributeAnimationSegment segment = 1;
+}
+
+message AttributeAnimationSegment {
+    optional int32 index = 1;
+    optional double duration = 2;
+    optional Blend blend = 4;
+    optional string id = 5;
+    optional Ease ease = 6;
+    
+    oneof animation_oneof {
+        CameraPoiOrbit camera_poi_orbit = 7;
+        CameraTransition camera_transition = 8;
+        CameraHold camera_hold = 9;
+    }
+}
+
+message CameraPoiOrbit {
+    optional double rotations = 2 [default = 1];
+    optional LookAtCamera poi = 3;
+}
+
+message CameraTransition {
+    optional TransitionType type = 1 [default = LINEAR];
+    enum TransitionType {
+        option allow_alias = true;
+        LINEAR_DEFAULT = 0;
+        LINEAR = 0;
+        PARABOLIC = 1;
+        CONTEXTUAL = 2;
+    }
+    
+    optional LookAtCamera start = 2;
+    optional LookAtCamera end = 3;
+}
+
+message CameraHold {
+    optional LookAtCamera camera = 1;
+}
+
+message Blend {
+    optional double offset = 1;
+    optional Ease ease = 2;
+}
+
+message Ease {
+    optional EaseType type = 1 [default = LINEAR];
+    enum EaseType {
+        option allow_alias = true;
+        LINEAR_DEFAULT = 0;
+        LINEAR = 0;
+        EASE_IN = 1;
+        EASE_OUT = 2;
+        EASE_IN_OUT = 3;
+        ADJUSTABLE_EASE_IN_OUT = 4;
+    }
+    
+    optional double adjustable_in_duration_sec = 2;
+    optional double adjustable_out_duration_sec = 3;
+}
+
+message AnimationFrame {
+    optional LookAtCamera camera = 1;
+}

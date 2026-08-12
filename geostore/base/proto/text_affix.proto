@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message TextAffixProto {
+    optional string language = 1;
+    optional string prefix = 2;
+    optional string suffix = 3;
+}

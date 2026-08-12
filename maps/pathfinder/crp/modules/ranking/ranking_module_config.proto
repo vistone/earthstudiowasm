@@ -1,0 +1,13 @@
+syntax = "editions";
+
+package pathfinder.crp;
+
+import "maps/pathfinder/crp/ranking/pruning_config.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "RankingModuleConfigProto";
+
+message RankingModuleConfig {
+    optional bool prune_mid_trip_alts_diverging_at_same_segment = 1 [deprecated = true];
+    optional PruningConfig pruning_config = 2;
+}

@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package geo.search.transit;
+
+import "google/type/color.proto";
+import "gws/mothership/api/v1/common/images/image.proto";
+import "gws/mothership/api/v1/common/text/styled_text.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.transit";
+
+message TransitSymbol {
+    oneof renderable {
+        gws.mothership.api.v1.common.images.Image icon = 2;
+        TextBox text_box = 3;
+    }
+    
+    reserved 1;
+    
+    message TextBox {
+        optional gws.mothership.api.v1.common.text.StyledText text = 1;
+        optional google.type.Color background_color = 2;
+    }
+}

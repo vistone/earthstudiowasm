@@ -1,0 +1,42 @@
+syntax = "editions";
+
+package geo_photo;
+
+import "geo/photo/proto/similarity_options.proto";
+import "geo/photo/proto/timestamp_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPH";
+option java_multiple_files = true;
+option java_outer_classname = "RankingOptionsProto";
+option java_package = "com.google.geo.photo";
+
+message RankingOptions {
+    optional RankingStrategy ranking_strategy = 1;
+    optional double logistic_curvature = 2 [default = 6];
+    optional double logistic_offset = 3 [default = 2];
+    optional double distance_ratio = 4 [default = 0.04, deprecated = true];
+    optional TimestampOptions timestamp_options = 5;
+    optional string preferred_photo_descriptor = 7;
+    optional SimilarityOptions similarity_options = 8;
+    optional bool uprank_annotated_gsv = 9;
+    
+    repeated RankingModifier ranking_modifiers = 10;
+    enum RankingModifier {
+        RANKING_MODIFIER_UNSPECIFIED = 0;
+        FILTER_PEOPLE = 1;
+    }
+    
+    reserved 6;
+}
+
+enum RankingStrategy {
+    option features = enum_type: CLOSED
+    ;
+    BEST = 1;
+    CLOSEST = 2;
+    CENTERED = 3 [deprecated = true];
+    LATEST = 4;
+}

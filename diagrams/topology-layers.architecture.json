@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Earth Studio WASM — 8-Layer Topological Dependency Hierarchy",
+    "subtitle": "From zero-dependency foundation (L0) to analytics consumer (L7) — arrows point to dependencies",
+    "output": "topology-layers.html"
+  },
+  "components": [
+    { "id": "l0_proto", "type": "cloud", "label": "google/protobuf", "sublabel": "Any, Timestamp, Dur. (7f)", "pos": [40, 40], "size": [140, 54], "tag": "L0 Foundation" },
+    { "id": "l0_net", "type": "cloud", "label": "net/proto2", "sublabel": "descriptor + bridge (7f)", "pos": [200, 40], "size": [140, 54], "tag": "L0 Foundation" },
+    { "id": "l0_type", "type": "cloud", "label": "google/type", "sublabel": "LatLng, Money, Color (8f)", "pos": [360, 40], "size": [140, 54], "tag": "L0 Foundation" },
+    { "id": "l1_stor", "type": "security", "label": "storage/datapol", "sublabel": "★890 imports (9 files)", "pos": [40, 130], "size": [150, 58], "tag": "L1 Annotations" },
+    { "id": "l1_api", "type": "cloud", "label": "google/api", "sublabel": "★208 imports (11 files)", "pos": [210, 130], "size": [140, 58], "tag": "L1 Annotations" },
+    { "id": "l1_java", "type": "external", "label": "java/JSPB", "sublabel": "★208 imports (20 files)", "pos": [370, 130], "size": [140, 58], "tag": "L1 Annotations" },
+    { "id": "l2_gs", "type": "database", "label": "geostore/base", "sublabel": "FeatureId, Route (162f, 408⚡)", "pos": [40, 230], "size": [170, 58], "tag": "L2 Geo Storage" },
+    { "id": "l2_know", "type": "backend", "label": "knowledge/", "sublabel": "graph, protomesh (11f)", "pos": [240, 230], "size": [140, 54] },
+    { "id": "l3_serv", "type": "backend", "label": "geo/serving", "sublabel": "195 cross-domain links", "pos": [40, 330], "size": [150, 54], "tag": "L3 Base Services" },
+    { "id": "l3_photo", "type": "backend", "label": "geo/photo", "sublabel": "111 internal edges", "pos": [210, 330], "size": [130, 54], "tag": "L3 Base Services" },
+    { "id": "l3_paint", "type": "backend", "label": "maps/paint", "sublabel": "107 internal edges", "pos": [360, 330], "size": [130, 54], "tag": "L3 Base Services" },
+    { "id": "l4_earth", "type": "frontend", "label": "geo/earth/*", "sublabel": "Commands, ContentModel (175)", "pos": [40, 430], "size": [160, 58], "tag": "L4 App Core" },
+    { "id": "l4_tact", "type": "frontend", "label": "maps/tactile", "sublabel": "API, directions (241⚡)", "pos": [230, 430], "size": [150, 58], "tag": "L4 App Core" },
+    { "id": "l5_int", "type": "cloud", "label": "google/internal/earth", "sublabel": "billing, builtenv (48f)", "pos": [40, 530], "size": [160, 58], "tag": "L5 Internal API" },
+    { "id": "l5_path", "type": "backend", "label": "maps/pathfinder", "sublabel": "CRP, autonomous (37)", "pos": [230, 530], "size": [150, 54], "tag": "L5 Router" },
+    { "id": "l6_state", "type": "frontend", "label": "State + Presenters", "sublabel": "60+ slices, studio (L6)", "pos": [40, 630], "size": [160, 54], "tag": "L6 State" },
+    { "id": "l7_logs", "type": "database", "label": "logs/proto/*", "sublabel": "EarthEvent 89 types (181f)", "pos": [40, 730], "size": [170, 60], "tag": "L7 Top Consumer" }
+  ],
+  "boundaries": [
+    { "kind": "region", "label": "L0-L1: Foundation (0 deps)", "wraps": ["l0_proto", "l0_net", "l0_type", "l1_stor", "l1_api", "l1_java"] },
+    { "kind": "region", "label": "L2-L3: Storage + Base Services", "wraps": ["l2_gs", "l2_know", "l3_serv", "l3_photo", "l3_paint"] },
+    { "kind": "region", "label": "L4-L5: Application Core", "wraps": ["l4_earth", "l4_tact", "l5_int", "l5_path"] },
+    { "kind": "security-group", "label": "L6-L7: State + Analytics", "wraps": ["l6_state", "l7_logs"] }
+  ],
+  "connections": [
+    { "from": "l1_stor", "to": "l0_proto", "variant": "emphasis", "fromSide": "top", "toSide": "bottom", "label": "imports" },
+    { "from": "l1_api", "to": "l0_net", "fromSide": "top", "toSide": "bottom" },
+    { "from": "l1_java", "to": "l0_type", "fromSide": "top", "toSide": "bottom" },
+    { "from": "l2_gs", "to": "l1_stor", "variant": "emphasis", "fromSide": "top", "toSide": "bottom" },
+    { "from": "l2_gs", "to": "l1_api", "fromSide": "right", "toSide": "bottom" },
+    { "from": "l2_know", "to": "l1_java", "fromSide": "top", "toSide": "bottom" },
+    { "from": "l3_serv", "to": "l2_gs", "variant": "emphasis", "fromSide": "top", "toSide": "bottom" },
+    { "from": "l3_photo", "to": "l2_gs", "fromSide": "top", "toSide": "right" },
+    { "from": "l3_paint", "to": "l2_gs", "fromSide": "left", "toSide": "right" },
+    { "from": "l4_earth", "to": "l3_serv", "variant": "emphasis", "fromSide": "top", "toSide": "bottom", "label": "122" },
+    { "from": "l4_earth", "to": "l3_photo", "fromSide": "left", "toSide": "right" },
+    { "from": "l4_tact", "to": "l3_paint", "variant": "emphasis", "fromSide": "top", "toSide": "bottom" },
+    { "from": "l5_int", "to": "l4_earth", "fromSide": "top", "toSide": "bottom", "label": "23" },
+    { "from": "l5_path", "to": "l4_tact", "fromSide": "top", "toSide": "bottom" },
+    { "from": "l6_state", "to": "l5_int", "fromSide": "top", "toSide": "bottom" },
+    { "from": "l6_state", "to": "l4_earth", "fromSide": "right", "toSide": "right" },
+    { "from": "l7_logs", "to": "l6_state", "variant": "emphasis", "fromSide": "top", "toSide": "bottom", "label": "181" }
+  ],
+  "cards": [
+    { "dot": "cyan", "title": "L0-L1 (0 deps)", "items": ["google/protobuf: Timestamp, Any", "google/type: LatLng, Money, Color", "net/proto2: internal descriptor", "storage/datapol: 890 imports ★"] },
+    { "dot": "emerald", "title": "L2-L3 (Storage+Base)", "items": ["geostore/base: 408 internal ★", "geo/serving: 195 cross-domain", "geo/photo: 111 internal", "maps/paint: 107 internal"] },
+    { "dot": "violet", "title": "L4-L7 (App+Logs)", "items": ["geo/earth: Commands, ContentModel", "maps/tactile: 241 internal ⚡", "State: 60+ slices", "logs: EarthEvent 89 types, 223 internal"] }
+  ]
+}

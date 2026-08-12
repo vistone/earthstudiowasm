@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package maps_tactile.shared.ads;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHADS";
+option java_multiple_files = true;
+option java_outer_classname = "AdBannerProto";
+option java_package = "com.google.maps.tactile.shared.ads";
+
+message AdBanner {
+    optional string title = 1;
+    optional string description = 2;
+    optional string advertiser_name = 4;
+    optional string thumbnail_image_url = 7;
+    optional string call_to_action = 3;
+    optional string visible_url = 6;
+    optional string banner_click_url = 5;
+    optional bool is_supplier = 8;
+}

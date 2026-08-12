@@ -1,0 +1,40 @@
+syntax = "editions";
+
+package earth;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/config_id.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.android.apps.earth";
+
+message Arguments {
+    optional string origin = 1;
+    optional string mirth_disk_cache_path = 2;
+    optional string os_name = 3;
+    optional string os_version = 4;
+    optional string language_code = 5;
+    optional string op_api_key = 6;
+    repeated string experiment_params = 7;
+    optional double pick_radius = 8;
+    optional bool is_recovery_mode = 9;
+    optional string ios_bundle_id = 10;
+    optional int32 initial_width = 11;
+    optional int32 initial_height = 12;
+    optional string rocktree_url = 13;
+    optional string rocktree_epoch = 14;
+    optional bool use_card_fetcher = 15;
+    optional ConfigId config_id = 16;
+    optional string config_url_override = 17;
+    optional string client_version = 18;
+    optional string package_name = 19;
+    optional string android_signature = 20;
+    optional bool is_flutter = 21;
+    optional string firebase_api_key = 22;
+    optional int32 target_memory_usage = 23;
+}

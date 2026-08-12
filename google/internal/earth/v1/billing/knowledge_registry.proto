@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package google.internal.earth.v1.billing;
+
+option java_multiple_files = true;
+option java_outer_classname = "KnowledgeRegistryOuterClass";
+option java_package = "com.google.internal.earth.v1.billing";
+
+message KnowledgeRegistry {
+    repeated KnowledgeEntry entries = 1;
+    message KnowledgeEntry {
+        string entity_id = 1;
+        Category category = 2;
+        string agent_explanation = 3;
+    }
+    
+    enum Category {
+        CATEGORY_UNSPECIFIED = 0;
+        CAPABILITY = 1;
+        INDUSTRY = 2;
+        PRODUCT_LIMIT = 3;
+    }
+}

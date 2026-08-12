@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/image_size.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ThumbnailOptionsProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message PhotoThumbnailOptions {
+    optional ImageSize min_dimension = 1;
+    optional string tag = 2;
+    optional bool force_crop = 3 [default = false];
+    optional bool fetch_base_url = 4 [default = false];
+}
+
+message ThumbnailOptions {
+    repeated ImageSize min_dimensions = 1 [deprecated = true];
+    repeated PhotoThumbnailOptions photo_thumbnail_options = 3;
+    optional bool suppress_animation = 2 [deprecated = true];
+    
+    reserved 4;
+}

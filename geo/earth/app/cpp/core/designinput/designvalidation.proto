@@ -1,0 +1,101 @@
+syntax = "editions";
+
+package earth.designinputvalidation;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "google/internal/earth/v1/builtenv/use_type_class.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+
+message DesignValidation {
+    repeated InputCategoryValidationErrors validation_errors = 1;
+    repeated InputCategoryValidationErrors validation_warnings = 2;
+}
+
+message InputCategoryValidationErrors {
+    optional InputCategory input_category = 1;
+    enum InputCategory {
+        UNKNOWN = 0;
+        BUILDING = 1;
+        USE_TYPE = 2;
+        PARKING = 3;
+        ZONING = 4;
+        PROGRAM = 5;
+    }
+    
+    optional string context_id = 2;
+    repeated ValidationError errors = 3;
+}
+
+message ValidationError {
+    optional ValidationErrorType error_type = 2;
+    enum ValidationErrorType {
+        UNKNOWN = 0;
+        REQUIRED_USE_TYPE_MISSING = 1;
+        OPTIONAL_USE_TYPE_MISSING = 2;
+        ALL_PARKING_RATIOS_ZERO = 3;
+        ALL_PARKING_STRATEGIES_DISABLED = 4;
+        OUT_OF_RANGE = 5;
+        PROGRAM_SITEWIDE_USE_TYPE_PERCENTAGES_GREATER_THAN_ONE_HUNDRED = 6;
+        UNIT_MIX_PERCENTAGES_NOT_ONE_HUNDRED = 7 [deprecated = true];
+        STRING_FIELD_NOT_UNIQUE = 8;
+        BUILDING_NAME_MISSING = 9;
+        BUILDING_TOO_TALL = 10;
+    }
+    
+    oneof context {
+        UseTypeErrorContext use_type = 3;
+        ZoningErrorContext zoning = 4;
+        ProgramErrorContext program = 5;
+    }
+}
+
+message UseTypeErrorContext {
+    oneof use_type {
+        google.internal.earth.v1.builtenv.UseTypeClass use_type_class = 1 [features = ];
+        string use_type_display_name = 2;
+    }
+}
+
+message ZoningErrorContext {
+    optional ZoningField zoning_field = 1;
+    enum ZoningField {
+        UNKNOWN = 0;
+        MAX_BUILDING_COVERAGE_RATIO = 1;
+        MAX_FLOOR_AREA_RATIO = 2;
+        MAX_HEIGHT_M = 3;
+        MIN_OPEN_GREEN_SPACE_RATIO = 4;
+        FRONT_YARD_SETBACK_M = 5;
+        REAR_YARD_SETBACK_M = 6;
+        SIDE_YARD_SETBACK_M = 7;
+    }
+    
+    optional ValidRange valid_range = 3;
+}
+
+message ValidRange {
+    optional double min = 1;
+    optional double max = 2;
+    
+    optional RangeSource type = 3 [default = UNKNOWN];
+    enum RangeSource {
+        UNKNOWN = 0;
+        DEFAULT = 1;
+        USER = 2;
+    }
+}
+
+message ProgramErrorContext {
+    optional ProgramField program_field = 1;
+    enum ProgramField {
+        UNKNOWN = 0;
+        SITEWIDE_FLOOR_AREA_RATIO_TARGET = 1;
+        PARCEL_FLOOR_AREA_RATIO_TARGET = 2;
+    }
+    
+    optional ValidRange valid_range = 2;
+}

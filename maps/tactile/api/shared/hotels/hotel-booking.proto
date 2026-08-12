@@ -1,0 +1,450 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "geo/serving/proto/ads/my_ad_center_panel_data.proto";
+import "geo/serving/proto/hotels/livequery/display_price_state.proto";
+import "geo/serving/proto/hotels/occupancy.proto";
+import "geo/serving/proto/link/link.proto";
+import "geo/serving/proto/scalableattributes/scalableattributes.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/maps/shared/lodging_pricing_information.proto";
+import "logs/proto/visual_element/hotel_booking_partner_data.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/paint/proto/client-vector-ops.proto";
+import "maps/tactile/api/logged-link.proto";
+import "maps/tactile/api/shared/ads/ad-banner.proto";
+import "maps/tactile/api/shared/hotels/annotation-ranking.proto";
+import "maps/tactile/api/shared/hotels/hotel-amenity.proto";
+import "maps/tactile/api/shared/hotels/hotel-aspect-type.proto";
+import "maps/tactile/api/shared/hotels/hotel-booking-disclosure.proto";
+import "maps/tactile/api/shared/hotels/hotel-booking-options.proto";
+import "maps/tactile/api/shared/hotels/lodging-type.proto";
+import "maps/tactile/api/shared/hotels/maps-live-query-result.proto";
+import "maps/tactile/api/shared/hotels/rate-features.proto";
+import "maps/tactile/api/shared/hotels/room-cluster.proto";
+import "maps/tactile/api/shared/hotels/room.proto";
+import "maps/tactile/api/shared/hotels/vacation-rental-attributes.proto";
+import "maps/tactile/api/shared/place/place-comparison-data.proto";
+import "maps/tactile/api/shared/placepreview/place-preview.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "webserver/shared/maps/logging/visibility.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "HotelBookingProto";
+option java_package = "com.google.maps.tactile";
+
+message HotelBooking {
+    optional uint64 google_hotel_id = 39 [jstype = JS_STRING];
+    optional string ei = 12 [deprecated = true];
+    optional string ved = 13;
+    optional string click_target_token = 22;
+    optional string hps_query_ei = 11;
+    optional HotelBookingOptions hotel_booking_options = 8;
+    optional string checkin_date = 1 [deprecated = true];
+    optional string checkout_date = 2 [deprecated = true];
+    optional string formatted_checkin_date = 3 [deprecated = true];
+    optional string formatted_checkout_date = 4 [deprecated = true];
+    optional bool is_tax_inclusive_country = 5 [deprecated = true];
+    optional string rating_stars = 7;
+    optional string book_link_subtitle = 9 [deprecated = true];
+    optional string single_price = 10;
+    optional string compact_single_price = 38;
+    optional HotelPriceVariants cheapest_non_promoted_partner_price = 46;
+    optional HotelPriceVariants cheapest_additional_non_promoted_partner_price = 47;
+    repeated HotelBookingPartner partner = 6;
+    repeated HotelBookingPartner organic_partner = 45;
+    repeated HotelBookingPartner partner_without_price = 61;
+    optional LoggedLink currency_disclaimer_link = 14;
+    optional bool is_promoted_hotel = 40;
+    optional string impression_logging_url_promoted = 16;
+    optional string impression_logging_url_non_promoted = 17;
+    optional string impression_logging_url_non_promoted_additional = 59;
+    
+    repeated AdView promoted_ad_view = 48;
+    message AdView {
+        optional string impression_logging_view_url = 1;
+    }
+    
+    repeated AdView non_promoted_ad_view = 49;
+    optional string hotel_price_state_token = 20;
+    optional bytes hotel_search_context_token = 53;
+    optional HotelTip hotel_tip = 21;
+    optional DealTreatment deal_treatment = 23;
+    optional HotelDateDisplay hotel_date_display = 24 [default = UNKNOWN_HOTEL_DATE_DISPLAY, deprecated = true];
+    optional HotelJustifications justifications = 26;
+    optional InsightsLure insights_lure = 31;
+    repeated HotelWhyThisAdDisclosure why_this_ad_disclosure = 27;
+    optional WhyThisAdWebViewParams why_this_ad_web_view_params = 35;
+    optional geo_serving_proto.ads.MyAdCenterPanelData my_ad_center_panel_data = 54;
+    optional string ad_click_url = 58;
+    optional maps_tactile.shared.ads.AdBanner ad_banner = 60;
+    optional maps_tactile.shared.hotels.HotelBookingDisclosure customized_price_disclosure = 50;
+    optional maps_tactile.shared.hotels.HotelBookingDisclosure organic_ranking_disclosure = 52;
+    optional AlternativeHotels alternative_hotels = 30;
+    optional AlternativeHotels alternative_vacation_rentals = 51;
+    optional AuctionWinner auction_winner = 29;
+    optional bool display_partner_ranking_disclaimer = 32;
+    optional maps_tactile.shared.hotels.AnnotationRanking hotel_annotation_ranking_response = 33;
+    optional maps_paint_client.ClientVectorOps hotel_map = 34;
+    optional PriceInsights price_insights = 42;
+    optional LodgingType lodging_type = 43;
+    optional AspectBasedAlternativeHotels aspect_based_alternative_hotels = 44;
+    optional logs_maps_shared.LodgingPricingInformation lodging_pricing_info = 55;
+    optional maps_tactile.shared.hotels.MapsLiveQueryResult maps_live_query_result = 56;
+    optional geo_serving_proto.hotels.livequery.DisplayPriceState display_price_state = 57;
+    
+    reserved 15, 18, 19, 25, 36, 37, 41;
+}
+
+message AuctionWinner {
+    optional string icon_url = 1;
+    optional string display_name = 2;
+}
+
+message AlternativeHotels {
+    repeated AlternativeHotelPlacePreview alternative_hotel = 1;
+    optional bytes hotel_search_context_token = 2;
+    optional int32 cheapest_alternative_hotel_index = 3;
+}
+
+message AspectBasedAlternativeHotels {
+    repeated AlternativeHotelPlacePreview aspect_based_alternative_hotel = 1;
+    optional string name = 2;
+    optional maps_tactile.shared.hotels.HotelAspectType hotel_aspect_type = 3;
+    optional string ved = 5;
+}
+
+message AlternativeHotelPlacePreview {
+    optional maps_tactile.shared.placepreview.PlacePreview place_preview = 1;
+    optional string subtext = 2;
+    optional string pivot_distance = 3;
+    optional string formatted_price = 4;
+    optional maps_tactile.shared.place.PlaceComparisonData comparison_data = 5;
+    optional string hotel_class_category = 6;
+    optional bytes place_lookup_supplemental_info_token = 7 [deprecated = true];
+}
+
+message HotelWhyThisAdDisclosure {
+    optional Disclosure disclosure = 1;
+    enum Disclosure {
+        UNKNOWN_DISCLOSURE = 0;
+        NONE = 1;
+        SIGNED_IN = 2;
+        AUDIENCE_LIST = 3 [deprecated = true];
+        WEBSITE_VISITOR = 6;
+        CUSTOMER_LIST = 7;
+        SIMILAR_AUDIENCE_SIGNED_IN = 4;
+        SIMILAR_AUDIENCE_SIGNED_OUT = 5;
+        DEVICE_ID_LIST = 8;
+    }
+}
+
+message HotelBookingPartner {
+    optional string click_target_token = 7;
+    optional string name = 1;
+    optional string formatted_price_with_taxes = 2;
+    optional string formatted_price = 3;
+    optional string formatted_total_price_with_taxes = 21;
+    optional string formatted_total_price = 22;
+    optional string formatted_total_taxes = 23;
+    optional bool exchange_rate_applied = 4 [default = false];
+    optional bool incomplete_taxes_and_fees = 5 [default = false];
+    optional LoggedLink url = 6 [deprecated = true];
+    optional geo_serving_proto.link.Link partner_url = 33;
+    optional geo_serving_proto.link.Link async_partner_ping_url = 34;
+    optional string partner_icon_url = 9;
+    optional bool is_owner = 10;
+    optional bool direct_booking_enabled = 11;
+    
+    repeated Tagline tagline = 12;
+    message Tagline {
+        optional string tagline_text = 1;
+        optional bool is_owner_tagline = 2;
+    }
+    
+    optional bool require_disclosure = 13;
+    optional DealTreatment deal_treatment = 14;
+    optional string click_to_call_url = 17;
+    optional geo_serving_proto.hotels.Occupancy occupancy = 18;
+    repeated maps_tactile.shared.hotels.Room room = 19;
+    repeated maps_tactile.shared.hotels.RoomCluster room_cluster = 28;
+    optional maps_tactile.shared.hotels.RateFeatures rate_features = 20;
+    optional bool is_customized_price = 27;
+    optional bool is_attributionsrc_label_enabled = 29;
+    optional string ved = 24;
+    optional int32 ve_type = 25 [default = 3229];
+    optional .logs.HotelBookingPartnerData hotel_booking_partner_metadata = 26;
+    repeated geo_serving_proto.scalableattributes.ScalableAttributeGroup partner_content_attribute = 31;
+    optional string pricing_tagline = 32;
+    
+    reserved 8, 15, 16;
+}
+
+message HotelPriceVariants {
+    optional string nightly_price = 1;
+    optional string tax_included_nightly_price = 2;
+    optional string tax_included_total_price = 3;
+}
+
+message DealTreatment {
+    optional int32 ve_type = 5 [default = -1];
+    
+    optional DealType deal_type = 1;
+    enum DealType {
+        UNKNOWN_DEAL = 0;
+        OFFER = 1;
+        VALUE = 2;
+        DEAL_TYPE_HIDDEN_HIGH = 3 [deprecated = true];
+        DEAL_TYPE_HIDDEN_LOW = 4 [deprecated = true];
+        GOOGLE_ONE = 5;
+    }
+    
+    optional string regular_price = 2;
+    optional string compact_regular_price = 16;
+    optional string regular_tax_included_price = 14;
+    optional string regular_tax_included_total = 15;
+    optional string discount_amount = 3;
+    optional int32 discount_percent = 6;
+    optional int32 discount_pct_upperbound = 9;
+    
+    optional RateExplanationType rate_explanation = 4;
+    enum RateExplanationType {
+        UNKNOWN_EXPLANATION = 0;
+        NO_EXPLANATION = 1;
+        SIGNED_IN = 2;
+        AUDIENCE_LIST = 3;
+    }
+    
+    optional bool requires_loyalty_signup = 7;
+    repeated maps_tactile.shared.hotels.HotelAmenity included_free_hotel_amenity = 12;
+    optional string hidden_price_message = 10 [deprecated = true];
+    
+    optional QualifiedRate qualified_rate = 17;
+    message QualifiedRate {
+        optional string qualified_rate_message = 1;
+        
+        optional PriceDisplay price_display = 2;
+        enum PriceDisplay {
+            UNKNOWN_PRICE_DISPLAY = 0;
+            HIDDEN = 1;
+            TRANSPARENT = 2;
+        }
+    }
+    
+    optional string custom_callout_message = 11;
+    optional DealMagnitude deal_magnitude = 13;
+    
+    reserved 8;
+}
+
+message HotelAttributes {
+    optional int32 hotel_class = 1;
+    optional string hotel_class_category = 4;
+    repeated maps_tactile.shared.hotels.HotelAmenity hotel_amenity = 3;
+    
+    repeated PartnerSource partner_source = 18;
+    message PartnerSource {
+        optional LoggedLink url = 1;
+    }
+    
+    optional maps_tactile.shared.hotels.VacationRentalAttributes vacation_rental_attributes = 13;
+    repeated VacationRentalInfo vacation_rental_info = 5;
+    
+    optional VacationRentalPartnerInfo vacation_rental_partner_info = 7;
+    message VacationRentalPartnerInfo {
+        optional string name = 1;
+        optional string icon_url = 2;
+        optional string host_description = 3;
+    }
+    
+    optional LodgingType lodging_type = 6;
+    
+    optional GeoContainer geo_container = 8;
+    message GeoContainer {
+        optional string name = 1;
+        optional string feature_id = 2;
+    }
+    
+    repeated geo_serving_proto.scalableattributes.ScalableAttributeGroup amenity_group = 9;
+    optional geo_serving_proto.scalableattributes.ScalableAttributeGroup popular_amenities = 10;
+    optional geo_serving_proto.scalableattributes.ScalableAttributeContainer sustainability_attributes = 11;
+    optional bool eco_certified = 12;
+    optional string check_in_time = 15;
+    optional string check_out_time = 16;
+    
+    reserved 2;
+}
+
+message UpdatedItinerary {
+    optional string iso_checkin = 1;
+    optional string iso_checkout = 2;
+    optional int32 length_of_stay = 3;
+    optional string fmt_checkin = 4;
+    optional string fmt_checkout = 5;
+}
+
+message HotelTip {
+    optional int32 ve_type = 4 [default = -1];
+    optional TipType type = 1 [default = UNKNOWN_TIP_TYPE];
+    optional UpdatedItinerary shifted_itinerary = 2;
+    optional string formatted_price_difference = 3;
+    optional string formatted_price = 15;
+    optional int32 hotel_class = 5;
+    optional int32 user_rating_percentile = 6;
+    optional int32 discount_percent = 7;
+    optional TravelerType popular_with_traveler_type = 9;
+    optional DealMagnitude deal_magnitude = 13;
+    optional geo_serving_proto.hotels.Occupancy occupancy = 14;
+    optional int32 increase_in_length_of_stay = 16;
+    optional HotelHighlightType highlight_type = 17;
+    
+    reserved 8, 10, 11, 12;
+}
+
+message HotelJustifications {
+    repeated HotelTip tip = 1;
+}
+
+message PriceInsights {
+    optional string price = 1;
+    optional float price_percentile = 2;
+    
+    optional PriceClassification price_classification = 3;
+    enum PriceClassification {
+        UNKNOWN_PRICE_CLASSIFICATION = 0;
+        PRICE_CLASSIFICATION_LOW = 1;
+        PRICE_CLASSIFICATION_TYPICAL = 2;
+        PRICE_CLASSIFICATION_HIGH = 3;
+    }
+    
+    optional string typical_price_lower_bound = 4;
+    optional string typical_price_upper_bound = 5;
+    optional string ved = 6;
+    optional maps_frontend.Visibility visibility = 7;
+}
+
+message InsightsLure {
+    optional string description_text = 1;
+    optional string call_to_action_text = 4;
+    optional string icon_url = 2;
+    optional string page_url = 3;
+}
+
+message WhyThisAdWebViewParams {
+    optional string deep_link_url = 1;
+}
+
+message VacationRentalInfo {
+    oneof structured_attribute {
+        int32 min_night_stay = 1;
+        int32 num_bedrooms = 2;
+        int32 num_beds = 3;
+        int32 num_bathrooms = 4;
+        int32 max_occupancy = 5;
+        double area_sq_feet = 10;
+        double area_sq_meters = 20;
+    }
+}
+
+enum TipType {
+    UNKNOWN_TIP_TYPE = 0;
+    ITINERARY_SHIFT = 1;
+    ITINERARY_SHIFT_FOR_UNAVAILABLE = 2;
+    ITINERARY_EXTENSION = 13;
+    ITINERARY_EXTENSION_FOR_UNAVAILABLE = 14;
+    DEALNESS = 3;
+    USER_RATING_RANK = 4 [deprecated = true];
+    USER_RATING_RANK_REGARDLESS_OF_STARS = 5 [deprecated = true];
+    FLEXIBLE_DATES = 6;
+    DEPRECATED_NEARBY_POI = 7 [deprecated = true];
+    POPULAR_WITH_TRAVELER_TYPE = 8;
+    PREVIOUS_STAY = 9;
+    DEPRECATED_UNIQUE_HOTEL_FEATURE = 10 [deprecated = true];
+    DEPRECATED_TRUST_YOU_REVIEW = 11 [deprecated = true];
+    ALTERNATIVE_OCCUPANCY = 12;
+    GENERIC_HIGHLIGHT = 15;
+}
+
+enum TravelerType {
+    UNKNOWN_TRIP_TYPE = 0;
+    COUPLE = 1;
+    FAMILY = 2;
+    BUSINESS = 3;
+    SOLO = 4;
+    FRIENDS = 5;
+}
+
+enum TrustYouReviewType {
+    UNKNOWN_TRUST_YOU_REVIEW_TYPE = 0;
+    BUSINESS_FAVORITE = 2;
+    COUPLE_FAVORITE = 3;
+    DESIGNER_VIBE = 4;
+    FAMILY_FAVORITE = 5;
+    GREAT_BREAKFAST = 6;
+    GREAT_DINING = 7;
+    GREAT_LOCATION = 8;
+    GREAT_POOL = 9;
+    GREAT_ROOMS = 10;
+    GREAT_SERVICE = 11;
+    LUXURIOUS_VIBE = 12;
+    MODERN_VIBE = 13;
+    NEAR_CITY_CENTER = 1;
+    NEAR_PUBLIC_TRANSIT = 14;
+    SOLO_FAVORITE = 15;
+}
+
+enum HotelHighlightType {
+    UNKNOWN_HOTEL_HIGHLIGHT_TYPE = 0;
+    HIGHLIGHT_BUSINESS_FAVORITE = 1;
+    HIGHLIGHT_COUPLE_FAVORITE = 2;
+    HIGHLIGHT_DESIGNER_VIBE = 3;
+    HIGHLIGHT_FAMILY_FAVORITE = 4;
+    HIGHLIGHT_FREE_BREAKFAST = 5;
+    HIGHLIGHT_FREE_PARKING = 6;
+    HIGHLIGHT_FREE_WIFI = 7;
+    HIGHLIGHT_GREAT_BREAKFAST = 8;
+    HIGHLIGHT_GREAT_DINING = 9;
+    HIGHLIGHT_GREAT_LOCATION = 10;
+    HIGHLIGHT_GREAT_NATURE_AND_OUTDOORS = 11 [deprecated = true];
+    HIGHLIGHT_GREAT_NIGHTLIFE = 12;
+    HIGHLIGHT_GREAT_POOL = 13;
+    HIGHLIGHT_GREAT_ROOMS = 14;
+    HIGHLIGHT_GREAT_SERVICE = 15;
+    HIGHLIGHT_GREAT_SLEEP = 16;
+    HIGHLIGHT_GREAT_VIEWS_FROM_ROOMS = 17 [deprecated = true];
+    HIGHLIGHT_GREAT_WELLNESS = 18;
+    HIGHLIGHT_HAS_AIR_CONDITIONING = 19;
+    HIGHLIGHT_HAS_BAR_OR_LOUNGE = 20;
+    HIGHLIGHT_HAS_BEACH_ACCESS = 21;
+    HIGHLIGHT_HAS_GYM = 22;
+    HIGHLIGHT_HAS_HOT_TUB = 23;
+    HIGHLIGHT_HAS_POOL = 24;
+    HIGHLIGHT_HAS_RESTAURANT = 25;
+    HIGHLIGHT_HAS_SPA = 26;
+    HIGHLIGHT_LUXURIOUS_VIBE = 27;
+    HIGHLIGHT_MODERN_VIBE = 28;
+    HIGHLIGHT_NEAR_CITY_CENTER = 29 [deprecated = true];
+    HIGHLIGHT_NEAR_POI_DRIVING = 30 [deprecated = true];
+    HIGHLIGHT_NEAR_POI_TRANSIT = 31 [deprecated = true];
+    HIGHLIGHT_NEAR_POI_WALKING = 32 [deprecated = true];
+    HIGHLIGHT_NEAR_PUBLIC_TRANSIT = 33;
+    HIGHLIGHT_PETS_ALLOWED = 34;
+    HIGHLIGHT_POPULAR_WITH_USER_COUNTRY = 35;
+    HIGHLIGHT_SOLO_FAVORITE = 36 [deprecated = true];
+    HIGHLIGHT_TOP_RATED_BED_AND_BREAKFAST = 37 [deprecated = true];
+    HIGHLIGHT_TOP_RATED_BOUTIQUE_HOTEL = 38 [deprecated = true];
+    HIGHLIGHT_TOP_RATED_HOSTEL = 39 [deprecated = true];
+    HIGHLIGHT_TOP_RATED_MOTEL = 40 [deprecated = true];
+    HIGHLIGHT_TOP_RATED_RESORT = 41 [deprecated = true];
+    HIGHLIGHT_USER_FAVORITE = 42;
+}
+
+enum DealMagnitude {
+    UNKNOWN_DEAL_MAGNITUDE = 0;
+    DEAL_TIER_1 = 1;
+    DEAL_TIER_2 = 2;
+    DEAL_TIER_NEGATIVE_1 = 3;
+    DEAL_TIER_NEUTRAL = 4;
+}

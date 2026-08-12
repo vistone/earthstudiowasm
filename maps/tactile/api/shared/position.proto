@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "PositionProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message Position {
+    optional Type type = 1 [default = INTERPOLATED_PREDICTION];
+    enum Type {
+        TYPE_UNKNOWN = 0;
+        INTERPOLATED_PREDICTION = 1;
+        RAW = 2;
+    }
+    
+    optional LatLng location = 2;
+    optional int64 timestamp = 3;
+}
+
+message PositionSeries {
+    repeated Position position = 1;
+}

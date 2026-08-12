@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package geo_serving_proto.hotels;
+
+import "geo/serving/proto/hotels/crisis_id.proto";
+import "geo/serving/proto/hotels/crisis_policy.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPH";
+option java_multiple_files = true;
+option java_outer_classname = "HotelCrisisPolicyParamsProto";
+option java_package = "com.google.geo.serving.proto.hotels";
+
+message HotelCrisisPolicyParams {
+    optional CrisisId crisis_id = 1;
+    optional CrisisPolicy policy = 2;
+}

@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package ve_log;
+
+import "net/proto2/proto/descriptor.proto";
+
+extend .proto2.MessageOptions {
+    optional string msg = 25255656;
+    optional bool result = 25255657;
+    optional bool extensions_ignored = 90684527;
+}
+
+extend .proto2.FieldOptions {
+    optional string fld = 25255658;
+    optional bool only = 25255659;
+    optional bool ved = 25255660;
+    optional bool ei = 25255661;
+    optional bool href_attr = 25255662;
+    optional bool rewrite_attr = 25255663;
+    optional string ve_whitelist = 25255664;
+    optional bool ignored = 53103641;
+}

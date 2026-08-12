@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message SkiBoundaryProto {
+    optional Type type = 1 [default = TYPE_SKI_AREA];
+    enum Type {
+        TYPE_ANY = 0;
+        TYPE_DANGER = 1;
+        TYPE_SKI_AREA = 2;
+        TYPE_SLOW_ZONE = 3;
+    }
+}

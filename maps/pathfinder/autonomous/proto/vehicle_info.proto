@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package maps_autonomous;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.pathfinder.autonomous.proto";
+
+message VehicleInfo {
+    OemId oem_id = 1;
+    enum OemId {
+        UNKNOWN = 0;
+        GENERAL_MOTORS = 1;
+        VOLVO = 2;
+        NISSAN = 3;
+    }
+    
+    string make = 2;
+    string model = 3;
+    string model_year = 4;
+    string assisted_driving_capability_version = 5;
+    string assisted_driving_capability_name = 6;
+}

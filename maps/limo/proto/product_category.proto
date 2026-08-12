@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package maps_limo;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ProductCategoryOuterClass";
+option java_package = "com.google.maps.limo";
+
+enum ProductCategory {
+    UNKNOWN_CATEGORY = 0;
+    CARPOOL_CATEGORY = 1;
+    ECONOMY_CATEGORY = 2;
+    PREMIUM_CATEGORY = 3;
+    HIGH_CAPACITY_CATEGORY = 4;
+    LICENSED_TAXI_CATEGORY = 5;
+    MOTORCYCLE_CATEGORY = 6;
+    AUTO_RICKSHAW_CATEGORY = 7;
+    OFFLINE_AUTO_RICKSHAW_CATEGORY = 8;
+    SELF_DRIVING_CATEGORY = 9;
+}

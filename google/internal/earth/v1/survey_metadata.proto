@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.survey_metadata;
+
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.earth.v1.service.surveymetadata";
+
+message SurveyMetadata {
+    optional SurveyName survey_name = 1;
+    optional protobuf.Timestamp survey_seen_timestamp = 2;
+    optional protobuf.Timestamp survey_completed_timestamp = 3;
+    optional int32 survey_dismissed_count = 4;
+    optional protobuf.Timestamp survey_dismissed_timestamp = 5;
+}
+
+message SurveyEvent {
+    optional SurveyName survey_name = 1;
+    optional SurveyStatus survey_status = 2;
+}
+
+enum SurveyStatus {
+    SURVEY_STATUS_UNSPECIFIED = 0;
+    SURVEY_STATUS_SHOWN = 1;
+    SURVEY_STATUS_DISMISSED = 2;
+    SURVEY_STATUS_STARTED = 3;
+    SURVEY_STATUS_COMPLETED = 4;
+}
+
+enum SurveyName {
+    SURVEY_NAME_UNSPECIFIED = 0;
+    SURVEY_NAME_INDUSTRY_SELECTOR = 1;
+}

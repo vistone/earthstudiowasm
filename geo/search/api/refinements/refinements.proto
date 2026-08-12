@@ -1,0 +1,1142 @@
+syntax = "proto2";
+
+package geo.search.refinements;
+
+import "apps/framework/data/caching_annotations.proto";
+import "frameworks/client/data/data_annotation.proto";
+import "geo/search/api/hotels/hotel_histogram.proto";
+import "geo/search/api/hotels/itinerary.proto";
+import "geo/search/api/map/viewport.proto";
+import "geo/search/api/refinements/date.proto";
+import "geo/serving/proto/health/covid19_vaccine_params.proto";
+import "geo/serving/proto/hotels/hotel_crisis_policy_params.proto";
+import "geo/serving/proto/hotels/occupancy.proto";
+import "geo/serving/proto/hotels/occupancy_type.proto";
+import "geo/serving/proto/hotels/supported_occupancy.proto";
+import "geo/serving/proto/place/place_identifier.proto";
+import "google/protobuf/duration.proto";
+import "google/type/date.proto";
+import "google/type/latlng.proto";
+import "google/type/postal_address.proto";
+import "google/type/timeofday.proto";
+import "gws/mothership/api/v1/common/images/raster_image.proto";
+import "gws/mothership/api/v1/common/text/styled_text.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_generate_object_format.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSR";
+option go_package = "refinements_proto";
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.refinements";
+
+message RefinementRequest {
+    optional Mode triggering_mode = 2 [default = ECHO];
+    enum Mode {
+        UNKNOWN_TRIGGERING_MODE = 0;
+        ECHO = 1;
+        TRIGGER = 2;
+    }
+    
+    optional Refinements refinements = 3;
+    optional RefinementRequestConfig config = 4;
+    
+    reserved 1;
+}
+
+message RefinementRequestConfig {
+    optional bool query_based_refinements_supported = 1;
+    optional bool precise_location_prompt_supported_for_pivots = 2;
+    optional bool open_hours_fallback_supported = 3;
+    repeated ValueSelectorPivotIdentifier supported_value_selector_pivots = 5;
+    optional bool allow_exact_location_refinement_exception = 6;
+    
+    reserved 4;
+}
+
+message RefinementResponse {
+    optional Refinements refinements = 2;
+    
+    reserved 1;
+}
+
+message ValueSelectorPivotIdentifier {
+    optional uint32 refinement_type = 1;
+}
+
+message Refinements {
+    map<uint32, RefinementParams> applied_params = 1;
+    repeated Pivot available_pivots = 2;
+    repeated Filter available_filters = 3;
+    repeated FilterGroup available_filter_groups = 5;
+    optional bytes persistent_query_state = 4;
+}
+
+message RefinementParams {
+    repeated RefinementParamsValue values = 2;
+    
+    reserved 1;
+}
+
+message RefinementParamsValue {
+    oneof params_type {
+        PriceLevelParams price_level_params = 1;
+        PriceRangeParams price_range_params = 64;
+        UserRatingParams user_rating_params = 2;
+        ReviewCountParams review_count_params = 69;
+        OpeningHoursParams opening_hour_params = 3;
+        HotelClassParams hotel_class_params = 4;
+        CuisineParams cuisine_params = 5;
+        HotelPriceParams hotel_price_params = 7;
+        DistanceParams distance_params = 8;
+        ZagatRatingParams zagat_rating_params = 9;
+        HotelAmenityParams hotel_amenity_params = 11;
+        HotelScalableAttributeParams hotel_scalable_attribute_params = 37;
+        QueryTermParams query_term_params = 12;
+        HotelDealsParams hotel_deals_params = 13;
+        HotelGoogleOneParams hotel_google_one_params = 31;
+        HotelDateParams hotel_date_params = 14;
+        ScalableAttributeParams scalable_attribute_params = 15;
+        VisitHistoryParams visit_history_params = 16;
+        SortParams sort_params = 17;
+        HotelOccupancyParams hotel_occupancy_params = 18;
+        LodgingTypeParams lodging_type_params = 19;
+        ReservationParams reservation_params = 20;
+        BookOnlineParams book_online_params = 33;
+        EstablishmentDateParams establishment_date_params = 21;
+        SearchAreaParams search_area_params = 22 [deprecated = true];
+        FoodOrderingParams food_ordering_params = 23;
+        EatNowParams eat_now_params = 70;
+        ExperienceTimeFrameParams experience_time_frame_params = 24;
+        ExperienceTimeOfDayParams experience_time_of_day_params = 34;
+        ExperienceAttributeParams experience_attribute_params = 25;
+        ElectricVehicleConnectorParams electric_vehicle_connector_params = 26;
+        SearchAlongRouteContextParams search_along_route_context_params = 27;
+        WaitTimeParams wait_time_params = 28;
+        BusynessParams busyness_params = 29;
+        ExperienceSettingParams experience_setting_params = 30;
+        HotelChainParams hotel_chain_params = 32;
+        DealsParams deals_params = 35;
+        HotelLocalityParams hotel_locality_params = 36;
+        ForYouParams for_you_params = 38;
+        GPayFoodRestaurantParams gpay_food_restaurant_params = 39;
+        ChainMemberParams chain_member_params = 40;
+        HotelCovid19ResponderParams hotel_covid19_responder_params = 41;
+        geo_serving_proto.hotels.HotelCrisisPolicyParams hotel_crisis_policy_params = 54;
+        HotelFreeCancellationParams hotel_free_cancellation_params = 42;
+        CategoricalAttractionParams categorical_attraction_params = 43;
+        GcidParams gcid_params = 44;
+        HotelAccommodationTypeParams accommodation_type_params = 45;
+        HealthInsuranceParams health_insurance_params = 46;
+        ChargingSpeedParams charging_speed_params = 47;
+        HierarchicalParentParams hierarchical_parent_params = 48;
+        ElectricVehiclePaymentNetworkParams electric_vehicle_payment_network_params = 49;
+        ProductAvailabilityParams product_availability_params = 50;
+        Covid19VaccineParams covid19_vaccine_params = 51;
+        HotelEcoCertifiedParams hotel_eco_certified_params = 52;
+        geo_serving_proto.health.Covid19VaccineParams gsp_covid19_vaccine_params = 53;
+        FoodDistributionSiteDonationParams food_distribution_site_donation_params = 55;
+        JobTypeParams job_type_params = 56 [deprecated = true];
+        TrendingParams trending_params = 57 [deprecated = true];
+        GovernmentOfficeParams government_office_params = 58;
+        HotelRoomStyleParams room_style_params = 59;
+        HotelSmokingInRoomParams smoking_in_room_params = 60;
+        HotelOpenAirBathInRoomParams open_air_bath_in_room_params = 61;
+        HotelMealPlansParams meal_plans_params = 62;
+        HotelBedsCombinationParams beds_combination_params = 63;
+        ServicesJobTypeParams services_job_type_params = 65;
+        ScalableJourneyAttributesParams scalable_journey_attributes_params = 71;
+        HotelEarlyCheckInParams early_check_in_params = 66;
+        HotelLateCheckOutParams late_check_out_params = 67;
+        HotelRoomStyleAndBedsCombinationParams room_style_and_beds_combination_params = 68;
+    }
+    
+    reserved "electric_vehicle_params";
+}
+
+message FilterGroup {
+    optional uint32 group_id = 4;
+    optional string label = 1;
+    optional gws.mothership.api.v1.common.images.RasterImage icon = 2;
+    repeated Filter filters = 3;
+    optional bool disabled = 5;
+}
+
+message Filter {
+    optional uint32 filter_id = 5;
+    optional uint32 refinement_type = 1;
+    optional string label = 4;
+    repeated FilterOption available_options = 2;
+    
+    optional CounterfactualType counterfactual_type = 3 [deprecated = true];
+    enum CounterfactualType {
+        UNSPECIFIED_COUNTERFACTUAL = 0;
+        COUNTRY_NOT_SUPPORTED = 1 [deprecated = true];
+        UI_NOT_SUPPORTED = 2 [deprecated = true];
+        FLAG_GUARDED = 3;
+    }
+}
+
+message FilterOption {
+    optional RefinementParamsValue value_when_applied = 1;
+    optional string label = 2;
+    optional gws.mothership.api.v1.common.images.RasterImage icon = 3;
+    optional uint32 estimated_result_count = 4;
+    optional bool selected = 6;
+    optional bool disabled = 5;
+    optional uint32 option_id = 7;
+}
+
+message Pivot {
+    optional uint32 refinement_type = 1;
+    
+    optional ParamsType params_type = 2 [default = SINGLE_VALUE];
+    enum ParamsType {
+        UNKNOWN_PARAMS_TYPE = 0;
+        SINGLE_VALUE = 1;
+        MULTI_VALUE = 2;
+    }
+    
+    optional RefinementParamsValue value_when_applied = 7;
+    optional string label = 4;
+    optional string accessibility_label = 9;
+    
+    optional Visibility visibility = 5 [default = ALWAYS_SHOW];
+    enum Visibility {
+        UNKNOWN_VISIBILITY = 0;
+        ALWAYS_SHOW = 1;
+        SHOW_ONLY_WHEN_APPLIED = 2;
+        SHOW_AS_VALUE_SELECTOR = 3;
+    }
+    
+    optional uint32 previous_index = 6 [deprecated = true];
+    optional bool precise_location_needed = 8;
+    
+    optional CounterfactualType counterfactual_type = 10 [deprecated = true];
+    enum CounterfactualType {
+        UNSPECIFIED_COUNTERFACTUAL = 0;
+        COUNTRY_NOT_SUPPORTED = 1;
+        UI_NOT_SUPPORTED = 2;
+        FLAG_GUARDED = 3;
+    }
+    
+    reserved 3;
+}
+
+message PriceLevelParams {
+    oneof level_type {
+        SemanticLevel semantic_level = 1;
+        uint32 custom_bitmask = 2;
+    }
+    
+    enum SemanticLevel {
+        UNKNOWN_SEMANTIC_LEVEL = 0;
+        CHEAP = 1;
+        UPSCALE = 2;
+    }
+    
+    enum CustomLevel {
+        PRICE_LEVEL_1 = 1;
+        PRICE_LEVEL_2 = 2;
+        PRICE_LEVEL_3 = 4;
+        PRICE_LEVEL_4 = 8;
+    }
+}
+
+message PriceRangeParams {
+    optional PriceRange range = 2;
+    message PriceRange {
+        optional int32 lower_bound = 1;
+        optional int32 upper_bound = 2;
+        optional string currency = 3;
+    }
+    
+    reserved 1;
+}
+
+message FoodDistributionSiteDonationParams {
+    optional GiveHelpType give_help_type = 1;
+    enum GiveHelpType {
+        UNKNOWN_GIVE_HELP_TYPE = 0;
+        MONETARY_DONATIONS = 1;
+        NON_MONETARY_DONATIONS = 2;
+        VOLUNTEERS = 3;
+    }
+}
+
+message GovernmentOfficeParams {
+    oneof filter_type {
+        string program_mid = 1;
+        bool allow_all_government_offices = 2;
+    }
+}
+
+message UserRatingParams {
+    oneof rating_type {
+        SemanticRating semantic_rating = 1;
+        NumericRating minimum_numeric_rating = 2;
+    }
+    
+    enum SemanticRating {
+        UNKNOWN_SEMANTIC_RATING = 0;
+        TOP_RATED = 1;
+    }
+    
+    enum NumericRating {
+        UNKNOWN_NUMERIC_RATING = 0;
+        RATING_0_5 = 1;
+        RATING_1_0 = 2;
+        RATING_1_5 = 3;
+        RATING_2_0 = 4;
+        RATING_2_5 = 5;
+        RATING_3_0 = 6;
+        RATING_3_5 = 7;
+        RATING_4_0 = 8;
+        RATING_4_5 = 9;
+        RATING_5_0 = 10;
+    }
+}
+
+message ReviewCountParams {
+    optional int32 min_review_count = 1;
+}
+
+message OpeningHoursParams {
+    oneof filter_type {
+        SemanticConstraint semantic_constraint = 1;
+        DateTimeConstraint date_time_constraint = 5;
+    }
+    
+    reserved 2, 3;
+    
+    message DateTimeConstraint {
+        oneof date_type {
+            .google.type.Date date = 1;
+            DayOfWeek day_of_week = 2;
+        }
+        
+        oneof time_type {
+            SemanticTime semantic_time = 3;
+            uint32 hour_of_day = 4;
+        }
+        
+        enum SemanticTime {
+            UNKNOWN_SEMANTIC_TIME = 0;
+            ANY_TIME = 1;
+        }
+    }
+    
+    enum SemanticConstraint {
+        UNKNOWN_SEMANTIC_CONSTRAINT = 0;
+        OPEN_NOW = 1;
+        OPEN_24_HOURS = 2;
+    }
+}
+
+message HotelClassParams {
+    oneof class_type {
+        uint32 star_class_bitmask = 1;
+        SemanticClass semantic_class = 2;
+    }
+    
+    enum StarClass {
+        STAR_CLASS_UNSPECIFIED = 0;
+        STAR_CLASS_1 = 1;
+        STAR_CLASS_2 = 2;
+        STAR_CLASS_3 = 4;
+        STAR_CLASS_4 = 8;
+        STAR_CLASS_5 = 16;
+    }
+    
+    enum SemanticClass {
+        UNKNOWN_CLASS = 0;
+        LUXURY = 1;
+    }
+}
+
+message LodgingTypeParams {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN_LODGING_TYPE = 0;
+        ALTERNATIVE_LODGING = 1;
+    }
+}
+
+message ReservationParams {
+    optional .google.type.Date date = 1;
+    optional .google.type.TimeOfDay time = 2;
+    optional uint32 party_size = 3;
+    optional .google.protobuf.Duration look_before_buffer = 5;
+    optional .google.protobuf.Duration look_after_buffer = 6;
+    optional uint32 max_slots_per_merchant = 7;
+}
+
+message SearchAreaParams {
+    optional LocationSearchOptions location_search_options = 3 [deprecated = true];
+    enum LocationSearchOptions {
+        LOCATION_SEARCH_OPTIONS_UNSPECIFIED = 0;
+        AROUND = 1;
+        RESTRICT = 2;
+        FORCE_AROUND = 3;
+    }
+    
+    oneof location_to_search {
+        search.map.Viewport viewport = 1 [deprecated = true];
+        PlaceIdentifierList place_identifier_list = 2 [deprecated = true];
+    }
+}
+
+message SearchAlongRouteContextParams {
+    optional string encoded_search_along_route_context = 1;
+}
+
+message WaitTimeParams {
+    optional int32 max_expected_wait_minutes = 2;
+    
+    reserved 1;
+}
+
+message BusynessParams {
+    optional BusynessLevel busyness_level = 1;
+    enum BusynessLevel {
+        UNKNOWN_BUSYNESS_LEVEL = 0;
+        LOW_BUSYNESS = 1;
+        HIGH_BUSYNESS = 2;
+    }
+}
+
+message ExperienceTimeFrameParams {
+    oneof time_frame_type {
+        SemanticTimeFrame semantic_time_frame = 2;
+        DateRange custom_date_range = 4;
+    }
+    
+    reserved 1, 3;
+    
+    enum SemanticTimeFrame {
+        UNKNOWN_SEMANTIC_TIME_FRAME = 0;
+        IMMEDIATE_FUTURE = 1;
+        UPCOMING_DAYS = 2;
+        TODAY = 3;
+        TOMORROW = 4;
+        THIS_WEEK = 5;
+        THIS_WEEKEND = 6;
+        THIS_MONTH = 7;
+        NEXT_WEEK = 8;
+    }
+}
+
+message ExperienceTimeOfDayParams {
+    optional SemanticTimeOfDay semantic_time_of_day = 1;
+    enum SemanticTimeOfDay {
+        UNKNOWN_SEMANTIC_TIME_OF_DAY = 0;
+        CURRENT_TIME_OF_DAY = 1;
+        DAYTIME = 2;
+        EVENING = 3;
+        LATE_NIGHT = 4;
+    }
+}
+
+message ExperienceAttributeParams {
+    optional ExperienceAttributeType attribute = 1;
+    enum ExperienceAttributeType {
+        UNKNOWN_EXPERIENCE_ATTRIBUTE_TYPE = 0;
+        GOOD_FOR_KIDS = 1;
+        GOOD_FOR_DATES = 2;
+        GOOD_FOR_GROUPS = 3;
+        GOOD_FOR_TOURISTS = 4;
+        WHEELCHAIR_ACCESSIBLE = 5;
+        FREE = 8;
+        CHEAP = 9;
+        FREE_OR_CHEAP = 10;
+    }
+}
+
+message ExperienceSettingParams {
+    optional ExperienceSettingType setting = 1;
+    enum ExperienceSettingType {
+        UNKNOWN_EXPERIENCE_SETTING_TYPE = 0;
+        OUTDOOR = 1;
+        INDOOR = 2;
+    }
+}
+
+message FoodOrderingParams {
+    optional AvailableService available_service = 1;
+    enum AvailableService {
+        UNKNOWN_SERVICE = 0;
+        DELIVERY = 1;
+        PICKUP = 2;
+        ANY_SERVICE = 3;
+    }
+    
+    optional DeliveryLocation delivery_location = 2;
+    message DeliveryLocation {
+        optional .google.type.PostalAddress delivery_address = 1;
+        optional .google.type.LatLng delivery_location = 2;
+    }
+}
+
+message EatNowParams {
+    optional .google.protobuf.Duration max_duration = 1;
+}
+
+message PlaceIdentifierList {
+    repeated geo_serving_proto.place.PlaceIdentifier place_identifier = 1;
+}
+
+message HotelDateParams {
+    optional search.hotels.Itinerary itinerary = 5;
+    
+    optional SemanticItinerary semantic_itinerary = 3;
+    enum SemanticItinerary {
+        SEMANTIC_ITINERARY_UNSPECIFIED = 0;
+        TONIGHT = 1;
+        TOMORROW_NIGHT = 2;
+        THIS_WEEKEND = 3;
+    }
+    
+    reserved 1, 2, 4;
+}
+
+message HotelDealsParams {
+    optional bool hotel_deals_only = 1;
+}
+
+message HotelGoogleOneParams {
+    optional bool hotel_google_one_only = 1;
+}
+
+message HotelChainParams {
+    optional uint32 chain_cluster_id = 1;
+    optional gws.mothership.api.v1.common.text.StyledText primary_display_name = 4;
+    optional gws.mothership.api.v1.common.text.StyledText secondary_display_name = 5;
+    optional uint32 parent_chain_cluster_id = 3;
+    
+    reserved 2;
+}
+
+message HotelLocalityParams {
+    optional gws.mothership.api.v1.common.text.StyledText locality_name = 1;
+    optional string mid = 2;
+    optional string parent_mid = 3;
+}
+
+message BookOnlineParams {
+    optional bool book_online_only = 1;
+}
+
+message CuisineParams {
+    optional string gcid = 1;
+}
+
+message ScalableAttributeParams {
+    optional string attribute_id = 1;
+}
+
+message JobTypeParams {
+    optional string job_type_id = 1;
+}
+
+message ServicesJobTypeParams {
+    optional string job_type_id = 1;
+    optional string job_type_name = 2;
+}
+
+message ScalableJourneyAttributesParams {
+    optional string attribute_id = 1;
+}
+
+message TrendingParams {
+    optional bool is_trending = 1;
+}
+
+message HotelPriceParams {
+    optional string currency_code = 3;
+    repeated search.hotels.Histogram histogram = 5;
+    
+    oneof filter_type {
+        PriceRange price_range = 1;
+        uint32 price_bucket_bitmask = 2;
+        SemanticHotelPrice semantic_hotel_price = 4;
+    }
+    
+    message PriceRange {
+        optional uint32 max_price = 1;
+        optional uint32 min_price = 2;
+        
+        optional RateFormat rate_format = 3;
+        enum RateFormat {
+            RATE_FORMAT_UNSPECIFIED = 0;
+            NIGHTLY_BASE = 1;
+            NIGHTLY_TOTAL = 2;
+            TOTAL_STAY = 3;
+        }
+    }
+    
+    enum HotelPriceBucket {
+        ORDINAL_PRICE_BUCKET_1 = 1;
+        ORDINAL_PRICE_BUCKET_2 = 2;
+        ORDINAL_PRICE_BUCKET_3 = 4;
+        ORDINAL_PRICE_BUCKET_4 = 8;
+        ORDINAL_PRICE_BUCKET_5 = 16;
+    }
+    
+    enum SemanticHotelPrice {
+        UNKNOWN_SEMANTIC_HOTEL_PRICE = 0;
+        CHEAP = 1;
+    }
+}
+
+message DistanceParams {
+    optional uint32 distance_meters = 1;
+    
+    optional Units units = 2;
+    enum Units {
+        UNKNOWN_UNITS = 0;
+        METER = 1;
+        KILOMETER = 2;
+        FOOT = 3;
+        YARD = 4;
+        MILE = 5;
+    }
+    
+    oneof origin_type {
+        SemanticLocation semantic_origin = 3;
+        ExplicitLocation explicit_origin = 4;
+    }
+    
+    message ExplicitLocation {
+        optional sfixed32 lat_e7 = 1;
+        optional sfixed32 lng_e7 = 2;
+    }
+    
+    enum SemanticLocation {
+        UNKNOWN_LOCATION = 0;
+        USER_LOCATION = 1;
+        HOME = 2;
+        WORK = 3;
+    }
+}
+
+message ZagatRatingParams {
+    optional bool zagat_rated_only = 1;
+}
+
+message EstablishmentDateParams {
+    optional EstablishmentTimeframe timeframe = 1;
+    enum EstablishmentTimeframe {
+        UNKNOWN_ESTABLISHMENT_TIMEFRAME = 0;
+        RECENTLY_OPENED = 1;
+    }
+}
+
+message HealthInsuranceParams {
+    optional HealthInsuranceNetwork network = 1;
+    enum HealthInsuranceNetwork {
+        UNKNOWN_HEALTH_INSURANCE = 0;
+        ACCEPTS_MEDICARE = 1;
+        ACCEPTS_MEDICAID = 2;
+        ALL_NETWORKS = 3;
+    }
+    
+    optional string carrier_mid = 2;
+    optional string network_mid = 3;
+    optional string carrier_name = 4;
+    optional string network_name = 5;
+    repeated HealthInsuranceNetwork selected_networks = 6;
+    
+    optional Dialog dialog_enabled = 7;
+    enum Dialog {
+        UNKNOWN = 0;
+        MEDICARE_MEDICAID_ENABLED = 1;
+    }
+}
+
+message VisitHistoryParams {
+    optional Status status = 1;
+    enum Status {
+        UNKNOWN_HISTORY = 0;
+        VISITED = 1;
+        NOT_VISITED = 2;
+    }
+    
+    optional DateRange date_range = 2;
+}
+
+message SortParams {
+    optional Order order = 1;
+    enum Order {
+        UNKNOWN_ORDER = 0;
+        RELEVANCE = 1;
+        DISTANCE_ASC = 2;
+        HOTEL_PRICE_ASC = 3;
+        HOTEL_PRICE_DESC = 4;
+        HOTEL_PRICE_ASC_TAX_INCL = 12;
+        HOTEL_PRICE_ASC_TOTAL_STAY = 14;
+        HOTEL_CLASS_ASC = 5;
+        HOTEL_CLASS_DESC = 6;
+        USER_RATING_ASC = 7;
+        USER_RATING_DESC = 8;
+        LAST_VISIT_TIMESTAMP_DESC = 9;
+        POINT_DISTANCE_ASC = 10;
+        PERSONAL_MATCH_DESC = 11;
+        NUMBER_OF_USER_RATINGS_DESC = 13;
+    }
+    
+    optional DistanceParams.ExplicitLocation distance_sort_center = 2;
+    optional string distance_sort_center_mid = 3;
+}
+
+message HotelOccupancyParams {
+    optional uint32 occupancy = 1 [deprecated = true];
+    optional geo_serving_proto.hotels.OccupancyType occupancy_type = 2 [deprecated = true];
+    
+    repeated Child children = 3 [deprecated = true];
+    message Child {
+        optional uint32 age = 1;
+    }
+    
+    optional geo_serving_proto.hotels.Occupancy selected_occupancy = 6;
+    optional geo_serving_proto.hotels.SupportedOccupancy supported_occupancy = 5;
+    
+    reserved 4;
+}
+
+message HotelAmenityParams {
+    optional HotelAmenity hotel_amenity = 1;
+    enum HotelAmenity {
+        UNKNOWN_HOTEL_AMENITY = 0;
+        AIRPORT_SHUTTLE = 11;
+        AIR_CONDITIONED = 1;
+        BAR = 2;
+        BEACH_ACCESS = 12;
+        CASINO = 13;
+        CHILD_FRIENDLY = 3;
+        FREE_BREAKFAST = 4;
+        PARKING = 18;
+        FREE_PARKING = 5;
+        FREE_WIFI = 6;
+        GYM = 7;
+        HOT_TUB = 14;
+        PETS_ALLOWED = 8;
+        POOL = 9;
+        INDOOR_POOL = 19;
+        OUTDOOR_POOL = 20;
+        RESTAURANT = 10;
+        ROOM_SERVICE = 15;
+        SPA = 16;
+        ALL_INCLUSIVE = 17;
+        WHEELCHAIR_ACCESSIBLE = 21;
+        ONSEN = 22;
+        TRANSFER = 23;
+        PUBLIC_BATH = 24;
+        OPEN_AIR_BATH = 25;
+        FAMILY_BATH = 26;
+        SAUNA = 27;
+        JACUZZI = 28;
+        EV_CHARGING = 29;
+    }
+}
+
+message HotelScalableAttributeParams {
+    optional HotelAmenityParams.HotelAmenity hotel_amenity = 1;
+}
+
+message QueryTermParams {
+    optional string token = 1;
+}
+
+message ElectricVehicleConnectorParams {
+    optional ConnectorTypePreferenceUsage use_connector_type_preferences = 1;
+    enum ConnectorTypePreferenceUsage {
+        UNKNOWN_CONNECTOR_TYPE_PREFERENCE_USAGE = 0;
+        DO_NOT_USE_CONNECTOR_TYPE_PREFERENCES = 1;
+        USE_CONNECTOR_TYPE_PREFERENCES = 2;
+        USE_AD_HOC_CONNECTOR_TYPE = 3;
+    }
+    
+    optional int32 connector_type = 2;
+}
+
+message ForYouParams {
+    optional ForYouRestrictionType for_you_restriction_type = 1;
+    enum ForYouRestrictionType {
+        UNKNOWN_FOR_YOU_RESTRICTION_TYPE = 0;
+        FOR_YOU = 1;
+    }
+}
+
+message GPayFoodRestaurantParams {
+    repeated FulfillmentType fulfillment_types = 1;
+    enum FulfillmentType {
+        UNKNOWN_FULFILLMENT_TYPE = 0;
+        DINE_IN_PREPAID = 1;
+        DINE_IN_POSTPAID = 3;
+        TAKEOUT = 2;
+    }
+}
+
+message ChainMemberParams {
+    optional ChainMemberRestrictionType chain_member_restriction_type = 1;
+    enum ChainMemberRestrictionType {
+        UNKNOWN_CHAIN_MEMBER_RESTRICTION_TYPE = 0;
+        CHAIN_ONLY = 1;
+        NO_CHAIN = 2;
+        CHAIN_SUBCHAIN_ONLY = 3;
+    }
+    
+    repeated string include_chain_mids = 2;
+}
+
+message DealsParams {
+    optional DealsRestrictionType restriction_type = 1;
+    enum DealsRestrictionType {
+        UNKNOWN_DEALS_RESTRICTION_TYPE = 0;
+        ALL_DEALS = 1;
+        EXPLORE_DEALS = 2;
+    }
+}
+
+message HotelCovid19ResponderParams {
+    optional HotelCovid19ResponderPolicy policy = 1;
+    enum HotelCovid19ResponderPolicy {
+        UNKNOWN_HOTEL_COVID19_RESPONDER_POLICY = 0;
+        ANY_POLICY = 1;
+    }
+}
+
+message HotelFreeCancellationParams {
+    optional bool refundable = 1;
+}
+
+message CategoricalAttractionParams {
+    optional AttractionCategory category = 1;
+    enum AttractionCategory {
+        UNKNOWN_ATTRACTION_CATEGORY = 0;
+        ARTS_AND_CULTURE = 1;
+        HISTORY = 2;
+        OUTDOORS = 3;
+    }
+}
+
+message GcidParams {
+    repeated string primary_gcid = 1;
+    repeated string gcid = 2;
+}
+
+message HotelAccommodationTypeParams {
+    optional string accommodation_type_mid = 1 [deprecated = true];
+    
+    optional AccommodationType accommodation_type = 2;
+    enum AccommodationType {
+        UNKNOWN_ACCOMMODATION_TYPE = 0;
+        APARTMENT = 1;
+        APARTHOTEL = 21;
+        BEACH_HOTEL = 12;
+        BED_AND_BREAKFAST = 19;
+        BOUTIQUE = 13;
+        BUDGET_JAPANESE_INN = 22;
+        BUNGALOW = 2;
+        CABIN = 3;
+        CHALET = 4;
+        COTTAGE = 5;
+        GITE = 6;
+        HOLIDAY_VILLAGE = 7;
+        HOSTEL = 14;
+        HOUSE = 8;
+        HOUSEBOAT = 9;
+        INN = 15;
+        JAPANESE_BUSINESS_HOTEL = 23;
+        JAPANESE_INN = 24;
+        MOTEL = 16;
+        RESORT = 17;
+        SPA_HOTEL = 18;
+        VILLA = 10;
+        UNCATEGORIZED_HOTEL = 20;
+        UNCATEGORIZED_VACATION_RENTAL = 11;
+    }
+    
+    optional bool is_vacation_rental = 3;
+}
+
+message HierarchicalParentParams {
+    optional string parent_mid = 1;
+}
+
+message ProductAvailabilityParams {
+    optional ProductAvailabilityState product_availability_state = 1;
+    enum ProductAvailabilityState {
+        UNKNOWN_PRODUCT_AVAILABILITY_STATE = 0;
+        IN_STOCK = 1;
+    }
+}
+
+message HotelEcoCertifiedParams {
+    optional bool eco_certified = 1;
+}
+
+message HotelRoomStyleParams {
+    repeated JapaneseHotelRoomStyle japanese_hotel_room_styles = 1;
+    enum JapaneseHotelRoomStyle {
+        UNSPECIFIED = 0;
+        WESTERN = 1;
+        JAPANESE = 2;
+        JAPANESE_WESTERN = 3;
+    }
+}
+
+message HotelSmokingInRoomParams {
+    optional bool allowed = 1;
+}
+
+message HotelOpenAirBathInRoomParams {
+    optional bool included = 1;
+}
+
+message HotelMealPlansParams {
+    optional bool strict = 1;
+    optional bool none = 2;
+    optional bool breakfast = 3;
+    optional bool dinner = 4;
+    optional bool breakfast_and_dinner = 5;
+}
+
+message HotelBedsCombinationParams {
+    optional bool strict = 1;
+    optional int32 any_bed = 2;
+    optional int32 single_bed = 3;
+    optional int32 semi_double_bed = 4;
+    optional int32 double_bed = 5;
+    optional int32 queen_bed = 6;
+    optional int32 king_bed = 7;
+}
+
+message HotelEarlyCheckInParams {
+    optional bool available = 1;
+}
+
+message HotelLateCheckOutParams {
+    optional bool available = 1;
+}
+
+message HotelRoomStyleAndBedsCombinationParams {
+    repeated HotelRoomStyleAndBedsCombination room_styles_and_beds_combination = 1 [packed = true];
+    enum HotelRoomStyleAndBedsCombination {
+        UNKNOWN = 0;
+        JAPANESE = 1;
+        JAPANESE_WESTERN = 2;
+        ONE_BED = 3;
+        SINGLE = 4;
+        DOUBLE = 5;
+        SEMI_DOUBLE = 6;
+        QUEEN = 7;
+        KING = 8;
+        TWIN = 9;
+        THREE_BEDS = 10;
+        MORE_THAN_THREE_BEDS = 11;
+    }
+}
+
+message FilterData {
+    enum Type {
+        UNKNOWN_FILTER_TYPE = 0;
+        PRICE = 1;
+        HOTEL_CLASS = 2;
+        OPENING_HOURS = 3;
+        RATINGS = 4;
+        CUISINE = 5;
+        DISTANCE = 6;
+        DISTANCE_ORIGIN = 7;
+        HOTEL_PRICE = 8;
+        ZAGAT_RATED = 9;
+        RESERVABLE = 10;
+        HOTEL_DATE_PICKER = 11;
+        HOTEL_AMENITIES = 12;
+        HOTEL_DEALS = 13;
+        HOTEL_CHAINS = 14;
+        HOTEL_OCCUPANCY = 15;
+        LODGING_TYPE = 16;
+        VISIT_HISTORY = 17;
+        ESTABLISHMENT_DATE = 18;
+        SCALABLE_ATTRIBUTE = 19;
+        FOR_YOU = 20;
+        COVID19_VACCINE = 21;
+        HEALTH_INSURANCE = 22;
+        FOOD_DISTRIBUTION_DONATION = 23;
+        JOB_TYPE = 24;
+        CHAIN_MEMBER = 25;
+        GCID = 26;
+        CHARGING_SPEED = 27;
+        TRENDING = 28 [deprecated = true];
+        ELECTRIC_VEHICLE_CONNECTOR_TYPE = 29;
+        GOVERNMENT_OFFICE = 30;
+        ELECTRIC_VEHICLE_CHARGING_NETWORK = 31;
+    }
+}
+
+message StaticPivotData {
+    enum Type {
+        UNKNOWN_PIVOT = 0;
+        OPEN_NOW = 11;
+        CHEAP = 12;
+        UPSCALE = 13;
+        LUXURY = 14;
+        TOP_RATED = 15;
+        CHEAP_HOTEL = 16;
+        HOTEL_DEALS = 17;
+        FOR_NOW = 18;
+        MORNING = 19;
+        EARLY_MORNING = 20;
+        NOON = 21;
+        NIGHT = 22;
+        LATE_NIGHT = 23;
+        BREAKFAST = 24;
+        BRUNCH = 25;
+        LUNCH = 26;
+        DINNER = 27;
+        BOOK_ONLINE = 28;
+        TRENDING = 29;
+    }
+}
+
+message VisitHistoryPivotData {
+    enum Status {
+        UNKNOWN_HISTORY = 0;
+        VISITED = 1;
+        NOT_VISITED = 2;
+    }
+}
+
+message ChargingSpeedParams {
+    optional ChargingSpeed charging_speed = 1;
+    enum ChargingSpeed {
+        UNKNOWN_CHARGING_SPEED = 0;
+        FAST_CHARGING_SPEED = 3;
+    }
+    
+    optional float minimum_charging_speed_kw = 2;
+}
+
+message ElectricVehiclePaymentNetworkParams {
+    optional PaymentNetworkPreferenceUsage payment_network_preference_usage = 1;
+    enum PaymentNetworkPreferenceUsage {
+        UNKNOWN_PAYMENT_NETWORK_PREFERENCE_USAGE = 0;
+        USE_PAYMENT_NETWORK_PREFERENCES = 1;
+        USE_AD_HOC_PAYMENT_NETWORK = 2;
+    }
+    
+    optional string payment_network_mid = 2;
+}
+
+message Covid19VaccineParams {
+    optional VaccineCategory vaccine_category = 1;
+    enum VaccineCategory {
+        UNKNOWN_VACCINE_CATEGORY = 0;
+        ADULT = 1;
+        CHILDREN = 2;
+        BABY = 3;
+    }
+    
+    optional VaccineType vaccine_type = 2;
+    enum VaccineType {
+        UNKNOWN_VACCINE_TYPE = 0;
+        COVAXIN = 1;
+        JOHNSON_AND_JOHNSON = 2;
+        MODERNA = 3;
+        OXFORD_ASTRAZENECA = 4;
+        PFIZER = 5;
+        SPUTNIK = 6;
+        ZYCOV_D = 7;
+        COVISHIELD = 8 [deprecated = true];
+        CORBEVAX = 9;
+        PFIZER_BOOSTER = 10;
+        MODERNA_BOOSTER = 11;
+    }
+}
+
+enum RefinementType {
+    UNKNOWN_REFINEMENT_TYPE = 0;
+    PRICE_LEVEL = 1;
+    PRICE_RANGE = 62;
+    USER_RATING = 2;
+    REVIEW_COUNT = 68;
+    OPENING_HOURS = 3;
+    HOTEL_CLASS = 4;
+    CUISINE = 5;
+    SOCIAL = 6;
+    HOTEL_PRICE = 7;
+    DISTANCE = 8;
+    ZAGAT_RATED = 9;
+    HOTEL_AMENITIES = 10;
+    QUERY_TERMS = 11;
+    SEARCH_AREA = 12;
+    HOTEL_DEALS = 13;
+    HOTEL_DATES = 14;
+    SCALABLE_ATTRIBUTE = 15;
+    VISIT_HISTORY = 16;
+    SORT = 17;
+    HOTEL_OCCUPANCY = 18;
+    LODGING_TYPE = 19;
+    RESERVATION_AVAILABILITY = 20;
+    FOOD_ORDERING_AVAILABILITY = 21;
+    EAT_NOW = 67;
+    ESTABLISHMENT_DATE = 22;
+    EXPERIENCE_TIME_FRAME = 23;
+    EXPERIENCE_ATTRIBUTE = 24;
+    ELECTRIC_VEHICLE_CONNECTOR_TYPE = 25;
+    SEARCH_ALONG_ROUTE_CONTEXT = 26;
+    WAIT_TIME = 27;
+    BUSYNESS = 28;
+    EXPERIENCE_SETTING = 29;
+    HOTEL_GOOGLE_ONE = 30;
+    HOTEL_CHAINS = 31;
+    BOOK_ONLINE = 32;
+    EXPERIENCE_TIME_OF_DAY = 33;
+    DEALS = 34;
+    HOTEL_LOCALITIES = 35;
+    HOTEL_SCALABLE_ATTRIBUTE = 36;
+    FOR_YOU = 37;
+    GPAY_FOOD_RESTAURANT = 38;
+    CHAIN_MEMBER = 39;
+    HOTEL_COVID19_RESPONDER = 40;
+    HOTEL_FREE_CANCELLATION = 41;
+    ATTRACTION_CATEGORY = 42;
+    GCID = 43;
+    HOTEL_ACCOMMODATION_TYPE = 44;
+    HEALTH_INSURANCE = 45;
+    CHARGING_SPEED = 46;
+    HIERARCHICAL_PARENT = 47;
+    ELECTRIC_VEHICLE_PAYMENT_NETWORK = 48;
+    PRODUCT_AVAILABILITY = 49;
+    COVID19_VACCINE = 50;
+    HOTEL_ECO_CERTIFIED = 51;
+    HOTEL_CRISIS_POLICY = 52;
+    FOOD_DISTRIBUTION_DONATION_TYPE = 53;
+    JOB_TYPE = 54;
+    TRENDING = 55 [deprecated = true];
+    GOVERNMENT_OFFICE = 56;
+    HOTEL_ROOM_STYLE = 57;
+    HOTEL_SMOKING_IN_ROOM = 58;
+    HOTEL_OPEN_AIR_BATH_IN_ROOM = 59;
+    HOTEL_MEAL_PLANS = 60;
+    HOTEL_BEDS_COMBINATION = 61;
+    SERVICES_JOB_TYPE = 63;
+    SCALABLE_JOURNEY_ATTRIBUTES = 69;
+    HOTEL_EARLY_CHECK_IN = 64;
+    HOTEL_LATE_CHECK_OUT = 65;
+    HOTEL_ROOM_STYLE_AND_BEDS_COMBINATION = 66;
+    PAYMENT_METHOD = 70;
+}
+
+enum DayOfWeek {
+    DAY_OF_WEEK_UNSPECIFIED = 0;
+    MONDAY = 1;
+    TUESDAY = 2;
+    WEDNESDAY = 3;
+    THURSDAY = 4;
+    FRIDAY = 5;
+    SATURDAY = 6;
+    SUNDAY = 7;
+}

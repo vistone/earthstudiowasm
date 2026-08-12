@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message KnowledgeGraphReferenceProto {
+    optional string id = 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional KnowledgeGraphReferenceProto message_set_extension = 157211294;
+    }
+}

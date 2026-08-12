@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package logs;
+
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/eventid/eventid.proto";
+import "logs/proto/visual_element/visual_element_offset_identifier.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_package = "com.google.common.logging";
+
+message ClickTrackingCGI {
+    optional int32 ve_index = 1 [default = -1];
+    optional int32 non_archival_ve_index = 11 [default = -1];
+    optional VeOffsetIdentifier ve_offset_identifier = 15;
+    optional int32 ve_type = 2;
+    optional int32 odelay_se_linker = 8;
+    optional int32 element_index = 5 [default = -1];
+    optional int32 result_index = 6 [default = -1];
+    optional int32 page_start = 7;
+    optional int32 result_group_element_index = 9 [default = -1, deprecated = true];
+    optional bool do_not_log_url = 10 [default = false];
+    optional fixed64 result_fprint = 12 [jstype = JS_STRING];
+    optional ClientEventIdMessage ve_event_id = 13;
+    optional int32 youtube_ve_counter = 14 [default = -1];
+    optional int32 youtube_ve_identifier = 16;
+    
+    reserved 3, 4;
+    
+    extend .proto2.bridge.MessageSet {
+        optional ClickTrackingCGI message_set_extension = 15872052;
+    }
+}

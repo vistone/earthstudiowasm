@@ -1,0 +1,34 @@
+syntax = "editions";
+
+package boq.travelfrontendhotelssearch.protos;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.travel.frontend.hotels.search.protos";
+
+enum NotableCategory {
+    option features = enum_type: CLOSED
+    ;
+    NOTABLE_CATEGORY_UNKNOWN = 0;
+    NOTABLE_CATEGORY_FREQUENTLY_MENTIONED = 1;
+    NOTABLE_CATEGORY_FEATURED_IN_ARTICLE = 2;
+    NOTABLE_CATEGORY_ACTIVITIES = 3;
+    NOTABLE_CATEGORY_BALCONIES = 22;
+    NOTABLE_CATEGORY_BAR = 4;
+    NOTABLE_CATEGORY_BATHROOM = 5;
+    NOTABLE_CATEGORY_BEACH = 6;
+    NOTABLE_CATEGORY_BREAKFAST = 7;
+    NOTABLE_CATEGORY_FAMILY_FRIENDLINESS = 9;
+    NOTABLE_CATEGORY_GYM = 10;
+    NOTABLE_CATEGORY_HOTEL = 20;
+    NOTABLE_CATEGORY_HOTEL_COMFORT = 11;
+    NOTABLE_CATEGORY_LOCATION = 12;
+    NOTABLE_CATEGORY_POOL = 13;
+    NOTABLE_CATEGORY_RESTAURANT = 14;
+    NOTABLE_CATEGORY_ROOMS = 15;
+    NOTABLE_CATEGORY_SERVICE = 16;
+    NOTABLE_CATEGORY_VIEWS = 21;
+    NOTABLE_CATEGORY_WELLNESS = 18;
+    NOTABLE_CATEGORY_WIFI = 19;
+}

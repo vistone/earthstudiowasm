@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package maps_tolls;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.directions.tolls.proto";
+
+enum ClientId {
+    CLIENT_UNKNOWN = 0;
+    GMM_DOGFOOD = 1;
+    ROUTES_PREFERRED = 2;
+    GMM_PROD = 3;
+    CLIENT_DARK_LAUNCH = 4;
+    ROUTES = 5;
+    TACTILE = 6;
+}

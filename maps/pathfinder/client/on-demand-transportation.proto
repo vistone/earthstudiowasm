@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "maps/limo/proto/context.proto";
+import "maps/limo/proto/platform.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "OnDemandTransportationProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message OnDemandTransportationOptions {
+    repeated int32 partner_app_capability_id = 1;
+    optional maps_limo.ClientPlatform client_platform = 2;
+    optional maps_limo.Context context = 3;
+}
+
+message BikesharingOptions {
+    optional RequestedResultTypes requested_result_types = 1;
+    message RequestedResultTypes {
+        optional bool include_dockless_bikesharing = 1;
+        optional bool include_docked_bikesharing = 2;
+    }
+    
+    optional string preferred_provider_token = 3;
+    
+    oneof reroute_token {
+        string vehicle_reroute_token = 2;
+        BikeStationRerouteTokens station_reroute_tokens = 4;
+    }
+    
+    message BikeStationRerouteTokens {
+        optional string pick_up_station_reroute_token = 1;
+        optional string drop_off_station_reroute_token = 2;
+    }
+}
+
+message TaxiOptions {
+    optional RequestedResultTypes requested_result_types = 1;
+    message RequestedResultTypes {
+        optional bool include_regular_ridesharing = 1 [default = true];
+        optional bool include_long_distance_ridesharing = 2;
+        optional bool include_offline_auto_rickshaw = 3;
+    }
+    
+    optional string preferred_provider_token = 2;
+    optional bool return_combined_promo_and_organic_intents = 3;
+    optional bool enable_trip_promotions = 5 [default = false];
+    optional bool enable_route_around_traffic = 6 [default = true];
+    optional bool return_all_trips = 7;
+    
+    reserved 4, 8;
+}

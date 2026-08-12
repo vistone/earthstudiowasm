@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geostore.ontology;
+
+import "geostore/base/proto/datasourceprovider.proto";
+import "geostore/base/proto/gconceptinstance.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.geostore.ontology.proto";
+
+message RawGConceptInstanceProto {
+    optional GConceptInstanceProto instance = 1;
+    optional DataSourceProvider.Provider provider = 2 [deprecated = true];
+    optional string source_dataset = 3 [deprecated = true];
+    optional bool is_inferred = 4;
+    optional bool is_added_by_edit = 5 [deprecated = true];
+}

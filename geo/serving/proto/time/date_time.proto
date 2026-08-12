@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geo_serving_proto.time;
+
+import "geo/serving/proto/time/time_ago.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPTM";
+option java_multiple_files = true;
+option java_outer_classname = "DateTimeProto";
+option java_package = "com.google.geo.serving.proto.time";
+
+message DateTime {
+    optional string relative_label = 1;
+    optional int64 timestamp_us = 2;
+    optional TimeAgo time_ago = 3;
+}

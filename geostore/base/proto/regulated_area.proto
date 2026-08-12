@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/restriction.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message RegulatedAreaProto {
+    repeated RestrictionProto restriction = 1;
+    
+    repeated EmissionsSticker required_emissions_sticker = 2;
+    enum EmissionsSticker {
+        EMISSIONS_STICKER_UNKNOWN = 0;
+        EURO0 = 1;
+        EURO1 = 2;
+        EURO2 = 3;
+        EURO3 = 4;
+        EURO4 = 5;
+        EURO5 = 6;
+        EURO6 = 7;
+        EURO7 = 8;
+        EURO_EEV = 9;
+        EURO2_WITH_PRC = 10;
+        EURO3_WITH_PRC = 11;
+        ELECTRIC_VEHICLES = 12;
+        DEU_RED = 13;
+        DEU_YELLOW = 14;
+        DEU_GREEN = 15;
+        FRA_CRITAIR = 16;
+        FRACRITAIR1 = 17;
+        FRACRITAIR2 = 18;
+        FRACRITAIR3 = 19;
+        FRACRITAIR4 = 20;
+        FRACRITAIR5 = 21;
+        DNK_RED = 22;
+        DNK_GREEN = 23;
+        AUT_EURO_I = 24;
+        AUT_EURO_II = 25;
+        AUT_EURO_III = 26;
+        AUT_EURO_IV = 27;
+        AUT_EURO_V = 28;
+        AUT_EURO_VI = 29;
+        SPA_CAT_ECO = 30;
+        SPA_CAT_ZERO = 31;
+        SPA_CAT_B = 32;
+        SPA_CAT_C = 33;
+    }
+}

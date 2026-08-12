@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/state/state.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Cardderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derived";
+
+message CardDerivedState {
+    optional NonRestorableKnowledgeCardData.StackRootCardId stack_root_card_id = 1;
+    optional bool fly_immediately_requested = 2;
+    optional bool card_set_requested = 3;
+    optional int32 index = 4;
+    optional NonRestorableKnowledgeCardData.CardSize card_size = 5;
+    optional bool is_card_saved_in_document = 6;
+    optional bool is_persistent_local_storage_available = 7;
+    optional bool show_placemark = 8;
+    optional NonRestorableFeelingLuckyData.FeelingLuckyRequestStatus feeling_lucky_request_status = 9;
+    optional bool is_feeling_lucky = 12;
+}

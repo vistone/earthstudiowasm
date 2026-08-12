@@ -1,0 +1,186 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "geostore/base/proto/transitline.proto";
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/pathfinder/client/polyline-codec.proto";
+import "logs/proto/maps/pathfinder/client/step.proto";
+import "logs/proto/maps/shared/geometry_e7.proto";
+import "logs/proto/maps/transit/api/accessibility.proto";
+import "logs/proto/maps/transit/api/link.proto";
+import "logs/proto/maps/transit/api/payment.proto";
+import "logs/proto/maps/transit/api/text.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "MetadataProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedMetadata {
+    map<fixed64, LoggedFeed> feed = 1;
+    map<fixed64, LoggedAgency> agency = 2;
+    map<fixed64, LoggedStation> station = 3;
+    map<fixed64, LoggedStop> stop = 4;
+    map<fixed64, LoggedNetwork> network = 12;
+    map<fixed64, LoggedLine> line = 5;
+    map<fixed64, LoggedLineDirection> line_direction = 6;
+    map<fixed64, LoggedRouteSection> route_section = 7;
+    map<fixed64, LoggedTransitTrip> transit_trip = 8;
+    map<fixed64, maps.pathfinder.client.LoggedEncodedPolyline> polyline = 9;
+    map<fixed64, LoggedAlert> alert = 10;
+    map<fixed64, LoggedTransfer> transfer = 11;
+    map<fixed64, LoggedVehicle> vehicle = 13;
+    map<fixed64, LoggedAttribution> attribution = 14;
+}
+
+message LoggedRealtimeFeed {
+    optional string partner_dashboard_name = 1;
+    optional int64 acquisition_time = 2;
+    optional bool is_confidential = 3;
+    optional string mode = 4;
+}
+
+message LoggedFeed {
+    optional logs_maps.FeatureIdProto feed_id = 1;
+    optional string partner_dashboard_name = 2;
+    optional string oyster_name = 3;
+    optional string agency_version = 4;
+    optional int64 acquisition_time = 5;
+    optional string matching_push_id = 6;
+    optional bool is_confidential = 7 [default = false];
+    optional LoggedText copyright = 9;
+    repeated LoggedRealtimeFeed realtime = 10;
+    
+    reserved 8;
+}
+
+message LoggedAgency {
+    optional logs_maps.FeatureIdProto agency_id = 1;
+    optional LoggedLabel name = 2;
+    repeated logs_maps.FeatureIdProto business_chain_id = 6;
+    
+    reserved 7;
+}
+
+message LoggedStation {
+    optional logs_maps.FeatureIdProto station_id = 1;
+    optional logs_maps_shared.PointE7 location = 2;
+    optional LoggedLabel name = 3;
+    repeated LoggedLinkRef schedule_ref = 4;
+    optional fixed64 parent_station_key = 5;
+    optional string country_code = 6;
+    optional LoggedPaymentOptions payment_options = 7;
+}
+
+message LoggedStop {
+    optional fixed64 station_key = 1;
+    optional logs_maps.FeatureIdProto stop_id = 2;
+    optional logs_maps_shared.PointE7 location = 3;
+    optional LoggedLabel name = 4;
+    optional LoggedLabel signposted_as = 7;
+    optional string stop_code = 5;
+    optional LoggedAccessibility accessibility = 6;
+}
+
+message LoggedNetwork {
+    optional LoggedLabel name = 1;
+}
+
+message LoggedLine {
+    optional logs_maps.FeatureIdProto line_id = 1;
+    optional geostore.TransitLineProto.VehicleTypeCategory vehicle_type = 2;
+    optional fixed64 network_key = 9;
+    optional LoggedLabel name = 5;
+    optional fixed32 shape_color = 6;
+    optional bool is_explicit = 7;
+    repeated LoggedLinkRef more_info_ref = 8;
+    
+    optional LoggedTripTiming trip_timing = 10;
+    enum LoggedTripTiming {
+        TRIP_TIMING_UNSPECIFIED = 0;
+        DURATION = 1;
+    }
+    
+    optional string capitalized_vehicle_name = 11;
+    repeated fixed64 vehicle_key = 12 [packed = true];
+}
+
+message LoggedLineDirection {
+    optional fixed64 line_key = 1;
+    optional LoggedLabel headsign = 2;
+    optional LoggedLabel direction = 3;
+    optional LoggedLabel express_type = 4;
+    optional fixed64 destination_station_key = 5;
+    repeated fixed64 via_station_key = 6 [packed = true];
+}
+
+message LoggedRouteSection {
+    optional fixed64 line_direction_key = 1;
+    optional int32 block_transfer_counter = 2;
+}
+
+message LoggedTransitTrip {
+    optional bytes vehicle_token = 19;
+    optional int64 first_departure_time = 2;
+    optional bool is_frequency_based = 3;
+    optional LoggedLabel name = 4;
+    repeated fixed64 feed_key = 5 [packed = true];
+    repeated fixed64 agency_key = 6 [packed = true];
+    optional LoggedAccessibility accessibility = 7;
+    repeated LoggedLinkRef more_info_ref = 8;
+    optional fixed64 line_and_pois_fprint = 9;
+    repeated fixed64 attribution_key = 10 [packed = true];
+    
+    reserved 1;
+}
+
+message LoggedAlert {
+    optional LoggedSeverity severity = 1;
+    enum LoggedSeverity {
+        SEVERITY_UNKNOWN = 0;
+        SEVERITY_CRITICAL = 1;
+        SEVERITY_WARNING = 2;
+        SEVERITY_INFORMATION = 3;
+    }
+    
+    optional int32 relative_importance = 2;
+    optional string headline = 3;
+    optional LoggedText text = 4;
+    optional LoggedLinkRef more_info_ref = 5;
+    optional string entity_id = 6;
+    optional fixed64 uid = 10;
+}
+
+message LoggedTransfer {
+    optional fixed64 start_stop_key = 1;
+    optional fixed64 end_stop_key = 2;
+    optional string summary = 5;
+    optional int32 distance_meters = 4;
+    repeated maps.pathfinder.client.LoggedStep step = 3;
+}
+
+message LoggedVehicle {
+    repeated LoggedCarriage carriage = 1;
+    message LoggedCarriage {
+        optional LoggedLabel name = 1;
+    }
+    
+    optional LoggedLabel vehicle_category_name = 2;
+}
+
+message LoggedAttribution {
+    optional fixed64 fprint = 1;
+    optional LoggedLabel organization_name = 2;
+    optional LoggedLabel attribution_text = 3;
+    optional LoggedLinkRef attribution_url = 4;
+    
+    repeated LoggedRole role = 6 [packed = true];
+    enum LoggedRole {
+        ROLE_UNSPECIFIED = 0;
+        PRODUCER = 1;
+        OPERATOR = 2;
+        AUTHORITY = 3;
+        REALTIME_PRODUCER = 4;
+    }
+}

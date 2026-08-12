@@ -1,0 +1,33 @@
+syntax = "editions";
+
+package logs_tactile;
+
+import "maps/tactile/api/directions-common.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+;
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.tactile";
+
+message LoggedSpotlightOptions {
+    optional maps_tactile.directions.SpotlightOptions.RenderingDetailLevel rendering_detail_level = 1 [default = FULL];
+    optional bool suppress_alternates = 2;
+    optional bool show_only_waypoints_vias = 3 [default = false];
+    repeated int32 suppressed_waypoint_index = 4;
+    repeated int32 suppressed_via_index = 5;
+    optional bool show_step_inspection_arrows = 6;
+}
+
+message LoggedTripUpdateInput {
+    optional int32 distance_from_start_meters = 2;
+}
+
+message LoggedCompactPolyline {
+    repeated sint32 latitude_e7_diff = 3 [features = repeated_field_encoding: PACKED
+    ];
+    repeated sint32 longitude_e7_diff = 4 [features = repeated_field_encoding: PACKED
+    ];
+    repeated sint32 latitude_e7_diff_deprecated = 1 [deprecated = true];
+    repeated sint32 longitude_e7_diff_deprecated = 2 [deprecated = true];
+}

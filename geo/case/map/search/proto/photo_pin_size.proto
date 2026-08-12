@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package geo.casemap.search;
+
+option features = enum_type: CLOSED
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.casemap.search.proto";
+
+enum PhotoPinSize {
+    PHOTO_PIN_SIZE_UNSPECIFIED = 0;
+    PHOTO_PIN_SIZE_SMALL = 1;
+    PHOTO_PIN_SIZE_LARGE = 2;
+}

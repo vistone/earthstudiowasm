@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/state/state.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Siteselectionderivedstate";
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message SiteSelectionDerivedState {
+    optional bool active = 1;
+    optional NonRestorableSiteSelectionData.FeatureSelection selected_feature_keys = 2;
+    optional bool is_abstract_map_enabled = 3;
+}

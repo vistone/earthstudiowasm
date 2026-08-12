@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package earth.documentexport;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTHBE";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.documentexport";
+
+message DocumentExportData {
+    optional int64 document_key = 1 [default = -1];
+    optional bool document_has_export_capability = 2;
+    optional bool document_has_designs = 3;
+    optional string kml_filename = 4;
+    optional string kml_content = 5;
+    optional ExportRestrictedFeatureCounts export_restricted_feature_counts = 6;
+}
+
+message ExportRestrictedFeatureCounts {
+    optional int32 restricted_user_layer_count = 1;
+    optional int32 restricted_threed_model_count = 2;
+}

@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package geo.search.hotels;
+
+import "geo/serving/proto/hotels/client_itinerary_source.proto";
+import "google/type/date.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSH";
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.hotels";
+
+message Itinerary {
+    optional google.type.Date check_in = 1;
+    optional google.type.Date check_out = 2;
+    optional ItineraryError error = 5;
+    optional int32 max_days_length_of_stay = 6;
+    optional int32 max_check_in_distance = 8;
+    optional google.type.Date min_check_in_date = 9;
+    
+    oneof source {
+        geo_serving_proto.hotels.ClientItinerarySource client_source = 3;
+        int32 backend_source = 4;
+    }
+    
+    reserved 7;
+}
+
+message ItineraryError {
+    optional ErrorType type = 1;
+    enum ErrorType {
+        ERROR_TYPE_UNSPECIFIED = 0;
+        CHECKOUT_BEFORE_CHECKIN = 1;
+        CHECKIN_IN_PAST = 2;
+        CHECKIN_TOO_FAR_IN_FUTURE = 3;
+        LENGTH_OF_STAY_TOO_LONG = 4;
+        UNKNOWN_BACKEND_ERROR = 5;
+    }
+}

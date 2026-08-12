@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package logs;
+
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_outer_classname = "TagOptionsProtos";
+
+message TaggingFieldOptions {
+    optional int32 key_id = 1;
+    optional string key = 2;
+    optional string contact = 3;
+    optional string values_file = 4;
+    
+    repeated TagEffect effect = 5;
+    enum TagEffect {
+        UNKNOWN = 0;
+        EVE = 1;
+        IGSA_DASH = 2;
+        RANKING = 3;
+        AGSA_DASH = 4;
+        GEOEVENTS = 5;
+        SGSESSIONS = 6;
+    }
+    
+    optional string expiration_date = 6;
+}
+
+extend .proto2.FieldOptions {
+    optional TaggingFieldOptions tagging = 116793149;
+}

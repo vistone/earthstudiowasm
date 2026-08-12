@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "maps/pathfinder/client/mrp-selector-specification.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "MRPRankingSpecificationProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message MRPRankingOptions {
+    repeated MRPSelectorSpecification selectors = 1;
+}

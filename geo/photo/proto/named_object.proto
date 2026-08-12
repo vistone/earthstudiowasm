@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/object_id.proto";
+import "i18n/localization/proto/localized_text.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "NamedObjectIdOuterClass";
+option java_package = "com.google.geo.photo.proto1api";
+
+message NamedObject {
+    optional ObjectId object_id = 1;
+    optional i18n.localization.LocalizedTextProto name = 3;
+}

@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package logs.proto.searchbox;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGSB";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.searchbox";
+
+enum ActionType {
+    UNKNOWN_ACTION_TYPE = 0;
+    ACTION_PHONE_CALL = 1;
+    ACTION_TEXT = 2;
+    ACTION_EMAIL = 3;
+    ACTION_CALL = 4;
+    ACTION_CHAT = 5;
+    ACTION_VIDEO_CALL = 6;
+    ACTION_NAVIGATE = 7;
+    ACTION_SEARCH = 8;
+    ACTION_WEBPAGE = 9;
+    ACTION_OSRP = 10;
+    ACTION_SM = 11;
+    ACTION_AOG = 12;
+    ACTION_WATCH = 13;
+    ACTION_AUDIO = 14;
+    ACTION_SHARE = 15;
+}

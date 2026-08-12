@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package maps_directions_customization_logs;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedEnumerationConfig {
+    optional string domain = 1;
+    optional string name = 2;
+    repeated string values = 3;
+}

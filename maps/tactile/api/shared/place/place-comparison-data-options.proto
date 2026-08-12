@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package maps_tactile.shared.place;
+
+import "maps/tactile/api/shared/place/place-comparison-attribute-ui-style.proto";
+import "maps/tactile/api/shared/place/place-comparison-badge-type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPL";
+option java_multiple_files = true;
+option java_outer_classname = "PlaceComparisonDataOptionsProto";
+option java_package = "com.google.maps.tactile.shared.place";
+
+message PlaceComparisonDataOptions {
+    optional int32 max_comparison_attributes = 1;
+    repeated PlaceComparisonAttributeUiStyle supported_comparison_attribute_ui_style = 2;
+    optional bool include_comparison_badge_info = 3;
+    repeated PlaceComparisonBadgeType supported_comparison_badge_type = 4;
+}

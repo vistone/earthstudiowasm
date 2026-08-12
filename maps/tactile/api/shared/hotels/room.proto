@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "geo/serving/proto/hotels/occupancy.proto";
+import "geo/serving/proto/link/link.proto";
+import "geo/serving/proto/scalableattributes/scalableattributes.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/logged-link.proto";
+import "maps/tactile/api/shared/hotels/rate-features.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "RoomProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message Room {
+    repeated RoomRate rate = 1;
+}
+
+message RoomRate {
+    optional LoggedLink url = 1 [deprecated = true];
+    optional geo_serving_proto.link.Link partner_url = 12;
+    optional geo_serving_proto.link.Link async_partner_ping_url = 34;
+    optional geo_serving_proto.hotels.Occupancy occupancy = 2;
+    optional RateFeatures rate_features = 3;
+    optional string formatted_price_with_taxes = 4;
+    optional string formatted_price = 5;
+    optional string formatted_total_price_with_taxes = 6;
+    optional string formatted_total_price = 7;
+    optional bool is_customized_price = 8;
+    optional bool is_attributionsrc_label_enabled = 9;
+    repeated geo_serving_proto.scalableattributes.ScalableAttributeGroup partner_content_attribute = 10;
+    optional string pricing_tagline = 11;
+}

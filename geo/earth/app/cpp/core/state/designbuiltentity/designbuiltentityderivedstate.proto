@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message DesignBuiltEntityDerivedState {
+    optional bool is_inspector_active = 1;
+    optional string selected_built_entity_id = 2;
+}

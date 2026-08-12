@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "logs/maps/featureid.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "BoardedTransitVehicleProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedBoardedTransitVehicle {
+    repeated logs_maps.FeatureIdProto trip_id = 1;
+    optional int32 trip_dataset_id = 4;
+    optional fixed64 trip_realtime_gtfs_fprint = 5;
+    optional int32 position_in_trip = 3;
+}

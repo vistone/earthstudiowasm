@@ -1,0 +1,316 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "geo/serving/proto/directions/duration.proto";
+import "geo/serving/proto/directions/time.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/shared/common/geom/geom.proto";
+import "maps/tactile/api/directions-common.proto";
+import "maps/tactile/api/directions-on-demand-transportation.proto";
+import "maps/tactile/api/directions-result-common.proto";
+import "maps/tactile/api/directions/elevation-profile.proto";
+import "maps/tactile/api/geometry.proto";
+import "maps/tactile/api/logged-link.proto";
+import "maps/tactile/api/photo-description.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "maps/tactile/api/shared/directions/energy-usage-summary.proto";
+import "maps/tactile/api/shared/directions/fare.proto";
+import "maps/tactile/api/shared/directions/monetary-cost.proto";
+import "maps/tactile/api/shared/platform-intent.proto";
+import "maps/tactile/api/traffic.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "net/proto2/contrib/output_source_markup/options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "DirectionsSummaryProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message DateInterval {
+    optional string formatted_value = 1;
+}
+
+message Schedule {
+    optional geo_serving_proto.directions.Time scheduled_departure_time = 1;
+    optional geo_serving_proto.directions.Time scheduled_arrival_time = 2;
+    optional geo_serving_proto.directions.Duration realtime_delay = 3;
+    optional bool estimated_from_frequency = 4;
+    optional geo_serving_proto.directions.Time departure_time = 5;
+    optional geo_serving_proto.directions.Time arrival_time = 6;
+    optional RealtimeSource realtime_source = 7 [default = SOURCE_UNKNOWN];
+    optional RealtimeStatus realtime_status = 8 [default = UNKNOWN];
+}
+
+message DrivingSummary {
+    optional geo_serving_proto.directions.Duration duration_with_traffic = 1;
+    optional TrafficData.DelayCategory delay_category = 3;
+    optional geo_serving_proto.directions.Duration freeflow_duration = 4;
+    
+    optional DurationRange duration_confidence_interval = 5;
+    message DurationRange {
+        optional int32 low_seconds = 1;
+        optional int32 high_seconds = 2;
+        optional string formatted = 3;
+    }
+    
+    optional geo_serving_proto.directions.Duration duration_with_charging = 15;
+    optional DurationRange duration_confidence_interval_with_charging = 16;
+    optional geo_serving_proto.directions.Duration total_charging_time = 17;
+    optional geo_serving_proto.directions.Duration duration_with_historical_traffic_only = 6;
+    optional bytes roadtraffic_logged_experimental_data = 7;
+    optional geo_serving_proto.directions.Time pessimistic_arrival_time = 8;
+    optional geo_serving_proto.directions.Time pessimistic_time_to_leave = 9;
+    
+    optional FuelConsumptionSummary fuel_consumption_summary = 14;
+    message FuelConsumptionSummary {
+        optional float co2_emissions_relative_to_fastest_route = 1;
+        optional string tripset_comparison_text = 2;
+        optional string tripset_comparison_short_text = 3;
+        optional string tripset_comparison_with_engine_type_text = 4;
+        optional string tripset_comparison_with_engine_type_short_text = 5;
+    }
+    
+    repeated Label label_compared_to_tripset = 10;
+    message Label {
+        optional Type type = 1;
+        enum Type {
+            TYPE_UNKNOWN = 0;
+            TYPE_TOLLS_YES = 1;
+            TYPE_TOLLS_NO = 2;
+            TYPE_TRAFFIC_CONGESTION_MORE = 3;
+            TYPE_TRAFFIC_CONGESTION_LESS = 4;
+            TYPE_LESS_FUEL_CONSUMPTION = 5;
+            TYPE_TRAFFIC_CONGESTION_SIMILAR = 6;
+            TYPE_TRAFFIC_CONGESTION_EVEN_LESS = 7;
+            TYPE_TRAFFIC_CONGESTION_EVEN_MORE = 8;
+        }
+        
+        optional string text = 2;
+        
+        optional InlineIcon icon = 3;
+        message InlineIcon {
+            optional string url = 1;
+            
+            optional Position position = 2;
+            enum Position {
+                POSITION_UNKNOWN = 0;
+                POSITION_START = 1;
+                POSITION_END = 2;
+            }
+            
+            optional ComponentIcon icon = 3;
+        }
+    }
+    
+    repeated Label label_compared_to_current_trip = 11;
+    
+    repeated RelativeLabels trip_id_to_relative_label = 13;
+    message RelativeLabels {
+        optional string compared_to_semantic_label_trip_id = 3;
+        optional string compared_to_traffic_report_trip_id = 4;
+        repeated Label relative_label = 2;
+        
+        reserved 1;
+    }
+    
+    reserved 2, 12;
+}
+
+message TransitSummary {
+    repeated TransitAgency transit_agency = 5;
+    optional string departure_stop = 1 [deprecated = true];
+    optional string arrival_stop = 2 [deprecated = true];
+    optional int32 num_transit_stops = 3 [deprecated = true];
+    optional string line_color = 4 [deprecated = true];
+    optional string departure_stop_code = 6 [deprecated = true];
+    optional string arrival_stop_code = 7 [deprecated = true];
+    optional bool must_phone = 8 [deprecated = true];
+    optional string departure_platform = 9 [deprecated = true];
+    optional string arrival_platform = 10 [deprecated = true];
+    optional ExpressType express_type = 11 [deprecated = true];
+    optional int32 vehicle_type = 12 [deprecated = true];
+    optional TransitStopProto departure_stop_proto = 13 [deprecated = true];
+    optional TransitStopProto arrival_stop_proto = 14 [deprecated = true];
+    repeated TransitStopProto intermediate_stop = 15 [deprecated = true];
+    optional TransitFareSet base_fare_set = 16;
+    optional bool block_transfer = 18 [default = false, deprecated = true];
+    
+    reserved 17;
+}
+
+message CyclingSummary {
+    repeated RoadType road_type = 2;
+    message RoadType {
+        optional Type type = 1;
+        enum Type {
+            UNKNOWN_TYPE = 0;
+            TYPE_SEPARATE_BIKE = 1;
+            TYPE_BIKE = 2;
+            TYPE_SHARED_USE_PATH = 10;
+            TYPE_MINOR = 4;
+            TYPE_MAIN = 5;
+            TYPE_PEDESTRIAN = 6;
+            TYPE_HIGHWAY = 7;
+            TYPE_STAIRWAY = 9;
+            TYPE_SHARED = 3 [deprecated = true];
+            TYPE_UNPAVED = 8 [deprecated = true];
+        }
+        
+        optional float percentage = 2;
+        optional int32 count = 3;
+    }
+    
+    repeated Label label_compared_to_tripset = 1;
+    message Label {
+        optional Type type = 1;
+        enum Type {
+            UNKNOWN_TYPE = 0;
+            TYPE_BEST_ROUTE = 1;
+            TYPE_FASTEST = 2;
+            TYPE_LESS_TRAFFIC = 3;
+            TYPE_MORE_BIKE_LANES = 4;
+            TYPE_LESS_HIGHWAYS = 5;
+            TYPE_LESS_STEEP_HILLS = 6;
+            TYPE_LESS_TURNS = 7;
+        }
+        
+        reserved 2;
+    }
+    
+    optional ElevationProfile elevation_profile = 3;
+    optional TrafficData.DelayCategory driving_delay_category = 4;
+}
+
+message TransitFareSet {
+    repeated maps_tactile.shared.directions.Fare fare = 1;
+    optional int32 num_steps = 2 [default = 1];
+    optional int32 preferred_fare = 3 [default = 0];
+}
+
+message TransitStopProto {
+    optional string name = 1;
+    optional string code = 2;
+    optional ComponentIcon icon = 16;
+    optional geo_serving_proto.directions.Time arrival_date_time = 3;
+    optional geo_serving_proto.directions.Time departure_date_time = 4;
+    optional geo_serving_proto.directions.Time scheduled_arrival_date_time = 8;
+    optional geo_serving_proto.directions.Time scheduled_departure_date_time = 9;
+    optional LatLng position = 5;
+    optional string country_code = 14;
+    optional string platform = 6;
+    optional string station_entrance_name = 12;
+    optional string signposted_as = 13;
+    optional string station_feature_id = 7;
+    repeated Notice notice = 10;
+    optional RealtimeStatus realtime_status = 11 [default = UNKNOWN];
+    
+    optional TrafficStatus traffic_status_from_prev_stop = 15 [default = UNKNOWN_TRAFFIC_STATUS, deprecated = true];
+    enum TrafficStatus {
+        UNKNOWN_TRAFFIC_STATUS = 0;
+        SAME_AS_USUAL = 1;
+        WORSE_THAN_USUAL = 2;
+    }
+}
+
+message ExpressType {
+    optional string short_name = 1;
+    optional string full_name = 2;
+}
+
+message TransitAgency {
+    optional string name = 1;
+    optional string id = 2;
+    optional LoggedLink link = 8;
+    optional LoggedLink fare_link = 9;
+    optional string phone = 5;
+    optional LoggedLink deep_link = 10;
+    optional maps_tactile.shared.PlatformIntent buy_tickets_intent = 11;
+    optional bool gpay_supported = 12;
+    
+    reserved 3, 4, 6, 7;
+}
+
+message FlightsSummary {
+    optional string origin = 1;
+    optional string destination = 2;
+    optional DateInterval default_dates = 3;
+    optional LoggedLink flight_search_link = 4;
+    optional geo_serving_proto.directions.Duration nonstop_duration = 5;
+    optional geo_serving_proto.directions.Duration connecting_duration = 7;
+    optional geo_serving_proto.directions.Duration shortest_duration = 9;
+    optional maps_tactile.shared.directions.MonetaryCost cheapest_cost = 10;
+    repeated string airline = 11;
+    optional int32 nonstop_min_flights_per_day = 12;
+    optional int32 nonstop_max_flights_per_day = 13;
+    optional int32 nonstop_total_flights_per_week = 14;
+    optional int32 connecting_min_num_stops = 15;
+    optional LoggedLink web_search_link = 16;
+    optional string web_search_query = 17;
+    
+    reserved 6, 8, 18, 19, 20;
+}
+
+message BikesharingSummary {
+    optional DocklessBikesharingDetails dockless_bikesharing_details = 1;
+    optional DockedBikesharingDetails docked_bikesharing_details = 2;
+}
+
+message TaxiSummary {
+    optional OnlineTaxiDetails online_taxi_details = 1;
+    optional OfflineTaxiDetails offline_taxi_details = 2;
+}
+
+message Summary {
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 1;
+    optional string text = 2;
+    optional Distance distance = 3;
+    optional geo_serving_proto.directions.Duration nominal_duration = 4;
+    optional Schedule schedule = 6;
+    optional TransitSummary transit = 7;
+    optional InspectionView inspection_view = 8;
+    optional bool google_confidential = 9;
+    repeated Notice notice = 10;
+    optional DrivingSummary driving = 11;
+    optional FlightsSummary flights = 14;
+    optional CyclingSummary cycling = 17;
+    optional BikesharingSummary bikesharing = 18;
+    optional TaxiSummary taxi = 19;
+    optional maps_tactile.shared.directions.MonetaryCost monetary_cost = 12;
+    repeated RenderableComponent renderable = 15;
+    optional float speed_kph = 16;
+    optional maps_tactile.shared.directions.EnergyUsageSummary energy_usage = 21;
+    
+    reserved 5, 13, 20;
+}
+
+message ImageryHint {
+    optional LatLng ideal_look_from = 1;
+    optional LatLng look_at = 2;
+    optional float relevance = 3;
+}
+
+message InspectionView {
+    optional maps_shared.geom.Camera camera = 1;
+    optional maps_shared.geom.Camera camera_3d = 5;
+    optional LatLng position = 3;
+    optional LatLngRectangle bounds = 4;
+    optional ImageryHint imagery_hint = 2;
+    optional PhotoDescription photo = 6;
+}
+
+enum RealtimeStatus {
+    UNKNOWN = 0;
+    ON_TIME = 1;
+    EARLY = 2;
+    LATE = 3;
+    REALTIME_ONLY = 4;
+}
+
+enum RealtimeSource {
+    SOURCE_UNKNOWN = 0;
+    SOURCE_REALTIME = 1;
+    SOURCE_STATIC_AND_REALTIME_TRAFFIC = 2;
+}

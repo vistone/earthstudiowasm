@@ -1,0 +1,129 @@
+syntax = "proto2";
+
+package logs.geo_transportation_analytics.triplogs;
+
+import "google/type/latlng.proto";
+import "logs/maps/featureid.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message User {
+    oneof identifier {
+        string zwieback_cookie = 1 [deprecated = true];
+        uint64 zwieback_uid = 3;
+        string pseudonym_id = 7;
+    }
+    
+    reserved 2, 4;
+}
+
+message Location {
+    optional google.type.LatLng latlng = 1;
+    optional logs_maps.FeatureIdProto feature_id = 2;
+}
+
+message TimestampedLocation {
+    optional Location location = 1;
+    optional int64 timestamp_ms = 2;
+}
+
+message DestinationLocation {
+    optional Location location = 1;
+    optional string place_id = 2;
+    optional DestinationPointSource point_source = 3;
+}
+
+message ClientStats {
+    optional float projected_fraction = 1;
+}
+
+message Software {
+    optional string platform = 1;
+    optional string application_name = 2;
+    optional string referrer_id = 3;
+    optional AutoPlatform auto_platform = 4;
+    optional string software_version = 5;
+    optional string nav_sdk_version = 6;
+    optional string cabrio_sdk_version = 7;
+    optional DevicePlatformType device_platform_type = 8;
+}
+
+message WaypointPredictions {
+    optional int64 pre_dispatch_eta_duration_ms = 1;
+    optional int64 post_dispatch_eta_duration_ms = 2;
+    optional double pre_dispatch_predicted_distance_meters = 3;
+    optional double post_dispatch_predicted_distance_meters = 4;
+}
+
+message WaypointActivityMeasures {
+    optional TimestampedLocation waypoint_start = 1;
+    optional TimestampedLocation waypoint_end = 2;
+    optional TimestampedLocation waypoint_complete = 7;
+    optional Location waypoint_destination = 6;
+    optional WaypointPredictions waypoint_predictions = 3;
+    optional int64 waypoint_activity_duration_ms = 4;
+    optional double waypoint_activity_distance_meters = 5;
+}
+
+enum DestinationPointSource {
+    DESTINATION_POINT_SOURCE_UNSPECIFIED = 0;
+    DESTINATION_POINT_SOURCE_DEVELOPER_PROVIDED = 1;
+    DESTINATION_POINT_SOURCE_CALCULATED_FROM_PLACE = 2;
+}
+
+enum DataSource {
+    DATA_SOURCE_UNKNOWN = 0;
+    DATA_SOURCE_NAV_LOGS = 1;
+    DATA_SOURCE_FLEET_ENGINE = 2;
+    DATA_SOURCE_LMFS_PROCESSED_LOGS = 3;
+}
+
+enum AutoPlatform {
+    NONE = 0;
+    CARGO = 1;
+    CARPLAY = 2;
+    EMBEDDED = 3;
+}
+
+enum DevicePlatformType {
+    UNKNOWN_DEVICE_PLATFORM_TYPE = 0;
+    DEVICE_PLATFORM_TYPE_ANDROID = 1;
+    DEVICE_PLATFORM_TYPE_IOS = 2;
+}
+
+enum LrdPartner {
+    UNKNOWN_PARTNER = 0;
+    LYFT = 1;
+    GOJEK = 2;
+    UBER = 3;
+    TAXI_APP = 4;
+    DIDI = 5;
+    DUNZO = 6;
+    OLA = 7;
+    MY_TAXI_INTELLIGENT_APPS = 8;
+    FREE_NOW = 9;
+    TAKEAWAY_COM = 10;
+    DOORDASH = 11;
+    GETT = 12;
+    DHL = 13;
+    OTHER_PARTNER = 14;
+    CABIFY = 15;
+    BLABLACAR = 16;
+    CAREEM = 17;
+    GRAB_TAXI = 18;
+    BEAT = 19;
+    FLASCHENPOST_DE = 20;
+}
+
+enum LrdVertical {
+    UNKNOWN_LRD_VERTICAL = 0;
+    LRD_VERTICAL_RIDES = 1;
+    LRD_VERTICAL_DELIVERY = 2;
+    LRD_VERTICAL_PARCEL_DELIVERY = 3;
+}
+
+enum TripsPoweredLevel {
+    LEVEL_UNKNOWN = 0;
+    LEVEL_L1 = 1;
+    LEVEL_L2A = 2;
+    LEVEL_L2B = 3;
+}

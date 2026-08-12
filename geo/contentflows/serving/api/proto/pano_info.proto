@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package geo_contentflows_serving;
+
+import "geo/photo/proto/location.proto";
+import "geo/photo/proto/view_parameters.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_outer_classname = "PanoInfoProto";
+option java_package = "com.google.geocontentflows.serving.proto";
+
+message PanoInfo {
+    optional geo_photo_service.ViewParameters view_parameters = 1;
+    optional geo_photo_service.Rotation orientation = 2;
+    optional string usv_sequence_id = 3;
+}

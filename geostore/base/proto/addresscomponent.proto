@@ -1,0 +1,42 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/addressrange.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/name.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/text_affix.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message AddressComponentProto {
+    optional TypeCategory type = 1;
+    enum TypeCategory {
+        TYPE_FEATURE = 17;
+        TYPE_POSTAL_CODE_SUFFIX = 18;
+        TYPE_POST_BOX = 21;
+        TYPE_STREET_NUMBER = 22;
+        TYPE_FLOOR = 23;
+        TYPE_ROOM = 24;
+        TYPE_HOUSE_ID = 25;
+        TYPE_DISTANCE_MARKER = 26;
+        TYPE_LANDMARK = 27;
+        TYPE_PLUS_CODE = 28;
+    }
+    
+    repeated NameProto parsed_name = 3;
+    optional int32 feature_type = 4;
+    optional FeatureIdProto feature_id = 5;
+    optional AddressRangeProto range = 6;
+    optional .proto2.bridge.MessageSet temporary_data = 15;
+    optional int32 index = 7;
+    repeated TextAffixProto text_affix = 8;
+    
+    reserved 2, 14;
+}

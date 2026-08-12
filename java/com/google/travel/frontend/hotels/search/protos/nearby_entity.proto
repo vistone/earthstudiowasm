@@ -1,0 +1,70 @@
+syntax = "editions";
+
+package boq.travelfrontendhotelssearch.protos;
+
+import "geo/search/api/map/viewport.proto";
+import "geo/search/api/route/directions_mode.proto";
+import "geo/search/api/transit/transit_station.proto";
+import "google/type/latlng.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/travel/frontend/hotels/search/protos/map.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.travel.frontend.hotels.search.protos";
+
+message NearbyEntity {
+    optional string feature_id = 13;
+    optional string entity_name = 1;
+    optional string entity_image_url = 2;
+    
+    repeated TransitTime transit_time = 3;
+    message TransitTime {
+        optional geo.search.route.DirectionsMode.TravelMode transit_type = 1;
+        optional string time = 2;
+    }
+    
+    optional geo.search.transit.TransitStation.Vehicle transit_station_type = 4;
+    optional string distance = 15;
+    optional string entity_directions_url = 5;
+    optional string entity_link = 10;
+    optional float entity_rating = 6;
+    optional int64 rating_count = 7;
+    optional string review_summary = 8;
+    optional .google.type.LatLng latlng = 9;
+    optional string entity_code = 11;
+    optional string price = 12;
+    optional string category = 14;
+    optional string agency = 16;
+    optional string location_description_text = 18;
+    optional string search_url = 19;
+    
+    reserved 17;
+}
+
+message NearbyEntitiesAndMap {
+    optional NearbyEntityType type = 1;
+    enum NearbyEntityType {
+        option features = enum_type: CLOSED
+        ;
+        NEARBY_ENTITY_TYPE_UNSPECIFIED = 0;
+        POI = 1;
+        TRANSIT = 2;
+        AIRPORT = 3;
+        NEIGHBORHOOD = 4;
+        SIMILAR_HOTEL = 5;
+        RESTAURANT = 6;
+    }
+    
+    optional StaticMap static_map = 2;
+    repeated NearbyEntity entities = 3;
+    optional geo.search.map.Viewport viewport = 6;
+    optional bool transit_times_available = 7;
+    optional string view_all_link = 8;
+    optional string static_map_view_all_link = 9;
+    optional bool enable_counterfactual_logging = 10;
+    
+    reserved 4, 5;
+}

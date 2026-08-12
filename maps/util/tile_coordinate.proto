@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package maps_util;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMU";
+option java_multiple_files = true;
+option java_outer_classname = "DummyTileCoordinateProto";
+option java_package = "com.google.maps.util";
+
+message TileCoordinateProto {
+    required int32 zoom = 1;
+    required int32 x = 2;
+    required int32 y = 3;
+    optional int32 tile_size = 4 [default = 256];
+    optional int32 s2_face_id = 5 [deprecated = true];
+}

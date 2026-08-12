@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message SegmentPortionProto {
+    optional FeatureIdProto segment_id = 1;
+    optional double start_fraction = 2 [default = 0];
+    optional double end_fraction = 3 [default = 1];
+}

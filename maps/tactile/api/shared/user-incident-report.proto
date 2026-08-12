@@ -1,0 +1,138 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "geostore/base/proto/timeschedule.proto";
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/tactile/api/shared/feature-id.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "UserIncidentReportProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message UserReportedIncidentDetails {
+    repeated FeatureId feature_id = 1;
+    repeated LatLng lat_lng = 2;
+    optional bool current_disturbance = 3;
+    optional geostore.TimeScheduleProto time_schedule = 4;
+    
+    optional RoadDirectionality road_directionality = 5;
+    enum RoadDirectionality {
+        UNDEFINED = 0;
+        ONE_WAY_DIRECTION_UNDEFINED = 1;
+        TWO_WAY = 2;
+    }
+    
+    optional RoadClosureCause closure_cause = 6;
+    message RoadClosureCause {
+        optional PrimaryCause primary_cause = 1;
+        enum PrimaryCause {
+            UNKNOWN_PRIMARY_CAUSE = 0;
+            CONSTRUCTION = 1;
+            CRASH = 2;
+            NATURE = 3;
+            EVENT = 4;
+        }
+        
+        optional NatureCause nature_cause = 2;
+        enum NatureCause {
+            UNKNOWN_NATURE_CAUSE = 0;
+            FLOOD = 1;
+            EARTHQUAKE = 2;
+            FIRE = 3;
+            MUDSLIDE = 4;
+            SNOW_ICE = 5;
+            TREE = 6;
+            OTHER = 7;
+        }
+        
+        optional string event_mid = 3;
+    }
+    
+    optional CameraDetails camera_detail = 7;
+    message CameraDetails {
+        optional CameraType camera_type = 1;
+        enum CameraType {
+            UNKNOWN_CAMERA_TYPE = 0;
+            SPEED = 1;
+        }
+        
+        optional PositioningType positioning_type = 2;
+        enum PositioningType {
+            UNKNOWN_POSITIONING_TYPE = 0;
+            MOBILE = 1;
+            FIXED = 2;
+        }
+    }
+    
+    optional TripContext trip_context = 8;
+    message TripContext {
+        optional Status status = 1;
+        enum Status {
+            UNKNOWN_STATUS = 0;
+            MID_TRIP = 1;
+            POST_TRIP = 2;
+        }
+        
+        optional float snapped_bearing_deg = 2;
+        optional string snapped_road_name = 3;
+    }
+    
+    optional SpeedLimitContext speed_limit_context = 9;
+    message SpeedLimitContext {
+        optional int32 speed_limit_kph = 1;
+    }
+}
+
+enum UserIncidentReportType {
+    UNKNOWN_USER_INCIDENT_REPORT_TYPE = 0;
+    INCIDENT_CREATE = 1;
+    INCIDENT_MODIFY = 2;
+    INCIDENT_TAKEDOWN = 3;
+    INCIDENT_UNSURE = 4;
+    INCIDENT_CONFIRM = 5;
+}
+
+enum UserIncidentReportFlow {
+    UNKNOWN_USER_INCIDENT_REPORT_FLOW = 0;
+    REPORT_NOT_CLOSED = 1;
+    REPORT_RAP_RMI = 3;
+    REPORT_TRICK_OR_TREAT = 4;
+    REPORT_INCIDENT_CARD = 5;
+    REPORT_MID_TRIP_CARD = 6;
+    REPORT_POST_TRIP_CARD = 7;
+    REPORT_3P_APP_MID_TRIP_CARD = 8;
+    REPORT_REOPEN_CLOSURE_PROMPT = 9;
+    REPORT_GEMINI = 10;
+    REPORT_ANYTHING = 11;
+}
+
+enum UserIncidentType {
+    UNKNOWN_INCIDENT_TYPE = 0;
+    INCIDENT_ROAD_CLOSED = 1;
+    INCIDENT_CRASH = 2;
+    INCIDENT_CONSTRUCTION = 3;
+    INCIDENT_FIXED_CAMERA = 4;
+    INCIDENT_MOBILE_CAMERA = 5;
+    INCIDENT_SUSPECTED_JAM = 6;
+    INCIDENT_SPEED_LIMIT = 7;
+    INCIDENT_SUSPECTED_CLOSURE = 8;
+    INCIDENT_LANE_CLOSURE = 9;
+    INCIDENT_STALLED_VEHICLE = 10;
+    INCIDENT_OBJECT_ON_ROAD = 11;
+    INCIDENT_POLICE_PRESENCE = 13;
+    INCIDENT_MOBILE_SPEED_CAMERA = 14;
+    INCIDENT_SNOW = 23;
+    INCIDENT_FOG = 24;
+    INCIDENT_FLOOD = 25;
+    DEPRECATED_INCIDENT_WEATHER = 21 [deprecated = true];
+    DEPRECATED_INCIDENT_ICE = 22 [deprecated = true];
+    DEPRECATED_INCIDENT_HAZARD = 15 [deprecated = true];
+    DEPRECATED_INCIDENT_BROKEN_TRAFFIC_LIGHT = 16 [deprecated = true];
+    DEPRECATED_INCIDENT_SLIPPERY_ROAD = 26 [deprecated = true];
+    DEPRECATED_INCIDENT_POTHOLE = 17 [deprecated = true];
+}

@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPD";
+option java_multiple_files = true;
+option java_outer_classname = "TrailerPhysicalAttributesProto";
+option java_package = "com.google.geo.serving.proto.directions";
+
+message TrailerPhysicalAttributes {
+    optional int32 height_mm = 1;
+    optional int32 width_mm = 2;
+    optional int32 length_mm = 3;
+    optional int32 distance_hitch_to_wheel_mm = 4;
+    optional int32 weight_kg = 5;
+}

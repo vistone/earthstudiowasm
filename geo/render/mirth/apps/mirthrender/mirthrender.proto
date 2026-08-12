@@ -1,0 +1,410 @@
+syntax = "proto2";
+
+package mirth_apps_mirthrender;
+
+import "geo/imagery/karto/proto/pubsub_schema.proto";
+
+option objc_class_prefix = "MTHR";
+
+message RenderRequest {
+    optional string name = 7;
+    optional ImageSpec image_spec = 19;
+    repeated RenderParameters render_parameters = 1;
+    optional double frames_per_second = 3 [default = 30];
+    optional Attribution attribution = 6;
+    repeated Kml kml = 14;
+    repeated TextBox text_box = 20;
+    optional bool render_as_individual_images = 9 [default = false];
+    optional bool multisample_enabled = 11 [default = false];
+    optional PixelMetrics pixel_metrics = 15;
+    optional string language_code = 16 [default = "en"];
+    optional string country_code = 17 [default = "US"];
+    optional Skybox skybox = 21;
+    optional bool ignore_asset_load_errors = 22 [default = false];
+    optional bool write_metadata_file = 25 [default = false];
+    optional string username = 10;
+    optional bool include_debug_context = 2 [default = false];
+    optional int32 first_frame_number = 4;
+    optional int32 total_frame_count = 12;
+    optional int32 warmup_frame_count = 5;
+    optional string base_path = 13;
+    optional bool write_file_content_type = 18 [default = false];
+    optional int32 rocktree_epoch = 23 [default = -1];
+    optional geo.imagery.karto.proto.MovieRequest karto_render_request = 24;
+}
+
+message RenderResponse {
+    repeated Image image = 1;
+    optional DebugContext debug_context = 2;
+}
+
+message RenderParameters {
+    optional double near_clip = 11 [default = 0];
+    optional double far_clip = 12 [default = 0];
+    optional EarthModeOptions earth_mode_options = 3;
+    optional RocktreeTimeMachine rocktree_time_machine = 14;
+    repeated KmlOptions kml_options = 8;
+    optional KmlTime kml_time = 9;
+    optional bool base_map_enabled = 10 [default = false];
+    repeated FeatureCategorySetting feature_category_setting = 13;
+    optional StreetViewPanos street_view_panos = 15;
+    optional bool street_view_enabled = 16 [default = false];
+    
+    oneof cam_oneof {
+        LookAtCamera camera = 2;
+        WorldToEyeCamera world_to_eye_camera = 7;
+    }
+    
+    oneof simulation_date_and_time_oneof {
+        double simulation_date_and_time = 4;
+        string simulation_date_and_time_string = 5;
+    }
+    
+    reserved 1, 6;
+}
+
+message LookAtCamera {
+    optional double longitude = 1;
+    optional double latitude = 2;
+    optional double altitude = 3;
+    optional double heading = 4;
+    optional double tilt = 5;
+    optional double roll = 6;
+    optional double fov_y = 7;
+    optional double range = 8;
+}
+
+message WorldToEyeCamera {
+    repeated float data = 1 [packed = true];
+    optional double fov_y = 2;
+}
+
+message EarthModeOptions {
+    optional bool water_enabled = 1;
+    optional bool buildings_enabled = 2;
+    optional bool draped_vectors_enabled = 3;
+    optional bool labels_enabled = 4;
+    optional bool date_time_rendering_enabled = 5;
+    optional double lod_bias = 6;
+    optional double lod_tilt_correction = 7;
+    optional double max_rocktree_level = 33;
+    optional bool clouds_enabled = 8;
+    optional double clouds_fading_min_altitude = 9;
+    optional double clouds_fading_max_altitude = 10;
+    optional bool clouds_datetime_enabled = 11;
+    optional string clouds_datetime_string = 12;
+    optional bool force_fragment_atmosphere = 13;
+    optional bool atmosphere_enabled = 14;
+    optional bool stars_enabled = 15;
+    optional WaterSpecularMode water_specular_mode = 16;
+    optional double water_specular_intensity = 17;
+    optional MapMode map_mode = 18 [default = MAP_MODE_OFF];
+    optional bool auto_exposure_enabled = 19;
+    optional double exposure_factor = 20;
+    optional bool depth_of_field_enabled = 21;
+    optional double depth_of_field_effect_strength = 22;
+    optional PointLla depth_of_field_focus_point_lla = 23;
+    optional bool depth_of_field_autofocus_enabled = 24;
+    optional bool motion_blur_enabled = 25;
+    optional double motion_blur_scale_factor = 26;
+    optional int32 motion_blur_n_samples = 27;
+    optional double vector_lod_bias = 28;
+    optional AtmosphereRenderingMode atmosphere_rendering_mode = 29;
+    optional double skybox_ambient_coefficient = 30;
+    optional double skybox_diffuse_coefficient = 31;
+    optional double skybox_reflection_coefficient = 32;
+    optional ModelLightSource model_light_source = 34;
+}
+
+message ImageSpec {
+    optional ImageFormat format = 1;
+    optional uint32 width = 2;
+    optional uint32 height = 3;
+    optional uint32 quality = 4 [default = 85];
+    optional double crf = 5 [default = 23];
+    optional int32 bitrate = 6 [default = 0];
+    optional bool equirectangular = 7 [default = false];
+    optional Stereo stereo = 8;
+    optional string lut3d_filepath = 9;
+}
+
+message Image {
+    optional ImageSpec image_spec = 1;
+    optional double frame_number = 5;
+    optional double frame_count = 7;
+    optional MetadataCollection metadata = 9;
+    
+    oneof output {
+        bytes data = 2;
+        string image_path = 8;
+    }
+    
+    reserved 3, 4, 6;
+}
+
+message RocktreeTimeMachine {
+    optional bool enabled = 1;
+    optional string datetime_string = 2;
+}
+
+message PointLla {
+    optional double longitude = 1;
+    optional double latitude = 2;
+    optional double altitude = 3;
+}
+
+message Kml {
+    oneof src_oneof {
+        string url = 1;
+        string content = 2;
+        bytes content_binary = 5;
+        string filepath = 4;
+    }
+    
+    reserved 3;
+}
+
+message KmlOptions {
+    optional int32 index = 1 [default = 0];
+    optional bool visibility = 2 [default = true];
+    optional double opacity = 3 [default = 1];
+}
+
+message KmlTime {
+    optional bool enabled = 1;
+    optional string begin = 2;
+    optional string end = 3;
+}
+
+message Attribution {
+    optional bool render_attribution = 1 [default = true];
+    optional bool render_providers = 7 [default = true];
+    optional bool write_providers_file = 9 [default = false, deprecated = true];
+    optional AttributionLogoTypeface logo_typeface = 2 [default = ATTRIBUTION_LOGO_LOGO];
+    optional AttributionTextAlignment text_alignment = 3;
+    optional uint32 custom_position_x = 5;
+    optional uint32 custom_position_y = 6;
+    optional AttributionPositionMode position_mode = 4 [default = ATTRIBUTION_POSITION_BOTTOM_RIGHT];
+    optional uint32 max_providers_to_render = 8 [default = 3];
+}
+
+message RgbaColor {
+    optional int32 red = 1 [default = 0];
+    optional int32 green = 2 [default = 0];
+    optional int32 blue = 3 [default = 0];
+    optional int32 alpha = 4 [default = 255];
+}
+
+message TextBox {
+    optional string text = 1;
+    optional double point_size = 2;
+    optional TextBoxPositionMode position_mode = 3 [default = TEXT_BOX_POSITION_BOTTOM_LEFT];
+    optional uint32 custom_position_x = 4;
+    optional uint32 custom_position_y = 5;
+    optional TextBoxHotSpot custom_hot_spot = 6 [default = TEXT_BOX_HOT_SPOT_TOP_LEFT];
+    optional RgbaColor text_color = 7;
+    optional RgbaColor outline_color = 8;
+}
+
+message Skybox {
+    optional string filepath = 1;
+    optional uint32 horizon_y = 2;
+    optional uint32 sun_x = 3;
+    optional uint32 sun_y = 4;
+    optional uint32 sun_radius = 5;
+    optional double sun_heading = 6;
+}
+
+message FeatureCategorySetting {
+    optional FeatureTypeCategory feature_category = 1;
+    optional bool enabled = 2 [default = true];
+}
+
+message DebugContext {
+    optional string calltrace = 1;
+}
+
+message PixelMetrics {
+    optional double physical_ppi = 1;
+    optional double logical_ppi = 2;
+    optional double font_scale_factor = 3;
+}
+
+message Stereo {
+    optional StereoMode mode = 1 [default = STEREO_NONE];
+    optional double interpupillary_distance_mm = 2 [default = 63];
+}
+
+message StreetViewPanos {
+    optional StreetViewPano pano_a = 1;
+    optional StreetViewPano pano_b = 2;
+    optional double blend_weight = 3 [default = 0];
+}
+
+message StreetViewPano {
+    optional string id = 1;
+}
+
+message Provider {
+    optional string name = 1;
+    optional uint32 count = 2;
+}
+
+message Metadata {
+    optional uint32 frame_number = 1;
+    optional string file_name = 2;
+    optional double near_clip = 3;
+    optional double far_clip = 4;
+    repeated double modelview_matrix = 5 [packed = true];
+    repeated double projection_matrix = 6 [packed = true];
+    repeated Provider providers = 7;
+}
+
+message MetadataCollection {
+    repeated Metadata metadata = 1;
+}
+
+enum ModelLightSource {
+    MODEL_LIGHT_SOURCE_UNSPECIFIED = 0;
+    MODEL_LIGHT_SOURCE_EYE = 1;
+    MODEL_LIGHT_SOURCE_SUN = 2;
+}
+
+enum ImageFormat {
+    PNG = 0;
+    JPEG = 1;
+    RAW_RGBA8888_DEPTH32 = 2;
+    RAW_RGBA8888 = 3;
+    RAW_RGB888 = 5;
+    MP4 = 4;
+}
+
+enum AtmosphereRenderingMode {
+    ATMOSPHERE_RENDERING_MODE_UNKNOWN = 0;
+    ATMOSPHERE_RENDERING_MODE_REALISTIC = 1;
+    ATMOSPHERE_RENDERING_MODE_SIMPLE = 2;
+    ATMOSPHERE_RENDERING_MODE_SKYBOX = 3;
+}
+
+enum WaterSpecularMode {
+    WATER_SPECULAR_AUTO = 0;
+    WATER_SPECULAR_ON = 1;
+    WATER_SPECULAR_OFF = 2;
+}
+
+enum MapMode {
+    MAP_MODE_UNKNOWN = 0;
+    MAP_MODE_OFF = 1;
+    MAP_MODE_SPHERE = 2;
+}
+
+enum AttributionLogoTypeface {
+    ATTRIBUTION_LOGO_UNKNOWN = 0;
+    ATTRIBUTION_LOGO_LOGO = 1;
+    ATTRIBUTION_LOGO_ARIAL = 2;
+    ATTRIBUTION_LOGO_ROBOTO = 3;
+    ATTRIBUTION_LOGO_GOOGLE = 4;
+}
+
+enum AttributionTextAlignment {
+    ATTRIBUTION_TEXT_ALIGNMENT_AUTO = 0;
+    ATTRIBUTION_TEXT_ALIGNMENT_LEFT = 1;
+    ATTRIBUTION_TEXT_ALIGNMENT_CENTER = 2;
+    ATTRIBUTION_TEXT_ALIGNMENT_RIGHT = 3;
+}
+
+enum AttributionPositionMode {
+    ATTRIBUTION_POSITION_UNKNOWN = 0;
+    ATTRIBUTION_POSITION_CUSTOM = 1;
+    ATTRIBUTION_POSITION_TOP_LEFT = 2;
+    ATTRIBUTION_POSITION_TOP_CENTER = 3;
+    ATTRIBUTION_POSITION_TOP_RIGHT = 4;
+    ATTRIBUTION_POSITION_BOTTOM_LEFT = 5;
+    ATTRIBUTION_POSITION_BOTTOM_CENTER = 6;
+    ATTRIBUTION_POSITION_BOTTOM_RIGHT = 7;
+}
+
+enum TextBoxPositionMode {
+    TEXT_BOX_POSITION_UNKNOWN = 0;
+    TEXT_BOX_POSITION_TOP_LEFT = 1;
+    TEXT_BOX_POSITION_TOP_CENTER = 2;
+    TEXT_BOX_POSITION_TOP_RIGHT = 3;
+    TEXT_BOX_POSITION_MIDDLE_LEFT = 4;
+    TEXT_BOX_POSITION_MIDDLE_CENTER = 5;
+    TEXT_BOX_POSITION_MIDDLE_RIGHT = 6;
+    TEXT_BOX_POSITION_BOTTOM_LEFT = 7;
+    TEXT_BOX_POSITION_BOTTOM_CENTER = 8;
+    TEXT_BOX_POSITION_BOTTOM_RIGHT = 9;
+    TEXT_BOX_POSITION_CUSTOM = 10;
+}
+
+enum TextBoxHotSpot {
+    TEXT_BOX_HOT_SPOT_UNKNOWN = 0;
+    TEXT_BOX_HOT_SPOT_TOP_LEFT = 1;
+    TEXT_BOX_HOT_SPOT_TOP_CENTER = 2;
+    TEXT_BOX_HOT_SPOT_TOP_RIGHT = 3;
+    TEXT_BOX_HOT_SPOT_MIDDLE_LEFT = 4;
+    TEXT_BOX_HOT_SPOT_MIDDLE_CENTER = 5;
+    TEXT_BOX_HOT_SPOT_MIDDLE_RIGHT = 6;
+    TEXT_BOX_HOT_SPOT_BOTTOM_LEFT = 7;
+    TEXT_BOX_HOT_SPOT_BOTTOM_CENTER = 8;
+    TEXT_BOX_HOT_SPOT_BOTTOM_RIGHT = 9;
+}
+
+enum StereoMode {
+    STEREO_UNKNOWN = 0;
+    STEREO_NONE = 1;
+    STEREO_LEFT_RIGHT = 2;
+    STEREO_TOP_BOTTOM = 3;
+}
+
+enum FeatureTypeCategory {
+    TYPE_ALL = 0;
+    TYPE_ADMINISTRATIVE = 1;
+    TYPE_COUNTRY = 17;
+    TYPE_ADMINISTRATIVE_AREA1 = 18;
+    TYPE_LOCALITY = 19;
+    TYPE_NEIGHBORHOOD = 20;
+    TYPE_LAND_PARCEL = 21;
+    TYPE_POI = 2;
+    TYPE_BUSINESS = 33;
+    TYPE_SHOPPING = 529;
+    TYPE_FOOD_AND_DRINK = 530;
+    TYPE_GAS_STATION = 531;
+    TYPE_CAR_RENTAL = 532;
+    TYPE_LODGING = 533;
+    TYPE_GOVERNMENT = 34;
+    TYPE_SCHOOL = 35;
+    TYPE_MEDICAL = 36;
+    TYPE_ATTRACTION = 37;
+    TYPE_PLACE_OF_WORSHIP = 38;
+    TYPE_SPORTS_COMPLEX = 39;
+    TYPE_PARK = 40;
+    TYPE_ROAD = 3;
+    TYPE_HIGHWAY = 49;
+    TYPE_CONTROLLED_ACCESS_HIGHWAY = 785;
+    TYPE_ARTERIAL_ROAD = 50;
+    TYPE_LOCAL_ROAD = 51;
+    TYPE_LOCAL_DRIVABLE_ROAD = 817;
+    TYPE_TRAIL = 818;
+    TYPE_LANE = 52;
+    TYPE_TRANSIT = 4;
+    TYPE_TRANSIT_LINE = 65;
+    TYPE_RAIL_LINE = 1041;
+    TYPE_FERRY_LINE = 1042;
+    TYPE_TRANSIT_LAYER_LINE = 1043;
+    TYPE_TRANSIT_STATION = 66;
+    TYPE_RAIL_STATION = 1057;
+    TYPE_BUS_STOP = 1058;
+    TYPE_AIRPORT = 1059;
+    TYPE_FERRY_TERMINAL = 1060;
+    TYPE_LANDSCAPE = 5;
+    TYPE_MAN_MADE_STRUCTURE = 81;
+    TYPE_BUILDING = 1297;
+    TYPE_BUILT_UP_AREA = 1298;
+    TYPE_AREA_OF_INTEREST = 1299;
+    TYPE_NATURAL_FEATURE = 82;
+    TYPE_LANDCOVER = 1313;
+    TYPE_TERRAIN = 1314;
+    TYPE_WATER = 6;
+}

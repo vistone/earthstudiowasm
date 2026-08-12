@@ -1,0 +1,96 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ImageCategorizationProto";
+option java_package = "com.google.geo.photo";
+
+message CategoryMappings {
+    repeated CategoryMapping category_mapping = 1;
+    optional double default_accept_confidence = 2 [default = 0.9];
+}
+
+message CategoryMapping {
+    optional CategorizationContext context = 1;
+    optional string identifier = 2;
+    repeated CategoryFromSemanticLabel category_from_semantic_label = 3;
+}
+
+message CategoryFromSemanticLabel {
+    optional ImageCategory category = 1;
+    repeated SemanticLabel label = 2;
+}
+
+message SemanticLabel {
+    optional string name = 1;
+    optional double accept_confidence = 2;
+    optional float reject_confidence = 3;
+}
+
+enum CategorizationContext {
+    CONTEXT_UNKNOWN = 0;
+    CONTEXT_SLEEP = 1;
+    CONTEXT_VACATION_RENTAL = 7;
+    CONTEXT_EAT = 2;
+    CONTEXT_SHOPPING = 3;
+    CONTEXT_PLAY = 4;
+    CONTEXT_TRAVEL = 6;
+    CONTEXT_THINGS_TO_DO = 8;
+    CONTEXT_SERVICES = 9;
+    CONTEXT_OUTDOORS = 10;
+    POLITICAL_REGION = 5;
+    CONTEXT_ANY = 255;
+}
+
+enum ImageCategory {
+    CATEGORY_UNKNOWN = 0;
+    CATEGORY_ROOM = 16;
+    CATEGORY_BEDROOM = 257;
+    CATEGORY_BED = 258;
+    CATEGORY_LIVING_ROOM = 259;
+    CATEGORY_BATHROOM = 260;
+    CATEGORY_ROOM_AMENITY = 261;
+    CATEGORY_INTERIOR = 18;
+    CATEGORY_INTERIOR_COMMONAREA = 289;
+    CATEGORY_INTERIOR_RESTAURANT = 290;
+    CATEGORY_INTERIOR_BAR = 291;
+    CATEGORY_INTERIOR_SEATS = 292;
+    CATEGORY_EXTERIOR = 19;
+    CATEGORY_EXTERIOR_SURROUNDING = 305;
+    CATEGORY_EXTERIOR_ENTRANCE = 306;
+    CATEGORY_EXTERIOR_NIGHT = 307;
+    CATEGORY_EXTERIOR_STOREFRONT = 308;
+    CATEGORY_EXTERIOR_OUTDOOR_SEATS = 309;
+    CATEGORY_EXTERIOR_VIEW = 310;
+    CATEGORY_EXTERIOR_ROAD = 311;
+    CATEGORY_AMENITY = 20;
+    CATEGORY_AMENITY_POOL = 321;
+    CATEGORY_AMENITY_GYM = 322;
+    CATEGORY_AMENITY_MEETINGROOM = 323;
+    CATEGORY_AMENITY_POOL_TABLE = 324;
+    CATEGORY_AMENITY_STORE_INTERIOR = 325;
+    CATEGORY_AMENITY_LOBBY = 326;
+    CATEGORY_AMENITY_HOT_TUB = 327;
+    CATEGORY_FOOD_AND_DRINK = 32;
+    CATEGORY_MENU = 33;
+    CATEGORY_MENU_2 = 529 [deprecated = true];
+    CATEGORY_VIBE = 34;
+    CATEGORY_VIBE_VIDEO = 545;
+    CATEGORY_LOGO = 35;
+    CATEGORY_PEOPLE = 36;
+    CATEGORY_MAP = 37;
+    CATEGORY_PRODUCT_AND_STORE = 48;
+    CATEGORY_FACILITY = 49;
+    CATEGORY_FEATURE = 64;
+    CATEGORY_TIME_OF_DAY = 80;
+    CATEGORY_SEASONALITY = 81;
+    CATEGORY_CULTURE = 82;
+    CATEGORY_LANDMARK = 83;
+    CATEGORY_NATURE = 84;
+    CATEGORY_NATURE_BEACH = 1345;
+    CATEGORY_OTHER = 255;
+}

@@ -1,0 +1,9 @@
+syntax = "editions";
+
+package maps_paint_client;
+
+import "maps/paint/proto/client-vector-style.proto";
+
+extend IconStyle {
+    optional bool secondary_icon = 160601348 [default = false];
+}

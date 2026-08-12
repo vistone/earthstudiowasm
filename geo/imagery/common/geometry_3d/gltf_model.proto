@@ -1,0 +1,15 @@
+syntax = "editions";
+
+package geo_imagery_common;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: IMPLICIT
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.imagery.common";
+
+message GltfModelProto {
+    optional bytes glb_data = 1 [features = ];
+}

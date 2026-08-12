@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message AutonomousDrivingProto {
+    enum ProductType {
+        UNKNOWN = 0;
+        HD_L4 = 1;
+        HD_L2 = 2;
+        ADAS = 3;
+        AUTO_DRIVING_EXPERIENCE = 4;
+    }
+}

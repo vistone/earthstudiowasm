@@ -1,0 +1,84 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/caller_info.proto";
+import "geo/photo/proto/experimental.proto";
+import "geo/photo/proto/product_special_case_options.proto";
+import "geo/photo/proto/superroot_params.proto";
+import "logs/eventid/eventid.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "RequestContextProto";
+option java_package = "com.google.geo.photo";
+
+message DebugLevel {
+    optional bool debug = 1;
+    optional bool only_summary = 3;
+    optional int32 image_ranking_debug_level = 2;
+}
+
+message InlineMetadataSpec {
+    optional bool include_takedown = 2 [default = false];
+    
+    reserved 1;
+}
+
+message InlineExtraPhotoDataSpec {
+    optional InlineMetadataSpec metadata_spec = 1;
+}
+
+message UtuBlockParams {
+    optional bool use_utu_blocks = 1 [default = false];
+    optional bytes consistency_info = 2;
+}
+
+message RequestContext {
+    optional string product_id = 1;
+    optional string product_id_chain = 18;
+    optional string policy_country_code = 5;
+    
+    optional RequestSource source = 2 [default = EXTERNAL];
+    enum RequestSource {
+        UNKNOWN_SOURCE = 0;
+        EXTERNAL = 1;
+        GOOGLE_INTERNAL = 2;
+    }
+    
+    optional int64 street_view_epoch_id = 3;
+    
+    optional CacheBehavior cache_behavior = 4 [default = BEST_EFFORT];
+    enum CacheBehavior {
+        BEST_EFFORT = 0;
+        CACHED_OR_NULL = 1;
+        SKIP_CACHE = 2;
+    }
+    
+    optional float max_rpc_deadline_seconds = 15 [default = 100];
+    optional DebugLevel gps_debug_level = 6;
+    
+    optional ProtoFormat http_response_format = 7 [default = JSPB];
+    enum ProtoFormat {
+        UNKNOWN_FORMAT = 0;
+        BINARY = 1;
+        JSPB = 2;
+        KML = 3 [deprecated = true];
+    }
+    
+    optional InlineExtraPhotoDataSpec inline_extra_data_spec = 8;
+    optional string query_origin = 9;
+    optional SuperrootParams superroot_params = 10;
+    optional ProductSpecialCaseOptions product_special_case_options = 11;
+    optional ExperimentalOptions experimental_options = 12;
+    optional EventIdMessage event_id = 13;
+    optional UtuBlockParams utu_block_params = 16 [deprecated = true];
+    optional int64 project_number = 17;
+    optional CallerInfo caller_info = 19;
+    
+    reserved 14;
+}

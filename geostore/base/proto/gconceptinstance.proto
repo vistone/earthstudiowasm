@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.proto";
+
+message GConceptInstanceProto {
+    optional string gconcept_id = 1;
+    
+    optional Prominence prominence = 2 [default = NON_PRIMARY];
+    enum Prominence {
+        NON_PRIMARY = 0;
+        PRIMARY = 1000;
+    }
+    
+    optional FieldMetadataProto metadata = 500;
+    
+    reserved 3;
+}

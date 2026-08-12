@@ -1,0 +1,55 @@
+syntax = "proto2";
+
+package boq.travelfrontendhotelssearch.protos;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.travel.frontend.hotels.search.protos";
+
+enum HighlightType {
+    HIGHLIGHT_TYPE_UNSPECIFIED = 0;
+    USER_RATING = 1;
+    FAMILY_TRAVELER_TYPE = 2;
+    COUPLE_TRAVELER_TYPE = 3;
+    BUSINESS_TRAVELER_TYPE = 4;
+    SOLO_TRAVELER_TYPE = 5 [deprecated = true];
+    NEARBY_POI = 6;
+    PREVIOUS_STAY = 7;
+    AIR_CONDITIONED = 8;
+    ALLOWS_PETS = 9;
+    FREE_BREAKFAST = 10;
+    FREE_PARKING = 11;
+    FREE_WIFI = 12;
+    GYM = 13;
+    LOUNGE = 14;
+    NEAR_CITY_CENTER = 15 [deprecated = true];
+    POOL = 16;
+    HAS_RESTAURANT = 17;
+    GREAT_ROOMS = 18;
+    GREAT_DINING = 19;
+    GREAT_BREAKFAST = 20;
+    GREAT_LOCATION = 21;
+    GREAT_SERVICE = 22;
+    GREAT_POOL = 23;
+    NEAR_PUBLIC_TRANSIT = 24;
+    DESIGNER_VIBE = 25;
+    LUXURIOUS_VIBE = 26;
+    MODERN_VIBE = 27;
+    GREAT_NATURE_AND_OUTDOORS = 28 [deprecated = true];
+    GREAT_NIGHTLIFE = 29;
+    GREAT_SLEEP = 30;
+    GREAT_WELLNESS = 31;
+    SPA = 32;
+    BEACH_ACCESS = 33;
+    HOT_TUB = 34;
+    GREAT_VIEWS_FROM_ROOMS = 35 [deprecated = true];
+    POPULAR_IN_USER_COUNTRY = 36;
+    POPULAR_AMONG_NEARBY_HOTELS = 37 [deprecated = true];
+    GREAT_BAR_OR_LOUNGE = 38;
+    GREAT_BATHROOM = 39;
+    GREAT_CLEANLINESS = 40;
+    GREAT_EXERCISE = 41;
+    COMBINATORIAL = 42;
+    NEAR_POI = 43;
+}

@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package storage_graph_bfg;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.storage.graph.bfg.proto";
+
+message LivegraphProvenanceMetadata {
+    optional bool weak_data = 1;
+    repeated string triangulation_key = 2;
+    optional uint64 lg_internal_writer_id = 3;
+    optional bool provenance_only_addition = 4;
+    repeated string direct_write_record_ids = 5;
+}

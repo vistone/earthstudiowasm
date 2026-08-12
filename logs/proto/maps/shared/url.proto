@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package logs_maps_shared;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps";
+
+message LoggedUrlProto {
+    optional string url = 1;
+    optional string language = 2;
+    optional int32 pagerank = 5 [deprecated = true];
+    
+    reserved 3, 4, 6, 500;
+}

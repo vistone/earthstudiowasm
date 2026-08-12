@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AccessibilityProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedAccessibility {
+    optional LoggedLevel wheelchair = 1 [default = LEVEL_UNKNOWN];
+    enum LoggedLevel {
+        LEVEL_UNKNOWN = 0;
+        LEVEL_ACCESSIBLE = 1;
+        LEVEL_INACCESSIBLE = 2;
+    }
+}
+
+enum LoggedAccessibilityDataState {
+    ACCESSIBILITY_DATA_UNSPECIFIED = 0;
+    ACCESSIBILITY_DATA_PRESENT = 1;
+    ACCESSIBILITY_DATA_MISSING = 2;
+}

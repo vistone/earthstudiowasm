@@ -1,0 +1,451 @@
+syntax = "proto2";
+
+package google.internal.earth.v1;
+
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+import "google/internal/earth/v1/billing/capability.proto";
+import "google/protobuf/timestamp.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "wireless/android/privacy/annotations/proto/collection_basis_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1";
+
+message ClientMetadata {
+    optional string country_code = 4;
+    optional string client_version = 2;
+    
+    optional ClientType client_type = 3;
+    enum ClientType {
+        UNKNOWN = 0;
+        ANDROID = 1;
+        IOS = 2;
+        WEB = 3;
+        PROBER = 4;
+        STUDIO = 5;
+        MIRTH_DEMO = 6;
+        MAPS_JS_API = 7;
+    }
+    
+    reserved 1;
+}
+
+message Viewport {
+    optional double north = 1;
+    optional double south = 2;
+    optional double east = 3;
+    optional double west = 4;
+}
+
+message RequestRule {
+    optional RuleType type = 1;
+    enum RuleType {
+        UNKNOWN_REQUEST_RULE = 0;
+        ACCEPT_LANGUAGE_HEADER = 1;
+        API_KEY = 2;
+        CLIENT_METADATA = 3;
+        STANDARD_AUTH = 4;
+        PH_SERVER_TOKEN = 5;
+        MANDATORY_PH_SERVER_TOKEN = 15;
+        BASE64_ENCODE_IF_EXECUTABLE = 6;
+        OUTPUT_PARAMETER = 7;
+        ALT_PROTO_OUTPUT = 8;
+        CONTENT_TYPE_JSON = 9;
+        FORCE_ALT_SERVICE = 10;
+        ONE_PLATFORM_AUTH = 11;
+        AUTH_USER = 12;
+        CONTENT_TYPE_X_PROTOBUF = 13;
+        BILLING_GCP_PROJECT = 14;
+    }
+}
+
+message LookFromCamera {
+    optional double latitude = 1;
+    optional double longitude = 2;
+    optional double altitude = 3;
+    optional double heading = 4;
+    optional double tilt = 5;
+    optional double roll = 6;
+    optional double field_of_view_y = 7;
+}
+
+message ImageSize {
+    optional int32 width = 1;
+    optional int32 height = 2;
+}
+
+message LatitudeLongitude {
+    optional double latitude = 1;
+    optional double longitude = 2;
+}
+
+message VideoRasterLayer {
+    optional string id = 1 [deprecated = true];
+    optional string tile_path = 2;
+    optional string start_date = 3;
+    optional string end_date = 4;
+    optional int32 num_frames = 5;
+    optional float animation_rate = 6;
+    optional float dwell_start = 7;
+    optional float dwell_end = 8;
+    optional int32 max_level = 9;
+    optional int32 clamped_altitude = 10;
+    optional string iso_date_format = 11;
+    optional string display_name = 12;
+}
+
+message DataLayerPublishingInfo {
+    repeated Source sources = 1;
+    message Source {
+        optional string name = 1;
+        optional string url = 2;
+    }
+}
+
+message DataLayerGraphicAssets {
+    optional GraphicAsset thumbnail = 1;
+    message GraphicAsset {
+        optional string url = 1;
+    }
+}
+
+message DataLayerEntitlementInfo {
+    optional bool user_has_access = 1;
+    optional string plan_display_name = 2;
+    optional billing.Capability required_capability = 3;
+}
+
+message DataLayerStatusMetadata {
+    optional LaunchStage launch_stage = 1;
+    enum LaunchStage {
+        LAUNCH_STAGE_UNSPECIFIED = 0;
+        LAUNCH_STAGE_EXPERIMENTAL = 1;
+    }
+    
+    optional LayerBadge layer_badge = 2;
+    enum LayerBadge {
+        LAYER_BADGE_UNSPECIFIED = 0;
+        LAYER_BADGE_NEW = 1;
+    }
+}
+
+message DataCoverageRegion {
+    optional string name = 1;
+}
+
+message TermsOfUseRestriction {
+    optional string restriction_text = 1;
+    
+    optional Icon icon = 2;
+    enum Icon {
+        ICON_UNSPECIFIED = 0;
+        ICON_FILE_DOWNLOAD_OFF = 1;
+        ICON_PRIVACY_TIP = 2;
+    }
+}
+
+message GovernanceSecurityInfo {
+    repeated TermsOfUseRestriction terms_of_use_restrictions = 1;
+}
+
+message ChangelogEntry {
+    optional string changelog_text = 1;
+    optional protobuf.Timestamp publish_time = 2;
+}
+
+message DataLayer {
+    optional string id = 1;
+    optional string display_name = 2;
+    optional string description = 9;
+    optional string subtitle = 11;
+    optional protobuf.Timestamp last_update = 4;
+    optional DataLayerGraphicAssets graphic_assets = 13;
+    map<string, AppliedStyleRules> legend_by_key = 10;
+    map<string, FilterSet> filters_by_key = 14;
+    optional DataLayerPublishingInfo publishing_info = 12;
+    optional DataLayerEntitlementInfo entitlement_info = 15;
+    optional DataLayerStatusMetadata status_metadata = 25;
+    optional .earth.document.protos.LookAtCamera default_look_at_camera = 16;
+    optional string layer_logging_id = 17;
+    repeated DataCoverageRegion data_coverage_regions = 18;
+    optional GovernanceSecurityInfo governance_security_info = 19;
+    map<string, LayerAttribute> layer_attributes = 20;
+    optional DataLayerProperties properties = 21;
+    
+    repeated GeometryType geometry_types = 22 [packed = true];
+    enum GeometryType {
+        GEOMETRY_TYPE_UNSPECIFIED = 0;
+        GEOMETRY_TYPE_POINT = 1;
+        GEOMETRY_TYPE_LINE = 2;
+        GEOMETRY_TYPE_POLYGON = 3;
+    }
+    
+    map<string, StyleMethods> styleable_attributes = 23;
+    repeated ChangelogEntry changelog_entries = 27;
+    optional bool is_tracked_layer = 24;
+    optional SearchMetadata search_metadata = 26;
+    
+    oneof layer_type {
+        DmsLayer dms_layer = 5;
+        KmlLayer kml_layer = 6;
+        UrlTemplateLayer url_template_layer = 7;
+        VideoRasterLayer video_raster_layer = 8;
+    }
+    
+    reserved 3;
+}
+
+message DataLayerProperties {
+    repeated Property properties = 1 [packed = true];
+    enum Property {
+        PROPERTY_UNSPECIFIED = 0;
+        PROPERTY_CAN_STYLE = 1;
+        PROPERTY_CAN_ANALYZE = 2;
+        PROPERTY_CAN_APPLY_GEOMETRIC_FILTER = 3;
+    }
+    
+    optional LayerInteractivityConfig interactivity_config = 2;
+}
+
+message LayerInteractivityConfig {
+    oneof settings {
+        string custom_view_name = 1;
+    }
+}
+
+message InteractiveBalloonData {
+    optional string style_url = 1;
+}
+
+message AppliedStyleRules {
+    optional string localized_name = 1;
+    repeated StyleAttribute attributes = 2;
+    optional StyleAttribute fallback_attribute = 4;
+    
+    optional InterpolationMode interpolation_mode = 3;
+    enum InterpolationMode {
+        INTERPOLATION_MODE_UNSPECIFIED = 0;
+        INTERPOLATION_MODE_INTERVAL = 1;
+        INTERPOLATION_MODE_LINEAR = 2;
+    }
+}
+
+message StyleAttribute {
+    optional string fill_color_rgb = 3;
+    optional string stroke_color_rgb = 4;
+    optional double stroke_width_px = 5;
+    optional double opacity = 6;
+    
+    optional Icon icon = 7;
+    message Icon {
+        oneof icon_type {
+            uint32 paint_id = 1;
+            bytes custom_icon_bytes = 2;
+            string custom_icon_path = 3;
+        }
+    }
+    
+    optional double scale = 8;
+    
+    oneof StyleAttributeValue {
+        CategoricalValue categorical_value = 1;
+        InterpolatedValue interpolated_value = 2;
+    }
+    
+    message CategoricalValue {
+        optional string localized_string_value = 5;
+        
+        oneof value {
+            string string_value = 1;
+            int64 int_value = 3;
+            double double_value = 4;
+        }
+        
+        reserved 2;
+    }
+    
+    message InterpolatedValue {
+        oneof value {
+            int64 int_value = 1;
+            double double_value = 2;
+        }
+    }
+}
+
+message StyleMethods {
+    optional InterpolatedStyleMethod interpolated = 1;
+    optional CategoricalStyleMethod categorical = 2;
+}
+
+message CategoricalStyleMethod {
+    repeated AttributeValue categories = 1;
+}
+
+message InterpolatedStyleMethod {
+    optional AttributeValue min_value = 1;
+    optional AttributeValue max_value = 2;
+}
+
+message AttributeValue {
+    optional string localized_string_value = 4;
+    
+    oneof AttributeType {
+        string string_value = 1;
+        double double_value = 2;
+        int64 int_value = 3;
+    }
+}
+
+message DmsLayer {
+    optional string tile_key = 1;
+    optional protobuf.Timestamp publish_timestamp = 3;
+    optional DmsLayerMetadata dms_layer_metadata = 7;
+    optional string fallback_title = 9;
+    optional string fallback_description = 10;
+    
+    oneof dms_layer_type {
+        InteractiveBalloonData interactive_balloon = 4;
+    }
+    
+    reserved 2, 8;
+}
+
+message DmsLayerIdentifier {
+    oneof dms_layer_identifier {
+        string opaque_identifier = 1;
+        string dms_handle = 2;
+    }
+}
+
+message DmsLayerMetadata {
+    repeated KeyValuePair key_value_pairs = 1;
+    message KeyValuePair {
+        optional string key = 1;
+        
+        oneof value {
+            bool bool_value = 2;
+            int64 int_value = 3;
+            double double_value = 4;
+            string string_value = 5;
+            bytes bytes_value = 6;
+        }
+    }
+    
+    map<string, string> processed_key_value_pairs = 2;
+    
+    optional AttributeConfig attribute_config = 3;
+    message AttributeConfig {
+        optional string primary_attribute = 1;
+        repeated string secondary_attributes = 2;
+        optional string feature_name_attribute = 3;
+        map<string, AttributeFormatConfig> attribute_format_config = 4;
+        optional string label_attribute = 5;
+        
+        message AttributeFormatConfig {
+            optional string currency_code = 3;
+            optional int32 significant_digits = 4;
+            
+            reserved 1, 2;
+        }
+    }
+    
+    optional ThinningStats thinning_stats = 4;
+    message ThinningStats {
+        optional int32 lowest_lod_without_thinning = 1;
+    }
+}
+
+message FilterSet {
+    optional string localized_attribute_name = 3;
+    
+    oneof filter_set {
+        CategoricalFilterSet categorical_filter_set = 1;
+        InterpolatedFilterSet interpolated_filter_set = 2;
+    }
+}
+
+message CategoricalFilterSet {
+    repeated CategoricalFilterOption options = 1;
+    message CategoricalFilterOption {
+        optional string localized_string_value = 4;
+        optional bool is_enabled = 5;
+        
+        oneof value {
+            string string_value = 1;
+            int64 int_value = 2;
+            double double_value = 3;
+        }
+    }
+}
+
+message InterpolatedFilterSet {
+    repeated InterpolatedFilterRange ranges = 1;
+    message InterpolatedFilterRange {
+        oneof range {
+            DoubleRange double_range = 1;
+            IntRange int_range = 2;
+        }
+    }
+}
+
+message DoubleRange {
+    optional double min = 1;
+    optional double max = 2;
+}
+
+message IntRange {
+    optional int64 min = 1;
+    optional int64 max = 2;
+}
+
+message GeometricFilter {
+    optional GeometricOperator geometric_operator = 1;
+    enum GeometricOperator {
+        GEOMETRIC_OPERATOR_UNSPECIFIED = 0;
+        GEOMETRIC_OPERATOR_CONTAINS = 1;
+        GEOMETRIC_OPERATOR_INTERSECTS = 2;
+    }
+    
+    optional .earth.document.protos.Geometry geometry = 2;
+}
+
+message KmlLayer {
+    optional string kml_url = 1;
+}
+
+message UrlTemplateLayer {
+    optional string url_template = 1;
+    repeated RequestRule request_rules = 2;
+}
+
+message DataProvider {
+    optional string id = 1;
+    optional string display_name = 2;
+}
+
+message LayerAttribute {
+    optional string localized_name = 1;
+    
+    optional AttributeType attribute_type = 2;
+    enum AttributeType {
+        ATTR_TYPE_UNSPECIFIED = 0;
+        ATTR_TYPE_STRING = 1;
+        ATTR_TYPE_ENUM = 2;
+        ATTR_TYPE_NUMBER = 3;
+        ATTR_TYPE_DATETIME_USEC = 4;
+        ATTR_TYPE_BOOLEAN = 5;
+        ATTR_TYPE_LAT_LNG = 6;
+        ATTR_TYPE_DISTANCE_M = 7;
+        ATTR_TYPE_AREA_SQ_M = 8;
+        ATTR_TYPE_POWER_W = 9;
+        ATTR_TYPE_VOLTAGE_V = 10;
+        ATTR_TYPE_MARKDOWN = 11;
+        ATTR_TYPE_IMAGE = 12;
+    }
+}
+
+message SearchMetadata {
+    optional double semantic_distance = 1;
+}

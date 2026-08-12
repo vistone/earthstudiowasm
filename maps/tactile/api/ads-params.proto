@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "maps/tactile/api/shared/ads.proto";
+import "maps/tactile/api/shared/ads/map-ads-request-context.proto";
+import "maps/tactile/api/shared/ads/placesheet-ad-type.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "maps/tactile/api/shared/logging-common.proto";
+import "maps/tactile/api/shared/place/maps-place-identifier.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "AdsParamsProto";
+option java_package = "com.google.maps.tactile";
+
+message AdsParams {
+    optional GeoProduct ads_client_type = 1;
+    optional string adshield_signals = 2;
+    repeated maps_tactile.shared.PlacesheetCreativeFormat placesheet_creative_format = 3;
+    optional string advertising_id = 4;
+    optional maps_tactile.shared.ATTManagerAuthorizationStatus att_status = 5;
+    optional maps_tactile.shared.LatLng similar_place_ad_target_location = 6;
+    optional maps_tactile.shared.ads.PlacesheetAdType placesheet_fake_ads_type = 7;
+    optional maps_tactile.shared.ads.MapAdsRequestContext map_ads_request_context = 8;
+    optional string attribution_os_supported_version = 9;
+    repeated maps_tactile.shared.place.MapsPlaceIdentifier previously_shown_search_ad_location = 10;
+    optional string cache_consistency_token = 11;
+}

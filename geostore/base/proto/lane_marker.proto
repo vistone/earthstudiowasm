@@ -1,0 +1,102 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/version_token_options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message LaneMarkerProto {
+    optional LinearStripePatternProto linear_pattern = 1;
+    optional CrossingStripePatternProto crossing_pattern = 2;
+    optional BarrierLogicalMaterialProto barrier_materials = 3;
+}
+
+message LinearStripePatternProto {
+    repeated PhysicalLineProto line = 1;
+}
+
+message PhysicalLineProto {
+    optional DashPattern pattern = 1;
+    enum DashPattern {
+        UNKNOWN_DASH_PATTERN = 1;
+        SOLID = 2;
+        DASHED = 3;
+        DOTTED = 4;
+        DOTTED_DASHED = 5;
+    }
+    
+    optional float dash_length_meters = 2;
+    optional float gap_length_meters = 3;
+    optional PaintedElementLogicalColorProto paint_color = 4;
+    optional PaintedElementLogicalColorProto gap_color = 5;
+    
+    repeated LaneStripeMaterial material = 6;
+    enum LaneStripeMaterial {
+        UNKNOWN_STRIPE_MATERIAL = 1;
+        PAINT_STRIPE = 2;
+        ROUND_DOT = 3;
+        SQUARE_DOT = 4;
+    }
+    
+    optional string physical_line_token = 7;
+}
+
+message PaintedElementLogicalColorProto {
+    optional PaintedElementLogicalColor color = 1;
+    enum PaintedElementLogicalColor {
+        UNKNOWN_LOGICAL_COLOR = 1;
+        WHITE = 2;
+        YELLOW = 3;
+        RED = 4;
+        GREEN = 5;
+        BLUE = 6;
+        BLACK = 7;
+        GREY = 8;
+        ORANGE = 9;
+    }
+}
+
+message CrossingStripePatternProto {
+    optional CrossingStripePattern stripe_pattern = 1;
+    enum CrossingStripePattern {
+        UNKNOWN_STRIPE_PATTERN = 1;
+        NO_STRIPE_PATTERN = 2;
+        LONGITUDINAL_STRIPE = 3;
+        DIAGONAL_STRIPE = 4;
+        LATERAL_STRIPE = 5;
+        SINGLE_CROSSING_LINE = 6;
+        DOUBLE_CROSSING_LINE = 7;
+        TRIANGLE_CROSSING_LINE_POINTING_LEFT = 8;
+        TRIANGLE_CROSSING_LINE_POINTING_RIGHT = 9;
+        STRUCTURED_CROSSING_LINE = 10;
+    }
+    
+    optional BorderPattern border_pattern = 2;
+    enum BorderPattern {
+        UNKNOWN_BORDER_PATTERN = 1;
+        NO_BORDER_PATTERN = 2;
+        SOLID = 3;
+        DASHED = 4;
+    }
+    
+    optional PhysicalLineProto border_line = 4;
+    repeated PaintedElementLogicalColorProto color = 3;
+}
+
+message BarrierLogicalMaterialProto {
+    repeated BarrierLogicalMaterial material = 1;
+    enum BarrierLogicalMaterial {
+        UNKNOWN_LOGICAL_MATERIAL = 1;
+        CONCRETE = 2;
+        METAL = 3;
+        PLASTIC = 4;
+        STONE = 5;
+        TIMBER = 6;
+    }
+}

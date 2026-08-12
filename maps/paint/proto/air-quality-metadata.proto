@@ -1,0 +1,71 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "geo/serving/proto/link/link.proto";
+import "geo/serving/proto/weather/air_quality_index.proto";
+import "google/protobuf/timestamp.proto";
+import "google/type/color.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "AirQualityMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message AirQualityMetadata {
+    optional string name = 1;
+    optional string station_id = 12;
+    optional string location = 5;
+    
+    optional AirQualityIndexValue value = 2;
+    message AirQualityIndexValue {
+        optional int32 int_value = 1;
+        optional string descriptive_value = 3;
+        optional google.type.Color scale_category_color = 2;
+        optional int32 matching_scale_category_index = 4;
+    }
+    
+    optional string description = 6;
+    optional string health_implications = 7;
+    optional google.protobuf.Timestamp update_time = 8;
+    optional geo_serving_proto.weather.AirQualityIndex air_quality_scale = 9;
+    
+    repeated DataSource data_source = 10;
+    message DataSource {
+        optional string text = 1;
+        optional geo_serving_proto.link.Link link = 2;
+    }
+    
+    repeated Link link = 11;
+    message Link {
+        optional string display_text = 1;
+        optional geo_serving_proto.link.Link link = 2;
+    }
+    
+    optional SmokeLegend smoke_legend = 13;
+    message SmokeLegend {
+        optional string title = 1;
+        
+        repeated SmokeLevel level = 2;
+        message SmokeLevel {
+            optional string description = 1;
+            
+            optional SmokeColor light_mode_color = 2 [deprecated = true];
+            message SmokeColor {
+                optional google.type.Color fill_color = 1;
+                optional google.type.Color stroke_color = 2;
+            }
+            
+            optional SmokeColor dark_mode_color = 3 [deprecated = true];
+            optional string light_mode_icon_url = 4;
+            optional string dark_mode_icon_url = 5;
+        }
+    }
+    
+    reserved 3, 4;
+    
+    extend .proto2.bridge.MessageSet {
+        optional AirQualityMetadata message_set_extension = 346648032;
+    }
+}

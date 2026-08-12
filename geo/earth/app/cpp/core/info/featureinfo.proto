@@ -1,0 +1,108 @@
+syntax = "proto2";
+
+package earth.info;
+
+import "geo/earth/app/cpp/core/protos/localized_message.proto";
+import "geo/earth/app/cpp/math/basic_types.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.info";
+
+message NumericValue {
+    optional double value = 1;
+    optional Unit unit = 2;
+}
+
+message ElevationProfileValue {
+    repeated double elevation_values_meters = 1 [packed = true];
+    optional double min_elevation_value_meters = 2;
+    optional double max_elevation_value_meters = 3;
+    optional double length_value_meters = 4;
+}
+
+message AggregateStats {
+    optional double min = 1;
+    optional double median = 2;
+    optional double max = 3;
+    optional Unit unit = 4;
+}
+
+message BoundingBox2dValue {
+    optional .earth.math.BoundingBox2d bounding_box = 1;
+    optional Unit unit = 2;
+}
+
+message InfoItem {
+    optional RefiningStatus refining_status = 4;
+    optional .earth.core.DisplayMessages display_messages = 9;
+    
+    oneof name {
+        KnownItemName known_name = 1;
+        string unknown_name = 2;
+    }
+    
+    oneof type {
+        NumericValue numeric_value = 3;
+        string string_value = 5;
+        BoundingBox2dValue bounding_box_2d_value = 6;
+        bool boolean_value = 7;
+        AggregateStats aggregate_stats = 8;
+        ElevationProfileValue elevation_profile_value = 10;
+    }
+}
+
+message FeatureInfo {
+    repeated InfoItem items = 1;
+    optional string feature_id = 2;
+}
+
+enum KnownItemName {
+    ITEM_UNKNOWN = 0;
+    ITEM_LATITUDE = 1;
+    ITEM_LONGITUDE = 2;
+    ITEM_LOCATION = 3;
+    ITEM_ALTITUDE = 4;
+    ITEM_LENGTH = 5;
+    ITEM_PERIMETER = 6;
+    ITEM_AREA = 7;
+    ITEM_PLUS_CODE = 8;
+    ITEM_ELEVATION = 9;
+    ITEM_ELEVATION_GAIN = 10;
+    ITEM_ELEVATION_LOSS = 11;
+    ITEM_TILE_OVERLAY_URL_PATTERN = 12;
+    ITEM_TILE_OVERLAY_TILE_SIZE = 13;
+    ITEM_TILE_OVERLAY_TILE_COVERAGE = 14;
+    ITEM_DURATION = 15;
+    ITEM_ADDRESS = 16;
+    ITEM_DESCENDANTS_COUNT = 17;
+    ITEM_CENTROID = 18;
+    ITEM_AREA_DESCRIPTION = 19;
+    ITEM_HEADING = 20;
+    ITEM_DISTANCE = 21;
+    ITEM_ELEVATION_STATS = 22;
+    ITEM_SLOPE_STATS = 23;
+    ITEM_FEATURE_TYPE_HEADING = 24;
+    ITEM_FEATURE_COUNT = 25;
+    ITEM_STREET_VIEW_DATE = 26;
+    ITEM_SUMMED_LENGTH = 27;
+    ITEM_SUMMED_AREA = 28;
+    ITEM_ELEVATION_PROFILE = 29;
+}
+
+enum Unit {
+    UNIT_UNKNOWN = 0;
+    UNIT_DEGREES = 1;
+    UNIT_METERS = 2;
+    UNIT_SQUARE_METERS = 3;
+    UNIT_CELSIUS = 4;
+    UNIT_PIXELS = 5;
+    UNIT_SECONDS = 6;
+    UNIT_DEGREES_SLOPE = 7;
+}
+
+enum RefiningStatus {
+    STATUS_NORMAL = 0;
+    STATUS_NEEDS_REFINEMENT = 1;
+    STATUS_REFINEMENT_IN_PROGRESS = 2;
+}

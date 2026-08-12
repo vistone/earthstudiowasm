@@ -1,0 +1,140 @@
+syntax = "editions";
+
+package maps_versatile;
+
+import "geostore/base/proto/feature.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/maps/tactile/annotation-data.proto";
+import "maps/paint/proto/client-style-transforms.proto";
+import "maps/paint/proto/client-vector-annotation-targeting.proto";
+import "maps/paint/proto/sub-style-tag.proto";
+import "maps/versatile/proto/annotation-enums.proto";
+import "maps/versatile/proto/data-bound-value.proto";
+import "maps/versatile/proto/vector-feature.proto";
+import "maps/versatile/proto/vector-render-op.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+
+message AnnotationFeatureInfo {
+    optional geostore.FeatureProto.TypeCategory type = 1;
+    repeated string rendering_gconcept = 3;
+    optional string country_code = 4;
+    
+    reserved 2;
+    
+    reserved "establishment_type";
+}
+
+message AnnotationContentProto {
+    optional annotations.UseCase use_case = 1;
+    optional string localization_policy_id = 2 [default = "USER_ONLY"];
+    optional AnnotationSubtitleContent subtitle_content = 3;
+    optional AnnotationStyleModification style_modification = 4;
+    optional AnnotationBoosting boosting = 5;
+    repeated DataBoundValue data_bound_value = 6;
+    
+    extensions 1000 to max;
+}
+
+message AnnotationSubtitleContent {
+    repeated AnnotationSubtitlePiece piece = 1;
+    optional logs_tactile.AnnotationImpressionData logging_metadata = 2;
+    optional CandidateTextWrapOptions text_wrap_options = 3;
+    
+    extensions 1000 to max;
+}
+
+message AnnotationSubtitlePiece {
+    optional LabelCandidateTemplate.LabelClass label_class = 1 [default = LABEL_CLASS_TEXT];
+    optional FeatureNameProto text = 2;
+    optional string localization_policy_id = 3;
+    optional annotations.SubtitleStyleTag style_tag = 4;
+    optional maps_paint_client.SubStyleTag sub_style_tag = 5;
+    optional bool preceded_by_line_break = 6;
+    
+    optional AnnotationTranslationInfo annotation_translation_info = 7;
+    message AnnotationTranslationInfo {
+        optional TranslatorID translator_id = 1;
+        enum TranslatorID {
+            TRANSLATOR_ID_UNKNOWN = 0;
+            TRANSLATOR_ID_TRANSLATION_CONSOLE_ID = 1;
+            TRANSLATOR_ID_PROGRESSIVE_DISCLOSURE = 2;
+            TRANSLATOR_ID_SHOPPING_CATEGORY_NAME = 3;
+            TRANSLATOR_ID_SEPARATED_TC_ID_LIST = 4;
+            TRANSLATOR_ID_HOTEL_PROGRESSIVE_DISCLOSURE = 5;
+            TRANSLATOR_ID_PERSONAL_SCORE = 7;
+            TRANSLATOR_ID_REGULATED_AREA = 8;
+            TRANSLATOR_ID_DEAL = 10;
+            TRANSLATOR_ID_POI_EVENTS = 11;
+            TRANSLATOR_ID_PHOTOPIN_SUBTITLE = 13;
+        }
+        
+        optional int32 translation_message_id = 2;
+        
+        extensions 1000 to 524999999, 525000000 to max;
+    }
+    
+    optional CandidateTextWrapOptions annotation_text_wrap_options = 9;
+    
+    reserved 8;
+}
+
+message AnnotationStyleModification {
+    repeated maps_paint_client.StyleTransforms.Tag transform_tag = 1 [features = repeated_field_encoding: EXPANDED
+    ];
+    optional logs_tactile.AnnotationImpressionData logging_metadata = 2;
+}
+
+message AnnotationBoosting {
+    optional BoostAmount boost_amount = 1;
+    enum BoostAmount {
+        BOOST_NONE = 0;
+        BOOST_SMALL = 1;
+        BOOST_MEDIUM = 2;
+        DEBOOST_SMALL = 3;
+        DEBOOST_MEDIUM = 4;
+    }
+    
+    optional logs_tactile.AnnotationImpressionData logging_metadata = 2;
+}
+
+message AnnotationTarget {
+    optional fixed64 fprint = 1;
+    optional maps_paint_client.AnnotationPredicate predicate = 2;
+}
+
+message AnnotationExperimentInfo {
+    repeated int32 for_experiment_id = 1;
+    repeated int32 exclude_from_experiment_id = 2;
+    repeated int32 counterfactual_experiment_id = 3;
+    
+    repeated LoggingDirective logging_directive = 4;
+    message LoggingDirective {
+        optional int32 annotation_id = 1;
+        optional int32 logged_id = 2;
+    }
+}
+
+message VectorAnnotationProto {
+    optional AnnotationContentProto annotation_content = 2;
+    optional AnnotationExperimentInfo experiment_info = 3;
+    optional fixed64 fprint = 4;
+    optional int32 rank_within_use_case = 12;
+    optional AnnotationFeatureInfo feature_info = 5;
+    optional AnnotationTarget annotation_target = 6;
+    optional int32 min_additional_zoom = 7 [default = 0];
+    optional int32 max_additional_zoom = 8 [default = -1];
+    optional int32 render_config_min_zoom = 10;
+    optional int32 render_config_max_zoom = 11 [default = -1];
+    optional bool is_personalized = 9;
+    optional .proto2.bridge.MessageSet temp_data = 13;
+    
+    reserved 1;
+}
+
+message VectorAnnotationProtoList {
+    repeated VectorAnnotationProto annotation = 1;
+}

@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package logs;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_package = "com.google.common.logging.proto1api";
+
+message VeOffsetIdentifier {
+    repeated int32 base = 1;
+    optional int32 offset = 2 [default = 0];
+}

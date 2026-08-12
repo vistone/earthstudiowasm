@@ -1,0 +1,61 @@
+syntax = "editions";
+
+package logs_maps_shared;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps";
+
+message LoggedNameProto {
+    optional string text = 1;
+    optional string language = 2;
+    
+    repeated LoggedFlagCategory flag = 3;
+    enum LoggedFlagCategory {
+        option features = enum_type: CLOSED
+        ;
+        FLAG_ANY = 0;
+        FLAG_IN_LOCAL_LANGUAGE = 1;
+        FLAG_PREFERRED = 2;
+        FLAG_OFFICIAL = 3;
+        FLAG_OBSCURE = 4;
+        FLAG_ON_SIGNS = 5;
+        FLAG_EXIT_NAME_NUMBER = 81;
+        FLAG_EXIT_NAME = 1297;
+        FLAG_INTERCHANGE_NAME = 20753;
+        FLAG_EXIT_NUMBER = 1298;
+        FLAG_INTERCHANGE_NUMBER = 20769;
+        FLAG_TRANSIT_HEADSIGN = 82;
+        FLAG_CONNECTS_DIRECTLY = 83;
+        FLAG_CONNECTS_INDIRECTLY = 84;
+        FLAG_INTERSECTION_NAME = 85;
+        FLAG_VANITY = 6;
+        FLAG_ROUTE_NUMBER = 7;
+        FLAG_COUNTRY_CODE_2 = 129;
+        FLAG_ABBREVIATED = 9;
+        FLAG_ID = 10;
+        FLAG_DESIGNATED_MARKET_AREA_ID = 161;
+        FLAG_IATA_ID = 163;
+        FLAG_ICAO_ID = 164;
+        FLAG_ISO_3166_2 = 165;
+        FLAG_COUNTRY_SPECIFIC_ID = 166;
+        FLAG_LANGUAGE_CODE = 167;
+        FLAG_TIMEZONE_ID = 168;
+        FLAG_PHONE_NUMBER_PREFIX = 169;
+        FLAG_PHONE_NUMBER_AREA_CODE = 2705;
+        FLAG_TRANSLITERATED = 11;
+        FLAG_NOT_ON_SIGNS = 12;
+        FLAG_NOT_IN_LOCAL_LANGUAGE = 209;
+        FLAG_ROUNDABOUT_ROUTE = 211;
+        FLAG_NEVER_DISPLAY = 212;
+        FLAG_BICYCLE_ROUTE = 213;
+        FLAG_MACHINE_GENERATED = 215;
+        FLAG_SUSPICIOUS = 216;
+        FLAG_TRADITIONAL = 217;
+    }
+    
+    optional string short_text = 6;
+}

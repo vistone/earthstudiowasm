@@ -1,0 +1,189 @@
+syntax = "editions";
+
+package geo_serving_proto.electricvehicle;
+
+import "geo/serving/proto/electricvehicle/charging_architecture.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPEV";
+option java_multiple_files = true;
+option java_outer_classname = "EnergyModelProto";
+option java_package = "com.google.geo.serving.proto.electricvehicle";
+
+message VehicleEnergyModel {
+    optional VehicleInfo vehicle_info = 1;
+    optional RoadLoadForce road_load = 2;
+    optional MaxRegenPower max_regen_power = 4;
+    repeated DrainAtTime auxiliary_drain_at_time = 6;
+    repeated DrainAtTemperature auxiliary_drain_at_temp = 7;
+    optional ChargingCurves charging_curves = 8;
+    optional ChargingTime current_charging_time = 9;
+    optional DrivetrainLosses drivetrain_losses = 10;
+    optional BatteryLosses battery_losses = 11;
+    optional ModelProviderClientInfo client_info = 12;
+    
+    optional BatteryPreconditioning battery_preconditioning = 13;
+    message BatteryPreconditioning {
+        repeated TargetTemperatureAtPower target_temp_at_input_power = 1;
+        message TargetTemperatureAtPower {
+            optional int32 input_power_watts = 1;
+            optional float target_battery_temp_celsius = 2;
+        }
+        
+        optional int32 battery_conditioning_power_watts = 2;
+        
+        repeated EnergyRequiredForPreconditioning energy_required_for_preconditioning = 3;
+        message EnergyRequiredForPreconditioning {
+            optional float target_battery_temp_celsius = 1;
+            optional int32 additional_energy_required_wh = 2;
+        }
+        
+        optional int32 minimum_battery_level_threshold_for_preconditioning_wh = 4;
+        
+        repeated MaximumTemperatureIncreaseAtStation maximum_temp_increase_at_station = 5;
+        message MaximumTemperatureIncreaseAtStation {
+            optional int32 input_power_watts = 1;
+            optional float maximum_battery_temp_increase_celsius = 2;
+        }
+    }
+    
+    reserved 3, 5;
+}
+
+message IntWithUncertainty {
+    optional int32 mean = 1;
+    optional float standard_deviation = 2;
+}
+
+message FloatWithUncertainty {
+    optional float mean = 1;
+    optional float standard_deviation = 2;
+}
+
+message VehicleInfo {
+    optional int64 base_time_sec = 1;
+    optional IntWithUncertainty battery_level_wh = 3;
+    optional IntWithUncertainty battery_capacity_wh = 4;
+    optional int32 factory_net_battery_capacity_wh = 14;
+    
+    optional HvacStatus hvac_status = 5;
+    enum HvacStatus {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_HVAC_STATUS = 0;
+        OFF_HVAC_STATUS = 1;
+        ON_HVAC_STATUS = 2;
+    }
+    
+    optional float reference_air_density = 6;
+    optional float external_temp_celsius = 7;
+    optional IntWithUncertainty mass_kilograms = 8;
+    optional int32 peak_motor_power_watts = 9;
+    optional int32 maximum_charging_rate_watts = 10;
+    optional bool heat_pump_equipped = 11;
+    optional float battery_temp_celsius = 12;
+    
+    repeated SupportedChargingArchitecture supported_charging_architecture = 13;
+    message SupportedChargingArchitecture {
+        optional ChargingArchitecture architecture = 1;
+        optional int32 maximum_supported_charge_rate_watts = 2;
+    }
+    
+    reserved 2;
+}
+
+message RoadLoadForce {
+    optional FloatWithUncertainty constant = 1;
+    optional FloatWithUncertainty linear = 2;
+    optional FloatWithUncertainty quadratic = 3;
+}
+
+message MaxRegenPower {
+    repeated RegenerationRateAtEnergyLevel regeneration_rate_at_energy_level = 1;
+    repeated RegenerationRateAtTime regeneration_rate_at_time = 2;
+}
+
+message RegenerationRateAtEnergyLevel {
+    optional int32 energy_level_wh = 1;
+    optional int32 regeneration_rate_watts = 2;
+}
+
+message RegenerationRateAtTime {
+    optional int32 relative_time_sec = 1;
+    optional int32 regeneration_rate_watts = 2;
+}
+
+message DrivetrainLosses {
+    repeated LossSeriesAtSpeed drivetrain_power_loss = 7;
+    optional int32 acceleration_modelling_speed_threshold_meters_per_second = 8;
+}
+
+message LossSeriesAtSpeed {
+    optional float speed_meters_per_second = 1;
+    repeated LossAtPower loss_at_power = 2;
+}
+
+message LossAtPower {
+    optional sint32 power_watts = 1;
+    optional IntWithUncertainty loss_watts = 2;
+}
+
+message BatteryLosses {
+    repeated LossAtPower battery_power_loss = 4;
+}
+
+message DrainAtTime {
+    optional int32 start_time_sec = 4;
+    optional IntWithUncertainty drain_watts = 3;
+    
+    reserved 1, 2, 5;
+}
+
+message DrainAtTemperature {
+    optional float temp_celsius = 1;
+    optional IntWithUncertainty hvac_drain_watts = 2;
+    optional IntWithUncertainty battery_conditioning_drain_watts = 3;
+    optional IntWithUncertainty total_drain_watts = 4;
+}
+
+message ChargingCurves {
+    repeated ChargingCurveAtPower charging_curve_at_power = 4;
+    message ChargingCurveAtPower {
+        optional int32 input_power_watts = 1;
+        
+        repeated TimeToFullBattery time_to_full_battery = 2;
+        message TimeToFullBattery {
+            optional int32 energy_to_full_wh = 1;
+            optional int32 time_to_full_secs = 2;
+        }
+    }
+    
+    repeated ChargingCurvesAtTemperature charging_curves_at_temperature = 5;
+    message ChargingCurvesAtTemperature {
+        optional float battery_temp_celsius = 1;
+        repeated ChargingCurveAtPower charging_curve_at_power = 2;
+    }
+    
+    reserved 1, 2, 3;
+}
+
+message ChargingTime {
+    optional int32 target_battery_level_wh = 1;
+    optional IntWithUncertainty time_remaining_secs = 2;
+}
+
+message ModelProviderClientInfo {
+    optional string content_provider_package_name = 1;
+    optional bool is_fake = 2;
+    
+    optional VehicleEnergyModelProvenance provenance = 3;
+    enum VehicleEnergyModelProvenance {
+        UNKNOWN_VEHICLE_ENERGY_MODEL_PROVENANCE = 0;
+        CAR_INTEGRATION = 1;
+        ZERO = 2;
+    }
+}

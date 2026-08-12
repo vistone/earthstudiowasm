@@ -1,0 +1,79 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/languagetaggedtext.proto";
+import "geostore/base/proto/openinghours.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/timebasedrate.proto";
+import "geostore/base/proto/timeschedule.proto";
+import "metaweb/data/topictable/topic.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message ParkingProto {
+    optional bool parking_available = 4;
+    repeated FeatureIdProto parking_provider_feature = 1;
+    repeated ParkingAssociationProto parking_association = 6;
+    optional OpeningHoursProto opening_hours = 2;
+    repeated ParkingAllowanceProto allowance = 5;
+    repeated ParkingRestrictionProto restriction = 3;
+}
+
+message ParkingRestrictionProto {
+    optional TimeScheduleProto restricted_hours = 1;
+    repeated TravelServiceType service_type = 2;
+    repeated ParkingVehicleType vehicle_type = 4;
+    
+    optional ParkingRestrictionCategory restriction_type = 3;
+    enum ParkingRestrictionCategory {
+        RESTRICTION_UNKNOWN = 0;
+        RESTRICTION_PARKING = 1;
+        RESTRICTION_STANDING = 17;
+        RESTRICTION_STOPPING = 273;
+        RESTRICTION_PICKUP_GOODS = 18;
+        RESTRICTION_PICKUP_PASSENGERS = 19;
+    }
+}
+
+message ParkingAllowanceProto {
+    optional ParkingAllowanceType allowance_type = 1 [default = STANDARD];
+    enum ParkingAllowanceType {
+        STANDARD = 0;
+        VALET = 1;
+        PERMIT = 2;
+        PICKUP_GOODS = 3;
+        PICKUP_PASSENGERS = 4;
+    }
+    
+    optional ParkingVehicleType vehicle_type = 2 [default = ANY];
+    repeated TravelServiceType service_type = 7;
+    repeated LanguageTaggedTextProto permit_type = 3;
+    repeated freebase.Topic min_purchase_for_validation = 4;
+    optional bool is_discount = 5;
+    repeated TimeBasedRateProto time_based_rate = 6;
+}
+
+message ParkingAssociationProto {
+    optional FeatureIdProto associated_parking_feature = 1;
+    optional bool is_onsite = 2;
+}
+
+enum TravelServiceType {
+    SERVICE_ALL = 0;
+    SERVICE_GENERAL_DRIVER = 1;
+    SERVICE_RIDESHARE = 2;
+    SERVICE_TAXI = 3;
+    SERVICE_COMMERCIAL = 4;
+}
+
+enum ParkingVehicleType {
+    ANY = 0;
+    CAR = 1;
+    MOTORCYCLE = 2;
+    TRUCK = 3;
+}

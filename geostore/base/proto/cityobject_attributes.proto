@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.geostore.base.proto";
+
+message CityObjectAttributes {
+    optional TrsAffineTransform trs_affine_transform = 1;
+    message TrsAffineTransform {
+        optional TrsScale scale = 1;
+        message TrsScale {
+            optional float x = 1;
+            optional float y = 2;
+            optional float z = 3;
+        }
+        
+        optional TrsRotate rotate = 2;
+        message TrsRotate {
+            optional float x = 1;
+            optional float y = 2;
+            optional float z = 3;
+        }
+        
+        optional TrsTranslate translate = 3;
+        message TrsTranslate {
+            optional double x = 1;
+            optional double y = 2;
+            optional double z = 3;
+        }
+    }
+}

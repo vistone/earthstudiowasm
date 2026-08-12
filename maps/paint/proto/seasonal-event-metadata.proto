@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "SeasonalEventMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message SeasonalEventMetadata {
+    optional int32 seasonal_event_type = 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional SeasonalEventMetadata message_set_extension = 525001227;
+    }
+}

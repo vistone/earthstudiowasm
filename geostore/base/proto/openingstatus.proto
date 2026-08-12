@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+enum OpeningStatus {
+    OPENING_STATUS_UNSPECIFIED = 0;
+    FUTURE_OPENING = 1;
+    OPEN = 2;
+    TEMPORARILY_CLOSED = 3;
+    PERMANENTLY_CLOSED = 4;
+}

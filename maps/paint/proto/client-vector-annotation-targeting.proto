@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/paint/proto/legendary/legendary.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_outer_classname = "ClientVectorAnnotationTargeting";
+option java_package = "com.google.maps.paint.client";
+
+message AnnotationAttribute {
+    optional int32 namespace_id = 1;
+    optional int32 attribute_id = 2;
+}
+
+message AnnotationAttributeSetPredicate {
+    repeated AnnotationAttribute attribute = 1;
+    optional AnnotationPredicateOp op = 2 [default = TARGET_MATCHES_ANY];
+}
+
+message AnnotationPredicate {
+    repeated AnnotationAttributeSetPredicate attribute_set = 1;
+    optional maps_paint.CustomStyleFeatureTag csft_target = 1000;
+    optional AnnotationPredicateOp op = 2 [default = TARGET_MATCHES_ALL];
+}
+
+enum AnnotationPredicateOp {
+    TARGET_MATCHES_UNDEFINED = 0;
+    TARGET_MATCHES_ANY = 1;
+    TARGET_MATCHES_ALL = 2;
+}

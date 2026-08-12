@@ -1,0 +1,124 @@
+syntax = "editions";
+
+package cityblock.streetsmart.biz;
+
+import "geo/imagery/geotracker/proto/extended_user_data.proto";
+import "geo/imagery/geotracker/proto/state_estimate.proto";
+import "geostore/base/proto/featureid.proto";
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "util/geometry2d/r2.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.cityblock.streetsmart.biz";
+
+message ImageryObservationProto {
+    repeated BizImageLabel label = 1 [features = repeated_field_encoding: EXPANDED
+    ];
+    optional StorefrontVerified verified = 2;
+    optional float bizclassifier_confidence = 3 [deprecated = true];
+    map<string, float> bizclassifier_results = 4;
+    
+    optional BizCatResult bizcat_result = 5;
+    message BizCatResult {
+        optional string model_name = 1;
+        optional string gcid = 2;
+        optional float confidence = 3;
+    }
+    
+    optional fixed64 approximate_user_capture_location_s2 = 6;
+    
+    extend .geotracker.ExtendedUserData {
+        optional ImageryObservationProto extended_user_data = 224588238;
+    }
+}
+
+message ImageryObservationInfo {
+    optional string observation_id = 1;
+    optional string pano_key = 2;
+    optional string image_id = 3;
+    optional string run_id = 4;
+    optional bool is_publishable = 5;
+    optional bool is_published = 6;
+    optional google.protobuf.Timestamp capture_timestamp = 7;
+    optional .geometry2d.R2BoundingBoxProto bounding_box = 8;
+    optional double storefront_detection_confidence = 11;
+    map<string, .geotracker.TranscriptionProto> text_transcriptions = 12;
+    repeated geostore.FeatureIdProto matched_feature_ids = 10;
+    
+    optional DetectionRay detection_ray = 9;
+    message DetectionRay {
+        optional Vector3d origin = 1;
+        message Vector3d {
+            optional double x = 1;
+            optional double y = 2;
+            optional double z = 3;
+        }
+        
+        optional Vector3d normalized_direction = 2;
+    }
+}
+
+message StorefrontFilteringResults {
+    repeated ClusteringFilterInclusionReason inclusion_reason = 1;
+    enum ClusteringFilterInclusionReason {
+        UNKNOWN = 0;
+        TEMPORAL_SPATIAL = 1;
+        FEATURE_ID = 2;
+        FOUND_IN_QSO = 3;
+    }
+    
+    extend .geotracker.ExtendedUserData {
+        optional StorefrontFilteringResults extended_user_data = 494280269;
+    }
+}
+
+message StorefrontFeatures {
+    map<string, .geotracker.MapFactsAssociationProto> features = 1;
+    
+    extend .geotracker.ExtendedUserData {
+        optional StorefrontFeatures extended_user_data = 494276187;
+    }
+}
+
+message BizClassifierResults {
+    map<string, float> bizclassifier_results = 1;
+}
+
+message PublishabilityStatus {
+    optional bool is_published = 1;
+    optional bool is_publishable = 2;
+}
+
+message RepresentativeImageInfo {
+    optional string viewcode_id = 2;
+    map<string, int32> rank = 1;
+}
+
+enum BizImageLabel {
+    UNKNOWN_IMAGE_LABEL = 0;
+    CITY_CENTER = 1;
+    TRAMS = 2;
+    IMRE = 3;
+    NEWFIE = 4;
+    S2_CELL = 5;
+    PUBLISHED = 6;
+    PUBLISHABLE = 7;
+}
+
+enum StorefrontVerified {
+    UNVERIFIED = 0;
+    MODEL_THRESHOLD = 1;
+    PLACEID_MATCH = 2;
+    QUICKMATCH_MATCH = 3;
+    CROWDSOURCE = 4;
+    CLUESTORE_MATCH = 5;
+    PLACEID_OBATZDA_MATCH = 6;
+    VIEWS_OBATZDA_MATCH = 10;
+    PLACEID_IM2OCR_MATCH = 7;
+    PLACEID_LVS_MATCH = 8;
+    GOLDEN = 9;
+}

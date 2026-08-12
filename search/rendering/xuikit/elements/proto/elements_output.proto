@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package search.rendering.xuikit.elements;
+
+import "google/api/inclusion.proto";
+import "google/protobuf/any.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "net/proto2/contrib/output_source_markup/options.proto";
+import "search/rendering/xuikit/elements/proto/data_store_batch_update.proto";
+import "search/rendering/xuikit/elements/proto/js_module_set_update.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "video/youtube/utils/elements/templates/proto/eml_parcel.proto";
+
+option objc_class_prefix = "XUI";
+option java_multiple_files = true;
+option java_package = "com.google.search.rendering.xuikit.elements";
+
+message ElementsOutput {
+    optional google.protobuf.Any element_tree = 2;
+    optional .youtube.elements.templates.proto.EMLParcel template_parcel = 3;
+    optional DataStoreBatchUpdate data_store_batch_update = 4;
+    optional int32 ve_id = 6;
+    optional JsModuleSetUpdate js_module_set_update = 8;
+    
+    optional RenderNextConfiguration render_next_configuration = 10;
+    enum RenderNextConfiguration {
+        DISABLED = 0;
+        ENABLE_RENDERNEXT = 1;
+    }
+    
+    extensions 5, 7, 9;
+    
+    reserved 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional ElementsOutput message_set_extension = 472231960;
+    }
+}

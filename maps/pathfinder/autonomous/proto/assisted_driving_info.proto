@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package maps_autonomous;
+
+import "maps/pathfinder/autonomous/proto/assisted_driving_state_info.proto";
+import "maps/pathfinder/autonomous/proto/vehicle_info.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.pathfinder.autonomous.proto";
+
+message AssistedDrivingInfo {
+    DatasetInfo dataset_info = 1;
+    message DatasetInfo {
+        string dataset_id = 1;
+        string provider_id = 2;
+    }
+    
+    VehicleInfo vehicle_info = 2;
+    AssistedDrivingStateInfo assisted_driving_state_info = 3;
+}

@@ -1,0 +1,159 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "geo/serving/proto/hotels/occupancy.proto";
+import "geo/serving/proto/hotels/supported_occupancy.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/tactile/api/shared/hotels/itinerary.proto";
+import "maps/tactile/api/shared/hotels/maps-live-query-config.proto";
+import "maps/tactile/api/shared/place/place-comparison-data-options.proto";
+import "maps/tactile/api/shared/placepreview/place-preview-field-mask.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "HotelBookingOptionsProto";
+option java_package = "com.google.maps.tactile";
+
+message HotelDisplayConfig {
+    optional int32 max_num_promoted_partners = 1;
+    optional int32 max_num_menu_partners = 2;
+    optional int32 num_organic_promoted_partners = 3;
+    optional int32 num_organic_menu_partners = 4;
+    optional int32 num_partners_without_price_promoted_options = 5;
+    optional int32 num_partners_without_price_menu_options = 6;
+}
+
+message HotelBookingOptions {
+    optional string check_in_date = 1 [deprecated = true];
+    optional int32 length_of_stay = 2 [default = 1, deprecated = true];
+    optional maps_tactile.shared.hotels.Itinerary itinerary = 17;
+    
+    optional DefaultDateBehavior default_check_in_date = 3 [default = HIGH_AVAILABILITY];
+    enum DefaultDateBehavior {
+        HIGH_AVAILABILITY = 0;
+        CLOSEST_DATE = 1;
+    }
+    
+    optional OriginalQueryType query_type = 4 [default = UNKNOWN];
+    enum OriginalQueryType {
+        UNKNOWN = 0;
+        CATEGORICAL = 1;
+        NAVIGATIONAL = 2;
+    }
+    
+    optional string hotel_price_state_token = 6;
+    optional float price_ablation_rate = 8;
+    optional HotelDisplayConfig display_config = 9;
+    optional HotelDateDisplay hotel_date_display = 11;
+    
+    optional PersonalizationParams p13n_params = 12;
+    message PersonalizationParams {
+        optional bool can_personalize = 1;
+        optional bool is_smh_enabled = 2;
+        optional bool is_google_one_user = 3;
+        optional bool is_recent_unicorn_child_user = 4;
+        optional bool is_dasher_user = 5;
+        optional bool is_corp_googler = 6;
+        optional bool enable_ads = 7 [default = true];
+    }
+    
+    optional maps_tactile.shared.placepreview.PlacePreviewFieldMask alternative_hotel_field_mask = 13;
+    optional geo_serving_proto.hotels.Occupancy occupancy = 15;
+    optional geo_serving_proto.hotels.SupportedOccupancy supported_occupancy = 21;
+    optional bool occupancy_is_default = 16;
+    optional bool free_cancellation = 19;
+    
+    optional FeatureOptions feature_options = 18;
+    message FeatureOptions {
+        optional bool include_insights_lure = 1;
+        optional bool include_lean_partner_list = 2;
+        optional bool include_justifications = 3 [default = true];
+        optional bool include_locality_info = 4;
+        optional bool include_nearby_info = 5;
+        optional bool include_live_query_results = 6 [default = true];
+        optional bool include_hotel_map = 7;
+        optional bool include_why_this_ad_web_view_params = 8;
+        optional bool request_sonic_partner_links = 9;
+        optional bool explore_query = 10 [deprecated = true];
+        
+        optional ExploreQuerySource explore_query_source = 23;
+        enum ExploreQuerySource {
+            UNKNOWN_EXPLORE_QUERY_SOURCE = 0;
+            EXPLORE_TAB = 1;
+            GEOPOLITICAL_PLACESHEET = 2;
+        }
+        
+        optional AlternativeHotelsParams alternative_hotels_params = 11;
+        message AlternativeHotelsParams {
+            optional maps_tactile.shared.place.PlaceComparisonDataOptions place_comparison_data_options = 1;
+        }
+        
+        optional bool include_price_insights = 12;
+        optional bool include_vacation_rentals_tip = 13;
+        optional bool supports_vacation_rentals = 14;
+        optional bool supports_partner_without_price = 34;
+        optional bool supports_partner_source = 35;
+        
+        optional PartnerFillStrategy vacation_rental_partner_fill_strategy = 36;
+        enum PartnerFillStrategy {
+            UNKNOWN_PARTNER_FILL_STRATEGY = 0;
+            STATIC = 1;
+            FILL_ORGANIC = 2;
+        }
+        
+        optional bool include_vacation_rental_photo_metadata = 29;
+        optional bool supports_alternative_vacation_rentals = 15 [deprecated = true];
+        optional bool supports_additional_alternative_vacation_rentals = 22;
+        optional bool supports_hotel_unpaid_booking_links = 17;
+        optional bool supports_hotel_grouped_amenities = 18;
+        optional bool supports_unified_lodging_fixed_slots = 28;
+        
+        optional AspectBasedAlternativeHotelsParams aspect_based_alternative_hotels_params = 16;
+        message AspectBasedAlternativeHotelsParams {
+            optional maps_tactile.shared.placepreview.PlacePreviewFieldMask aspect_based_alternative_hotel_field_mask = 1;
+        }
+        
+        optional bool supports_sustainability = 19;
+        optional bool supports_cheapest_price_only_in_categorical = 20;
+        optional bool supports_recently_viewed_hotels = 25;
+        optional bool supports_paragraph_safe_html = 21;
+        optional bool include_3d_videos_in_placesheet = 24;
+        optional bool supports_uprank_alternative_lodging_carousels = 26;
+        
+        optional VacationRentalAttributesOptions vacation_rental_attributes_options = 27;
+        message VacationRentalAttributesOptions {
+            optional bool include_short_essential_attributes = 1;
+        }
+        
+        optional bool supports_lodging_polling_live_query = 30;
+        optional bool supports_lodging_polling_live_query_in_categorical = 31;
+        optional bool supports_japan_specific_filters = 32;
+        
+        optional RoomsOptions rooms_options = 33;
+        message RoomsOptions {
+            optional bool supports_room_clusters = 1;
+        }
+        
+        optional bool supports_unified_partner_link_handling = 37;
+        optional bool supports_async_organic_partner_pings = 38;
+    }
+    
+    optional PriceRequestDetail price_request_detail = 20;
+    enum PriceRequestDetail {
+        UNKNOWN_PRICE_REQUEST_DETAIL = 0;
+        PARTNER_PRICES = 1;
+        HOTEL_PRICE_ONLY = 2;
+    }
+    
+    optional bytes price_logging_token = 22;
+    optional maps_tactile.shared.hotels.MapsLiveQueryConfig maps_live_query_config = 23;
+    
+    reserved 5, 7, 10, 14;
+}
+
+enum HotelDateDisplay {
+    UNKNOWN_HOTEL_DATE_DISPLAY = 0;
+    TONIGHT_TOMORROW = 1;
+}

@@ -1,0 +1,810 @@
+syntax = "proto2";
+
+package earth.document.protos;
+
+import "geo/earth/proto/map_type.proto";
+import "geo/earth/proto/storage_restrictions.proto";
+import "geo/enterprise/common/protomerger/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.core.document";
+
+message Document {
+    optional string id = 1;
+    optional DocumentMetadata metadata = 2;
+    optional DocumentProperties properties = 3;
+    optional DocumentSchema schema = 4;
+    optional DocumentContents contents = 5;
+    optional ContentStyle style = 6;
+    optional CreationInfo creation_info = 7;
+    optional OwnerProfile owner_profile = 8;
+    optional MapType type = 9;
+    optional ModelVersion model_version = 10 [default = MODEL_VERSION_V1];
+}
+
+message DocumentMetadata {
+    optional string title = 1;
+    optional string description = 2;
+    optional bool using_design_feature = 3;
+}
+
+message DocumentProperties {
+    optional LookAtCamera look_at_camera = 1;
+}
+
+message DocumentSchema {
+    repeated Column column = 1;
+}
+
+message DocumentContents {
+    repeated Feature feature = 1;
+    repeated Feature feature_tree_continuation = 2;
+}
+
+message LocalVisibilityOverride {
+    optional bool local_visibility = 1;
+}
+
+message LocalOpenedOverride {
+    optional bool local_opened = 1;
+}
+
+message FeatureProperties {
+    repeated Attribute attribute = 1;
+    optional LookAtCamera look_at_camera = 2;
+    optional bool visible = 3 [default = true];
+    optional LocalVisibilityOverride local_visibility_override_not_supported_by_backend = 12;
+    optional string title = 4;
+    optional string description = 5;
+    optional string snippet = 6;
+    optional string address = 14;
+    optional PlaceInfo place_info = 7;
+    optional bool is_geocoded = 15;
+    optional FeatureRestrictions feature_restrictions = 16;
+    optional FeatureOrigin feature_origin = 17 [default = FEATUREORIGIN_USER];
+    optional FeatureModelType feature_model_type = 8 [default = FEATUREMODELTYPE_PLACEMARK];
+    optional Placemark placemark = 9;
+    optional GroundOverlay ground_overlay = 10;
+    optional MapTilePyramid map_tile_pyramid = 11;
+    optional Container container = 13;
+    optional NetworkLink network_link = 18;
+    optional ScreenOverlay screen_overlay = 20;
+    optional PhotoOverlay photo_overlay = 21;
+}
+
+message Feature {
+    optional string feature_id = 1;
+    optional bool is_continued = 5;
+    optional FeatureProperties properties = 2;
+    repeated Media media = 3;
+    repeated Feature child_feature = 4;
+    optional FeatureStyle render_style_not_supported_by_backend = 6;
+}
+
+message Placemark {
+    oneof GeometryRepresentation {
+        Geometry geometry = 2;
+        Model model = 3;
+        TrackSet track_set = 4;
+    }
+}
+
+message LatLng {
+    optional double latitude = 3;
+    optional double longitude = 4;
+    
+    reserved 1, 2;
+}
+
+message LookAtCamera {
+    optional LatLng position = 1;
+    optional double altitude = 2;
+    optional AltitudeMode altitude_mode = 3 [default = RELATIVE_TO_GROUND];
+    optional double heading = 4;
+    optional double tilt = 5;
+    optional double range = 6;
+    optional double fovy = 8 [default = 35];
+    optional double roll = 9;
+    optional LookAtCameraOptions options = 7;
+    
+    optional LookAtCameraType type = 10 [default = LOOKATCAMERA_LOOKAT];
+    enum LookAtCameraType {
+        LOOKATCAMERA_UNKNOWN = 0;
+        LOOKATCAMERA_LOOKAT = 1;
+        LOOKATCAMERA_CAMERA = 2;
+    }
+}
+
+message LookAtCameraOptions {
+    optional bool enable_streetview = 1 [default = false];
+    optional bool enable_historical_imagery = 2 [default = false];
+    optional bool enable_sunlight_effects = 3 [default = false];
+    optional int64 timestamp = 4;
+    optional string streetview_pano_id = 5;
+}
+
+message PlaceInfo {
+    optional string mapfacts_feature_id = 1;
+    optional string knowledge_graph_machine_id = 2;
+}
+
+message FeatureRestrictions {
+    optional FeatureExportRestrictions export_restrictions = 1;
+    optional FeatureEditRestrictions edit_restrictions = 2;
+}
+
+message FeatureExportRestrictions {
+    optional bool can_export_feature = 1 [default = true];
+    optional FeaturePropertiesExportRestrictions property_export_restrictions = 2;
+}
+
+message FeaturePropertiesExportRestrictions {
+    optional bool can_export_title = 1 [default = true];
+}
+
+message FeatureEditRestrictions {
+    optional bool can_edit_feature_properties = 1 [default = true];
+    optional bool can_edit_feature_style = 2 [default = true];
+}
+
+message Geometry {
+    repeated Point points = 1;
+    repeated Polyline polylines = 2;
+    repeated Polygon polygons = 3;
+}
+
+message Point {
+    optional LatLng position = 1;
+    optional double altitude = 5;
+    optional AltitudeMode altitude_mode = 3 [default = CLAMP_TO_GROUND];
+    optional bool extrude = 4 [default = false];
+    optional int32 geometry_index = 6;
+    
+    reserved 2;
+}
+
+message Polyline {
+    repeated Point point = 1;
+    optional AltitudeMode altitude_mode = 2 [default = CLAMP_TO_GROUND];
+    optional bool extrude = 3 [default = false];
+    optional bool tessellate = 4 [default = false];
+    optional int32 geometry_index = 5;
+}
+
+message Polygon {
+    repeated Polyline loop = 1;
+    optional AltitudeMode altitude_mode = 2 [default = CLAMP_TO_GROUND];
+    optional bool extrude = 3 [default = false];
+    optional int32 geometry_index = 4;
+}
+
+message StyleType {
+    optional BaseStyleType base_style_type = 1 [default = INDIVIDUAL_STYLE];
+    optional string style_column_id = 2;
+}
+
+message ContentStyle {
+    optional ContentStyleOptions style_options = 1;
+    repeated IndividualStyleRule individual_style_rule = 2;
+}
+
+message ContentStyleOptions {
+    optional StyleType style_type = 1;
+    optional IndividualStyleOptions individual_options = 2;
+}
+
+message IndividualStyleRule {
+    optional string feature_id = 1;
+    optional FeatureStyle feature_style = 2;
+}
+
+message IndividualStyleOptions {
+    optional FeatureStyle default_feature_style = 1;
+}
+
+message IndividualStyle {
+    optional string feature_id = 1;
+    optional FeatureStyle feature_style = 2;
+}
+
+message FeatureStyle {
+    optional PointStyle point_style = 1;
+    optional PolylineStyle polyline_style = 2;
+    optional PolygonStyle polygon_style = 3;
+    optional BalloonStyle balloon_style = 4;
+    optional LabelStyle label_style = 5;
+    optional ListItemStyle list_item_style = 7;
+    optional StyleUrlList style_url_not_supported_by_backend = 6;
+}
+
+message PointStyle {
+    optional Icon icon = 1;
+    optional StockIconTextOverlay stock_icon_text_overlay = 2;
+    optional bool draw_occluded = 3;
+}
+
+message Icon {
+    optional Color filter_color = 3;
+    optional double render_scale = 4 [default = 1];
+    optional double heading = 5;
+    
+    oneof IconType {
+        StockIcon stock_icon = 1;
+        CustomIcon custom_icon = 2;
+    }
+}
+
+message StockIcon {
+    optional int32 stock_icon_id = 1 [default = 2000];
+}
+
+message StockIconTextOverlay {
+    optional string overlay_text = 1;
+    optional int32 font_size = 2;
+}
+
+message CustomIcon {
+    optional IconData icon_data = 1;
+    optional PixelOffset anchor = 2;
+}
+
+message IconData {
+    optional double icon_scale = 3 [default = 1];
+    
+    oneof IconDataType {
+        bytes icon_bytes = 1;
+        string icon_url_not_supported_by_backend = 2;
+    }
+}
+
+message PixelOffset {
+    optional int32 x = 1;
+    optional int32 y = 2;
+}
+
+message PolylineStyle {
+    optional Color color = 1;
+    optional int32 width = 2 [default = 4000];
+    optional bool draw_occluded = 3;
+}
+
+message PolygonStyle {
+    optional Color fill_color = 1;
+    optional Color border_color = 2;
+    optional int32 border_width = 3 [default = 4000];
+    optional bool flatten_surface_model = 4;
+    optional bool draw_occluded = 5;
+}
+
+message BalloonStyle {
+    optional DisplayMode display_mode = 1;
+    enum DisplayMode {
+        UNKNOWN_DISPLAY_MODE = 0;
+        BALLOON_DISPLAY_MODE_HIDDEN = 1;
+        BALLOON_DISPLAY_MODE_DEFAULT = 2;
+        BALLOON_DISPLAY_MODE_CARD = 3;
+        BALLOON_DISPLAY_MODE_CARD_STACK = 6;
+        BALLOON_DISPLAY_MODE_PANEL = 4;
+        BALLOON_DISPLAY_MODE_FULLSCREEN = 5;
+    }
+    
+    optional Color background_color = 2;
+    
+    oneof BalloonContentType {
+        BalloonHtmlContent balloon_html = 5;
+        BalloonTemplate balloon_template = 6;
+    }
+}
+
+message BalloonHtmlContent {
+    optional string raw_unsafe_html = 1;
+}
+
+message BalloonTemplate {
+    optional string template_id = 1;
+    repeated BalloonTemplateParameter parameter = 2;
+    optional int32 index_not_supported_by_backend = 3;
+}
+
+message BalloonTemplateParameter {
+    optional string template_parameter_name = 1;
+    optional string template_parameter_value = 2;
+}
+
+message LabelStyle {
+    optional bool visible = 1 [default = true];
+    optional Color text_color = 2;
+    optional double scale = 3 [default = 1];
+    optional bool draw_occluded = 4;
+}
+
+message ListItemStyle {
+    optional ListItemType list_item_type = 1 [default = LIST_ITEM_TYPE_DEFAULT];
+    optional Color background_color = 2;
+    optional ListItemIconStates item_icon_states = 3;
+}
+
+message ListItemIconStates {
+    optional string open_state_icon_url = 1;
+    optional string closed_state_icon_url = 2;
+    optional string error_state_icon_url = 3;
+    optional string fetching0_state_icon_url = 4;
+    optional string fetching1_state_icon_url = 5;
+    optional string fetching2_state_icon_url = 6;
+}
+
+message StyleUrlList {
+    repeated string url = 1;
+}
+
+message Color {
+    optional int32 color = 1 [default = 0xffffff];
+    optional int32 opacity = 2 [default = 255];
+}
+
+message Attribute {
+    optional string column_id = 1;
+    optional AttributeValue value = 2;
+}
+
+message AttributeValue {
+    oneof ValueType {
+        string string_value = 1;
+        int64 integer_value = 2;
+        double double_value = 3;
+        bool boolean_value = 4;
+    }
+}
+
+message Column {
+    optional string column_id = 1;
+    optional ColumnSpec column_spec = 2;
+    optional int32 column_index = 3 [default = -1];
+}
+
+message ColumnSpec {
+    optional string name = 3;
+    optional ColumnType type = 4;
+    optional string template_alias = 5;
+    optional string template_default = 6;
+}
+
+message MediaMutationId {
+    oneof MutationIdType {
+        string mutation_public_image_url = 1;
+        string mutation_token = 2;
+        string mutation_youtube_id = 3;
+        string mutation_embedded_image_id = 4;
+    }
+}
+
+message MediaDisplayResource {
+    oneof DisplayResourceType {
+        string image_view_url = 4;
+        string youtube_id = 5;
+        bytes image_bytes = 6;
+    }
+}
+
+message Media {
+    optional MediaMutationId mutation_id = 1;
+    optional MediaDisplayResource display_resource = 2;
+    optional string title = 3;
+    optional string description = 4;
+}
+
+message GroundOverlay {
+    optional double altitude = 1;
+    optional AltitudeMode altitude_mode = 2 [default = CLAMP_TO_GROUND];
+    optional Media image_media = 5;
+    optional double draw_order = 6;
+    optional Color color = 7;
+    
+    oneof GroundOverlayType {
+        LatLngRect rect = 3;
+        LatLngQuad quad = 4;
+    }
+}
+
+message MapTilePyramid {
+    optional double altitude = 3;
+    optional AltitudeMode altitude_mode = 4 [default = CLAMP_TO_GROUND];
+    optional int32 tile_size = 7 [default = 256];
+    optional TilingScheme tiling_scheme = 8 [default = TILINGSCHEME_WEBMERCATORQUADTREE];
+    optional int32 max_level = 9 [default = -1];
+    optional int32 min_level = 10 [default = -1];
+    optional double opacity = 12 [default = 1];
+    optional double draw_order = 13;
+    
+    oneof LayerType {
+        RasterTileLayer raster_tile_layer = 1;
+        PaintFeLayer paintfe_layer = 2;
+        EarthDataLayer earth_data_layer = 11;
+    }
+    
+    oneof BoundaryType {
+        LatLngRect rect = 5;
+        LatLngQuad quad = 6;
+    }
+}
+
+message Container {
+    optional LocalOpenedOverride local_opened_override_not_supported_by_backend = 1;
+    optional bool opened = 2 [default = true];
+}
+
+message NetworkLink {
+    optional string url = 1;
+    optional NetworkLinkType type = 2 [default = NETWORKLINKTYPE_KML];
+    optional NetworkLinkRefreshMode refresh_mode = 3 [default = NETWORKLINK_REFRESHMODE_ONCHANGE];
+    optional int64 refresh_interval_milliseconds = 4;
+}
+
+message RasterTileLayer {
+    optional string url_pattern = 1;
+}
+
+message EarthDataLayer {
+    optional string earth_data_layer_identifier = 1;
+    optional EarthDataLayerProperties earth_data_layer_properties = 2;
+}
+
+message EarthDataLayerProperties {
+    repeated EarthDataLayerAttributeFilters attribute_filters = 1;
+    repeated EarthDataLayerAttributeStyles attribute_styles = 2;
+    optional EarthDataLayerAttributeStyles uniform_style = 3;
+    
+    optional StyleStrategy strategy = 4;
+    enum StyleStrategy {
+        STYLESTRATEGY_UNSPECIFIED = 0;
+        STYLESTRATEGY_UNIFORM = 1;
+        STYLESTRATEGY_DATADRIVEN = 2;
+    }
+    
+    optional string active_style_attribute_key = 5;
+    optional string active_label_attribute_key = 6;
+    optional ClassificationLayerInputs classification_layer_inputs = 8;
+    optional int64 last_modified_timestamp_millis = 9;
+    
+    reserved 7;
+}
+
+message EarthDataLayerAttributeFilters {
+    optional string attribute_key_name = 1;
+    
+    oneof FilterSet {
+        CategoricalFilterSet categorical_filter_set = 2;
+        RangeFilterSet range_filter_set = 3;
+    }
+}
+
+message CategoricalFilterSet {
+    repeated CategoricalFilter filters = 1;
+}
+
+message CategoricalFilter {
+    optional string value_id = 1;
+    optional bool is_enabled = 2;
+}
+
+message RangeFilterSet {
+    repeated RangeFilter filters = 1;
+}
+
+message RangeFilter {
+    optional string filter_id = 1;
+    optional RangeFilterValueType min_value_type = 4;
+    optional RangeFilterValueType max_value_type = 5;
+    
+    oneof RangeFilter {
+        DoubleRangeFilter double_range_filter = 2;
+        IntRangeFilter int_range_filter = 3;
+    }
+}
+
+message DoubleRangeFilter {
+    optional double min = 1;
+    optional double max = 2;
+}
+
+message IntRangeFilter {
+    optional int64 min = 1;
+    optional int64 max = 2;
+}
+
+message EarthDataLayerGeometricFilter {
+    optional string filter_id = 1;
+    
+    optional GeometricOperator geometric_operator = 2 [default = GEOMETRICOPERATOR_CONTAINS];
+    enum GeometricOperator {
+        GEOMETRICOPERATOR_UNKNOWN = 0;
+        GEOMETRICOPERATOR_CONTAINS = 1;
+        GEOMETRICOPERATOR_INTERSECTS = 2;
+    }
+    
+    optional Geometry geometry = 3;
+}
+
+message EarthDataLayerAttributeStyles {
+    optional string attribute_key_name = 1;
+    optional FeatureStyle default_attribute_style = 2;
+    
+    oneof DataDrivenStyleRuleSet {
+        CategoricalStyleRuleSet categorical_styles = 3;
+        InterpolatedStyleRuleSet interpolated_styles = 4;
+    }
+}
+
+message ColorPalette {
+    optional bool reversed = 2;
+    
+    oneof Palette {
+        PredefinedColorPalette predefined_color_palette = 1;
+    }
+}
+
+message CategoricalStyleRuleSet {
+    optional ColorPalette color_palette = 1;
+    repeated CategoricalStyleRule categorical_style_rules = 2;
+}
+
+message CategoricalStyleRule {
+    optional string value_id = 1;
+    optional FeatureStyle style = 2;
+    optional string user_defined_label = 3;
+    optional Color user_defined_color = 4;
+    optional bool is_enabled = 5 [default = true];
+}
+
+message ColorRamp {
+    optional bool reversed = 2;
+    
+    oneof Ramp {
+        PredefinedColorRamp predefined_color_ramp = 1;
+    }
+}
+
+message InterpolatedStyleRuleSet {
+    optional ColorRamp color_ramp = 1;
+    
+    optional InterpolationMode mode = 3;
+    enum InterpolationMode {
+        INTERPOLATIONMODE_UNSPECIFIED = 0;
+        INTERPOLATIONMODE_LINEAR = 1;
+        INTERPOLATIONMODE_INTERVAL = 2;
+    }
+    
+    optional CustomIntervals custom_intervals = 4;
+    
+    optional Classification active_classification = 5 [default = CLASSIFICATION_CUSTOM_INTERVALS];
+    enum Classification {
+        CLASSIFICATION_UNSPECIFIED = 0;
+        CLASSIFICATION_CUSTOM_INTERVALS = 1;
+    }
+}
+
+message CustomIntervals {
+    repeated CustomIntervalInput inputs = 1;
+}
+
+message CustomIntervalInput {
+    optional string value_id = 1;
+    optional double input_value = 2;
+}
+
+message PaintFeLayer {
+    optional string layer_id = 1;
+}
+
+message LatLngRect {
+    optional LatLng north_west = 1;
+    optional LatLng south_east = 2;
+    optional double rotation = 3;
+}
+
+message LatLngQuad {
+    optional LatLng position1 = 1;
+    optional LatLng position2 = 2;
+    optional LatLng position3 = 3;
+    optional LatLng position4 = 4;
+}
+
+message CreationInfo {
+    optional int64 creation_timestamp_milliseconds = 1;
+    
+    reserved 2, 3;
+}
+
+message OwnerProfile {
+    optional string display_name = 1;
+    optional string photo_url = 2;
+    optional string filter_token = 3;
+}
+
+message Orientation {
+    optional double heading = 1;
+    optional double tilt = 2;
+    optional double roll = 3;
+}
+
+message Scale {
+    optional double x = 1 [default = 1];
+    optional double y = 2 [default = 1];
+    optional double z = 3 [default = 1];
+}
+
+message BoundingBox {
+    optional double x_min = 1;
+    optional double x_max = 2;
+    optional double y_min = 3;
+    optional double y_max = 4;
+    optional double z_min = 5;
+    optional double z_max = 6;
+}
+
+message ThreeDAsset {
+    optional string mutation_token = 1;
+    optional string url = 2;
+    optional string mime_type = 3;
+}
+
+message Model {
+    optional AltitudeMode altitude_mode = 2 [default = CLAMP_TO_GROUND];
+    optional LatLng position = 3;
+    optional double altitude = 4;
+    optional Orientation orientation = 5;
+    optional Scale scale = 6;
+    optional BoundingBox bounding_box = 7;
+    optional ThreeDAsset asset = 8;
+    
+    reserved 1;
+}
+
+message TrackSet {
+    repeated Track track = 1;
+}
+
+message Track {
+    
+}
+
+message ScreenOverlay {
+    
+}
+
+message PhotoOverlay {
+    
+}
+
+message ClassificationLayerInputs {
+    optional int32 year = 1;
+    repeated ClassDefinition class_definitions = 2;
+    optional Geometry classification_area = 3;
+    optional string class_system_id = 4;
+}
+
+message ClassDefinition {
+    optional string class_id = 1;
+    repeated SamplePoint sample_points = 2;
+    optional string class_system_class_id = 3;
+}
+
+message SamplePoint {
+    optional string sample_point_id = 1;
+    optional LatLng position = 2;
+}
+
+enum ModelVersion {
+    MODEL_VERSION_UNKNOWN = 0;
+    MODEL_VERSION_V1 = 1;
+    MODEL_VERSION_V2 = 2;
+    MODEL_VERSION_V3 = 3;
+    MODEL_VERSION_V4 = 4;
+}
+
+enum FeatureModelType {
+    FEATUREMODELTYPE_UNKNOWN = 0;
+    FEATUREMODELTYPE_FOLDER = 1;
+    FEATUREMODELTYPE_PLACEMARK = 2;
+    FEATUREMODELTYPE_GROUNDOVERLAY = 3;
+    FEATUREMODELTYPE_MAPTILEPYRAMID = 4;
+    FEATUREMODELTYPE_SUBDOCUMENT = 5;
+    FEATUREMODELTYPE_NETWORKLINK = 6;
+    FEATUREMODELTYPE_SCREENOVERLAY = 7;
+    FEATUREMODELTYPE_PHOTOOVERLAY = 8;
+    FEATUREMODELTYPE_TOUR = 9;
+}
+
+enum FeatureOrigin {
+    FEATUREORIGIN_UNKNOWN = 0;
+    FEATUREORIGIN_USER = 1;
+    FEATUREORIGIN_GEMINI = 2;
+}
+
+enum AltitudeMode {
+    UNKNOWN_ALTITUDE_MODE = 0;
+    ABSOLUTE = 1;
+    CLAMP_TO_GROUND = 2;
+    CLAMP_TO_SEA_FLOOR = 3;
+    RELATIVE_TO_GROUND = 4;
+    RELATIVE_TO_SEA_FLOOR = 5;
+    RELATIVE_TO_SURFACE_MODEL = 6;
+}
+
+enum BaseStyleType {
+    UNKNOWN_STYLE_TYPE = 0;
+    INDIVIDUAL_STYLE = 1;
+}
+
+enum ListItemType {
+    LIST_ITEM_TYPE_UNKNOWN = 0;
+    LIST_ITEM_TYPE_DEFAULT = 1;
+    LIST_ITEM_TYPE_HIDE_CHILDREN = 2;
+    LIST_ITEM_TYPE_LEGACY_RADIO_FOLDER = 3;
+    LIST_ITEM_TYPE_LEGACY_CHECK_OFF_ONLY = 4;
+}
+
+enum ColumnType {
+    UNKNOWN_COLUMN_TYPE = 0;
+    COLUMN_TYPE_STRING = 1;
+    COLUMN_TYPE_INTEGER = 2;
+    COLUMN_TYPE_DOUBLE = 3;
+    COLUMN_TYPE_BOOLEAN = 4;
+}
+
+enum NetworkLinkType {
+    NETWORKLINKTYPE_UNKNOWN = 0;
+    NETWORKLINKTYPE_KML = 1;
+}
+
+enum NetworkLinkRefreshMode {
+    NETWORKLINK_REFRESHMODE_UNKNOWN = 0;
+    NETWORKLINK_REFRESHMODE_ONCHANGE = 1;
+    NETWORKLINK_REFRESHMODE_ONINTERVAL = 2;
+    NETWORKLINK_REFRESHMODE_ONEXPIRE = 3;
+}
+
+enum TilingScheme {
+    TILINGSCHEME_UNKNOWN = 0;
+    TILINGSCHEME_WEBMERCATORQUADTREE = 1;
+}
+
+enum RangeFilterValueType {
+    RANGEFILTERVALUETYPE_UNKNOWN = 0;
+    RANGEFILTERVALUETYPE_INCLUSIVE = 1;
+    RANGEFILTERVALUETYPE_EXCLUSIVE = 2;
+}
+
+enum PredefinedColorPalette {
+    PREDEFINEDCOLORPALETTE_UNKNOWN = 0;
+    PREDEFINEDCOLORPALETTE_DEFAULT = 1;
+    PREDEFINEDCOLORPALETTE_CONTRASTING = 2;
+    PREDEFINEDCOLORPALETTE_RAINBOW = 3;
+    PREDEFINEDCOLORPALETTE_BRIGHT = 4;
+    PREDEFINEDCOLORPALETTE_COOL = 5;
+    PREDEFINEDCOLORPALETTE_WARM = 6;
+}
+
+enum PredefinedColorRamp {
+    PREDEFINEDCOLORRAMP_UNKNOWN = 0;
+    PREDEFINEDCOLORRAMP_MATERIAL_BLUE = 1;
+    PREDEFINEDCOLORRAMP_MATERIAL_YELLOW = 2;
+    PREDEFINEDCOLORRAMP_MATERIAL_PURPLE = 3;
+    PREDEFINEDCOLORRAMP_MATERIAL_GREEN = 4;
+    PREDEFINEDCOLORRAMP_MATERIAL_PINK = 5;
+    PREDEFINEDCOLORRAMP_MATERIAL_CYAN = 6;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_BLUE = 7;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_YELLOW = 8;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_PURPLE = 9;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_GREEN = 10;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_PINK = 11;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_CYAN = 12;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_ORANGE = 13;
+    PREDEFINEDCOLORRAMP_SINGLE_COLOR_RED = 14;
+    PREDEFINEDCOLORRAMP_TWO_COLOR_YELLOW_RED = 15;
+    PREDEFINEDCOLORRAMP_TWO_COLOR_CYAN_PINK = 16;
+    PREDEFINEDCOLORRAMP_TWO_COLOR_YELLOW_GREEN = 17;
+    PREDEFINEDCOLORRAMP_TWO_COLOR_STANDARD_RED_GREEN = 18;
+}

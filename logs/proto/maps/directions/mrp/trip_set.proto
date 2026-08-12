@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/proto/maps/directions/mrp/trip.proto";
+import "logs/proto/maps/directions/mrp/trip_set_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedTripSetProto {
+    optional int32 trip_version = 8;
+    optional int32 traffic_version = 9;
+    repeated LoggedTripProto trips = 1;
+    optional LoggedTripSetAnnotationsProto annotations = 2;
+    optional LoggedTripProto reroute_requery_trip = 3 [deprecated = true];
+    optional uint64 session_id = 4;
+    optional string extended_session_id = 5;
+}

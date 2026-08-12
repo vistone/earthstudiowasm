@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+
+option java_multiple_files = true;
+
+message LandUseProto {
+    optional LandUseCategory land_use_category = 1 [default = LAND_USE_UNKNOWN];
+    enum LandUseCategory {
+        LAND_USE_UNKNOWN = 0;
+        LAND_USE_RESIDENTIAL = 1;
+        LAND_USE_COMMERCIAL = 2;
+        LAND_USE_MIXED = 3;
+    }
+}

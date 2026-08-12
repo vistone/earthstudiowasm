@@ -1,0 +1,47 @@
+syntax = "proto2";
+
+package geo.earth.proto.earth_mate;
+
+import "geo/earth/proto/commands.proto";
+import "geo/earth/proto/earth_mate/earth_mate_attribution.proto";
+import "geo/earth/proto/earth_mate/earth_mate_error_detail.proto";
+import "geo/earth/proto/earth_mate/file_attachment.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.proto";
+
+message EarthMateResponseWrapper {
+    oneof response_type {
+        EarthMateQueryResponse query_response = 1;
+        EarthMateAreaDescriptionResponse area_description_response = 2;
+    }
+}
+
+message QueryExecutionMetadata {
+    optional bool response_feature_limit_reached = 1;
+    optional bool is_passthrough_response = 2;
+    optional bool is_slideshow = 3;
+    optional EarthMateErrorDetail non_fatal_error = 4;
+}
+
+message EarthMateQueryResponse {
+    repeated Command commands = 1;
+    optional string response_string = 2;
+    optional QueryExecutionMetadata query_execution_metadata = 5;
+    repeated EarthMateAttribution attributions = 6;
+    optional string chat_id = 7;
+    optional FileAttachment viewport_file_attachment = 9;
+    
+    reserved 3, 4, 8;
+}
+
+message EarthMateRateResponse {
+    
+}
+
+message EarthMateAreaDescriptionResponse {
+    optional string response_string = 1;
+    repeated string suggested_followup_queries = 2;
+    optional string expanded_response_string = 3;
+}

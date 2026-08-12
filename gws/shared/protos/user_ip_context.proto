@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package gws;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GWS";
+option java_multiple_files = true;
+option java_outer_classname = "UserIpContextProto";
+option java_package = "com.google.gws.shared.protos";
+
+message UserIpContext {
+    optional string user_ip = 1;
+}

@@ -1,0 +1,75 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "logs/proto/maps/pathfinder/client/error.proto";
+import "logs/proto/maps/pathfinder/client/experiments.proto";
+import "logs/proto/maps/pathfinder/client/logging-context.proto";
+import "logs/proto/maps/pathfinder/client/mode-availability.proto";
+import "logs/proto/maps/pathfinder/client/trip.proto";
+import "logs/proto/maps/transit/api/metadata.proto";
+import "logs/proto/maps/transit/api/travel_overview.proto";
+import "maps/transit/api/result_label.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TripSetProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedBetterRoutePromptDetails {
+    optional LoggedRerouteType reroute_type = 1 [default = REROUTE_TYPE_BETTER_ETA];
+    enum LoggedRerouteType {
+        REROUTE_TYPE_UNKNOWN = 0;
+        REROUTE_TYPE_BETTER_ETA = 1;
+        REROUTE_TYPE_AVOIDS_CLOSURE = 2;
+        REROUTE_TYPE_AVOIDS_VEHICLE_RESTRICTION = 3;
+        REROUTE_TYPE_AVOIDS_DYNAMIC_CLOSURE = 4;
+    }
+    
+    optional LoggedDefaultValue default_value = 2;
+    enum LoggedDefaultValue {
+        REJECT = 1;
+        ACCEPT = 2;
+        FORCE = 3;
+    }
+}
+
+message LoggedTripGroup {
+    repeated LoggedTripReference trip_reference = 5;
+    message LoggedTripReference {
+        oneof reference {
+            int32 trip_index = 1;
+            int32 unavailable_trip_index = 2;
+        }
+    }
+    
+    optional string headline = 2;
+    optional maps_transit.api.ResultLabel type = 4;
+    
+    reserved 1, 3;
+}
+
+message LoggedTripUpdateAction {
+    optional LoggedType type = 1 [default = TYPE_REQUERY_FAILED];
+    enum LoggedType {
+        TYPE_UPDATE_UNKNOWN = 0;
+        TYPE_REQUERY_SUCCEEDED = 1;
+        TYPE_REQUERY_FAILED = 2;
+        TYPE_BETTER_ROUTE_PROMPT = 3;
+    }
+    
+    optional LoggedBetterRoutePromptDetails better_route_prompt_details = 2;
+    optional bool polyline_fingerprint_matches = 3 [default = false];
+}
+
+message LoggedTripSet {
+    repeated LoggedTrip trip = 2;
+    repeated LoggedError error = 8;
+    optional LoggedModeAvailability mode_availability = 10;
+    optional LoggedExperimentTripSetLogData experiment_log_data = 12;
+    repeated LoggedTripGroup trip_group = 15;
+    optional maps_transit.api.LoggedTravelOverview transit_travel_overview = 19;
+    optional maps_transit.api.LoggedMetadata transit_metadata = 20;
+    optional LoggedResponseLoggingContext logging_context = 25;
+    optional LoggedBetterRoutePromptDetails better_route_found = 28;
+}

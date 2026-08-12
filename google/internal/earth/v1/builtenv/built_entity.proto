@@ -1,0 +1,209 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "google/internal/earth/v1/builtenv/geometry.proto";
+import "google/internal/earth/v1/builtenv/raster.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+
+message BuiltEntity {
+    optional string built_entity_id = 1;
+    optional string name = 2;
+    optional string scene_parent_id = 3;
+    
+    oneof properties {
+        SolarPanel solar_panel = 5 [deprecated = true];
+        SolarStructure solar_structure = 6;
+        SolarStructureComponent solar_canopy_component = 7;
+        Parcel parcel = 8;
+        Block block = 9;
+        Street street = 10;
+        ParkingLot parking_lot = 11;
+        Park park = 12;
+        BuildingLot building_lot = 13;
+        Building building = 14;
+        Floor floor = 15;
+        Core core = 16;
+        Corridor corridor = 17;
+        Roof roof = 18;
+        Amenity amenity = 19;
+        BuildingSolarPanel building_solar_panel = 20;
+        ParkingSolarPanel parking_solar_panel = 21;
+        BuildingUnit building_unit = 22;
+        Views views = 23;
+        GroundSunlightHours ground_sunlight_hours = 24;
+    }
+    
+    message GroundSunlightHours {
+        repeated Raster rasters = 1;
+    }
+    
+    message Views {
+        repeated Raster rasters = 1;
+    }
+    
+    message SolarPanel {
+        optional Polygon geometry = 1;
+        
+        optional Metrics metrics = 2;
+        message Metrics {
+            optional double energy_potential_kwh_per_year = 1;
+        }
+    }
+    
+    message BuildingSolarPanel {
+        optional Polygon geometry = 1;
+        
+        optional Metrics metrics = 2;
+        message Metrics {
+            optional double energy_potential_kwh_per_year = 1;
+            optional double flux_kwh_per_m2_per_year = 2;
+        }
+    }
+    
+    message ParkingSolarPanel {
+        optional Polygon geometry = 1;
+        
+        optional Metrics metrics = 2;
+        message Metrics {
+            optional double energy_potential_kwh_per_year = 1;
+            optional double flux_kwh_per_m2_per_year = 2;
+        }
+    }
+    
+    message SolarStructure {
+        
+    }
+    
+    message SolarStructureComponent {
+        optional Polygon geometry = 1;
+        
+        optional SolarStructureType solar_structure_type = 2;
+        enum SolarStructureType {
+            COMPONENT_UNSPECIFIED = 0;
+            COLUMN = 1;
+            CANOPY_ROOF = 2;
+        }
+    }
+    
+    message Parcel {
+        optional Polygon geometry = 1;
+        optional TotalArea total_area = 2;
+        optional double num_apts = 3;
+        optional string input_id = 4;
+    }
+    
+    message Block {
+        optional Polygon geometry = 1;
+    }
+    
+    message Street {
+        optional Polyline geometry = 1;
+    }
+    
+    message ParkingLot {
+        optional Polygon geometry = 1;
+        
+        optional ParkingType parking_type = 2;
+        enum ParkingType {
+            PARKING_UNSPECIFIED = 0;
+            PARKING_SURFACE = 1;
+            PARKING_UNDERGROUND = 2;
+            PARKING_GARAGE = 3;
+        }
+        
+        optional double total_area_sq_m = 3;
+        optional int32 num_spaces = 4;
+    }
+    
+    message Park {
+        optional Polygon geometry = 1;
+        optional double park_area_sq_m = 2;
+        
+        optional OpenSpaceType open_space_type = 3;
+        enum OpenSpaceType {
+            OPEN_SPACE_UNSPECIFIED = 0;
+            PUBLIC = 1;
+            PRIVATE = 2;
+        }
+        
+        optional float park_average_sunlight_hr = 4;
+        optional float park_average_shadow_hr = 5;
+        optional float park_sky_access_pct = 6;
+    }
+    
+    message BuildingLot {
+        optional Polygon geometry = 1;
+    }
+    
+    message UserGeneratedName {
+        optional string id = 1;
+        optional string display_name = 2;
+    }
+    
+    message Building {
+        optional Polygon geometry = 1;
+        
+        optional StructureDisplayNameType structure_display_name = 2;
+        enum StructureDisplayNameType {
+            UNKNOWN = 0;
+            STICK_BUILT = 1;
+            STEEL = 2;
+            REINFORCED_CONCRETE = 3;
+        }
+    }
+    
+    message Floor {
+        optional Polygon geometry = 1;
+        optional string composition_id = 2;
+        optional double area_sq_m = 3 [deprecated = true];
+        optional UserGeneratedName use_type = 4;
+        optional ChildrenArea children_area = 5;
+        optional NonChildrenArea non_children_area = 6;
+        optional double total_area_sq_m = 7;
+        optional string use_type_id = 8;
+    }
+    
+    message BuildingUnit {
+        optional Polygon geometry = 3;
+        optional UserGeneratedName unit_mix = 1;
+        optional double total_area_sq_m = 2;
+        optional string use_type_id = 4;
+        optional string floor_composition_id = 5 [deprecated = true];
+        optional string floor_id = 6;
+    }
+    
+    message Core {
+        optional Polygon geometry = 1;
+    }
+    
+    message Corridor {
+        optional Polygon geometry = 1;
+    }
+    
+    message Roof {
+        optional Polygon geometry = 1;
+        optional double roof_area_sq_m = 2;
+    }
+    
+    message Amenity {
+        optional Point geometry = 1;
+    }
+}
+
+message TotalArea {
+    optional double area_sq_m = 2;
+    optional double usable_area_sq_m = 3;
+}
+
+message ChildrenArea {
+    optional double area_sq_m = 2;
+    optional double usable_area_sq_m = 3;
+}
+
+message NonChildrenArea {
+    optional double area_sq_m = 2;
+    optional double usable_area_sq_m = 3;
+}

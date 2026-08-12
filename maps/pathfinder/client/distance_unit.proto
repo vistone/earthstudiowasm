@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package pathfinder;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.pathfinder.client";
+
+enum DistanceUnit {
+    DISTANCE_UNIT_UNSPECIFIED = 0;
+    DISTANCE_UNIT_FEET = 1;
+    DISTANCE_UNIT_YARDS = 2;
+    DISTANCE_UNIT_MILES = 3;
+    DISTANCE_UNIT_METERS = 4;
+    DISTANCE_UNIT_KILOMETERS = 5;
+}

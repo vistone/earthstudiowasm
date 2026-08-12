@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package geo_serving_proto.electricvehicle;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPEV";
+option java_multiple_files = true;
+option java_outer_classname = "PredictedAvailabilityProto";
+option java_package = "com.google.geo.serving.proto.electricvehicle";
+
+message PredictedAvailability {
+    optional int32 mean_wait_time_sec = 1;
+    optional int32 total_available_ports = 2;
+}
+
+message TimedPrediction {
+    optional int64 prediction_start_timestamp = 1;
+    optional int64 prediction_end_timestamp = 2;
+    optional PredictedAvailability predicted_availability = 3;
+}

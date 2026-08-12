@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "WebmapsEnumsProto";
+option java_package = "com.google.maps.tactile.shared";
+
+enum PwaSurface {
+    UNKNOWN_PWA_SURFACE = 0;
+    WEB = 1;
+    APK = 2;
+    ADD_TO_HOMESCREEN = 4;
+    TINY_UI = 3;
+    WEB_FROM_AGMM = 5;
+}

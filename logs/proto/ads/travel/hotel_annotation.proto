@@ -1,0 +1,33 @@
+syntax = "editions";
+
+package ads_travel;
+
+import "ads/travel/base/hotel_amenities.proto";
+import "ads/travel/hotelpricing/protos/deals.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "travel/hotels/servers/hps/flows/rank_annotations/annotation_type.proto";
+
+option features = repeated_field_encoding: EXPANDED
+;
+
+message HotelAnnotation {
+    optional ads_travel.rank_annotations.AnnotationType type = 1;
+    
+    oneof params {
+        AmenitiesParams amenities_params = 2;
+        DealParams deal_params = 3;
+        DistanceToPoiParams distance_to_poi_params = 4;
+    }
+}
+
+message AmenitiesParams {
+    repeated HotelAmenities.Amenities ranked_amenities = 1;
+}
+
+message DistanceToPoiParams {
+    optional int32 distance_in_meters = 1;
+}
+
+message DealParams {
+    optional HotelDealMagnitude deal_magnitude = 1;
+}

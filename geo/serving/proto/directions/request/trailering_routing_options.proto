@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions.request;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPDR";
+option java_multiple_files = true;
+option java_outer_classname = "TraileringRoutingOptionsProto";
+option java_package = "com.google.geo.serving.proto.directions.request";
+
+message TraileringRoutingOptions {
+    optional bool enable_customized_routing = 1;
+    optional bool enable_impassable_routes = 3;
+    optional bool hard_avoid_width_restrictions = 4;
+    optional bool hard_avoid_weight_restrictions = 5;
+    optional bool hard_avoid_length_restrictions = 6;
+    optional bool enable_conditional_cost_modifier = 7;
+    
+    reserved 2;
+}

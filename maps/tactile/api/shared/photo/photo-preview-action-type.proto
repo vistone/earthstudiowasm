@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package maps_tactile.shared.photo;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHP";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoPreviewActionTypeProto";
+option java_package = "com.google.maps.tactile.shared.photo";
+
+enum PhotoPreviewActionType {
+    UNKNOWN_PHOTO_PREVIEW_ACTION_TYPE = 0;
+    PHOTO_PREVIEW_OPEN_LIGHTBOX = 1;
+    PHOTO_PREVIEW_OPEN_GALLERY = 2;
+    PHOTO_PREVIEW_OPEN_WEB_VIEW = 3;
+    PHOTO_PREVIEW_OPEN_3D_FLYOVER_VIEW = 4;
+    PHOTO_PREVIEW_OPEN_GEOSPATIAL_CONTENT = 5;
+}

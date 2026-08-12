@@ -1,0 +1,92 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/deeplink/legacydatastate.proto";
+import "geo/earth/app/cpp/core/state/state.proto";
+import "geo/earth/proto/mapstyle.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derived";
+
+message VoyagerState {
+    optional bool grid_open = 1;
+    optional string guid = 2;
+    optional string balloon_feature_id = 3;
+}
+
+message KnowledgeCardState {
+    optional NonRestorableKnowledgeCardData.CardSize card_size = 3;
+    optional bool card_set_requested = 4;
+    
+    oneof place_id {
+        string mid = 1;
+        NonRestorableKnowledgeCardData.OysterId oyster_id = 2;
+    }
+}
+
+message SearchState {
+    optional string query = 1;
+    optional .earth.deeplink.LatLonBox viewport = 2;
+}
+
+message TimeMachineState {
+    optional bool enabled = 1;
+    optional string current_date = 2;
+    optional bool expanded = 3;
+}
+
+message TimelapseState {
+    optional bool enabled = 1;
+    optional bool expanded = 2;
+    optional double framerate_multiplier = 3;
+    optional int32 paused_at_year = 4;
+}
+
+message BasemapStyleState {
+    optional layers.MapStyle.Imagery imagery = 1;
+}
+
+message StreetViewState {
+    optional NonRestorableStreetViewData.PanoId pano_id = 1;
+}
+
+message DocumentViewState {
+    optional bool is_document_persisted = 1;
+    optional int32 focused_document_key = 2 [default = -1];
+}
+
+message HomescreenState {
+    optional bool is_homescreen_open = 1;
+}
+
+message DesignState {
+    optional bool is_design_details_open = 1;
+    optional bool is_design_viewer_open = 2;
+}
+
+message EarthMateState {
+    optional bool is_chat_open = 1;
+}
+
+message DeepLinkDerivedState {
+    optional VoyagerState voyager_state = 1;
+    optional KnowledgeCardState knowledge_card_state = 2;
+    optional SearchState search_state = 3;
+    optional TimeMachineState time_machine_state = 4;
+    optional StreetViewState street_view_state = 5;
+    optional DocumentViewState document_view_state = 6;
+    optional .earth.deeplink.EarthFeedData legacy_restorable_earth_feed_data = 8;
+    optional .earth.deeplink.KnowledgeCardData legacy_restorable_knowledge_card_data = 9;
+    optional .earth.deeplink.DriveData legacy_restorable_drive_data = 10;
+    optional TimelapseState timelapse_state = 11;
+    optional HomescreenState homescreen_state = 12;
+    optional BasemapStyleState basemap_style_state = 13;
+    optional DesignState design_state = 14;
+    optional EarthMateState earth_mate_state = 15;
+}

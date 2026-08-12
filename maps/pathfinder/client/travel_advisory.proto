@@ -1,0 +1,41 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/specialized_road_restriction.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "TravelAdvisoryProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message TravelAdvisory {
+    required string text = 1;
+    optional string url = 2;
+    
+    optional TravelAdvisoryCategory category = 3 [default = UNKNOWN];
+    enum TravelAdvisoryCategory {
+        UNKNOWN = 1;
+        COUNTRY_CROSSING = 2;
+        TEMPORARY_ROAD_CLOSURE = 3;
+        SEASONAL_CLOSURE = 4;
+        FERRY_BOAT = 5;
+        FERRY_TRAIN = 6;
+        TOLL = 7;
+        PRIVATE_ROAD = 8;
+        TIME_BASED_RESTRICTION = 9;
+        TIME_BASED_HOV = 10;
+        TIME_ZONE_CROSSING = 11;
+        VEHICLE_LICENSE_RESTRICTION = 12;
+        HIGHWAY = 13;
+        COUNTRY_CROSSING_RESTRICTED = 14;
+    }
+    
+    repeated RegionSpecificRestriction restriction = 5;
+    message RegionSpecificRestriction {
+        optional geostore.SpecializedRoadRestrictionProto.RegionSpecificRestrictionIdentifier restriction_identifier = 1;
+        repeated geostore.FeatureIdProto feature_id = 2;
+    }
+    
+    reserved 4;
+}

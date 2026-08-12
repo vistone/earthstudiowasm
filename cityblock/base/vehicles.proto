@@ -1,0 +1,46 @@
+syntax = "editions";
+
+package cityblock;
+
+import "cityblock/base/collection_type.proto";
+
+option features = utf8_validation: NONE
+;
+
+message VehicleIdRange {
+    optional int32 min = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional int32 max = 2 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional string type = 3 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional string rosette_type = 4 [features = field_presence: LEGACY_REQUIRED
+    ];
+    
+    optional VehicleType vehicle_type = 5 [default = UNKNOWN, features = field_presence: LEGACY_REQUIRED
+    ];
+    enum VehicleType {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN = 0;
+        CAR = 1;
+        TRIKE = 2;
+        TROLLEY = 3;
+        SNOWMOBILE = 4;
+        AIRPLANE = 5;
+        TREKKER = 6;
+        BOAT = 7;
+        STREETVIEW_PARTNER = 9;
+        ARTCAMERA = 10;
+        LGT = 12;
+        NO_VEHICLE = 11;
+        TREKKER_ON_SNOWMOBILE = 8 [deprecated = true];
+    }
+    
+    optional string description = 6;
+    optional CollectionType.Type collection_type = 7 [default = UNSPECIFIED];
+}
+
+message VehicleIdRangeSet {
+    repeated VehicleIdRange range = 1;
+}

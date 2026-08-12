@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "google/internal/earth/v1/builtenv/use_type_class.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+
+message DesignContentIdMap {
+    repeated UseType use_type_map = 1;
+    message UseType {
+        optional string use_type_id = 1;
+        optional string display_name = 2;
+        optional UseTypeClass use_type_class = 3;
+    }
+    
+    repeated UnitType unit_type_map = 2;
+    message UnitType {
+        optional string unit_type_id = 1;
+        optional string use_type_id = 2;
+        optional string display_name = 3;
+    }
+}

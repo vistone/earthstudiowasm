@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package geo_serving_proto.address;
+
+import "java/com/google/apps/jspb/jspb.proto";
+
+option objc_class_prefix = "GSPADR";
+option java_multiple_files = true;
+option java_outer_classname = "PlusCodePlacesheetPriorityProto";
+option java_package = "com.google.geo.serving.proto.address";
+
+enum PlusCodePlacesheetPriority {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_PLUS_CODE_PLACESHEET_PRIORITY = 0;
+    ABOVE_ADDRESS = 1;
+    BELOW_ADDRESS = 2;
+    DEMOTED = 3;
+}

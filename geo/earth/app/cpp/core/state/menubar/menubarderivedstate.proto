@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/proto/mapstyle.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Menubarderivedstate";
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message MenuBarDerivedState {
+    optional bool gridlines_visible = 1;
+    optional bool time_machine_available = 2;
+    optional bool time_machine_enabled = 3;
+    optional layers.MapStyle map_style = 4;
+    optional bool street_view_coverage_overlay_active = 5;
+}

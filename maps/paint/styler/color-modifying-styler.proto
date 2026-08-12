@@ -1,0 +1,32 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+option java_package = "com.google.maps.paint";
+
+message ColorTransform {
+    optional Action action = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    enum Action {
+        option features = enum_type: CLOSED
+        ;
+        ADJUST_HUE = 1;
+        ADJUST_SATURATION = 2;
+        ADJUST_LIGHTNESS = 3;
+        ADJUST_GAMMA = 4;
+        INVERT_LIGHTNESS = 5;
+        SET_COLOR = 6;
+    }
+    
+    optional float parameter = 2;
+    optional fixed32 color_rgb = 3;
+    optional int32 color_alpha = 4;
+    optional string icon_id_part = 1000;
+    
+    reserved 100;
+}

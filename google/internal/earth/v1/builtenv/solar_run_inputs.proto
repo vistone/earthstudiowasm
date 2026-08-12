@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message SolarRunInputs {
+    optional double roof_cost_currency_per_w = 1;
+    optional double parking_lot_cost_currency_per_w = 2;
+    optional double electricity_rate_currency_per_kwh = 3;
+    optional double electricity_rate_escalator_ratio_per_year = 4;
+    
+    optional NetMeteringPreference net_metering_preference = 5;
+    enum NetMeteringPreference {
+        NET_METERING_PREFERENCE_UNSPECIFIED = 0;
+        EXCESS = 1;
+        NOT_APPLICABLE = 2;
+        ALL = 3;
+    }
+    
+    optional double debt_fraction_ratio = 6;
+    optional double loan_rate_ratio = 7;
+    optional double building_roof_monthly_lease_currency_per_w = 8;
+    optional double parking_lot_monthly_lease_currency_per_w = 9;
+    optional double lease_rate_escalator_ratio_per_year = 10;
+    optional double power_purchase_agreement_currency_per_kwh = 11;
+    optional double power_purchase_agreement_rate_escalator_ratio_per_year = 12;
+    optional double electricity_annual_usage_kwh = 13;
+    optional double fuel_annual_usage_therms = 14;
+}

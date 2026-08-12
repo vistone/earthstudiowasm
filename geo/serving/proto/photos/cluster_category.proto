@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "ClusterCategoryProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+enum ClusterCategory {
+    UNKNOWN_CLUSTER_CATEGORY = 0;
+    DISH = 1;
+    GENERIC_VERSION_OF_DISH = 5;
+    SPATIAL = 2;
+    RANKING = 3;
+    EXPERIMENTAL_RANKING = 4;
+    DISH_ATTRIBUTE = 7;
+    SUMMARIZATION_OBJECT = 8;
+}

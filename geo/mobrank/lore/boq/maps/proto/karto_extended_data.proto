@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package geo.mobrank.lore;
+
+import "net/proto2/bridge/proto/message_set.proto";
+
+option features = utf8_validation: NONE
+;
+option java_outer_classname = "KartoExtendedDataOuterClass";
+
+message KartoExtendedData {
+    optional string icon_base_type = 1 [features = ];
+    
+    extend .proto2.bridge.MessageSet {
+        optional KartoExtendedData message_set_extension = 525000188;
+    }
+}

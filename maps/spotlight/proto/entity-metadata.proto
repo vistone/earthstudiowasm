@@ -1,0 +1,42 @@
+syntax = "editions";
+
+package maps_spotlight;
+
+import "maps/tactile/api/entity-details-common.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMSL";
+option java_multiple_files = true;
+option java_outer_classname = "DummyEntityMetadata";
+option java_package = "com.google.maps.spotlight";
+
+message EntityMetadata {
+    optional maps_tactile.Entity entity = 1;
+    
+    optional PersonalMetadata personal_metadata = 2;
+    message PersonalMetadata {
+        optional PersonalType personal_type = 1 [default = TYPE_DEFAULT];
+        enum PersonalType {
+            option features = enum_type: CLOSED
+            ;
+            TYPE_DEFAULT = 0;
+            TYPE_STAR = 1;
+            TYPE_ALIAS = 2;
+        }
+    }
+    
+    optional PersonalIntelligenceMetadata personal_intelligence_metadata = 4;
+    message PersonalIntelligenceMetadata {
+        optional string poi_subtitle = 1;
+    }
+    
+    optional maps_tactile.Entity context = 5;
+    
+    reserved 3;
+    
+    extend .proto2.bridge.MessageSet {
+        optional EntityMetadata message_set_extension = 31581606;
+    }
+}

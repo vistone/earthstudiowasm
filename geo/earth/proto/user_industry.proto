@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package geo.earth.proto;
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.proto";
+
+enum EarthUserIndustry {
+    INDUSTRY_UNKNOWN = 0;
+    INDUSTRY_URBAN_PLANNING_AND_INFRASTRUCTURE = 1;
+    INDUSTRY_REAL_ESTATE = 2;
+    INDUSTRY_GOVERNMENT = 3;
+    INDUSTRY_CONSTRUCTION_AND_INFRASTRUCTURE = 4;
+    INDUSTRY_TRANSPORTATION = 5;
+    INDUSTRY_MOBILITY_AND_AUTO_SERVICES = 6;
+}

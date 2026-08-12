@@ -1,0 +1,114 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "DirectionsConstantsProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+enum TravelMode {
+    option deprecated = true;
+    DRIVE = 0;
+    BICYCLE = 1;
+    WALK = 2;
+    TRANSIT = 3;
+    FLY = 4;
+    TWO_WHEELER = 9;
+    MIXED = 6;
+    TAXI = 8;
+    BIKESHARING = 11;
+    TAXICAB = 10;
+}
+
+enum TransitTimeAnchoring {
+    TRANSIT_SERVER_DEFINED_TIME = 1000;
+    TRANSIT_DEPARTURE_TIME = 0;
+    TRANSIT_ARRIVAL_TIME = 1;
+    TRANSIT_LAST_AVAILABLE = 2;
+    TRANSIT_OVERVIEW_NOW = 3;
+    TRANSIT_CALENDAR_DEPARTURE_TIME = 4;
+    TRANSIT_CALENDAR_ARRIVAL_TIME = 5;
+    TRANSIT_OVERVIEW = 6;
+}
+
+enum TimeAnchoring {
+    DEPARTURE = 0;
+    ARRIVAL = 1;
+}
+
+enum TransitTripAggregation {
+    SERVER_DEFINED = 0;
+    HIGHEST_SCORING = 1;
+    TYPICAL_PATTERNS = 2;
+    LEAVING_NOW_PATTERNS = 3;
+    SCHEDULE_EXPLORATION = 4;
+    LAST_AVAILABLE = 5;
+    GROUP_FREQUENT_TRIPS = 6;
+    ALL_DEPARTURES_FOR_ROUTE = 7;
+}
+
+enum TimezoneInterpretation {
+    UTC = 1;
+    LOCAL_TIMEZONE = 2;
+}
+
+enum TransitScoringPreference {
+    TRANSIT_BEST = 1;
+    TRANSIT_FEWER_TRANSFERS = 2;
+    TRANSIT_LESS_WALKING = 3;
+    TRANSIT_PREFER_ACCESSIBLE = 4;
+    TRANSIT_PREFER_CHEAPER = 5;
+    TRANSIT_PREFER_EARLIEST_ARRIVAL = 6;
+}
+
+enum VehicleTypePreference {
+    PREFER_BUS = 0;
+    PREFER_SUBWAY = 1;
+    PREFER_TRAIN = 2;
+    PREFER_TRAM = 3;
+}
+
+enum TransitVehicleType {
+    TRANSIT_VEHICLE_TYPE_UNKNOWN = 0;
+    TRANSIT_VEHICLE_TYPE_BUS = 1;
+    TRANSIT_VEHICLE_TYPE_RAIL = 2;
+    TRANSIT_VEHICLE_TYPE_SUBWAY = 3;
+    TRANSIT_VEHICLE_TYPE_TRAIN = 4;
+    TRANSIT_VEHICLE_TYPE_TRAM = 5;
+    TRANSIT_VEHICLE_TYPE_FERRY = 6;
+}
+
+enum RerouteType {
+    REROUTE_TYPE_BETTER_ETA = 1;
+    REROUTE_TYPE_AVOIDS_CLOSURE = 2;
+    REROUTE_TYPE_AVOIDS_VEHICLE_RESTRICTION = 3;
+    REROUTE_TYPE_AVOIDS_DYNAMIC_CLOSURE = 4;
+}
+
+enum TrafficRoutingStrategy {
+    IGNORE_TRAFFIC = 1;
+    RANK_USING_TRAFFIC = 2;
+    DYNAMIC_ROUTE_AROUND_TRAFFIC = 3;
+}
+
+enum FareType {
+    UNKNOWN_FARE = 0;
+    NORMAL_FARE = 1;
+    IC_FARE = 2;
+}
+
+enum RealTimePolicy {
+    UNKNOWN_REAL_TIME_POLICY = 0;
+    APPLY_REALTIME = 1;
+    IGNORE_REALTIME = 2;
+}
+
+enum TransitPatternMatchingMode {
+    UNKNOWN_TRANSIT_PATTERN_MATCHING_MODE = 0;
+    SOFT_MATCHING = 1;
+    STRICT_MATCHING = 2;
+}

@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/contentflows/proto/api/v1/moderation_info.proto";
+import "geo/contentflows/proto/api/v1/publication_info.proto";
+import "geo/photo/proto/rejection_reasons.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "PublicationInfoProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message PublicationInfo {
+    optional RejectionReasons rejection_reasons = 1 [deprecated = true];
+    optional geo_contentflows.ModerationInformation moderation_information = 2;
+    optional geo_contentflows.PublicationInformation publication_information = 3;
+}

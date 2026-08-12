@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "google/internal/earth/v1/builtenv/built_entity.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+
+message BuiltEntitySummarizedMetrics {
+    optional TotalArea total_area = 1;
+    optional double building_coverage_per = 2;
+    optional double street_wall_per = 3;
+    optional double facade_area_sq_m = 4;
+    optional double total_private_area_m2 = 5;
+    optional double profit_on_cost = 6;
+    optional ParkQualityMetrics park_quality_metrics = 7;
+}
+
+message ParkQualityMetrics {
+    optional double average_shadow_hours_per_day = 1;
+    optional double average_sun_hours_per_day = 2;
+    optional double average_green_access_per_residential = 3;
+}

@@ -1,0 +1,330 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+import "geo/imagery/karto/proto/cloud_tts_options.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GGIMGK";
+option java_multiple_files = true;
+option java_outer_classname = "AppOptionsProto";
+option java_package = "com.google.geo.imagery.karto.proto";
+
+message ImmersiveStreetUIOptions {
+    optional float pin_size_meters = 1;
+    optional float pin_scale = 2;
+    optional float height_offset_meters = 3;
+    
+    optional ImageData images = 4;
+    message ImageData {
+        optional string pin_image_path = 1;
+        optional string google_logo_image_path = 2;
+        optional string ai_logo_image_path = 3;
+    }
+}
+
+message StreamedUIOptions {
+    optional bool enable_time_slider = 1 [default = false];
+    
+    optional PinVisibility pin_visibility = 2 [default = NONE];
+    enum PinVisibility {
+        UNKNOWN = 0;
+        NONE = 1;
+        PRIMARY_ONLY = 2;
+        PRIMARY_AND_RELATED = 3;
+        PAINT = 4;
+    }
+    
+    optional string custom_primary_pin_icon_url = 8;
+    optional bool auto_select_primary_pin = 9;
+    optional bool hide_pin_labels = 10 [default = false];
+    
+    optional PinIconType pin_icon_type = 12 [default = KARTO_DEFAULT];
+    enum PinIconType {
+        UNKNOWN_ICON = 0;
+        KARTO_DEFAULT = 1;
+        SKYVIEW_DEFAULT = 2;
+        CLASSIC_RED = 3;
+    }
+    
+    optional bool enable_navigation_ui = 3 [default = false];
+    optional bool enable_action_ui = 4 [default = false];
+    
+    repeated StreetLevelPin enabled_streetlevel_pins = 5;
+    enum StreetLevelPin {
+        UNKNOWN_PIN = 0;
+        UGC_PHOTO = 1;
+        STREETVIEW_PANO = 2;
+        NERF = 3;
+    }
+    
+    optional float scale_factor = 7 [default = 1];
+    optional bool enable_streaming_base_ui_scaling = 11 [default = false];
+    optional bool enable_pegman_entry_point = 13 [default = false];
+    
+    reserved 6;
+}
+
+message FeatureFlags {
+    optional PoiMovementOptions poi_movement_options = 1;
+    message PoiMovementOptions {
+        optional bool enable_collision_avoidance = 1 [default = false];
+        optional bool adjust_heading = 2 [default = false];
+        optional bool adjust_pitch = 5 [default = false];
+        optional bool adjust_for_visibility = 6 [default = false];
+        
+        optional DistanceMode distance_mode = 3 [default = USE_CURRENT];
+        enum DistanceMode {
+            UNKNOWN = 0;
+            USE_CURRENT = 1;
+            CALCULATE_FROM_ORIENTED_BOUNDING_BOXES = 2;
+            CALCULATE_FROM_ALL_BOUNDING_BOXES = 3;
+        }
+        
+        optional bool wait_for_data_loaded = 4 [default = false];
+        optional bool enable_outdoor_nerf = 7 [default = false];
+    }
+    
+    optional BusynessOptions busyness_options = 2;
+    message BusynessOptions {
+        optional bool enable_busyness = 1 [default = false];
+        optional bool enable_live_busyness = 2 [default = false];
+    }
+    
+    optional WeatherOptions weather_options = 3;
+    message WeatherOptions {
+        optional bool enable_precipitation_annotations = 1 [default = false];
+        optional bool enable_air_quality = 2 [default = false];
+    }
+    
+    optional NerfOptions nerf_options = 4;
+    message NerfOptions {
+        optional bool enable_area_view_button = 1 [deprecated = true];
+        optional bool enable_internal_nerfs = 2 [default = false];
+        optional bool enable_ugc_in_nerf = 3 [default = false, deprecated = true];
+        optional bool enable_food_ugc_as_default = 7 [default = false, deprecated = true];
+        optional bool enable_new_nerf_ui = 4 [default = false, deprecated = true];
+        
+        optional IndoorAnnotationsSource indoor_annotations_source = 5 [deprecated = true];
+        enum IndoorAnnotationsSource {
+            UNDEFINED_INDOOR_ANNOTATIONS_SOURCE = 0;
+            GRASS = 1;
+            DEV_TABLE = 2;
+        }
+        
+        optional bool use_nerf_metadata_interface = 6 [default = false, deprecated = true];
+    }
+    
+    optional SessionControlOptions session_control_options = 5;
+    message SessionControlOptions {
+        optional int32 session_max_length_sec = 2 [default = 7200];
+        optional int32 disconnection_warning_sec = 3 [default = 60];
+    }
+    
+    optional FocusOptions focus_options = 6;
+    message FocusOptions {
+        optional bool focus_button_visible = 1 [default = false];
+        
+        optional FocusMode focus_mode = 2 [default = DEFAULT];
+        enum FocusMode {
+            DEFAULT = 0;
+            DISCOVERY = 1;
+            SCORE_HEATMAP = 2;
+        }
+        
+        optional bool focus_view_enabled = 3 [default = false];
+    }
+    
+    optional TrafficOptions traffic_options = 7;
+    message TrafficOptions {
+        optional bool enable_segment_speeds_query = 1 [default = false];
+        optional bool enable_real_time_traffic_sim = 2 [default = false];
+        optional bool enable_default_traffic_sim = 3 [default = false];
+        optional bool enable_internal_traffic_sim = 5 [default = false];
+        
+        reserved 4, 6;
+    }
+    
+    optional PawnOptions pawn_options = 8;
+    message PawnOptions {
+        optional Pawn pawn = 1 [default = ORBITOUCH];
+        enum Pawn {
+            UNKNOWN_PAWN = 0;
+            ORBITOUCH = 1;
+            FREETOUCH = 2;
+        }
+    }
+    
+    optional StreetViewOptions street_view_options = 9;
+    message StreetViewOptions {
+        optional bool show_selected_poi = 2 [default = false];
+        optional bool enable_street_view_on_deep_selection = 5 [default = false, deprecated = true];
+        optional bool show_pano_annotations = 6 [default = false];
+        optional bool enable_tap2go_pano2pano = 7 [default = false, deprecated = true];
+        optional bool enable_offscreen_indicator = 8 [default = false];
+        optional bool enable_projected_pano_transitions = 9 [default = false];
+        optional bool enable_advanced_semantics = 10 [default = false];
+        
+        reserved 1, 3, 4;
+    }
+    
+    optional BoundingBoxOptions bounding_box_options = 10;
+    message BoundingBoxOptions {
+        optional bool load_automated_boxes = 1 [default = true, deprecated = true];
+        optional bool view_bounding_box = 2 [default = false];
+    }
+    
+    optional NightTimeOptions night_time_options = 11;
+    message NightTimeOptions {
+        optional bool enable_street_lights = 1 [default = false];
+        optional bool street_lights_from_server = 2 [default = false];
+    }
+    
+    optional StartupOptions startup_options = 12;
+    message StartupOptions {
+        optional StreamResolution stream_resolution = 4 [default = STREAM_RESOLUTION_1080];
+        enum StreamResolution {
+            STREAM_RESOLUTION_UNKNOWN = 0;
+            STREAM_RESOLUTION_1080 = 1;
+            STREAM_RESOLUTION_720 = 2;
+        }
+        
+        optional bool enable_viewport_and_backbuffer_update = 6 [default = false];
+        
+        reserved 1, 2, 3, 5;
+    }
+    
+    optional RoutePreviewOptions route_preview_options = 13;
+    message RoutePreviewOptions {
+        optional PoiPinOptions poi_pin_options = 1;
+        message PoiPinOptions {
+            optional PinType pin_type = 1 [default = UNKNOWN];
+            enum PinType {
+                UNKNOWN = 0;
+                NEIGHBORHOOD_VIBE = 1;
+                ORIENTATION_LANDMARKS_ALONG_ROUTES = 2;
+                PARKING_AND_TRANSIT_AT_DESTINATION = 3;
+            }
+            
+            reserved 2;
+        }
+        
+        optional UIMode ui_mode = 2 [default = MINIMAL_UI];
+        enum UIMode {
+            UNKNOWN = 0;
+            SWIPE_CARDS = 1 [deprecated = true];
+            STATIC_BUTTONS = 2 [deprecated = true];
+            MINIMAL_UI = 3;
+            MINIMAL_UI_V2 = 4;
+            MINIMAL_UI_V3 = 5;
+        }
+        
+        optional bool enable_alternate_routes = 3 [default = false];
+        
+        optional StartMode start_mode = 4 [default = START_AERIAL];
+        enum StartMode {
+            UNKNOWN_START_MODE = 0;
+            START_AERIAL = 1;
+            START_SV = 2;
+            END_AERIAL = 3;
+            END_SV = 4;
+            END_SV_SWOOP = 5;
+            OVERVIEW_AERIAL = 6;
+        }
+        
+        optional bool enable_pegman_entry_point = 5 [default = false];
+    }
+    
+    optional RoutePreviewOptions aerial_focused_route_preview_options = 21;
+    optional RoutePreviewOptions ai_route_preview_options = 20;
+    
+    optional TreeOptions tree_options = 14;
+    message TreeOptions {
+        optional bool enable_improved_trees = 1 [default = false];
+    }
+    
+    optional TooltipOptions tooltip_options = 15;
+    message TooltipOptions {
+        optional bool always_allow_tooltips = 1 [default = false];
+    }
+    
+    optional GaussianSplatOptions gaussian_splat_options = 16;
+    message GaussianSplatOptions {
+        optional bool enable_gsplats = 1 [default = false];
+        optional bool enable_gsplats_loading_animation = 2 [default = false];
+        optional bool enable_gsplats_tap2go = 3 [default = false];
+        optional float override_path_width_meters = 4 [default = 0];
+    }
+    
+    optional AnnotationPoiOptions annotation_poi_options = 17;
+    message AnnotationPoiOptions {
+        optional ViewOptions aerial = 1;
+        message ViewOptions {
+            optional OcclusionApproach occlusion_approach = 1 [default = NONE];
+            enum OcclusionApproach {
+                UNKNOWN = 0;
+                NONE = 1;
+                DEFAULT = 2;
+            }
+            
+            optional SpawnerType spawner = 2 [default = ANNOTATION_SPAWNER];
+            enum SpawnerType {
+                SPAWNER_UNSPECIFIED = 0;
+                ANNOTATION_SPAWNER = 1;
+                ANNOTATION_POI_SPAWNER = 2;
+            }
+        }
+        
+        optional ViewOptions street_view = 2;
+    }
+    
+    optional Tap2GoOptions tap2go_options = 18;
+    message Tap2GoOptions {
+        optional bool enable_aerial_to_street_view = 1 [default = false];
+        optional bool enable_pano_to_pano = 2 [default = false];
+        optional bool enable_aerial_to_nerf = 3 [default = false];
+        optional bool enable_aerial_tap2go = 4 [default = false];
+    }
+    
+    optional GeminiOptions gemini_options = 19;
+    message GeminiOptions {
+        optional bool enable_gemini_entry_point = 1 [default = false];
+    }
+}
+
+message ProfilingOptions {
+    optional bool start_profile_trace = 1 [default = false];
+    optional bool stat_named_events = 2 [default = false];
+    optional string trace_channels = 3;
+    optional bool start_stat_capture = 4 [default = false];
+}
+
+message TilesetOptions {
+    optional string tileset_version = 1;
+    optional string debug_tileset_url = 2;
+}
+
+message AppOptions {
+    optional TemperatureUnit temp_unit = 4 [default = CELSIUS];
+    enum TemperatureUnit {
+        UNKNOWN_UNIT = 0;
+        CELSIUS = 1;
+        FAHRENHEIT = 2;
+    }
+    
+    optional string related_place_tag = 5;
+    optional FeatureFlags feature_flags = 6;
+    optional string language_code = 7;
+    optional ProfilingOptions profiling_options = 8;
+    optional TilesetOptions tileset_options = 9;
+    optional CloudTtsOptions cloud_tts_options = 11;
+    
+    oneof PinOptions {
+        StreamedUIOptions streamed_ui_options = 3;
+        ImmersiveStreetUIOptions immersive_street_ui_options = 10;
+    }
+    
+    reserved 1, 2;
+}

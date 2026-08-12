@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package logs.proto.maps_limo;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedServiceProvider {
+    optional string provider_token = 1;
+    optional string provider_name = 2;
+    optional string provider_icon_id = 3;
+}

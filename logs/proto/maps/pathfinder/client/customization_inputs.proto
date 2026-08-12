@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "logs/proto/maps/directions/customization/config/serving_protos/parameter_value.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "CustomizationInputsProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedCustomizationInputs {
+    optional string id = 1;
+    repeated string decoration_ids = 4;
+    map<string, maps_directions_customization_logs_serving_protos.LoggedParameterValue> parameters = 3;
+    map<string, maps_directions_customization_logs_serving_protos.LoggedParameterValue> decoration_parameters = 5;
+    
+    reserved 2;
+}

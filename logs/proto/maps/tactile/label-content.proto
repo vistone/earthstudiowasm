@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package logs_tactile;
+
+import "maps/tactile/api/onmap/on-map-impression-enums.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGST";
+option java_multiple_files = true;
+option java_outer_classname = "LabelContentProto";
+option java_package = "com.google.common.logging.tactile";
+
+message LoggedLabelContent {
+    optional maps_tactile.onmap.LabelContentType label_content_type = 1;
+    optional maps_tactile.onmap.LabelContentLocation label_content_location = 2;
+}

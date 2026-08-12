@@ -1,0 +1,48 @@
+syntax = "proto2";
+
+package maps_tactile.shared.automotive;
+
+import "geo/serving/proto/electricvehicle/electric_vehicle_options.proto";
+import "geo/serving/proto/electricvehicle/vehicle_energy_model.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHA";
+option java_multiple_files = true;
+option java_outer_classname = "ElectricVehicleOptionsProto";
+option java_package = "com.google.maps.tactile.shared.automotive";
+
+message ElectricVehicleOptions {
+    optional geo_serving_proto.electricvehicle.VehicleEnergyModel vehicle_energy_model = 1;
+    optional bool include_ev_info = 2;
+    optional bool fetch_detailed_ev_charging_recommendation = 3;
+    optional geo_serving_proto.electricvehicle.ElectricVehicleOptions filtering_options = 4;
+    optional bool should_fetch_daisy_chain_waypoints = 5 [deprecated = true];
+    optional bool allow_eco_friendly_routing = 9;
+    optional bool include_segment_energy_usage = 10;
+    optional bool include_compact_segment_energy_usage = 15;
+    optional float macroscopic_kinetic_energy_minimum_speed_difference_threshold_meters_per_second = 11;
+    optional bool allow_weather_based_forecasts = 12;
+    optional bool allow_ml_based_forecasts = 13;
+    optional bool enable_charger_real_time_availability_predictions = 14;
+    
+    optional TripPreferences trip_preferences = 7;
+    message TripPreferences {
+        optional int32 minimum_arrival_battery_percentage_for_charging_stops = 1;
+        optional int32 minimum_arrival_battery_percentage_override_for_routing = 9 [deprecated = true];
+        optional int32 minimum_arrival_battery_percentage_buffer_for_routing = 5 [deprecated = true];
+        optional int32 target_arrival_battery_percentage_for_destination = 3;
+        optional bool want_exact_charging_times = 2;
+        optional bool ignore_out_of_service_ports = 6;
+        optional bool enable_payment_method_filtering_in_daisy_chain = 8 [deprecated = true];
+        optional bool enable_daisy_chain_corridor = 10;
+        
+        reserved 4, 7;
+    }
+    
+    repeated OemPaymentNetwork oem_suggested_payment_network = 8;
+    message OemPaymentNetwork {
+        optional string id = 1;
+    }
+    
+    reserved 6;
+}

@@ -1,0 +1,30 @@
+syntax = "editions";
+
+package geo_moderation;
+
+import "geo/moderation/service/proto/appealability.proto";
+import "geo/moderation/service/proto/policy_classification.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+;
+option java_package = "com.google.geo.moderation.proto1api";
+
+message TransparencyMetadata {
+    optional ClassificationSource classification_source = 1;
+    enum ClassificationSource {
+        UNSPECIFIED_SOURCE = 0;
+        AUTOMATED_SYSTEM = 1;
+        OPERATOR = 2;
+    }
+    
+    repeated PolicyViolation policy_violations = 2;
+    optional Appealability appealability = 3;
+    
+    optional Mode mode = 4;
+    enum Mode {
+        UNSPECIFIED_MODE = 0;
+        DARK = 1;
+        LIVE = 2;
+    }
+}

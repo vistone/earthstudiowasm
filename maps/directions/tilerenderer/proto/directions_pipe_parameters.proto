@@ -1,0 +1,95 @@
+syntax = "proto2";
+
+package maps_directions_tilerenderer;
+
+import "maps/directions/tilerenderer/proto/simple_directions_request.proto";
+import "maps/paint/proto/pipe-metadata.proto";
+import "maps/paint/proto/visual-element.proto";
+import "maps/tactile/api/directions-common.proto";
+import "maps/tactile/api/directions-request.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMMDT";
+option java_multiple_files = true;
+option java_package = "com.google.maps.directions.tilerenderer.proto";
+
+message DirectionsPipeParameters {
+    optional bytes directions_retrieval_token = 14 [debug_redact = true];
+    repeated StyledRoute styled_routes = 16;
+    
+    optional ClientType client_type = 5 [default = CLIENT_DESKTOP];
+    enum ClientType {
+        CLIENT_MOBILE_PHONE = 0;
+        CLIENT_MOBILE_TABLET = 6;
+        CLIENT_MOBILE_WEB = 9;
+        CLIENT_MOBILE_GSA = 13;
+        CLIENT_DESKTOP = 1;
+        CLIENT_DESKTOP_LITE = 10;
+        CLIENT_IFRAME_API = 11;
+        CLIENT_JS_API = 12;
+        CLIENT_LU_RICHLIST_MAP = 2;
+        CLIENT_LU_RICHLISTDESKTOP_FULLLIST_MAP = 3;
+        CLIENT_LU_MAPS_LITE = 7;
+        CLIENT_MOBILE_LU_MAPS_LITE = 15;
+        CLIENT_MOBILE_IMMERSIVE_LU_MAPS_LITE = 17;
+        CLIENT_TABLET_LU_MAPS_LITE = 16;
+        CLIENT_IOS_GSA_LU = 4;
+        CLIENT_IOS_GSA_IMMERSIVE = 5;
+        CLIENT_LU = 8;
+        CLIENT_EARTH = 14;
+        CLIENT_ASSISTANT_TRAVEL = 18;
+        CLIENT_ASK_MAPS = 19;
+    }
+    
+    optional ClientOptions client_options = 10;
+    
+    oneof directions_fetch {
+        maps_tactile.DirectionsRequest directions_request = 3 [deprecated = true];
+        SimpleDirectionsRequest simple_directions_request = 15;
+    }
+    
+    reserved 1, 2, 4, 6 to 9, 11, 12;
+    
+    extend maps_paint.PipeMetadata {
+        optional DirectionsPipeParameters pipe_metadata = 496503080;
+    }
+}
+
+message LoggingParameters {
+    optional maps_paint.VisualElementMetadata callout_visual_element_metadata = 1;
+    optional maps_paint.VisualElementMetadata polyline_visual_element_metadata = 2;
+}
+
+message StyledRoute {
+    optional bytes directions_retrieval_token = 1 [debug_redact = true];
+    optional string xuikit_command_data_store_key = 2;
+    optional int32 trip_index = 3;
+    optional bool is_highlighted = 4;
+    optional fixed32 polyline_color_override_argb = 5;
+    optional LoggingParameters logging_parameters = 7;
+    
+    reserved 6;
+}
+
+message ClientOptions {
+    optional MapType map_type = 1 [deprecated = true];
+    enum MapType {
+        MAP_STANDARD = 0;
+        MAP_GMM_ONE_THIRD_LIST_VIEW = 1;
+        MAP_COMMUTE = 2;
+        MAP_LU_NAVIGATIONAL = 3;
+        MAP_RICHLIST = 4;
+        MAP_RICHLIST_HOTELS = 5;
+        MAP_DIRECTIONS = 7;
+        MAP_HOTEL_SETS = 9;
+        MAP_SEARCH_RESULTS = 6;
+        MAP_TACTILE_HOTELS = 8;
+        MAP_LU_DESKTOP_SRP_DEFAULT = 10;
+        MAP_LU_DESKTOP_SRP_LETTERED = 11;
+    }
+    
+    optional maps_tactile.directions.SpotlightOptions spotlight_options = 3;
+    optional int32 trip_index = 4;
+    
+    reserved 2, 5;
+}

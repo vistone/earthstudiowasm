@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package google.research.researchpartnerships.v1.rsgeofm;
+
+import "google/api/field_behavior.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "CustomScoringOptionsProto";
+option java_package = "com.google.research.researchpartnerships.v1.rsgeofm";
+
+message SvmParams {
+    double svm_c = 1;
+    
+    KernelType kernel_type = 2;
+    enum KernelType {
+        KERNEL_TYPE_UNSPECIFIED = 0;
+        LINEAR = 1;
+        POLYNOMIAL = 2;
+        RBF = 3;
+        SIGMOID = 4;
+        PRECOMPUTED = 5;
+    }
+    
+    double gamma = 3;
+    int32 nr_weight = 4;
+    repeated int32 weight_labels = 5;
+    repeated double weights = 6;
+}
+
+message CustomScoringOptions {
+    DistanceMeasureType dist_type = 1;
+    enum DistanceMeasureType {
+        DISTANCE_MEASURE_TYPE_UNSPECIFIED = 0;
+        SVM_SCORE_ONLY = 1;
+        SVM_SCORE_AND_COS_SIM = 2;
+    }
+    
+    float svm_score_weight = 2;
+    float cos_sim_weight = 3;
+    int32 neighbor_count = 4;
+    SvmParams svm_params = 5;
+    
+    ScoringMode scoring_mode = 6;
+    enum ScoringMode {
+        SCORING_MODE_UNSPECIFIED = 0;
+        SCORE_DURING_RETRIEVAL = 1;
+        SCORE_AFTER_RETRIEVAL = 2;
+    }
+}

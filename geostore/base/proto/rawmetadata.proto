@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message RawMetadataProto {
+    required string key = 1;
+    required string label = 2;
+    required string description = 3;
+    
+    optional ConflationMethod conflation_method = 4 [default = CONFLATION_PICK_FIRST_VALUE];
+    enum ConflationMethod {
+        CONFLATION_PICK_FIRST_VALUE = 0;
+        CONFLATION_UNION_CSV = 1;
+        CONFLATION_SUM = 2;
+    }
+}

@@ -1,0 +1,21 @@
+syntax = "editions";
+
+package maps_tactile.shared.ev;
+
+import "geo/serving/proto/electricvehicle/predicted_availability.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option objc_class_prefix = "GMTTSHEVS";
+option java_multiple_files = true;
+option java_outer_classname = "PredictedAvailabilityPerEtaProto";
+option java_package = "com.google.maps.tactile.shared.ev";
+
+message PredictedAvailabilityPerEta {
+    optional int32 arrival_eta_mins = 1;
+    optional geo_serving_proto.electricvehicle.PredictedAvailability predicted_availability = 2;
+}

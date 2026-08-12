@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions.request;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPDR";
+option java_multiple_files = true;
+option java_outer_classname = "BikesharingDecorationsVersionProto";
+option java_package = "com.google.geo.serving.proto.directions.request";
+
+enum BikesharingDecorationsVersion {
+    UNKNOWN_BIKESHARING_DECORATIONS_VERSION = 0;
+    BIKESHARING_DECORATIONS_VERSION_1 = 1;
+    BIKESHARING_DECORATIONS_VERSION_2 = 2;
+}

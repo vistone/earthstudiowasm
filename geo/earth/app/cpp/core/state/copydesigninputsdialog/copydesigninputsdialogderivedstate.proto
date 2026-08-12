@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Copydesigninputsdialogderivedstate";
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message CopyDesignInputsDialogDerivedState {
+    optional bool is_copy_design_inputs_dialog_active = 1;
+}

@@ -1,0 +1,243 @@
+syntax = "proto2";
+
+package logs.proto.hotels;
+
+import "ads/travel/base/hotel_set_name_structure_enum.proto";
+import "geo/search/api/refinements/refinements.proto";
+import "geo/search/candidate/hotels/vacation_rental_amenities.proto";
+import "geo/serving/proto/hotels/client_itinerary_source.proto";
+import "google/type/date.proto";
+import "java/com/google/travel/frontend/hotels/search/protos/highlight_type.proto";
+import "java/com/google/travel/frontend/hotels/search/protos/notable.proto";
+import "java/com/google/travel/frontend/hotels/search/protos/notable_category_enum.proto";
+import "java/com/google/travel/frontend/hotels/search/protos/previous_trigger_decision.proto";
+import "logs/eventid/eventid.proto";
+import "logs/gws/public/tags/tag_options.proto";
+import "logs/maps/featureid.proto";
+import "logs/proto/ads/travel/hotel_price_details.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "storage/googlesql/public/proto/type_annotation.proto";
+import "travel/frontend/common/proto/amenities/amenities.proto";
+import "travel/frontend/common/proto/entity_type.proto";
+
+message LoggedHotelSummaryData {
+    optional EntityKey entity_key = 1;
+    optional int32 vacation_rental_partner_id = 2;
+    optional string primary_concept = 3;
+    repeated ads_travel.HotelImageKey image_keys = 4;
+}
+
+message LoggedHotelHighlightData {
+    optional boq.travelfrontendhotelssearch.protos.HighlightType hotel_highlight_type = 1;
+}
+
+message LoggedHotelNotableGroupData {
+    optional int32 notable_count = 1;
+}
+
+message LoggedHotelNotableData {
+    optional boq.travelfrontendhotelssearch.protos.NotableCategory category = 1;
+    optional boq.travelfrontendhotelssearch.protos.NotableSentimentType sentiment_type = 2;
+    optional boq.travelfrontendhotelssearch.protos.NotablesLinkTarget link_target = 3;
+}
+
+message LoggedHotelAmenityWebSnippetsData {
+    optional .travel.frontend.common.proto.amenities.AttributeType hotel_amenity_type = 1;
+}
+
+message LoggedPartnerRoomsDataProviderData {
+    optional int32 partner_id = 1;
+    optional uint64 hotel_id = 3;
+    optional int32 available_rooms_count = 2;
+}
+
+message LoggedRoomSummaryOptionData {
+    optional string room_id = 1;
+    optional int32 num_rates_available = 2;
+    optional int32 max_occupancy = 3;
+    optional int32 num_photos = 4;
+    optional double lowest_price = 5;
+}
+
+message LoggedRoomRateData {
+    optional int32 partner_id = 1;
+    optional string room_id = 2;
+    optional double price = 3;
+}
+
+message EntityKey {
+    optional string mid = 1;
+    optional logs_maps.FeatureIdProto feature_id_proto = 2;
+    optional uint64 hotel_id = 3;
+    optional .travel.frontend.common.proto.EntityType entity_type = 4;
+}
+
+message LoggedHotelPlaceDetailsData {
+    optional int32 partner_id = 1;
+    optional bool is_supplier = 2;
+    optional bool is_crawled = 3;
+    optional string url = 4;
+}
+
+message LoggedHotelWithoutPriceData {
+    optional int32 partner_id = 1;
+    optional bool is_supplier = 2;
+    optional bool is_crawled = 3;
+    optional string url = 4;
+}
+
+message LoggedHotelPriceData {
+    optional string currency_code = 1;
+    optional double price_per_night = 2;
+    optional double taxes_and_fees_per_night = 3;
+    
+    optional DisplaySetting display_setting = 4;
+    enum DisplaySetting {
+        UNKNOWN = 0;
+        WITH_FEES_AND_TAXES = 1;
+        WITHOUT_FEES_AND_TAXES = 2;
+        WITH_FEES_ONLY = 3;
+    }
+    
+    optional double conversion_rate_to_usd = 5;
+    optional bool is_deal = 6;
+    optional int32 partner_id = 7;
+    optional bool is_composed = 8;
+    optional bool has_alternate_occupancy = 9;
+    optional int32 booking_window_days = 10;
+    optional bool is_base_price_offender = 11;
+    optional bool is_base_price_offender_reference_partner = 12;
+    optional EventIdMessage query_id = 13;
+    optional EventIdMessage event_id = 14;
+    optional float granular_price_accuracy = 15;
+    optional float average_price_accuracy = 16;
+    optional float organic_pctr = 17;
+    optional float organic_quality_score = 18;
+}
+
+message LoggedHotelSearchData {
+    optional Itinerary itinerary = 1;
+    optional int32 occupancy = 2 [default = 2];
+    optional Refinements refinements = 3;
+    optional LocationData destination_data = 4;
+    optional LocationData search_container = 5;
+    optional PriceRange price_range = 6;
+    optional int32 evcs_search_interest_count = 7;
+    optional int32 evcs_geo_interest_count = 8;
+    optional int32 ev_interest_count = 9;
+    optional boq.travelfrontendhotelssearch.protos.PreviousTriggerDecision previous_trigger_decision = 10;
+}
+
+message Itinerary {
+    optional .google.type.Date check_in_date = 1;
+    optional int32 length_of_stay = 2;
+    
+    oneof source {
+        geo_serving_proto.hotels.ClientItinerarySource client_source = 3;
+        int32 backend_source = 4;
+    }
+}
+
+message LocationData {
+    optional string mid = 1;
+    optional logs_maps.FeatureIdProto feature_id_proto = 2;
+}
+
+message PriceRange {
+    optional uint32 max_price = 1;
+    optional uint32 min_price = 2;
+    optional string currency_code = 3;
+}
+
+message Refinements {
+    optional bool is_alternative_lodging_only = 1;
+    optional geo.search.refinements.UserRatingParams.NumericRating min_user_rating = 2;
+    repeated uint32 applied_chains = 3;
+    repeated uint32 applied_subchains = 4;
+    repeated geo.search.refinements.HotelAccommodationTypeParams.AccommodationType applied_accommodation_type = 12 [packed = true];
+    optional geo.search.refinements.SortParams.Order sort_order = 5;
+    repeated string applied_neighborhood_mid = 8;
+    repeated uint32 star_class = 9;
+    optional bool is_refundable_only = 10;
+    optional geo.search.refinements.HotelCovid19ResponderParams.HotelCovid19ResponderPolicy covid19_responder_policy = 11 [deprecated = true];
+    optional bool is_eco_certified_only = 13;
+    repeated geo.search.refinements.HotelBedsCombinationParams obsolete_beds_combinations = 14 [deprecated = true];
+    
+    repeated LoggedHotelBedsCombinationParams beds_combinations = 21;
+    message LoggedHotelBedsCombinationParams {
+        optional bool strict = 1;
+        optional int32 any_bed = 2;
+        optional int32 single_bed = 3;
+        optional int32 semi_double_bed = 4;
+        optional int32 double_bed = 5;
+        optional int32 queen_bed = 6;
+        optional int32 king_bed = 7;
+    }
+    
+    optional geo.search.refinements.HotelRoomStyleParams obsolete_room_styles = 15 [deprecated = true];
+    
+    optional LoggedHotelRoomStyleParams room_styles = 22;
+    message LoggedHotelRoomStyleParams {
+        repeated geo.search.refinements.HotelRoomStyleParams.JapaneseHotelRoomStyle japanese_hotel_room_styles = 1 [packed = true];
+    }
+    
+    optional bool smoking_in_room = 16;
+    optional bool open_air_bath_in_room = 17;
+    optional geo.search.refinements.HotelMealPlansParams obsolete_meal_plans = 18 [deprecated = true];
+    
+    optional LoggedHotelMealPlansParams meal_plans = 23;
+    message LoggedHotelMealPlansParams {
+        optional bool strict = 1;
+        optional bool none = 2;
+        optional bool breakfast = 3;
+        optional bool dinner = 4;
+        optional bool breakfast_and_dinner = 5;
+    }
+    
+    optional bool early_check_in = 19;
+    optional bool late_check_out = 20;
+    
+    oneof applied_amenities {
+        LoggedHotelAmenities hotel_amenities = 6;
+        LoggedVacationRentalAmenities vacation_rental_amenities = 7;
+    }
+    
+    message LoggedHotelAmenities {
+        repeated geo.search.refinements.HotelAmenityParams.HotelAmenity applied_amenities = 1;
+    }
+    
+    message LoggedVacationRentalAmenities {
+        repeated geo.search.hotels.VacationRentalAmenityType applied_amenities = 1;
+    }
+}
+
+message LoggedAlternativeHotelsData {
+    repeated AlternativeHotel similar_hotels = 1;
+    repeated AlternativeHotel popular_hotels = 2;
+}
+
+message AlternativeHotel {
+    optional LoggedHotelSummaryData summary_data = 1;
+    optional LoggedHotelPriceData price_data = 2;
+}
+
+message LodgingBrowsyAtomicPacksExtension {
+    optional int32 browsy_unit_index = 1;
+    optional ads_travel.HotelSetNameStructure semantic_set_type = 2;
+}
+
+message HotelLevelBackendData {
+    optional uint64 hotel_id = 1;
+}
+
+message PartnerLevelBackendData {
+    optional int32 partner_id = 1;
+    optional float total_price = 2;
+    optional float taxes_and_fees = 3;
+    optional float fees = 4;
+    optional string currency_code = 5;
+    optional int32 display_result_info = 6;
+    optional float granular_price_accuracy_score = 7;
+    optional float pctr = 8;
+}

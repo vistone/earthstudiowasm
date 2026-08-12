@@ -1,0 +1,43 @@
+syntax = "proto2";
+
+package maps_tactile.shared.ads;
+
+import "geo/serving/proto/link/link.proto";
+
+option objc_class_prefix = "GMTTSHADS";
+option java_multiple_files = true;
+option java_outer_classname = "PromotedPinAdsCalloutInfoProto";
+option java_package = "com.google.maps.tactile.shared.ads";
+
+message PromotedPinAdsCalloutInfo {
+    optional string ad_badge_text = 1 [deprecated = true];
+    optional string display_text = 2 [deprecated = true];
+    
+    optional CalloutType callout_type = 3 [deprecated = true];
+    enum CalloutType {
+        UNKNOWN_CALLOUT_TYPE = 0;
+        SIMILAR_PLACES_AD = 1;
+        SIMILAR_PLACES_AD_OFFSCREEN_INDICATOR = 4;
+        NAVIGATION_AD = 2;
+        ONLINE_ACTION_CALLOUT = 3;
+    }
+    
+    oneof callout_format {
+        TextBasedCallout text_based_callout = 4;
+        ActionCallout action_callout = 5;
+    }
+    
+    message TextBasedCallout {
+        optional string ad_badge_text = 1;
+        optional string display_text = 2;
+        optional CalloutType callout_type = 3;
+        optional string logo_url = 4;
+    }
+    
+    message ActionCallout {
+        optional string call_to_action = 1;
+        optional geo_serving_proto.link.Link on_click_link = 2;
+        optional string visible_url_text = 3;
+        optional CalloutType callout_type = 4;
+    }
+}

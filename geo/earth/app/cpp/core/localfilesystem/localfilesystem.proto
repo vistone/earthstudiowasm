@@ -1,0 +1,12 @@
+syntax = "editions";
+
+package earth.localfilesystem;
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Localfilesystem";
+option java_package = "com.google.android.apps.earth.flutter.localfilesystem";
+
+message FileMetadata {
+    optional int64 last_modified_time_millis = 1;
+}

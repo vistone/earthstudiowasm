@@ -1,0 +1,40 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "geo/serving/proto/directions/entrance_type.proto";
+import "geostore/base/proto/attachments/transit/transit_entrance_attachment.proto";
+import "geostore/base/proto/entrance.proto";
+import "geostore/base/proto/featureid.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option features = repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "TransitStationEntranceMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message TransitStationEntranceMetadata {
+    optional string name = 1;
+    repeated geostore.attachments.TransitEntranceAttachmentProto.Mode mode = 2;
+    optional geostore.FeatureIdProto feature_id = 3;
+    optional geostore.EntranceProto entrance = 4;
+    optional geo_serving_proto.directions.EntranceType type = 5;
+    
+    optional ContextSignalType context_signal_type = 6;
+    enum ContextSignalType {
+        option features = enum_type: CLOSED
+        ;
+        CONTEXT_SIGNAL_TYPE_UNSPECIFIED = 0;
+        CONTEXT_SIGNAL_TYPE_SELECTED_STATE = 1;
+        CONTEXT_SIGNAL_TYPE_MOBILITY = 2;
+    }
+    
+    optional bool is_from_country_with_customized_icon = 7;
+    
+    extend .proto2.bridge.MessageSet {
+        optional TransitStationEntranceMetadata message_set_extension = 525000423;
+    }
+}

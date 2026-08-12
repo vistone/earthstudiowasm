@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package maps_tactile.shared.ev;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option objc_class_prefix = "GMTTSHEVS";
+option java_multiple_files = true;
+option java_outer_classname = "OemPaymentIdProto";
+option java_package = "com.google.maps.tactile.shared.ev";
+
+message OemPaymentId {
+    optional string id = 1;
+}

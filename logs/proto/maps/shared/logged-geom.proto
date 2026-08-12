@@ -1,0 +1,33 @@
+syntax = "editions";
+
+package logs_maps_shared.geom;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps";
+
+message Camera {
+    optional Location location = 1;
+    optional Rotation rotation = 2;
+    optional Size screen_size = 3;
+    optional float field_of_view_y = 4;
+}
+
+message Location {
+    optional double longitude = 2;
+    optional double latitude = 3;
+    optional double altitude = 1;
+    optional bool redacted = 4;
+}
+
+message Rotation {
+    optional float heading = 1;
+    optional float tilt = 2;
+    optional float roll = 3;
+}
+
+message Size {
+    optional int32 width = 1;
+    optional int32 height = 2;
+}

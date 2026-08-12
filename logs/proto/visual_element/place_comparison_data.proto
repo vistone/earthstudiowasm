@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package logs;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_multiple_files = true;
+option java_outer_classname = "PlaceComparisonDataProto";
+option java_package = "com.google.common.logging";
+
+message PlaceComparisonData {
+    optional int32 total_comparison_attribute_count = 1;
+    optional int32 missing_comparison_attribute_count = 2;
+}

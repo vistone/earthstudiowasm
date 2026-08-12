@@ -1,0 +1,40 @@
+syntax = "editions";
+
+package photos.serving;
+
+import "net/proto2/contrib/validator/annotations.proto";
+import "net/proto2/proto/descriptor.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.photos.serving.proto1api";
+
+message OsidDomainInfo {
+    optional OsidAuthenticationType osid_authentication_type = 1;
+    enum OsidAuthenticationType {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_OSID_AUTHENTICATION_TYPE = 0;
+        OSID_AND_SSID = 1;
+        OSID_ALONE = 2;
+    }
+}
+
+message OsidDomain {
+    enum Type {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_OSID_DOMAIN = 0;
+        NONE = 1;
+        PHOTOS = 2;
+        DRIVE = 3;
+        TEST = 4;
+        CONTRIBSERVICE_SHARED = 5;
+        DRIVE_GOOGLE_COM = 6;
+        STITCH_WITHGOOGLE_COM = 7;
+        DOCS_GOOGLE_COM = 8;
+    }
+}
+
+extend .proto2.EnumValueOptions {
+    optional OsidDomainInfo osid_domain_info = 263401661;
+}

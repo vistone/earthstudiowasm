@@ -1,0 +1,62 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/directions-result-common.proto";
+import "maps/tactile/api/geometry.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "TrafficReportPromptProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message TrafficReportPrompt {
+    optional string ved = 6;
+    optional string ei = 7 [deprecated = true];
+    
+    optional PrerollSound preroll_sound = 11 [default = DEFAULT_NONE];
+    enum PrerollSound {
+        DEFAULT_NONE = 0;
+        DING_DAH = 6;
+        DING_DEE = 7;
+        DING_DONG = 8;
+        DRING_DRING = 9;
+        TAH_LAH_LAH = 10;
+        TOO_LOO = 11;
+    }
+    
+    repeated AudioComponent audio_component = 9;
+    optional bytes report_history_token = 2;
+    optional bool prompt_should_be_suppressed = 12;
+    optional Notice notification = 3;
+    
+    optional CameraHints camera_hints = 8;
+    message CameraHints {
+        optional RoutePortion route_portion_of_current_trip = 1;
+        optional RoutePortion route_portion_of_better_trip = 2;
+        optional bool routes_overview = 3 [default = false];
+        optional LatLngRectangle region_bounds = 4;
+    }
+    
+    optional ExpirationPolicy expiration_policy = 10;
+    message ExpirationPolicy {
+        optional int32 maximum_report_age_seconds = 1 [default = 3600];
+    }
+    
+    optional AlertMethod alert_method = 13;
+    enum AlertMethod {
+        ALERT_UNKNOWN = 0;
+        AUDIO_AND_VISUAL = 1;
+        AUDIO_ONLY = 2;
+    }
+    
+    reserved 1, 4, 5;
+    
+    message RoutePortion {
+        optional int32 along_the_route_offset_meters = 1;
+        optional int32 along_the_route_length_meters = 2;
+    }
+}

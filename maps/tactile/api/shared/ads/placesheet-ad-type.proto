@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package maps_tactile.shared.ads;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHADS";
+option java_multiple_files = true;
+option java_outer_classname = "PlacesheetAdTypeProto";
+option java_package = "com.google.maps.tactile.shared.ads";
+
+enum PlacesheetAdType {
+    UNKNOWN_PLACESHEET_AD_TYPE = 0;
+    PLACESHEET_AD_TYPE_ULC = 1;
+    PLACESHEET_AD_TYPE_ULC_CREATIVE_MEDIA = 5;
+    PLACESHEET_AD_TYPE_OLA = 2;
+    PLACESHEET_AD_TYPE_SPA = 3;
+    PLACESHEET_AD_TYPE_AFS = 4;
+    PLACESHEET_AD_TYPE_GEOPOLITICAL_HOTEL_ADS_CAROUSEL = 6;
+}

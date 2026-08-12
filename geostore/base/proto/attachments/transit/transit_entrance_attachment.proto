@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package geostore.attachments;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/languagetaggedtext.proto";
+import "geostore/tools/public/annotations.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GSAT";
+option java_package = "com.google.geostore.base.proto.attachments";
+
+message TransitEntranceAttachmentProto {
+    optional Accessibility accessibility = 1;
+    enum Accessibility {
+        ACCESSIBILITY_UNKNOWN = 0;
+        ACCESSIBILITY_NONE = 1;
+        ACCESSIBILITY_WHEELCHAIR = 2;
+    }
+    
+    repeated Mode mode = 2;
+    enum Mode {
+        MODE_UNKNOWN = 0;
+        MODE_ELEVATOR = 1;
+        MODE_ESCALATOR = 2;
+        MODE_STAIRS = 3;
+        MODE_RAMP = 4;
+        MODE_WALKWAY = 5;
+    }
+    
+    repeated FeatureIdProto station_id = 3 [deprecated = true];
+    repeated FeatureIdProto connected_station_ids = 6;
+    repeated LanguageTaggedTextProto exit_signage = 5 [deprecated = true];
+    optional int32 heading = 7;
+    
+    repeated IndoorConnection indoor_connections = 8;
+    message IndoorConnection {
+        optional FeatureIdProto poi_id = 1;
+    }
+    
+    reserved 4;
+    
+    extend .proto2.bridge.MessageSet {
+        optional TransitEntranceAttachmentProto message_set_extension = 122556540;
+    }
+}

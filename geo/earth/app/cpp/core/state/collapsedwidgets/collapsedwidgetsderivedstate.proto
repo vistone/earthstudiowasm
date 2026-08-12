@@ -1,0 +1,20 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Collapsedwidgetsderivedstate";
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message CollapsedWidgetsDerivedState {
+    optional bool is_timelapse_enabled = 1;
+    optional bool is_timelapse_expanded = 2;
+    optional bool is_timelapse_expanded_sui = 3;
+    optional bool is_time_machine_enabled = 4;
+    optional bool is_time_machine_expanded = 5;
+    optional bool is_time_machine_expanded_sui = 6;
+    optional bool is_streetview_timeline_visible = 7;
+    optional bool is_streetview_timeline_expanded = 8;
+}

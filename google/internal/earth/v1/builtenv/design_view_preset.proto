@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+
+message ViewPresetConfig {
+    optional ViewPresetType view_preset_type = 1;
+}
+
+enum ViewPresetType {
+    VIEW_PRESET_TYPE_UNSPECIFIED = 0;
+    SOLAR_ENERGY_POTENTIAL = 1;
+    NEW_BUILD_BY_USE_TYPE = 2;
+    NEW_BUILD_BY_APARTMENT_TYPE = 3;
+    NEW_BUILD_SOLAR_ENERGY_POTENTIAL = 4;
+    NEW_BUILD_WALKABILITY = 5;
+    NEW_BUILD_GROUND_SUNLIGHT_HOURS = 6;
+    NEW_BUILD_VIEWS = 7 [deprecated = true];
+}

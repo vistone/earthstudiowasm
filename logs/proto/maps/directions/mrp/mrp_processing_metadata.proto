@@ -1,0 +1,92 @@
+syntax = "editions";
+
+package logs.proto.maps.directions.mrp;
+
+import "maps/directions/proto/directions_client_stats.proto";
+import "net/loadshedding/proto/request_qos.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+
+message MrpProcessingMetadata {
+    optional ProcessingRequestType processing_request_type = 1;
+    enum ProcessingRequestType {
+        UNKNOWN_PROCESSING_REQUEST_TYPE = 0;
+        ORIGINAL_REQUEST = 1;
+        SHADOW_REQUEST = 2;
+    }
+    
+    optional string parent_extended_session_id = 2 [deprecated = true];
+    optional fixed64 requery_token_fingerprint = 3;
+    optional int32 trip_version = 4;
+    optional int32 traffic_version = 5;
+    
+    optional MrpProcessingType mrp_processing_type = 6;
+    enum MrpProcessingType {
+        UNKNOWN_MRP_PROCESSING_TYPE = 0;
+        FOREGROUND = 1;
+        BACKGROUND = 2;
+    }
+    
+    optional SloClass slo_class = 7;
+    enum SloClass {
+        UNKNOWN_SLO_CLASS = 0;
+        NORMAL = 1;
+        DYNACORE = 2;
+        CUSTOM_CH = 3;
+        CUSTOM_DYNACORE = 4;
+    }
+    
+    optional bool slo_eligible = 8;
+    optional int32 canonical_code = 11;
+    optional net.loadshedding.RequestQoS.Criticality request_criticality = 12;
+    optional string starting_metro = 13;
+    optional string starting_country = 14;
+    optional DirectionsClientStats directions_client_stats = 15;
+    optional string maps_api_method_name = 16;
+    
+    repeated LogModification log_modifications = 17;
+    enum LogModification {
+        UNKNOWN_LOG_STATUS = 0;
+        SCRUBBED_DUE_TO_LOG_SIZE = 1;
+        SCRUBBED_DUE_TO_REQUEST_SOURCE = 2;
+        SCRUBBED_PARTIALLY_DUE_TO_LOG_SIZE = 3;
+        SANITIZED_FOR_PRIVACY = 4 [deprecated = true];
+    }
+    
+    optional LogEligibilityReason log_eligibility_reason = 18;
+    enum LogEligibilityReason {
+        LOG_ELIGIBILITY_REASON_UNSPECIFIED = 0;
+        THIRD_PARTY_ALWAYS_LOGGABLE = 1;
+        REQUEST_SPECIFIED_LOGGABLE = 2;
+        NO_VALID_SECURITY_CONTEXT_SANITIZED = 3 [deprecated = true];
+        SECURITY_CONTEXT_INDICATED_ANONYMOUS_LOGGABLE = 4;
+        SECURITY_CONTEXT_NO_USER_SANITIZED = 5 [deprecated = true];
+        SECURITY_CONTEXT_NO_GAIA_ID_SANITIZED = 6 [deprecated = true];
+        SECURITY_CONTEXT_ACCOUNT_CAPABILITY_NOT_FOUND_SANITIZED = 7 [deprecated = true];
+        SECURITY_CONTEXT_ACCOUNT_CAPABILITY_INDICATED_NOT_LOGGABLE_SANITIZED = 8 [deprecated = true];
+        SECURITY_CONTEXT_ACCOUNT_CAPABILITY_INDICATED_LOGGABLE = 9;
+    }
+}
+
+message DirectionsClientStats {
+    optional maps_directions.DirectionsClientStats.DirectionsClient directions_client = 1;
+    optional maps_directions.DirectionsClientStats.DirectionsClientPlatform directions_client_platform = 2;
+    optional maps_directions.DirectionsClientStats.DirectionsContext directions_context = 3;
+    
+    optional DirectionsContextSource directions_context_source = 4;
+    enum DirectionsContextSource {
+        UNKNOWN_CONTEXT_SOURCE = 0;
+        SERVER_INFERRED = 1;
+        CLIENT_PROVIDED = 2;
+    }
+    
+    optional DirectionsQueryType directions_query_type = 5;
+    enum DirectionsQueryType {
+        UNKNOWN_QUERY_TYPE = 0;
+        DURATION_ONLY = 1;
+        FULL_QUERY = 2;
+    }
+}

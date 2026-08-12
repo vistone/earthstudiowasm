@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package geo_serving_proto.openhours;
+
+import "frameworks/client/data/data_annotation.proto";
+import "geo/serving/proto/openhours/current_details.proto";
+import "geo/serving/proto/openhours/day_hours.proto";
+import "geo/serving/proto/text/annotated_text.proto";
+import "google/type/dayofweek.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/geo/production/antiscraping/proto/limited_response_annotations.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPOPH";
+option java_multiple_files = true;
+option java_outer_classname = "OpenHoursProto";
+option java_package = "com.google.geo.serving.proto.openhours";
+
+message OpenHours {
+    repeated DayHours schedules = 1;
+    optional CurrentDetails current_details = 2;
+    optional .google.type.DayOfWeek query_day_of_week = 3;
+    optional string future_open_status = 5;
+    optional geo_serving_proto.text.AnnotatedText disclaimer = 6;
+    optional .google.type.DayOfWeek start_of_week = 7;
+    
+    reserved 4, 8;
+}

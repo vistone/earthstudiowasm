@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "LocalizationContextProto";
+option java_package = "com.google.geo.photo";
+
+message LocalizationContext {
+    optional string language = 1;
+    optional string region_code = 2;
+    optional string accept_language = 3;
+}

@@ -1,0 +1,48 @@
+syntax = "editions";
+
+package mapcore;
+
+option objc_class_prefix = "SMC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.shared";
+
+message MercatorPixel {
+    optional int32 x = 1;
+    optional int32 y = 2;
+}
+
+message ECEFPoint {
+    optional double x = 1;
+    optional double y = 2;
+    optional double z = 3;
+}
+
+message LatLongAlt {
+    optional double latitude = 1;
+    optional double longitude = 2;
+    optional double altitude = 3;
+    
+    optional AltitudeReference altitude_reference = 4;
+    enum AltitudeReference {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN = 0;
+        WGS84_DATUM = 1;
+        EGM96_GEOID = 2;
+    }
+}
+
+message Position {
+    oneof position {
+        MercatorPixel mercator_pixel = 1;
+        ECEFPoint ecef_point = 2;
+        LatLongAlt lat_long_alt = 3;
+    }
+}
+
+message Pose {
+    optional Position position = 1;
+    optional float tilt = 2;
+    optional float heading = 3;
+    optional float roll = 4;
+}

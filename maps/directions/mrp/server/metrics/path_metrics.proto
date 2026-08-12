@@ -1,0 +1,37 @@
+syntax = "editions";
+
+package maps.mrp.metrics;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+message PathMetricsProto {
+    repeated NameValue metric_values = 1;
+    message NameValue {
+        optional MetricName name = 1;
+        optional double value = 2;
+    }
+    
+    enum MetricName {
+        METRIC_NAME_UNSPECIFIED = 0;
+        METRIC_NAME_TOTAL_DISTANCE_M = 1;
+        METRIC_NAME_TOTAL_DURATION_S = 2;
+        METRIC_NAME_REPEATED_SEGMENT_COUNT = 3;
+        METRIC_NAME_PRIORITY_VALLEY_MAX_DEPTH = 4;
+        METRIC_NAME_HIGHWAY_HIERARCHY_VALLEY_MAX_DEPTH = 5;
+        METRIC_NAME_VIA_POINT_COUNT = 6;
+        METRIC_NAME_SNAPPED_WAYPOINT_COUNT = 7;
+        METRIC_NAME_SIBLING_UTURN_TRIP_START_COUNT = 8;
+        METRIC_NAME_SIBLING_UTURN_MID_TRIP_COUNT = 9;
+        METRIC_NAME_METRIC_CALCULATION_TIME_MS = 10;
+        METRIC_NAME_SEARCH_METHOD_CRP = 11;
+        METRIC_NAME_ACTIVE_RESTRICTION_CLOSURE = 12;
+        METRIC_NAME_ACTIVE_RESTRICTION_DISRUPTION_CLOSURE = 13;
+        METRIC_NAME_WANTS_DYNAMIC_ROUTING = 14;
+        METRIC_NAME_ACTIVE_RESTRICTION_DYNAMIC_CLOSURE = 19;
+        METRIC_NAME_DISTANCE_ON_DYNAMIC_CLOSURES_METERS = 20;
+        METRIC_NAME_AVOID_HIGHWAYS = 15;
+        METRIC_NAME_AVOID_TOLLS = 16;
+        METRIC_NAME_AVOID_FERRIES = 17;
+        METRIC_NAME_ALLOW_HOV = 18;
+    }
+}

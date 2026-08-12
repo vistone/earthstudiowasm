@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.tolls.proto;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+enum LoggedClientId {
+    CLIENT_UNKNOWN = 0;
+    GMM_DOGFOOD = 1;
+    ROUTES_PREFERRED = 2;
+    GMM_PROD = 3;
+    CLIENT_DARK_LAUNCH = 4;
+    ROUTES = 5;
+    TACTILE = 6;
+}

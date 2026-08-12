@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package maps_tactile.shared.transit;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHTR";
+option java_multiple_files = true;
+option java_outer_classname = "LongDistanceOptionsProto";
+option java_package = "com.google.maps.tactile.shared.transit";
+
+message LongDistanceOptions {
+    optional bool include_transit_booking_modules = 1;
+}

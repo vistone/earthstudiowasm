@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package gws;
+
+import "net/proto2/contrib/http/options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GWS";
+option java_multiple_files = true;
+option java_outer_classname = "GeolocationContextProto";
+option java_package = "com.google.gws.shared.protos";
+
+message GeolocationContext {
+    optional string region_code = 1;
+}

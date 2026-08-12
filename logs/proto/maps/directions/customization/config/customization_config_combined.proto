@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package maps_directions_customization_logs;
+
+import "logs/proto/maps/directions/customization/config/annotation_api_config.proto";
+import "logs/proto/maps/directions/customization/config/annotation_config.proto";
+import "logs/proto/maps/directions/customization/config/customization_config.proto";
+import "logs/proto/maps/directions/customization/config/domain_config.proto";
+import "logs/proto/maps/directions/customization/config/enumeration_config.proto";
+import "logs/proto/maps/directions/customization/config/parameter_config.proto";
+import "logs/proto/maps/directions/customization/config/trip_property_config.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedCustomizationData {
+    optional LoggedDomainConfig domain_config = 1;
+    optional LoggedCustomizationAndCostFunction customization_and_cost_function = 2;
+    repeated LoggedTripPropertyAndFunction trip_property_and_function = 3;
+    repeated LoggedAnnotationAndApiConfig annotation_and_api_config = 4;
+    repeated LoggedParameterConfig parameter_config = 6;
+    repeated LoggedEnumerationConfig enumeration_config = 7;
+    
+    reserved 5;
+}
+
+message LoggedCustomizationAndCostFunction {
+    optional LoggedCustomizationConfig config = 1;
+    optional int32 binary_compilation_cl = 2;
+}
+
+message LoggedTripPropertyAndFunction {
+    optional LoggedTripPropertyConfig config = 1;
+    optional int32 binary_compilation_cl = 2;
+}
+
+message LoggedAnnotationAndApiConfig {
+    optional LoggedAnnotationConfig annotation_config = 1;
+    optional LoggedAnnotationApiConfig annotation_api_config = 2;
+}

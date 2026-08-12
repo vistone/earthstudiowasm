@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package proto2.contrib.http;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "net/proto2/proto/descriptor.proto";
+
+enum ProtoFormat {
+    UNKNOWN = 0;
+    NESTED_PARAMETER_LIST = 1;
+}
+
+extend FieldOptions {
+    optional string query_param_key = 167716325;
+    optional string hash_param_key = 194280188;
+    optional ProtoFormat proto_format = 188385980;
+    optional bool comma_separated_value = 203821100 [default = true];
+    optional string nested_param_key = 194020525;
+    optional string header_key = 194806723;
+    optional string java_converter_class = 178408386;
+    optional bool inject_java_converter = 310413575;
+    optional string javascript_part_parser = 221801649;
+    optional string history_state_object_namespace = 230256827;
+    optional string history_state_object_converter = 231829056;
+    optional string cc_converter_type = 339116085;
+    optional string cc_converter_header_file = 339363179;
+}
+
+extend EnumValueOptions {
+    optional string param_value = 167716325;
+}

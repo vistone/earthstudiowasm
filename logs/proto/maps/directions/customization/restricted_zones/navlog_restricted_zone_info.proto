@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package logs.proto.geo_restricted_zones;
+
+import "logs/maps/featureid.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedZoneInfo {
+    repeated LoggedRestrictedZone restricted_zone = 1;
+    message LoggedRestrictedZone {
+        optional logs_maps.FeatureIdProto id = 4;
+    }
+}

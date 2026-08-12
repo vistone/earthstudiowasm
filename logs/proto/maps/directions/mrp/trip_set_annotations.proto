@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "maps/directions/mrp/proto/risk_averse_routing_status.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedTripSetAnnotationsProto {
+    optional LoggedTrafficReportTripSetAnnotationProto traffic_report = 7;
+    optional LoggedRequeryTripSetAnnotationProto requery = 24;
+    optional LoggedModeAvailabilityAnnotationProto mode_availability_annotation = 25;
+    optional LoggedRiskAverseRoutingAnnotationProto risk_averse_routing = 26;
+}
+
+message LoggedTrafficReportTripSetAnnotationProto {
+    
+}
+
+message LoggedRequeryTripSetAnnotationProto {
+    
+}
+
+message LoggedModeAvailabilityAnnotationProto {
+    
+}
+
+message LoggedRiskAverseRoutingAnnotationProto {
+    optional .maps.mrp.RiskAverseRoutingStatus risk_averse_routing_status = 1;
+}

@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message BorderProto {
+    required int32 type = 1;
+    
+    optional BorderStatus status = 2 [default = STATUS_NORMAL];
+    enum BorderStatus {
+        STATUS_NORMAL = 1;
+        STATUS_DISPUTED = 2;
+        STATUS_UNSURVEYED = 3;
+        STATUS_INTERNATIONAL_WATER = 4;
+        STATUS_NEVER_DISPLAY = 5;
+        STATUS_TREATY = 6;
+        STATUS_PROVISIONAL = 7;
+        STATUS_NO_LABEL = 8;
+    }
+    
+    optional FeatureIdProto feature_id_left = 3;
+    optional FeatureIdProto feature_id_right = 4;
+    repeated OverrideBorderStatusProto override_status = 5;
+    repeated FeatureIdProto logical_border = 6;
+}
+
+message OverrideBorderStatusProto {
+    optional BorderProto.BorderStatus status = 1;
+    optional string country_code = 2;
+}

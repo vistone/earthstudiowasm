@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package maps_paint_client;
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint.client";
+
+enum SubStyleTag {
+    option features = enum_type: CLOSED
+    ;
+    SUB_STYLE_TAG_UNKNOWN = 0;
+    SUB_STYLE_TAG_SUBTITLE = 1;
+}

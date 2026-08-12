@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/proto/maps/directions/mrp/ranking_rule_type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedSimpleRankingRuleProto {
+    optional LoggedType type = 1;
+}
+
+message LoggedNestedRankingRuleProto {
+    optional LoggedType type = 1;
+    optional LoggedSimpleRankingRuleProto sub_rule = 2;
+}
+
+message LoggedRankingRuleProto {
+    oneof kind {
+        LoggedSimpleRankingRuleProto simple_rule = 1;
+        LoggedNestedRankingRuleProto nested_rule = 2;
+    }
+}

@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message AddressRangeProto {
+    repeated int32 number = 1;
+    repeated float parameter = 2;
+    optional bool same_parity = 3 [default = true];
+    optional string prefix = 4;
+    optional string suffix = 5;
+    optional .proto2.bridge.MessageSet temporary_data = 15;
+    
+    reserved 6;
+}

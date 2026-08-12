@@ -1,0 +1,44 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "i18n/localization/proto/localized_text.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "AttributionProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message Attribution {
+    repeated SingleAttribution copyright = 1;
+    repeated SingleAttribution account = 2;
+    repeated SingleAttribution photographer = 3;
+    repeated SingleAttribution agency = 4;
+    repeated SingleAttribution source = 5;
+}
+
+message SingleAttribution {
+    optional i18n.localization.LocalizedTextProto name = 1;
+    optional string url = 2;
+    optional string thumbnail_url = 3;
+    
+    optional Category category = 4;
+    enum Category {
+        UNKNOWN_CATEGORY = 0;
+        ANONYMOUS_GOOGLE_USER = 1;
+        GOOGLE_INC = 2;
+    }
+    
+    optional bool fineprint_ok = 5 [default = true];
+    optional string obfuscated_gaia_id = 6;
+    optional ContributionSummary contribution_summary = 7;
+    optional string contribution_summary_url = 8;
+}
+
+message ContributionSummary {
+    optional int32 local_guide_level = 1;
+    optional int32 photo_count = 2;
+    optional int32 review_count = 3;
+}

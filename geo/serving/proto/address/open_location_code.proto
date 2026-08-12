@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package geo_serving_proto.address;
+
+import "geo/serving/proto/address/plus_code_placesheet_priority.proto";
+import "geo/serving/proto/text/annotated_text.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPADR";
+option java_multiple_files = true;
+option java_outer_classname = "OpenLocationCodeProto";
+option java_package = "com.google.geo.serving.proto.address";
+
+message OpenLocationCode {
+    optional string ved = 1;
+    optional geo_serving_proto.text.AnnotatedText global_code = 2;
+    optional geo_serving_proto.text.AnnotatedText compound_code = 3;
+    optional PlusCodePlacesheetPriority place_sheet_priority = 4;
+}

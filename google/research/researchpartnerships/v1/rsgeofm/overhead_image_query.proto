@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package google.research.researchpartnerships.v1.rsgeofm;
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+import "google/research/researchpartnerships/v1/rsgeofm/custom_scoring_options.proto";
+import "google/type/latlng.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "OverheadImageQueryProto";
+option java_package = "com.google.research.researchpartnerships.v1.rsgeofm";
+
+message OverheadImageQueryRequest {
+    string text_query = 1;
+    int32 matches_count = 2;
+    string page_token = 9;
+    bool include_image_data = 3;
+    TimeFilter time_filter = 4;
+    GeographicalArea geography_filter = 5;
+    MergeOptions merge_options = 7;
+    OriginIdentifiers origin_identifiers = 8;
+    ModelOptions model_options = 10;
+    RetrievalOptions retrieval_options = 11;
+    
+    oneof _similarity_threshold {
+        double similarity_threshold = 6;
+    }
+}
+
+message RetrievalOptions {
+    repeated string positive_image_ids = 1;
+    repeated string negative_image_ids = 2;
+    CustomScoringOptions custom_scoring_options = 3;
+    int32 over_retrieval_multiplier = 4;
+}
+
+message TimeFilter {
+    protobuf.Timestamp start_time = 1;
+    protobuf.Timestamp end_time = 2;
+}
+
+message GeographicalArea {
+    oneof polygon_filter {
+        bytes polygon_wkb_bytes = 1;
+        Polygons st_geography_bytes = 2;
+    }
+    
+    message Polygons {
+        repeated Polygon polygons = 1;
+    }
+    
+    message Polygon {
+        bytes data = 1;
+    }
+}
+
+message MergeOptions {
+    MergeStrategy merge_strategy = 1;
+    enum MergeStrategy {
+        MERGE_STRATEGY_UNSPECIFIED = 0;
+        MERGE_STRATEGY_NONE = 1;
+        MERGE_STRATEGY_CONTAINED = 2;
+        MERGE_STRATEGY_OVERLAPPING = 3;
+    }
+    
+    bool consolidate_merged_results = 2;
+}
+
+message OverheadImageQueryResponse {
+    repeated Image matching_images = 1;
+    string next_page_token = 2;
+}
+
+message Image {
+    string id = 7;
+    string image_asset = 1;
+    float matching_score = 2;
+    LatLngRect image_extent = 3;
+    protobuf.Timestamp acquisition_time = 4;
+    RawImageData image_data = 5;
+    repeated Image merged_images = 6;
+}
+
+message LatLngRect {
+    type.LatLng lo = 1;
+    type.LatLng hi = 2;
+}
+
+message RawImageData {
+    bytes image_bytes = 1;
+    int32 width = 2;
+    int32 height = 3;
+    int32 channels = 4;
+}
+
+message OriginIdentifiers {
+    string domain = 1;
+    string region_code = 2;
+}
+
+message ModelOptions {
+    string text_model_path = 1;
+    string scam_dataset_id = 2;
+}

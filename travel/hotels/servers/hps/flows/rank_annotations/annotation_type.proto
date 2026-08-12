@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package ads_travel.rank_annotations;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+
+enum AnnotationType {
+    UNKNOWN_ANNOTATION_TYPE = 0;
+    DEALNESS_TIP = 1;
+    DEALS = 2;
+    DISTANCE_TO_POI = 3;
+    DEALS_FACTORY_TIP = 25;
+    REVIEW_SNIPPETS = 4;
+    HOTEL_AMENITIES = 5;
+    EDITORIAL_SUMMARY = 6;
+    HOTEL_RECOMMENDATION_TIP = 7;
+    HOTEL_NAV_SEARCH_TIP = 8;
+    POI_NAV_SEARCH_TIP = 9;
+    P13N_SIMILAR_HOTEL_TIP = 10;
+    HOTEL_RECENCY_TIP = 20;
+    BACKOFF_TIP = 11;
+    COUNTRY_POPULARITY_TIP = 12;
+    PARENT_CHAIN = 13;
+    WEB_SNIPPETS = 14;
+    CONTEXTUALIZED_REVIEW_SUMMARY = 15;
+    TEMPORARY_CLOSURE = 16;
+    VACATION_RENTAL_AMENITIES = 17;
+    VACATION_RENTAL_ATTRIBUTES = 18;
+    COVID19_RESPONDER = 19;
+    CRISIS_POLICY = 21;
+    TOPIC_SUMMARY = 22;
+    GENERATIVE_ENTITY_JUSTIFICATION = 23;
+    MEDIA_MENTION = 24;
+}

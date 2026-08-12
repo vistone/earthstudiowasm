@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package gws.mothership;
+
+option java_multiple_files = true;
+option java_outer_classname = "HttpEndpointLoadBalancingTypeProto";
+option java_package = "com.google.gws.mothership";
+
+enum HttpEndpointLoadBalancingType {
+    UNKNOWN = 0;
+    NORETRY = 1;
+    RETRY = 2;
+    WEB = 3;
+    WEB_ASYNC = 4;
+}

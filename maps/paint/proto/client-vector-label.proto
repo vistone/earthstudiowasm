@@ -1,0 +1,287 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_lazy_extension.proto";
+import "maps/paint/proto/client-vector-annotation-targeting.proto";
+import "maps/paint/proto/client-vector-data-bound-value.proto";
+import "maps/paint/proto/client-vector-snapping.proto";
+import "maps/paint/proto/client-vector-style-info.proto";
+import "maps/paint/proto/client-vector-tile-debug.proto";
+import "maps/paint/proto/map-element-id.proto";
+import "maps/paint/proto/maps-metadata-container.proto";
+import "maps/util/geometry-transform.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint.client";
+
+message AbsolutePointPosition {
+    optional bytes point_data = 1;
+    optional bytes offset_data = 2 [deprecated = true];
+    optional Coord2Proto point = 1000;
+    optional Coord2Proto offset = 1001 [deprecated = true];
+}
+
+message RotatedBound {
+    optional bytes center_data = 1;
+    optional int32 rotation = 2;
+    optional int32 width = 3;
+    optional int32 height = 4;
+    optional Coord2Proto center = 1000;
+}
+
+message AbsoluteLabelPosition {
+    optional AbsolutePointPosition position = 1;
+    
+    optional AnchorPoint anchor_point = 2 [default = CENTER];
+    enum AnchorPoint {
+        CENTER = 1;
+        LEFT = 2;
+        RIGHT = 3;
+        TOP = 4;
+        TOP_LEFT = 5;
+        TOP_RIGHT = 6;
+        BOTTOM = 7;
+        BOTTOM_LEFT = 8;
+        BOTTOM_RIGHT = 9;
+    }
+    
+    optional int32 rotation = 4;
+    
+    optional RotationType rotation_type = 3 [default = WORLD_ROTATION];
+    enum RotationType {
+        UNKNOWN_ROTATION = 0;
+        WORLD_ROTATION = 1;
+        SCREEN_ROTATION = 2;
+    }
+    
+    optional RotatedBound bound = 5 [deprecated = true];
+}
+
+message PolylineLabelPosition {
+    optional bytes vertex_data = 1 [ctype = CORD];
+    optional int32 vertex_count = 3;
+    optional int32 orthogonal_offset = 2;
+    
+    optional Anchor anchor = 4 [default = ANCHOR_MIDDLE];
+    enum Anchor {
+        ANCHOR_MIDDLE = 1;
+        ANCHOR_BEGINNING = 2;
+        ANCHOR_END = 3;
+    }
+    
+    optional int32 anchor_offset = 5;
+    optional Point2List vertex = 1000;
+}
+
+message LabelGroup {
+    repeated LabelElement element = 1;
+    optional int32 multi_zoom_style_index = 2 [default = -1];
+    optional int64 multi_zoom_style_id = 3 [default = -1];
+    
+    optional Justification justification = 4 [default = CENTER_JUSTIFY];
+    enum Justification {
+        CENTER_JUSTIFY = 1;
+        LEFT_JUSTIFY = 2;
+        RIGHT_JUSTIFY = 3;
+    }
+    
+    optional ClientVectorStyleInfo client_vector_style_info = 5;
+    optional int32 z_plane_for_sorting = 1000;
+    
+    extensions 25000000 to 524999999, 525000000 to max;
+}
+
+message LabelElement {
+    optional string text = 1;
+    optional int32 multi_zoom_style_index = 2 [default = -1];
+    optional int64 multi_zoom_style_id = 4 [default = -1];
+    optional int32 client_internal_major_epoch_override = 2000;
+    optional int32 multi_zoom_sub_style_tag = 5;
+    optional bool line_break = 3;
+    repeated int32 sprite_index = 6 [packed = true];
+    repeated int32 outline_sprite_index = 7 [packed = true];
+    repeated sint32 sprite_x_pos = 8 [packed = true];
+    repeated sint32 sprite_y_pos = 9 [packed = true];
+    repeated sint32 outline_sprite_x_pos = 10 [packed = true];
+    repeated sint32 outline_sprite_y_pos = 11 [packed = true];
+    optional int32 z_plane_for_sorting = 1000;
+    optional string debug_text = 1001;
+    optional ClientVectorStyleInfo client_vector_style_info = 12;
+    
+    extensions 25000000 to 524999999, 525000000 to max;
+}
+
+message GeometryDescription {
+    repeated float local_point_xyz = 2 [packed = true];
+    repeated float s2_relative_point_st = 3 [packed = true];
+    repeated float local_q_label = 4 [packed = true];
+}
+
+message LabelRenderOp {
+    optional LabelGroup primary = 1;
+    optional LabelGroup secondary = 2;
+    optional GeometryDescription label_geometry = 21;
+    optional AbsoluteLabelPosition point_position = 3;
+    optional PolylineLabelPosition line_position = 4;
+    
+    optional TiePointPosition secondary_relative_position = 7 [default = CENTER_LEFT_TO_CENTER_RIGHT];
+    enum TiePointPosition {
+        BOTTOM_RIGHT_TO_TOP_LEFT = 0;
+        BOTTOM_RIGHT_TO_TOP_RIGHT = 1;
+        BOTTOM_CENTER_TO_TOP_CENTER = 2;
+        BOTTOM_LEFT_TO_TOP_LEFT = 3;
+        BOTTOM_LEFT_TO_TOP_RIGHT = 4;
+        TOP_RIGHT_TO_TOP_LEFT = 5;
+        CENTER_RIGHT_TO_CENTER_LEFT = 6;
+        BOTTOM_RIGHT_TO_BOTTOM_LEFT = 7;
+        TOP_LEFT_TO_TOP_RIGHT = 8;
+        CENTER_LEFT_TO_CENTER_RIGHT = 9;
+        BOTTOM_LEFT_TO_BOTTOM_RIGHT = 10;
+        TOP_RIGHT_TO_BOTTOM_LEFT = 11;
+        TOP_RIGHT_TO_BOTTOM_RIGHT = 12;
+        TOP_CENTER_TO_BOTTOM_CENTER = 13;
+        TOP_LEFT_TO_BOTTOM_LEFT = 14;
+        TOP_LEFT_TO_BOTTOM_RIGHT = 15;
+    }
+    
+    optional int32 attributes = 14;
+    optional int32 rank = 11;
+    optional int32 min_additional_zoom_eighths = 12;
+    optional int32 max_additional_zoom_eighths = 13;
+    optional fixed64 base_tile_op_id = 15 [deprecated = true];
+    optional uint32 legacy_base_tile_op_id = 6 [deprecated = true];
+    optional int32 multi_zoom_style_index = 8 [default = -1];
+    optional int64 multi_zoom_style_id = 5 [default = -1];
+    optional int32 z_grade = 9;
+    optional fixed32 z_within_grade = 10;
+    repeated int32 style_transform_tag = 16 [packed = true];
+    repeated AnnotationAttribute annotation_attribute = 17;
+    
+    repeated LabelRepresentation alternate_representation = 18;
+    message LabelRepresentation {
+        optional int32 representation_tag = 1;
+        optional LabelGroup primary = 2;
+        optional LabelGroup secondary = 3;
+        optional int64 multi_zoom_style_id = 4 [default = -1];
+        optional int32 multi_zoom_style_index = 9 [default = -1];
+        optional ClientVectorStyleInfo client_vector_style_info = 10;
+        optional int32 attributes = 5;
+        repeated AnnotationAttribute annotation_attribute = 6;
+        optional LabelRenderOp extensions_holder = 7;
+        optional int32 rank = 8;
+        
+        extensions 25000000 to max;
+    }
+    
+    repeated LabelRepresentationZooms representation_placement_instruction = 19;
+    message LabelRepresentationZooms {
+        optional int32 representation_tag = 1;
+        optional int32 min_zoom_eighths = 2;
+        optional int32 max_zoom_eighths = 3;
+        optional int32 representation_preference_value = 4;
+    }
+    
+    repeated DataBoundValue data_bound_value = 20;
+    optional MapsMetadataContainer maps_metadata_container = 22;
+    optional bool disable_client_logging = 23 [deprecated = true];
+    optional MapElementId map_element_id = 26;
+    optional ClientVectorStyleInfo client_vector_style_info = 27;
+    
+    repeated SelectedRepresentationZooms selected_representation_placement_instruction = 28;
+    message SelectedRepresentationZooms {
+        optional int32 representation = 1;
+        optional int32 min_zoom_eighths = 2;
+        optional int32 max_zoom_eighths = 3;
+        optional int32 representation_preference_value = 4;
+    }
+    
+    repeated LabelRepresentation selected_representation = 29;
+    optional int32 z_plane_for_sorting = 1000;
+    
+    oneof geometry_modifier {
+        GeometrySnapParameters geometry_snap_parameters = 24;
+        GeometryProjectionParameters geometry_projection_parameters = 25;
+    }
+    
+    extensions 25000000 to 524999999, 525000000 to max;
+    
+    enum Attributes {
+        ATTRIBUTE_IS_REQUIRED = 1;
+        ATTRIBUTE_ALLOW_OVERLAP = 2;
+        ATTRIBUTE_HIDE_WHEN_TILTED = 4;
+        ATTRIBUTE_DO_NOT_FLIP = 8;
+        ATTRIBUTE_SECONDARY_DISPLAY_OPTIONAL = 16;
+        ATTRIBUTE_IS_REPEATED_LABEL = 32;
+        ATTRIBUTE_LIMIT_REPEATS = 128;
+    }
+}
+
+message LineLabelCandidate {
+    optional LabelElement element = 1;
+    optional int32 min_zoom_eighths = 2;
+    optional int32 max_zoom_eighths = 3;
+    optional int32 rank = 4;
+    repeated DataBoundValue data_bound_value = 5;
+    optional MapsMetadataContainer maps_metadata_container = 6;
+    
+    optional AlignmentMode alignment_mode = 7;
+    enum AlignmentMode {
+        ALIGNMENT_NONE = 0;
+        ALIGNMENT_OVER = 1;
+        ALIGNMENT_SPLAT_X_UP = 2;
+    }
+    
+    optional bool flip_content_for_viewport = 8 [default = true];
+    optional bool is_repeated = 9;
+    optional bool limit_repeats = 10;
+    optional int32 multi_zoom_style_index = 11 [default = -1];
+    optional int64 multi_zoom_style_id = 12 [default = -1];
+    repeated int32 close_label_threshold_eighths = 13 [packed = true];
+    optional fixed64 close_label_threshold_dedup_id = 14 [deprecated = true];
+    optional MapElementId map_element_id = 15;
+    optional ClientVectorStyleInfo client_vector_style_info = 16;
+    
+    extensions 10000 to max;
+}
+
+message LineLabelSeedPoints {
+    repeated float priority = 1 [packed = true];
+    repeated float inset = 2 [packed = true];
+    
+    repeated Justification justification = 3 [packed = true];
+    enum Justification {
+        JUSTIFY_UNKNOWN = 0;
+        JUSTIFY_CENTER = 1;
+        JUSTIFY_LEFT = 2;
+        JUSTIFY_RIGHT = 3;
+    }
+}
+
+message LineLabelGeometry {
+    optional bytes vertex_data = 1 [ctype = CORD];
+    repeated double vertices = 9 [packed = true];
+    optional maps_util.Transform3D local_t_model = 8;
+    optional LineLabelSeedPoints seed_points = 2;
+    optional double clipped_front = 5;
+    optional double clipped_back = 6;
+    optional double total_length = 7;
+    
+    oneof geometry_modifier {
+        GeometrySnapParameters geometry_snap_parameters = 3;
+        GeometryProjectionParameters geometry_projection_parameters = 4;
+    }
+}
+
+message LineLabelCandidateSet {
+    optional LineLabelGeometry geometry_3d = 1;
+    repeated LineLabelCandidate candidates = 2;
+    optional int32 multi_zoom_style_index = 3 [default = -1];
+    optional int64 multi_zoom_style_id = 4 [default = -1];
+    optional ClientVectorStyleInfo client_vector_style_info = 5;
+    
+    extensions 10000 to max;
+}

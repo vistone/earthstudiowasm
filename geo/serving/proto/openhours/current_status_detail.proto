@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geo_serving_proto.openhours;
+
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+
+option objc_class_prefix = "GSPOPH";
+option java_multiple_files = true;
+option java_outer_classname = "CurrentStatusDetailProto";
+option java_package = "com.google.geo.serving.proto.openhours";
+
+enum CurrentStatusDetail {
+    UNKNOWN_CURRENT_STATUS_DETAIL = 0;
+    OPEN_NOW = 1;
+    CLOSING_SOON = 2;
+    OPEN_LATER = 4;
+    CLOSED_FOR_DAY = 5;
+    CLOSED_ALL_DAY = 6;
+}

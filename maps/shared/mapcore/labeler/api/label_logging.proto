@@ -1,0 +1,11 @@
+syntax = "editions";
+
+package mapcore.labeler;
+
+option objc_class_prefix = "GMRL";
+option java_outer_classname = "LabelLogging";
+option java_package = "com.google.maps.shared.labeler";
+
+message PlacedLabelLoggingMetadata {
+    optional bool is_selected = 1;
+}

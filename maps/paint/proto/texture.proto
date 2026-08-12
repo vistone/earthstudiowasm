@@ -1,0 +1,43 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_package = "com.google.maps.paint";
+
+message TextureRequest {
+    optional ChevronParameters chevron = 1;
+    optional AssetParameters asset = 2;
+    
+    extensions 1000;
+}
+
+message ChevronParameters {
+    optional int32 width = 1;
+    
+    repeated Chevron chevron = 2;
+    message Chevron {
+        optional fixed32 color_argb = 1;
+        optional int32 length = 2;
+    }
+    
+    optional int32 head_length = 3;
+    optional int32 outline_stroke_width = 4;
+    optional fixed32 outline_color_argb = 5;
+    optional int32 padding_horizontal = 6;
+    
+    optional ChevronComponent component = 7 [default = CHEVRON_FULL];
+    enum ChevronComponent {
+        CHEVRON_FULL = 0;
+        CHEVRON_REPEATABLE_TORSO_TEXTURE = 1;
+        CHEVRON_HEAD_ALPHA_MASK = 2;
+        CHEVRON_TAIL_ALPHA_MASK = 3;
+    }
+}
+
+message AssetParameters {
+    optional string filename = 1;
+}

@@ -1,0 +1,7 @@
+syntax = "editions";
+
+package geo_photo.metadata;
+
+message PanoSemanticMap {
+    optional bytes pano_semantic_map_webp = 1;
+}

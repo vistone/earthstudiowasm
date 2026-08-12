@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/proto/maps/directions/mrp/query_plan_preset.proto";
+import "logs/proto/maps/pathfinder/client/cost-model-options.proto";
+import "logs/proto/maps/pathfinder/client/logging-context.proto";
+import "logs/proto/maps/pathfinder/client/mrp-selector-info.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedRequeryTokenTripContext {
+    oneof version {
+        LoggedVersion1 version1 = 1;
+    }
+    
+    message LoggedVersion1 {
+        repeated pathfinder.client.LoggedMRPSelectorInfo selector_infos = 1;
+        optional pathfinder.client.LoggedCostModelOptions cost_model_options = 2;
+        optional pathfinder.client.LoggedLoggingContext logging_context = 4;
+        optional LoggedQueryPlanPreset original_query_plan_preset = 5;
+        optional string customization_id = 6;
+    }
+}

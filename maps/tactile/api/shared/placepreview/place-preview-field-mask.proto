@@ -1,0 +1,61 @@
+syntax = "proto2";
+
+package maps_tactile.shared.placepreview;
+
+import "geo/serving/proto/address/address_options.proto";
+import "maps/tactile/api/shared/placepreview/cost-options.proto";
+import "maps/tactile/api/shared/placepreview/photo-preview-options.proto";
+import "maps/tactile/api/shared/placepreview/scalable-attribute-options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPP";
+option java_multiple_files = true;
+option java_outer_classname = "PlacePreviewFieldMaskProto";
+option java_package = "com.google.maps.tactile.shared.placepreview";
+
+message PlacePreviewFieldMask {
+    optional bool include_place_id = 1;
+    optional bool include_feature_id = 2;
+    optional bool include_knowledge_graph_mid = 14;
+    optional bool include_maps_place_identifier = 25;
+    optional bool include_lat_lng = 3;
+    optional bool include_title = 4;
+    optional bool include_local_language_title = 22;
+    optional bool include_single_line_address = 5;
+    optional bool include_address = 26;
+    optional geo_serving_proto.address.AddressOptions address_options = 27;
+    
+    optional GeocodeOptions geocode_options = 24;
+    message GeocodeOptions {
+        optional bool include_is_geocoded_address = 1;
+    }
+    
+    optional int32 num_photo = 6 [default = 0];
+    optional PhotoPreviewOptions photo_options = 7;
+    optional bool include_num_rating_stars = 8;
+    optional bool include_review_count = 9;
+    optional bool include_formatted_review_count = 32;
+    optional int32 num_category = 10 [default = 0];
+    
+    optional CategoryOptions category_options = 28;
+    message CategoryOptions {
+        optional bool use_short_name = 1;
+    }
+    
+    optional bool include_open_status = 11;
+    optional bool include_open_hours_info = 19;
+    optional bool include_map_label = 13;
+    optional bool include_map_rendering_data = 20;
+    optional bool include_neighborhood = 15;
+    optional bool include_cost_info = 16;
+    optional CostOptions cost_options = 23;
+    optional bool include_phone_number = 17;
+    optional bool include_place_type_icon = 18;
+    optional bool include_timezone_id = 21;
+    optional bool include_regional_relation_info = 29;
+    optional bool include_scalable_attribute_container = 33;
+    optional ScalableAttributeOptions scalable_attribute_options = 30;
+    optional bool include_additional_cuisine_info = 31;
+    
+    extensions 12;
+}

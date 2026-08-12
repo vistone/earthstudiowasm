@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package maps_tactile.shared.place;
+
+import "maps/tactile/api/shared/feature-id.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPL";
+option java_multiple_files = true;
+option java_outer_classname = "RegionalRelationProto";
+option java_package = "com.google.maps.tactile.shared.place";
+
+message RegionalRelation {
+    optional FeatureId feature_id = 1;
+    optional string mid = 4;
+    optional float bundle_name_priority = 2;
+    
+    repeated RelationName name = 3;
+    message RelationName {
+        optional string text = 1;
+    }
+    
+    optional Geometry geometry = 5;
+    message Geometry {
+        optional double polygon_area_km2 = 1;
+        optional LatLngRectangle bound = 2;
+    }
+}

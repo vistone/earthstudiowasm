@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "maps/tactile/api/shared/directions/retrieval-client.proto";
+import "maps/tactile/api/shared/hotels/hotel-map-layer-options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "PaintDescriptionOptionsProto";
+option java_package = "com.google.maps.tactile";
+
+message PaintDescriptionOptions {
+    optional bool exclude_spotlight_layer = 1;
+    optional bool use_explicit_features = 3;
+    optional bool hotels_layer_context = 4;
+    optional bool allow_additional_hotel_results = 5 [deprecated = true];
+    
+    optional SearchMapLayerOptions search_map_layer_options = 6;
+    message SearchMapLayerOptions {
+        optional bool enable_categorical_injection = 1;
+        optional bool enable_spotlit = 2;
+    }
+    
+    optional maps_tactile.shared.hotels.HotelMapLayerOptions hotel_map_layer_options = 7;
+    optional bool use_directions_pipe_parameters = 8;
+    optional maps_tactile.shared.directions.RetrievalClient directions_pipe_retrieval_client = 10;
+    optional bool omit_directions_pipe_parameters_directions_request = 11;
+    optional bool use_popular_areas_carousel_pipe_metadata = 9;
+    
+    reserved 2;
+}

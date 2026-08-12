@@ -1,0 +1,12 @@
+syntax = "editions";
+
+package earth.document;
+
+message ExternalFileSystemCapabilities {
+    optional bool can_mutate_contents = 1;
+    optional bool can_export = 2;
+    optional bool can_discard = 3;
+    optional bool is_external = 4;
+    optional bool can_write_to_handle = 5;
+    optional bool is_dirty = 6;
+}

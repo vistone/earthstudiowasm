@@ -1,0 +1,35 @@
+syntax = "proto2";
+
+package logs;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/hotels/hotels_feature_data.proto";
+import "maps/tactile/api/shared/hotels/lodging-type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_multiple_files = true;
+option java_outer_classname = "HotelBookingPartnerDataProto";
+option java_package = "com.google.common.logging";
+
+message HotelBookingPartnerData {
+    optional uint64 google_hotel_id = 1 [jstype = JS_STRING];
+    optional string place_mid = 14;
+    optional maps_tactile.LodgingType lodging_type = 15;
+    optional int32 partner_id = 4;
+    optional string partner_hotel_id = 5;
+    optional bool hotel_booking_module_has_ad_supplier = 2;
+    optional bool hotel_booking_module_has_organic_supplier = 3;
+    optional string check_in_date_iso = 6;
+    optional int32 length_of_stay = 7;
+    optional int32 advance_booking_window_days = 8;
+    optional int32 hotel_occupancy_adults = 9;
+    optional int32 hotel_occupancy_children = 10;
+    optional double price_per_night = 11;
+    optional double taxes_and_fees_per_night = 12;
+    optional double conversion_rate_to_usd = 13;
+    optional bool is_crawled = 17;
+    optional bool is_owner = 18;
+    optional string url = 19;
+    optional logs.proto.hotels.Refinements refinements = 16;
+}

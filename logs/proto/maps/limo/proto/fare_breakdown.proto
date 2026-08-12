@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package logs.proto.maps_limo;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedMonetaryCost {
+    optional double amount = 1;
+    optional string currency = 2;
+    optional int32 num_legs = 3 [default = 1];
+}
+
+message LoggedFareBreakdown {
+    repeated LoggedFareGroup fare_group = 1;
+    message LoggedFareGroup {
+        repeated LoggedFareItem fare_item = 1;
+        message LoggedFareItem {
+            optional string description = 1;
+            optional LoggedMonetaryCost cost = 2;
+        }
+    }
+}

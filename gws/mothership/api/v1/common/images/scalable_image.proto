@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package gws.mothership.api.v1.common.images;
+
+import "gws/mothership/api/v1/common/net/url.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "MSPI";
+option java_multiple_files = true;
+option java_outer_classname = "ScalableImageProto";
+option java_package = "com.google.gws.mothership.api.v1.common.images";
+
+message ScalableImage {
+    string svg_text = 1;
+    net.Url svg_url = 2;
+}

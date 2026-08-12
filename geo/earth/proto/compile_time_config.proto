@@ -1,0 +1,34 @@
+syntax = "editions";
+
+package geo.earth.proto;
+
+import "geo/earth/client_config/config.proto";
+import "google/internal/earth/v1/client_config.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+
+message CompileTimeConfig {
+    optional LayerConfig layer_config = 1;
+    map<string, google.internal.earth.v1.config.AbsoluteUrlTemplate> assets = 2;
+}
+
+message LayerConfig {
+    optional BaseLayerStyleConfig base_layer_style_config = 1;
+    optional PaintFeLayerConfig paint_fe_layer_config = 2;
+    optional RasterLayerConfig raster_layer_config = 3;
+    optional bool layer_style_collapse_pois = 4;
+}
+
+message BaseLayerStyleConfig {
+    repeated .earth.config.BaseLayerStyle base_layer_style = 1;
+}
+
+message PaintFeLayerConfig {
+    repeated .earth.config.PaintFeLayer paint_fe_layer = 1;
+}
+
+message RasterLayerConfig {
+    repeated .earth.config.RasterLayer raster_layer = 1;
+}

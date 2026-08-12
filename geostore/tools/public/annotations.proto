@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package geostore;
+
+import "net/proto2/proto/descriptor.proto";
+
+option java_package = "com.google.geostore.tools";
+
+enum FeatureIdForwardingRule {
+    DO_NOT_FORWARD_REFERENCE = 1;
+    FORWARD_REFERENCE = 2;
+    FORWARD_REFERENCE_AND_DEDUP = 3;
+}
+
+enum FeatureIdDanglingReferenceRule {
+    DO_NOT_DROP_REFERENCE = 1;
+    DELETE_REFERENCE = 2;
+    DELETE_PARENT_MESSAGE = 3;
+}
+
+extend .proto2.FieldOptions {
+    optional FeatureIdForwardingRule feature_id_forwarding_rule = 143183347;
+    optional FeatureIdDanglingReferenceRule feature_id_dangling_reference_rule = 143183348;
+}

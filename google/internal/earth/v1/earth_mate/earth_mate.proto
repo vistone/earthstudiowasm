@@ -1,0 +1,69 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.earthmate;
+
+import "geo/earth/proto/commands.proto";
+import "geo/earth/proto/earth_mate/earth_mate_attribution.proto";
+import "geo/earth/proto/earth_mate/earth_mate_request.proto";
+import "geo/earth/proto/earth_mate/earth_mate_response.proto";
+import "geo/earth/proto/earth_mate/file_attachment.proto";
+import "google/internal/earth/v1/shared.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "wireless/android/privacy/annotations/proto/collection_basis_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.earthmate";
+
+message ChatRequestWrapper {
+    optional ClientMetadata client_metadata = 1;
+    optional geo.earth.proto.earth_mate.EarthMateQueryRequest request = 2;
+    optional int32 retry = 3;
+}
+
+message RateRequestWrapper {
+    optional ClientMetadata client_metadata = 1;
+    optional geo.earth.proto.earth_mate.EarthMateRateRequest request = 2;
+}
+
+message StreamChatRequest {
+    optional geo.earth.proto.earth_mate.EarthMateQueryRequest request = 1;
+}
+
+message AgentThinkingState {
+    optional string status_text = 1;
+}
+
+message PartialUpdate {
+    optional AgentThinkingState thinking_state = 1 [deprecated = true];
+    repeated geo.earth.proto.Command commands = 2;
+    optional string output_text = 3;
+    repeated geo.earth.proto.earth_mate.EarthMateAttribution attributions = 4;
+    optional string thought = 5;
+    optional string status_update = 6;
+    optional AgentStatus status = 7;
+}
+
+message FinalUpdate {
+    repeated geo.earth.proto.Command commands = 1 [deprecated = true];
+    optional string output_text = 2;
+    optional geo.earth.proto.earth_mate.QueryExecutionMetadata query_execution_metadata = 3;
+    repeated geo.earth.proto.earth_mate.EarthMateAttribution attributions = 4 [deprecated = true];
+    optional geo.earth.proto.earth_mate.FileAttachment viewport_file_attachment = 5;
+}
+
+message StreamChatResponse {
+    optional string chat_id = 1;
+    
+    oneof response_type {
+        PartialUpdate partial_update = 2;
+        FinalUpdate final_update = 3;
+    }
+}
+
+enum AgentStatus {
+    AGENT_STATUS_UNSPECIFIED = 0;
+    AGENT_STATUS_THINKING = 1;
+    AGENT_STATUS_PROCESSING = 2;
+}

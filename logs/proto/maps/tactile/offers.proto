@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package logs_tactile;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.tactile";
+
+message OfferData {
+    optional string id = 1;
+    optional string source = 2;
+    optional bool is_promoted = 3;
+}

@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package pathfinder.crp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+
+message IterativeSearchConfig {
+    optional int32 max_num_search_iterations = 1;
+    optional int32 max_num_search_iterations_alternates = 2;
+    
+    reserved 3;
+    
+    reserved "min_num_segments_with_overrides_for_iterative_search";
+}

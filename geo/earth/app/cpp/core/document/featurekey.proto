@@ -1,0 +1,12 @@
+syntax = "editions";
+
+package earth.document.proto;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "FeatureKeyProto";
+
+message FeatureKey {
+    optional string key = 1;
+}

@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package logs;
+
+import "maps/tactile/api/directions-result-common.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps";
+
+message DisruptionsImpressionData {
+    optional DisruptionsSurface disruptions_surface = 1;
+    enum DisruptionsSurface {
+        DISRUPTIONS_SURFACE_UNKNOWN = 0;
+        DIRECTIONS = 1;
+        NAVIGATION = 2;
+    }
+    
+    optional maps_tactile.directions.IncidentType incident_type = 2;
+}

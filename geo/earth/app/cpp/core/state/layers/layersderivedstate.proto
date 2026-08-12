@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/layers/baselayerstyles.proto";
+import "geo/earth/proto/mapstyle.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Layersderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derived";
+
+message LayersDerivedState {
+    optional bool layers_visible = 1;
+    optional bool three_d_imagery_available = 2;
+    optional bool three_d_imagery_enabled = 3;
+    optional bool use_animated_clouds = 4;
+    optional .earth.layers.GridlinesStyle gridlines_style = 5;
+    optional .earth.layers.MapStyle map_style = 6;
+    optional bool timelapse_available = 7;
+    optional bool timelapse_enabled = 8;
+    optional bool time_machine_available = 9;
+    optional bool time_machine_enabled = 10;
+    optional bool updated_imagery_enabled = 11;
+    optional bool three_d_coverage_enabled = 12;
+    optional bool pinned_projects_enabled = 16;
+}

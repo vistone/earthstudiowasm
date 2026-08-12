@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geo_serving_proto.userreactions;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPUR";
+option java_multiple_files = true;
+option java_outer_classname = "ReactionTypeProto";
+option java_package = "com.google.geo.serving.proto.userreactions";
+
+enum ReactionType {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_REACTION_TYPE = 0;
+    THUMBS_UP = 1;
+    THUMBS_DOWN = 2;
+    LOVE = 3;
+    HELPFUL = 4;
+    AMAZING = 5;
+    YUM = 6;
+    OMG = 7;
+}

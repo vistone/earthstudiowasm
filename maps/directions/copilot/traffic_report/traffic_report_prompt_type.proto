@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package maps_directions.copilot;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TrafficReportPromptTypeProto";
+option java_package = "com.google.maps.directions.copilot.proto";
+
+enum PromptType {
+    PROMPT_TYPE_UNSPECIFIED = 0;
+    PROMPT_TYPE_PRE_FLIGHT = 1;
+    PROMPT_TYPE_TROUBLE_AHEAD = 2;
+    PROMPT_TYPE_DYNAMIC_REROUTE = 3;
+}

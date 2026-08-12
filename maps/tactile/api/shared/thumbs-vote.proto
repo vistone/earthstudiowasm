@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "geo/serving/proto/photos/image_key.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "ThumbsVoteProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message ThumbsVoteKey {
+    optional ContentType content_type = 1;
+    enum ContentType {
+        UNKNOWN_CONTENT_TYPE = 0;
+        REVIEW = 1;
+        PLACE_QA = 2;
+        PHOTO = 3;
+    }
+    
+    optional string content_id = 2;
+    optional geo_serving_proto.photos.ImageKey image_key = 3;
+    optional int32 index_in_photoset = 4;
+}
+
+message ThumbsVoteInfo {
+    optional int32 thumbs_up_count = 1;
+    optional bool user_voted = 2;
+    optional bool user_voted_down = 3;
+    optional ThumbsVoteType vote = 4;
+}
+
+enum ThumbsVoteType {
+    UNKNOWN_VOTE_TYPE = 0;
+    THUMBS_UP = 1;
+    THUMBS_DOWN = 2;
+    THUMBS_VOTE_NONE = 3;
+}

@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "geo/serving/proto/photos/video_stream.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "VideoPreviewProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message VideoPreview {
+    optional int64 duration_ms = 1;
+    repeated VideoStream video_streams = 2;
+}

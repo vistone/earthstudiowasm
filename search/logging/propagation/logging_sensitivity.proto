@@ -1,0 +1,36 @@
+syntax = "editions";
+
+package search.logging.propagation;
+
+import "knowledge/proto/queryunderstandingservice/resolution/query_resolution_extensions.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "search/logging/redaction/enums.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+;
+option java_package = "com.google.search.logging.propagation";
+
+message LoggingSensitivity {
+    optional SensitivityType sensitivity_type = 1;
+    enum SensitivityType {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN = 0;
+        NOT_SENSITIVE = 1;
+        SENSITIVE = 2;
+    }
+    
+    repeated redaction.RedactionReason redaction_reasons = 3;
+    optional bool qrewrite_can_override = 4;
+    
+    reserved 2;
+    
+    extend .proto2.bridge.MessageSet {
+        optional LoggingSensitivity message_set_extension = 203068059;
+    }
+    
+    extend knowledge.proto.PerQueryDataAndSignals {
+        optional LoggingSensitivity per_query_data_and_signals_extension = 1098;
+    }
+}

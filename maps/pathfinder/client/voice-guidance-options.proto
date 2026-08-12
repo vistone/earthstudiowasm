@@ -1,0 +1,12 @@
+syntax = "editions";
+
+package pathfinder;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.pathfinder.client";
+
+message VoiceGuidanceOptions {
+    optional bool enable_traffic_lights = 1 [deprecated = true];
+}

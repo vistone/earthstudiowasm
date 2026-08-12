@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package pattributes;
+
+import "net/proto2/proto/descriptor.proto";
+import "privacy/pattributes/containers/proto_field/proto_field_attributes.proto";
+
+option java_outer_classname = "ProtoFieldAnnotations";
+option java_package = "com.google.pattributes.annotations";
+
+extend .proto2.FieldOptions {
+    repeated ProtoFieldAttributes proto_field = 535801427;
+}
+
+extend .proto2.EnumOptions {
+    repeated ProtoFieldAttributes all_enum_fields = 525000038;
+}
+
+extend .proto2.MessageOptions {
+    repeated ProtoFieldAttributes all_message_fields = 535801327;
+}

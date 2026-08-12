@@ -1,0 +1,52 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "geostore/base/proto/options.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message PriceRangeProto {
+    optional double lower_price = 1;
+    optional double upper_price = 2;
+    optional string currency = 3;
+    
+    optional UnitsCategory units = 4;
+    enum UnitsCategory {
+        ANY_UNITS = 0;
+        PER_USE = 1;
+        PER_PHONE_CALL = 17;
+        PER_RIDE = 18;
+        PER_TIME_UNIT = 2;
+        PER_SECOND = 33;
+        PER_MINUTE = 34;
+        PER_HOUR = 35;
+        PER_DAY = 36;
+        PER_NIGHT = 37;
+        PER_WEEK = 38;
+        PER_MONTH = 39;
+        PER_YEAR = 40;
+        PER_VOLUME_UNIT = 4;
+        PER_LITER = 65;
+        PER_GLASS = 66;
+        PER_BOTTLE = 67;
+        PER_POT = 68;
+        PER_LENGTH_UNIT = 5;
+        PER_CENTIMETER = 81;
+        PER_METER = 82;
+        PER_KILOMETER = 83;
+        PER_MASS_UNIT = 6;
+        PER_GRAM = 97;
+        PER_KILOGRAM = 98;
+        PER_OUNCE = 99;
+        PER_POUND = 100;
+    }
+    
+    extend .proto2.bridge.MessageSet {
+        optional PriceRangeProto message_set_extension = 15000834;
+    }
+}

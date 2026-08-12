@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package geo_serving_proto.ads;
+
+import "geo/serving/proto/link/link.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPADS";
+option java_multiple_files = true;
+option java_outer_classname = "MyAdCenterPanelDataProto";
+option java_package = "com.google.geo.serving.proto.ads";
+
+message MyAdCenterPanelData {
+    optional TokenData token_data = 1;
+    message TokenData {
+        optional string encrypted_wta_token = 1;
+    }
+    
+    optional UrlData url_data = 2;
+    message UrlData {
+        optional geo_serving_proto.link.Link my_ad_center_panel_url = 1;
+    }
+}

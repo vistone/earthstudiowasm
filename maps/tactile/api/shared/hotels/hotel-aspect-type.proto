@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "HotelAspectTypeProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+enum HotelAspectType {
+    UNKNOWN_HOTEL_ASPECT_TYPE = 0;
+    BOUTIQUE = 1;
+    BED_AND_BREAKFAST = 2;
+    RESORT = 3;
+    HOSTEL = 4;
+    INN = 5;
+    MOTEL = 6;
+    SPA = 7;
+    WELLNESS = 8;
+    CASINO = 9;
+}

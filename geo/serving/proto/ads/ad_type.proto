@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package geo_serving_proto.ads;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPADS";
+option java_multiple_files = true;
+option java_outer_classname = "AdTypeProto";
+option java_package = "com.google.geo.serving.proto.ads";
+
+enum AdType {
+    SEARCH_AD = 0;
+    DEPRECATED_QUERYLESS_AD = 1 [deprecated = true];
+    ENTITY_AD = 2;
+    LOCAL_UNIVERSAL_SEARCH_AD = 3;
+    GOOGLE_LOCAL_SERVICES_AD = 4;
+    OCCUPANT_LOCATION_AD = 5;
+    PROMOTED_PLACES_AD = 6;
+    LOCAL_TOP_AD = 7;
+    GEOPOLITICAL_PLACESHEET_AD = 8;
+    SUGGEST_AD = 9;
+    SPONSORED_ACTION_AD = 10;
+}

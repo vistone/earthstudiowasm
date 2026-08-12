@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package logs.proto.searchbox;
+
+import "google/api/inclusion.proto";
+import "logs/proto/searchbox/action_on_google_annotation.proto";
+import "logs/proto/searchbox/action_type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGSB";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.searchbox";
+
+message ActionInfo {
+    optional ActionType action_type = 1;
+    optional string package_id = 2;
+    optional ActionsOnGoogleAnnotation aog_annotation = 3;
+    optional string action_uri = 4;
+    optional string intent_name = 5;
+    optional uint32 kesem_action_type = 6;
+}

@@ -1,0 +1,39 @@
+syntax = "editions";
+
+package pathfinder.crp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "ManeuverDetectorConfigProto";
+
+message ManeuverDetectorConfig {
+    optional bool use_geometry_facade = 1;
+    optional SimpleTurnConfig simple_turn_config = 2;
+    optional RoundaboutConfig roundabout_config = 3;
+    optional ComplexUTurnConfig complex_u_turn_config = 4;
+}
+
+message SimpleTurnConfig {
+    optional int32 max_angle_considered_straight_degrees = 1;
+}
+
+message RoundaboutConfig {
+    optional int32 max_angle_considered_straight_degrees = 1;
+    optional int32 min_angle_considered_uturn_degrees = 2;
+}
+
+message ComplexUTurnConfig {
+    repeated TypeConfig type_config = 1;
+    message TypeConfig {
+        optional Type type = 1;
+        optional int32 max_spanning_distance_meters = 2;
+        optional int32 max_angle_degrees_to_consider_uturn = 3;
+        optional int32 max_distance_meters_between_uturn_segments = 4;
+    }
+    
+    enum Type {
+        TYPE_UNSPECIFIED = 0;
+        TYPE_RAMP = 1;
+        TYPE_COMPLEX_INTERSECTION = 2;
+    }
+}

@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package geo_serving_proto.phonenumber;
+
+import "geo/serving/proto/link/link.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "webserver/shared/gws/eval/gws_eval_proto_options.proto";
+
+option objc_class_prefix = "GSPPN";
+option java_multiple_files = true;
+option java_outer_classname = "PhoneNumberProto";
+option java_package = "com.google.geo.serving.proto.phonenumber";
+
+message PhoneNumber {
+    optional string display_phone_number = 1;
+    repeated FormattedPhoneNumber formatted_phone_number = 2;
+    optional string phone_label = 3;
+    optional string dial_phone_number = 4;
+    optional string display_call_rate = 5;
+    optional geo_serving_proto.link.Link phone_number_link = 6;
+}
+
+message FormattedPhoneNumber {
+    optional string display_phone_number = 1;
+    optional FormatType format_type = 2;
+}
+
+enum FormatType {
+    UNKNOWN_FORMAT_TYPE = 0;
+    NATIONAL = 1;
+    INTERNATIONAL = 2;
+}

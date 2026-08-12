@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/state/state.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Celestialderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derived";
+
+message CelestialDerivedState {
+    optional NonRestorableCelestialData.CelestialBody celestial_body = 1;
+    optional bool celestial_time_enabled = 2;
+    
+    oneof date_and_time {
+        double celestial_time_ms = 3;
+        string celestial_time_stamp = 4 [features = ];
+    }
+}

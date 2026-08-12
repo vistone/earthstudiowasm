@@ -1,0 +1,88 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "maps/tactile/api/shared/date-time.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "RateFeaturesProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message RateFeature {
+    oneof detail {
+        WifiIncluded wifi_included = 1;
+        BreakfastIncluded breakfast_included = 2;
+        ParkingIncluded parking_included = 3;
+        Meal breakfast = 5;
+        Meal dinner = 6;
+        RoomStyle room_style = 7;
+        Beds beds = 8;
+        TimeOfDay checkin_time = 9;
+        TimeOfDay checkout_time = 10;
+        Refundable refundable = 4;
+        Refundability refundability = 11;
+    }
+    
+    message WifiIncluded {
+        
+    }
+    
+    message BreakfastIncluded {
+        
+    }
+    
+    message ParkingIncluded {
+        
+    }
+    
+    message Meal {
+        optional RateInclusion rate_inclusion = 1;
+        enum RateInclusion {
+            UNKNOWN_RATE_INCLUSION = 0;
+            INCLUDED_IN_RATE = 1;
+            NOT_INCLUDED_IN_RATE = 2;
+        }
+    }
+    
+    message Bed {
+        optional Size size = 1;
+        enum Size {
+            UNKNOWN_SIZE = 0;
+            SINGLE = 1;
+            SEMI_DOUBLE = 2;
+            DOUBLE = 3;
+            QUEEN = 4;
+            KING = 5;
+        }
+    }
+    
+    message Beds {
+        repeated Bed bed = 1;
+    }
+    
+    message Refundable {
+        optional string until_date_formatted = 1;
+    }
+    
+    message Refundability {
+        optional Status status = 4;
+        enum Status {
+            UNKNOWN_STATUS = 0;
+            REFUNDABLE = 1;
+            NOT_REFUNDABLE = 2;
+        }
+    }
+    
+    enum RoomStyle {
+        UNKNOWN_ROOM_STYLE = 0;
+        ROOM_STYLE_WESTERN = 1;
+        ROOM_STYLE_JAPANESE = 2;
+        ROOM_STYLE_JAPANESE_WESTERN = 3;
+    }
+}
+
+message RateFeatures {
+    repeated RateFeature rate_feature = 1;
+}

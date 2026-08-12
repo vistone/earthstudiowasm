@@ -1,0 +1,36 @@
+syntax = "editions";
+
+package geostore;
+
+import "geostore/base/proto/emobility_ids.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/gelfs_ids.proto";
+import "google/api/inclusion.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+
+message EvStationProto {
+    repeated ExternalStationIdProto external_id = 6;
+    message ExternalStationIdProto {
+        optional string id = 1;
+        
+        optional StationIdSource source = 2;
+        enum StationIdSource {
+            SOURCE_UNSPECIFIED = 0;
+            TESLA = 1;
+        }
+    }
+    
+    repeated EMobilityLocationIdProto ocpi_id = 7;
+    repeated GelfsLocationIdProto gelfs_id = 8;
+    
+    optional OemRestriction oem_restriction = 4 [default = OEM_RESTRICTION_NONE];
+    enum OemRestriction {
+        OEM_RESTRICTION_NONE = 0;
+        TESLA = 1;
+        NACS_PARTNER = 2;
+        RIVIAN = 3;
+    }
+    
+    optional FeatureIdProto associated_host = 2;
+    repeated FeatureIdProto ev_chargers = 3;
+}

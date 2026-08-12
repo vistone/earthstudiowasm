@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "LodgingTypeProto";
+option java_package = "com.google.maps.tactile";
+
+enum LodgingType {
+    UNKNOWN_LODGING_TYPE = 0;
+    HOTEL = 1;
+    VACATION_RENTAL = 2;
+}

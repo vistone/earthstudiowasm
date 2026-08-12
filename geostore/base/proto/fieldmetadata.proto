@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/internal/internalfieldmetadata.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message FieldMetadataProto {
+    optional InternalFieldMetadataProto internal = 15;
+}
+
+extend .proto2.FieldOptions {
+    optional int32 metadata_for_tag_id = 1331432;
+}

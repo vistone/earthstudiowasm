@@ -1,0 +1,85 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "geo/photo/proto/color_detection_results.proto";
+import "geo/photo/proto/date_time.proto";
+import "geo/photo/proto/licensing_info.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "net/proto2/contrib/output_source_markup/options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ImageAttributeProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message ImageAttributes {
+    optional ImageAffiliation affiliation = 1;
+    optional ImageConnectivity connectivity = 2;
+    optional ImageVisibility visibility = 3;
+    optional LicensingInfo licensing_info = 6;
+    repeated ImageContentTags content_tags = 4;
+    optional ImagePublicationToMapsIntent maps_publication_intent = 5 [deprecated = true];
+    optional ImagePublicationToMapsStatus maps_publication_status = 7;
+    optional DateTime capture_time = 8;
+    optional DateTime upload_time = 9;
+    repeated ColorDetectionResults color_detection_results = 10;
+}
+
+enum ImageAffiliation {
+    UNKNOWN_AFFILIATION = 0;
+    UGC_OWNER = 1;
+    UGC_OTHER = 2;
+    GOOGLE = 3;
+    LICENSED_TO_GOOGLE = 4;
+    MAP_CARD = 5;
+    GMB_PHOTO_CARD = 6;
+    AIE_PHOTO_CARD = 7;
+}
+
+enum ImageConnectivity {
+    UNKNOWN_CONNECTIVITY = 0;
+    NONE = 1;
+    SPACE = 2;
+    TIME = 3;
+    SPACE_AND_TIME = 4;
+}
+
+enum ImageVisibility {
+    UNKNOWN_VISIBILITY = 0;
+    PUBLIC = 1;
+    SHARED = 2;
+    PRIVATE = 3;
+}
+
+enum ImageContentTags {
+    UNKNOWN_CONTENT_TAG = 0;
+    COVER = 5;
+    INTERIOR = 1;
+    EXTERIOR = 2;
+    PRODUCT = 3;
+    LOGO = 4;
+    MENU = 6;
+    PEOPLE = 7;
+    FOOD_AND_DRINK = 8;
+    STORE_INTERIOR = 9;
+    MAYBE_RECEIPT = 10;
+    RECEIPT = 11;
+    OUTDOOR_SEATING_AREA = 12;
+    PLACE_HIGHLIGHT = 13;
+    BUSINESS_HOURS = 14;
+}
+
+enum ImagePublicationToMapsIntent {
+    UNKNOWN_PUBLICATION_INTENT = 0;
+    NOT_PUBLISH = 1;
+    EXPLICIT_PUBLISH = 2;
+    IMPLICIT_PUBLISH = 3;
+}
+
+enum ImagePublicationToMapsStatus {
+    UNKNOWN_PUBLICATION_STATUS = 0;
+    PUBLISHED = 1;
+    NOT_ELIGIBLE = 2;
+}

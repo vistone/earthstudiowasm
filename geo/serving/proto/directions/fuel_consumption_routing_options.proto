@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPD";
+option java_multiple_files = true;
+option java_outer_classname = "FuelConsumptionRoutingOptionsProto";
+option java_package = "com.google.geo.serving.proto.directions";
+
+message FuelConsumptionRoutingOptions {
+    optional bool enable_routing = 1;
+    optional bool prioritize_when_routing = 2;
+}

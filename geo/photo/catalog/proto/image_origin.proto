@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package geo_photo_catalog;
+
+import "i18n/localization/proto/localized_text.proto";
+
+option features = utf8_validation: NONE
+;
+option java_outer_classname = "ImageOriginProto";
+option java_package = "com.google.geo.photo.catalog.proto";
+
+message ImageOrigin {
+    optional string source = 1;
+    optional string tag = 2;
+    optional string label = 3;
+    optional i18n.localization.LocalizedTextSetProto localized_label = 4;
+}

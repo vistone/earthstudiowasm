@@ -1,0 +1,69 @@
+syntax = "editions";
+
+package logs_maps_shared;
+
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/shared/geometry_e7.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message GeoDocFetchKey {
+    oneof data {
+        GeoDocFetchId non_synthetic = 1;
+        InterpolatedGeocodeData interpolated_geocode = 2;
+        SubpremiseData subpremise = 3;
+        IntersectionData intersection = 4;
+        TruncatedRouteData truncated_route = 5;
+        InterpolatedHouseIdData interpolated_house_id = 6;
+        PlusCodeGeocodeData plus_code_geocode = 7;
+    }
+}
+
+message GeoDocFetchId {
+    oneof id {
+        logs_maps.FeatureIdProto feature_id = 1;
+        string mid = 2;
+    }
+}
+
+message InterpolatedGeocodeData {
+    optional GeoDocFetchId segment_id = 1;
+    optional GeoDocFetchId route_id = 5;
+    
+    oneof data {
+        int32 street_number = 2;
+        double interpolation_param = 3;
+        PointE7 snapped_point = 4;
+    }
+}
+
+message SubpremiseData {
+    optional GeoDocFetchKey base_feature_key = 1;
+    optional string subpremise_number = 2;
+}
+
+message IntersectionData {
+    optional GeoDocFetchId intersection_id = 1;
+    optional GeoDocFetchId base_id = 2;
+    repeated GeoDocFetchId cross_street_ids = 3;
+    optional PointE7 location = 4;
+}
+
+message TruncatedRouteData {
+    optional GeoDocFetchId route_id = 1;
+    optional GeoDocFetchId restricting_id = 2;
+    optional RectE7 bound = 3 [deprecated = true];
+}
+
+message InterpolatedHouseIdData {
+    optional GeoDocFetchId container_id = 1;
+    optional int32 house_id_number = 2;
+}
+
+message PlusCodeGeocodeData {
+    optional PointE7 point = 1;
+    optional uint32 code_length = 2;
+    optional GeoDocFetchId reference_id = 3;
+}

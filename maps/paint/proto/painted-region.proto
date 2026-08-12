@@ -1,0 +1,65 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "net/proto2/bridge/proto/message_set.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "PaintedRegionProto";
+option java_package = "com.google.maps.paint";
+
+message PaintedRegion {
+    optional Status status = 1 [default = STATUS_OK];
+    enum Status {
+        option features = enum_type: CLOSED
+        ;
+        STATUS_OK = 0;
+        STATUS_NOT_FOUND = 1;
+        STATUS_BAD_REQUEST = 2;
+        STATUS_SERVER_ERROR = 3;
+        STATUS_IVSERVER_AMBIGUOUS_RESPONSE = 4;
+        STATUS_OK_EMPTY = 5;
+        STATUS_OK_DATA_UNCHANGED = 6;
+        STATUS_SERVICE_UNAVAILABLE = 7;
+        STATUS_INVALID_EPOCH = 8;
+    }
+    
+    optional string error_message = 15;
+    optional float ttl_seconds = 2 [default = -1];
+    optional bool enable_public_caching = 6 [default = true];
+    optional bool skip_painted_region_cache = 13;
+    optional bytes data = 3 [ctype = CORD];
+    optional int32 major_epoch = 8;
+    optional int32 combined_epoch = 10;
+    optional int32 routile_version = 14;
+    optional bytes style_table_consistency_key = 11;
+    optional string version_id = 9;
+    optional .proto2.bridge.MessageSet structured_data = 5;
+    optional string content_type = 7;
+    optional string debug_info = 4;
+    optional bool may_be_personalized = 16;
+    optional int32 payload_attributes = 17;
+    
+    extensions 10000000 to max;
+    
+    reserved 12;
+}
+
+message PaintedRegionList {
+    repeated PaintedRegion region = 1;
+    
+    extensions 10000 to max;
+}
+
+message StreamingRegion {
+    optional int32 input_region_index = 1;
+    optional PaintedRegion region = 2;
+    optional int64 original_gcu_time_us = 4;
+    
+    reserved 3;
+}

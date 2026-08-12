@@ -1,0 +1,67 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/name.proto";
+import "geostore/base/proto/options.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message RelationProto {
+    optional RelationCategory relation = 1;
+    enum RelationCategory {
+        RELATION_OVERLAPS = 1;
+        RELATION_CONTAINED_BY = 17;
+        RELATION_EQUAL_TO = 273;
+        RELATION_POLITICAL_DEPRECATED = 2 [deprecated = true];
+        RELATION_CAPITAL_OF = 3;
+        RELATION_DISAMBIGUATED_BY = 4;
+        RELATION_NEIGHBOR_OF = 65;
+        RELATION_OPPOSITE_TO = 1041;
+        RELATION_NEXT_TO = 1042;
+        RELATION_RIGHT_OF = 16673;
+        RELATION_LEFT_OF = 16674;
+        RELATION_BEHIND = 1043;
+        RELATION_IN_FRONT_OF = 1044;
+        RELATION_SAME_BUILDING = 66;
+        RELATION_ABOVE = 1057;
+        RELATION_BELOW = 1058;
+        RELATION_NEAR = 67;
+        RELATION_ORGANIZATIONALLY_PART_OF = 6;
+        RELATION_DEPARTMENT_OF = 97;
+        RELATION_WORKS_AT = 99;
+        RELATION_INDEPENDENT_ESTABLISHMENT_IN = 100;
+        RELATION_ON_LEVEL = 7;
+        RELATION_OCCUPIES = 8;
+        RELATION_BUSINESS_LIFE_CYCLE = 9;
+        RELATION_BUSINESS_MOVED = 145;
+        RELATION_BUSINESS_REBRANDED = 146;
+        RELATION_MEMBER_OF_CHAIN = 10;
+        RELATION_AUTHORIZED_DEALER_FOR_CHAIN = 161;
+        RELATION_SUBSIDIARY_OF = 11;
+        RELATION_PRIMARILY_OCCUPIED_BY = 12;
+        RELATION_VARIATION = 13 [deprecated = true];
+        RELATION_HAS_VARIANT = 209 [deprecated = true];
+        RELATION_VARIANT_OF = 210 [deprecated = true];
+        RELATION_VARIANT_SIBLING = 211 [deprecated = true];
+        RELATION_CLIENT_DEFINED = 15;
+    }
+    
+    optional FeatureIdProto other_feature_id = 2;
+    required int32 other_feature_type = 3;
+    optional string other_feature_country_code = 4;
+    optional string other_feature_territorial_administrator = 8;
+    optional float overlap_fraction = 5 [deprecated = true];
+    repeated NameProto other_feature_name = 6;
+    optional bool relation_is_reversed = 7;
+    optional .proto2.bridge.MessageSet temporary_data = 16;
+    optional FieldMetadataProto metadata = 500;
+    
+    reserved 15, 17;
+}

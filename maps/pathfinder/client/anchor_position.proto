@@ -1,0 +1,12 @@
+syntax = "editions";
+
+package pathfinder;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+enum AnchorPosition {
+    ANCHOR_POSITION_UNSPECIFIED = 0;
+    ANCHOR_POSITION_AT = 1;
+    ANCHOR_POSITION_BEFORE = 2;
+    ANCHOR_POSITION_AFTER = 3;
+}

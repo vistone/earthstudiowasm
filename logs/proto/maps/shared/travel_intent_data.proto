@@ -1,0 +1,26 @@
+syntax = "editions";
+
+package logs_maps_shared;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGMS";
+option java_multiple_files = true;
+option java_outer_classname = "TravelIntentDataProto";
+option java_package = "com.google.common.logging.maps";
+
+message TravelIntentData {
+    optional TravelIntent travel_intent = 1 [deprecated = true];
+    enum TravelIntent {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_TRAVEL_INTENT = 0;
+        TRAVEL_PLANNING_INTENT = 1;
+        IN_DESTINATION_INTENT = 2;
+        LOCAL_INTENT = 3;
+    }
+    
+    optional int32 viewport_distance_from_flop_25km_bucket = 2;
+    optional int32 viewport_distance_from_user_location_25km_bucket = 3;
+    optional int32 user_location_distance_from_flop_25km_bucket = 4;
+}

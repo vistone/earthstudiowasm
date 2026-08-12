@@ -1,0 +1,51 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/image_categorization.proto";
+import "geo/photo/proto/image_format.proto";
+import "geo/photo/proto/timestamp_range.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoFilterOptionsProto";
+option java_package = "com.google.geo.photo";
+
+message PhotoFilterOptions {
+    optional ImageFormatRestrictions format_restrictions = 1;
+    optional ImageSemanticRestrictions semantic_restrictions = 7;
+    optional bool restrict_to_ads_eligible = 2 [default = false];
+    optional bool restrict_to_directions_appropriate = 3 [default = false, deprecated = true];
+    optional bool restrict_to_photos_with_focus_attribution = 5 [default = false, deprecated = true];
+    optional bool restrict_to_syndication_eligible = 6 [default = false, deprecated = true];
+    optional bool restrict_to_owner_attributed_photos = 8 [default = false];
+    optional bool restrict_to_visitor_attributed_photos = 9 [default = false, deprecated = true];
+    optional ProviderIdRestrictions provider_id_restrictions = 10;
+    optional TimestampRange photo_age = 11;
+    optional bool allow_exact_duplicate_photo = 12 [default = true];
+    optional bool allow_near_duplicate_photo = 13 [default = true];
+    optional bool restrict_to_vps_photos = 14 [default = false];
+}
+
+message ImageFormatRestrictions {
+    repeated ImageFormat image_format = 1;
+}
+
+message ImageSemanticRestrictions {
+    optional CategorizationContext applicable_categorization_context = 3 [default = CONTEXT_ANY];
+    repeated ImageCategory image_categories = 4;
+    repeated string knowledge_graph_ids = 5;
+    
+    reserved 1, 2;
+}
+
+message ProviderIdRestrictions {
+    repeated string provider_ids_whitelist = 1;
+    repeated string provider_ids_blacklist = 2;
+    
+    reserved 3;
+}

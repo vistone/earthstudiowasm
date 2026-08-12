@@ -1,0 +1,121 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/directions-result-common.proto";
+import "net/proto2/contrib/output_source_markup/options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "TrafficDataProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message SpeedReading {
+    optional int32 offset_meters = 1;
+    optional int64 elapsed_time_seconds = 2;
+    
+    optional SpeedCategory speed_category = 4 [default = SPEED_NODATA];
+    enum SpeedCategory {
+        SPEED_NODATA = 0;
+        SPEED_STOPPED = 1;
+        SPEED_STOP_AND_GO = 2;
+        SPEED_SLOW = 3;
+        SPEED_NORMAL = 4;
+    }
+    
+    optional float speed_kph = 5;
+    
+    reserved 3;
+}
+
+message TrafficTrendBarChart {
+    optional string ei = 4 [deprecated = true];
+    optional string ved = 5;
+    
+    repeated HorizontalAxisTick horizontal_axis_tick = 1;
+    message HorizontalAxisTick {
+        optional string label = 1;
+        optional int32 label_timestamp_seconds = 4;
+        
+        optional TickMarkType tick_mark_type = 2;
+        enum TickMarkType {
+            UNKNOWN_TICK_MARK_TYPE = 0;
+            LONG = 1;
+            SHORT = 2;
+        }
+        
+        optional string domain = 3;
+    }
+    
+    optional VerticalAxisRangeHighlight vertical_axis_range_highlight = 2;
+    message VerticalAxisRangeHighlight {
+        optional string label = 1;
+        optional float reading = 2;
+    }
+    
+    repeated BarChartSeries bar_chart_series = 3;
+    message BarChartSeries {
+        repeated Bar bar = 1;
+        message Bar {
+            optional string domain = 1;
+            optional float reading = 2;
+            
+            optional BarStyle style = 3;
+            enum BarStyle {
+                UNKNOWN_BAR_STYLE = 0;
+                HISTORICAL = 1;
+                REALTIME_HEAVY_TRAFFIC = 2;
+                REALTIME_MEDIUM_TRAFFIC = 3;
+                REALTIME_LIGHT_TRAFFIC = 4;
+            }
+            
+            optional BarAnimationStyle animation_style = 4;
+            enum BarAnimationStyle {
+                UNKNOWN_BAR_ANIMATION_STYLE = 0;
+                NO_BAR_ANIMATION = 1;
+                UP_PULSE_ANIMATION = 2;
+                DOWN_PULSE_ANIMATION = 3;
+            }
+        }
+    }
+}
+
+message TrafficData {
+    repeated SpeedReading speed_reading = 1;
+    optional int64 traffic_information_timestamp_ms = 7;
+    optional bool use_traffic_problem_notices = 5 [default = false];
+    repeated Notice traffic_incident_notice = 2 [deprecated = true];
+    repeated Notice on_route_traffic_problem_notice = 4;
+    repeated Notice off_route_traffic_problem_notice = 8;
+    optional Notice on_route_traffic_trend_notice = 9;
+    repeated Notice on_route_suspected_closure_notice = 11;
+    optional TrafficTrendBarChart traffic_trend_bar_chart = 10;
+    repeated Notice on_route_problem_notice = 12;
+    
+    optional VisualTrafficReportPolylineRendering visual_traffic_report_polyline_rendering = 6;
+    message VisualTrafficReportPolylineRendering {
+        repeated RoadStretch road_stretch = 1;
+        message RoadStretch {
+            optional Style style = 1;
+            enum Style {
+                UNKNOWN_STYLE = 0;
+                SLOWER_TRAFFIC = 1;
+                TRAFFIC_JAM = 2;
+            }
+            
+            optional int32 offset_meters = 2;
+            optional int32 length_meters = 3;
+        }
+    }
+    
+    optional DelayCategory delay_category = 3 [default = DELAY_NODATA];
+    enum DelayCategory {
+        DELAY_NODATA = 0;
+        DELAY_HEAVY = 1;
+        DELAY_MEDIUM = 2;
+        DELAY_LIGHT = 3;
+    }
+}

@@ -1,0 +1,33 @@
+syntax = "editions";
+
+package maps_tactile.shared.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "TrafficReportProblemAlertConfigProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message TrafficReportProblemAlertConfig {
+    optional VisualAlertMethod visual_alert_method = 1;
+    enum VisualAlertMethod {
+        UNKNOWN_VISUAL_ALERT_METHOD = 0;
+        VISUAL_ALERT_METHOD_DISPLAY_NONE = 1;
+        VISUAL_ALERT_METHOD_DISPLAY = 2;
+    }
+    
+    optional AudioAlertMethod audio_alert_method = 2;
+    enum AudioAlertMethod {
+        UNKNOWN_AUDIO_ALERT_METHOD = 0;
+        AUDIO_ALERT_METHOD_NONE = 1;
+        AUDIO_ALERT_METHOD_CHIME_ONLY = 2;
+        AUDIO_ALERT_METHOD_CHIME_AND_AUDIO_COMPONENT = 3;
+    }
+}

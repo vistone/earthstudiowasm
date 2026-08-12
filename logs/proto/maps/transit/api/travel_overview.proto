@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "geostore/base/proto/transitline.proto";
+import "logs/proto/maps/transit/api/accessibility.proto";
+import "logs/proto/maps/transit/api/region_description.proto";
+import "maps/transit/api/non_transit_mode.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TravelOverviewProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedTravelOverview {
+    repeated geostore.TransitLineProto.VehicleTypeCategory available_vehicle_type = 1;
+    optional LoggedAccessibilityDataState accessibility_data_state = 2 [default = ACCESSIBILITY_DATA_UNSPECIFIED];
+    
+    optional LoggedTransitType transit_type = 3;
+    enum LoggedTransitType {
+        UNKNOWN = 0;
+        LONG_DISTANCE = 1;
+    }
+    
+    repeated .maps_transit.api.NonTransitMode.Mode available_flm_modes = 4 [packed = true];
+    optional LoggedRegionDescription source_region = 5;
+}

@@ -1,0 +1,55 @@
+syntax = "editions";
+
+package earth.core;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/l10n_message_id.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.core.localizedmessage";
+
+message PlaceholderValue {
+    oneof kind {
+        double number_value = 1;
+        string string_value = 2;
+        L10nMessageId.MessageId message_id_value = 3;
+    }
+}
+
+message PlaceholderFormatOptions {
+    optional PlaceholderFormat format = 1 [default = PLACEHOLDER_FORMAT_INDIVIDUAL];
+    enum PlaceholderFormat {
+        PLACEHOLDER_FORMAT_UNSPECIFIED = 0;
+        PLACEHOLDER_FORMAT_INDIVIDUAL = 1;
+        PLACEHOLDER_FORMAT_LIST = 2;
+    }
+    
+    optional ListType list_type = 2 [default = LIST_TYPE_AND];
+    enum ListType {
+        LIST_TYPE_UNSPECIFIED = 0;
+        LIST_TYPE_AND = 1;
+        LIST_TYPE_OR = 2;
+        LIST_TYPE_UNIT = 3;
+    }
+    
+    optional ListStyle list_style = 3 [default = LIST_STYLE_LONG];
+    enum ListStyle {
+        LIST_STYLE_UNSPECIFIED = 0;
+        LIST_STYLE_LONG = 1;
+        LIST_STYLE_SHORT = 2;
+        LIST_STYLE_NARROW = 3;
+    }
+}
+
+message LocalizedMessage {
+    optional L10nMessageId.MessageId message_id = 1;
+    repeated PlaceholderValue placeholder_values = 2;
+    optional PlaceholderFormatOptions placeholder_format_options = 3;
+}
+
+message DisplayMessages {
+    repeated LocalizedMessage info_messages = 1;
+    repeated LocalizedMessage error_messages = 2;
+    repeated LocalizedMessage loading_messages = 3;
+}

@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package logs.proto.maps.directions.mrp.metrics;
+
+import "maps/directions/mrp/server/metrics/path_metrics.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedPathMetricsProto {
+    repeated NameValue metric_values = 1;
+    message NameValue {
+        optional .maps.mrp.metrics.PathMetricsProto.MetricName name = 1;
+        optional double value = 2;
+    }
+}

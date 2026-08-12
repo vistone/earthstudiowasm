@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_package = "com.google.geo.photo";
+
+enum PinningClient {
+    option features = enum_type: CLOSED
+    ;
+    PINNING_CLIENT_UNSPECIFIED = 0;
+    THINGS_TO_DO = 1;
+    GMB_VANITY_URL = 2;
+}

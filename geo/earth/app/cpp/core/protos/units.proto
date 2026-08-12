@@ -1,0 +1,46 @@
+syntax = "editions";
+
+package earth.core.units;
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_outer_classname = "UnitsProto";
+option java_package = "com.google.geo.earth.app.common.core.units";
+
+message ProtoRequiresAtLeastOneMessageInFileUnits {
+    
+}
+
+enum UnitSystem {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_UNIT_SYSTEM = 0;
+    METRIC = 1;
+    IMPERIAL = 2;
+}
+
+enum UnitName {
+    UNKNOWN_UNIT_NAME = 0;
+    AUTO_UNIT = 1;
+    CENTIMETERS = 2;
+    METERS = 3;
+    KILOMETERS = 4;
+    INCHES = 5;
+    FEET = 6;
+    YARDS = 7;
+    MILES = 8;
+    NAUTICAL_MILES = 9;
+    SMOOTS = 10;
+    SQUARE_METERS = 11;
+    SQUARE_KILOMETERS = 12;
+    SQUARE_FEET = 13;
+    SQUARE_YARDS = 14;
+    SQUARE_MILES = 15;
+    SQUARE_NAUTICAL_MILES = 16;
+    HECTARES = 17;
+    ACRES = 18;
+    PERCENT = 19;
+    FAR = 20;
+    DEGREES_SLOPE = 21;
+    PERCENT_SLOPE = 22;
+}

@@ -1,0 +1,48 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "i18n/localization/proto/localized_text.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "IndexInfoProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message LicensingInfo {
+    optional string imagery_provider_id = 3;
+    optional i18n.localization.LocalizedTextProto provider_name = 5;
+    repeated LicenseUsageFlags license_flags = 4;
+    optional int32 max_thumbnail_size_in_pixels = 6;
+    
+    reserved 1, 2;
+}
+
+enum LicenseUsageFlags {
+    NO_IMAGE_MOD = 0;
+    ATTRIB_USER = 1;
+    ATTRIB_NAME = 2;
+    ATTRIB_LINK = 3;
+    ATTRIB_COPYRIGHT = 12;
+    NO_ADS = 4;
+    NO_SYNDICATION = 5;
+    DISCOVERABLE = 6;
+    INTERNAL_DISCOVERABLE = 13;
+    UGC = 7;
+    NO_LOCAL_HOSTING = 8;
+    CRAWLED = 9;
+    NO_WATERMARK = 10;
+    LIMITED_SYNDICATION = 11;
+    NO_CAPTURE_TIME = 14;
+}
+
+enum LicenseIndexingFlags {
+    NORMAL_ELIGIBILITY = 0;
+    SPATIAL_INELIGIBLE = 1;
+    REDUCED_SCORING_THRESHOLD = 2 [deprecated = true];
+}

@@ -1,0 +1,285 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "geo/serving/proto/directions/decorations/step_summary_decorations.proto";
+import "geo/serving/proto/directions/maneuver_type.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/directions-result-common.proto";
+import "maps/tactile/api/directions-summary.proto";
+import "maps/tactile/api/shared/common.proto";
+import "maps/tactile/api/shared/directions/elevation-category.proto";
+import "maps/tactile/api/shared/road-priority.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "DirectionsStepProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message StepIcon {
+    optional string icon_url = 1;
+    optional string css_class = 2;
+}
+
+message Step {
+    optional string ved = 6;
+    optional Summary summary = 1;
+    optional geo_serving_proto.directions.decorations.StepSummaryDecorations step_summary_decorations = 27;
+    
+    optional SpokenText spoken_text = 19;
+    message SpokenText {
+        optional bool is_muted = 1 [default = false];
+        optional string text = 2;
+    }
+    
+    optional StepIcon icon = 3;
+    optional ComponentIcon step_icon = 5;
+    optional geo_serving_proto.directions.ManeuverType maneuver_type = 7 [default = MANEUVER_UNKNOWN];
+    
+    optional TurnType turn_type = 8 [default = TURN_UNKNOWN];
+    enum TurnType {
+        TURN_UNKNOWN = 0;
+        TURN_SLIGHT = 1;
+        TURN_NORMAL = 2;
+        TURN_SHARP = 3;
+        TURN_KEEP = 4;
+        TURN_UTURN = 5;
+        TURN_STRAIGHT = 6;
+        TURN_MERGE = 7;
+        TURN_FORK = 8;
+    }
+    
+    optional TurnSide turn_side = 9 [default = SIDE_UNSPECIFIED];
+    enum TurnSide {
+        SIDE_LEFT = 1;
+        SIDE_RIGHT = 2;
+        SIDE_UNSPECIFIED = 3;
+    }
+    
+    optional HeadingType heading_type = 10 [default = HEADING_UNKNOWN];
+    enum HeadingType {
+        HEADING_UNKNOWN = 0;
+        NORTH = 1;
+        NORTH_EAST = 2;
+        EAST = 3;
+        SOUTH_EAST = 4;
+        SOUTH = 5;
+        SOUTH_WEST = 6;
+        WEST = 7;
+        NORTH_WEST = 8;
+    }
+    
+    optional int32 maneuver_turn_number = 11;
+    optional int32 roundabout_turn_angle = 18;
+    repeated DirectionsStepCueProto step_cue = 12;
+    repeated LaneGuidance lane_guidance = 13;
+    optional BuildingLevel building_level = 14;
+    repeated GuidanceEventProto guidance_event = 15;
+    optional int32 compact_polyline_vertex_offset = 16;
+    optional bool synthetic_polyline = 23 [default = false];
+    optional bool highway_interchange = 17;
+    optional bool names_valid_for_entire_step = 24 [default = true];
+    
+    repeated NavigationPopup popup = 20;
+    message NavigationPopup {
+        optional Type type = 1 [default = UNKNOWN];
+        enum Type {
+            UNKNOWN = 0;
+            DELIGHTFUL_BADGE = 1;
+            WARNING = 2;
+        }
+        
+        optional string headline = 2;
+        optional string subheadline = 7;
+        repeated AudioComponent audio_component = 3;
+        optional int32 step_offset_meters = 4;
+        
+        optional ThrottlePolicy throttle_policy = 5;
+        message ThrottlePolicy {
+            optional string dedup_token = 1;
+            optional int32 throttle_period_seconds = 2;
+        }
+        
+        oneof specialized_navigation_popup_details {
+            DelightfulBadge delightful_badge = 6;
+        }
+        
+        message DelightfulBadge {
+            optional string badge_svg_url = 1;
+        }
+    }
+    
+    optional Notice.SideOfRoad driving_side = 21 [default = NONE];
+    
+    repeated SpeedLimitChange speed_limit_change = 22;
+    message SpeedLimitChange {
+        optional int32 step_offset_meters = 1;
+        optional int32 speed_limit_kph = 2 [default = -1];
+        
+        optional DisplayUnits default_display_units = 3;
+        enum DisplayUnits {
+            UNKNOWN_DISPLAY_UNITS = 0;
+            KILOMETERS_PER_HOUR = 1;
+            MILES_PER_HOUR = 2;
+        }
+        
+        optional int32 low_quality_speed_limit_kph = 4 [default = -1];
+    }
+    
+    repeated ElevationCategoryChange elevation_category_change = 28;
+    message ElevationCategoryChange {
+        optional int32 step_offset_meters = 1;
+        optional maps_tactile.shared.directions.ElevationCategory elevation_category = 2 [default = ELEVATION_NORMAL];
+    }
+    
+    repeated RoadPriorityChange road_priority_change = 26;
+    message RoadPriorityChange {
+        optional int32 step_offset_meters = 1;
+        optional maps_tactile.shared.Priority segment_priority = 2;
+    }
+    
+    repeated Landmark landmark = 25;
+    message Landmark {
+        optional string name = 1;
+        
+        optional FeatureId id = 2;
+        message FeatureId {
+            optional fixed64 cell_id = 1 [jstype = JS_STRING];
+            optional fixed64 fprint = 2 [jstype = JS_STRING];
+        }
+        
+        optional Point point = 3;
+        message Point {
+            optional fixed32 lat_e7 = 1;
+            optional fixed32 lng_e7 = 2;
+        }
+        
+        optional int32 pin_style = 4;
+        optional int32 text_style = 5;
+    }
+    
+    reserved 1000, 2, 4;
+}
+
+message LaneTurn {
+    optional Shape shape = 2 [default = STRAIGHT];
+    enum Shape {
+        STRAIGHT = 0;
+        SLIGHT = 1;
+        NORMAL = 2;
+        SHARP = 3;
+        U_TURN = 4;
+        MERGE = 5;
+    }
+    
+    optional bool is_right_turn = 3 [default = false];
+    
+    reserved 1;
+}
+
+message LaneGuidance {
+    optional Guidance guidance = 1;
+    enum Guidance {
+        RECOMMENDED = 0;
+        ON_ROUTE = 1;
+        OFF_ROUTE = 2;
+        FORBIDDEN = 3;
+    }
+    
+    repeated LaneTurn lane_turn = 2;
+}
+
+message DirectionsStepCueProto {
+    optional StepCueType type = 1;
+    enum StepCueType {
+        TYPE_TO_ROAD_NAME = 0;
+        TYPE_TOWARD_NAME = 1;
+        TYPE_TOWARD_ROAD_NAME = 2;
+        TYPE_EXIT_NUMBER = 3;
+        TYPE_FOLLOW_ROAD_NAME = 4;
+        TYPE_FROM_ROAD_NAME = 5;
+        TYPE_TITLE = 6;
+        TYPE_ADDRESS = 7;
+        TYPE_AT_ROAD_NAME = 8;
+        TYPE_INTERSECTION = 9;
+        TYPE_TRANSIT_SIGNPOST = 10;
+        TYPE_EXIT_NAME = 11;
+        TYPE_TRANSIT_ENTRANCE_NAME = 12;
+        TYPE_TRANSIT_EXIT_NAME = 13;
+    }
+    
+    optional string name = 2;
+    optional string full_name = 6;
+    optional string language = 7;
+    optional string country = 8;
+    optional string spoken_name = 5;
+    optional ComponentIcon icon = 10;
+    optional string icon_url = 3 [deprecated = true];
+    optional string icon_text = 4;
+    
+    optional StepCuePriority priority = 9 [default = UNKNOWN_STEP_CUE_PRIORITY];
+    enum StepCuePriority {
+        UNKNOWN_STEP_CUE_PRIORITY = 0;
+        PRIMARY = 1;
+        SECONDARY = 2;
+    }
+}
+
+message GuidanceEventProto {
+    required EventTypeEnum type = 1;
+    enum EventTypeEnum {
+        PREPARE = 0;
+        ACT = 1;
+        SUCCESS = 2;
+        NOTE = 3;
+    }
+    
+    optional sint32 relevance_range_end_meters = 2;
+    optional int32 min_relevance_seconds = 3;
+    optional int32 min_relevance_meters = 4;
+    optional bool next_step_relevant = 5;
+    optional string text_override = 6;
+    optional int32 notice_index = 7;
+    optional int32 canned_message_id = 8;
+    
+    repeated GuidanceWithDistance guidance_with_distance = 9;
+    message GuidanceWithDistance {
+        optional int32 min_distance_meters = 4;
+        optional int32 max_distance_meters = 1;
+        optional GuidanceSpokenText text = 2;
+        optional bool prefetch_tts = 3;
+        optional bool strict_range = 5;
+    }
+    
+    message GuidanceSpokenText {
+        repeated CannedMessage canned_message = 1;
+        optional string text = 2;
+        optional bytes nlg_data = 3;
+        optional bytes spoken_text_metadata_log_only = 4;
+    }
+}
+
+message CannedMessage {
+    optional int32 canned_message_id = 4;
+    
+    oneof canned_message {
+        ManeuverMessage maneuver_message = 1;
+        DistanceMessage distance_message = 2;
+        PredefinedMessage predefined_message = 3;
+    }
+    
+    message ManeuverMessage {
+        optional int32 maneuver_id = 1;
+    }
+    
+    message DistanceMessage {
+        optional int32 max_meters = 3;
+    }
+    
+    message PredefinedMessage {
+        optional string name = 4;
+    }
+}

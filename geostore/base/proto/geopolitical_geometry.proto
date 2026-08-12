@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/polygon.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message GeopoliticalGeometryProto {
+    optional PolygonProto self_polygon = 1;
+    optional PolygonProto rest_of_world_polygon = 2;
+}

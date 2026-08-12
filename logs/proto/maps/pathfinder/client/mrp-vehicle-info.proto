@@ -1,0 +1,26 @@
+syntax = "editions";
+
+package logs.proto.maps.pathfinder.client;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+repeated_field_encoding: EXPANDED
+;
+option java_multiple_files = true;
+option java_outer_classname = "MRPVehicleInfo";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedMRPVehicleInfo {
+    optional LoggedType type = 1;
+    enum LoggedType {
+        TYPE_UNSPECIFIED = 0;
+        TYPE_TRUCK = 1;
+    }
+    
+    repeated LoggedHazardousGoodsType hazardous_goods_type = 2;
+    enum LoggedHazardousGoodsType {
+        HAZARD_UNSPECIFIED = 0;
+        HAZARD_UNKNOWN = 1;
+    }
+}

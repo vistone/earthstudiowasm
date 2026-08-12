@@ -1,0 +1,33 @@
+syntax = "editions";
+
+package geo_photo_catalog;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPC";
+option java_multiple_files = true;
+option java_outer_classname = "OcrSummaryProto";
+option java_package = "com.google.geo.photo.catalog.proto";
+
+message OcrSummary {
+    optional string text = 1;
+    optional int32 text_length = 2;
+    optional string primary_language_code = 3;
+    optional string secondary_language_code = 8;
+    optional int32 num_text_blocks = 4;
+    optional float avg_text_confidence = 5;
+    optional float primary_text_rotation = 6;
+    optional OcrArea ocr_area = 7;
+}
+
+message OcrArea {
+    optional float fraction_area_ocr = 5;
+    optional float xmin = 6;
+    optional float xmax = 7;
+    optional float ymin = 8;
+    optional float ymax = 9;
+    
+    reserved 1, 2, 3, 4;
+}

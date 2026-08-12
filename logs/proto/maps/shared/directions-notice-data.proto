@@ -1,0 +1,39 @@
+syntax = "editions";
+
+package logs_maps_shared.visual_element;
+
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option objc_class_prefix = "LOGMS";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps";
+
+message DirectionsNoticeData {
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 1;
+    
+    optional Severity severity = 2;
+    enum Severity {
+        ALERT = 0;
+        WARNING = 1;
+        INFORMATION = 2;
+        CRITICAL = 3;
+    }
+    
+    optional fixed32 external_summary_hash = 3;
+    optional fixed32 external_details_hash = 4;
+    optional string language_code = 5;
+    optional string agency_id = 6;
+    optional fixed64 incident_id = 7 [deprecated = true];
+    
+    repeated OriginatingProblemProvider originating_problem_provider = 8;
+    enum OriginatingProblemProvider {
+        ORIGINATING_PROBLEM_PROVIDER_UNSPECIFIED = 0;
+        ORIGINATING_PROBLEM_PROVIDER_WAZE = 1;
+        ORIGINATING_PROBLEM_PROVIDER_USER_REPORT = 2;
+    }
+}

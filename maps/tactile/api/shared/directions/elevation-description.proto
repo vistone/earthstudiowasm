@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "ElevationDescriptionProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+enum ElevationDescription {
+    UNKNOWN_ELEVATION_DESCRIPTION = 0;
+    FLAT = 8;
+    MOSTLY_FLAT = 1;
+    GENTLE_HILL = 10;
+    GENTLE_HILLS = 9;
+    MODERATE_HILL = 5;
+    MODERATE_HILLS = 2;
+    STEEP_HILL = 6;
+    STEEP_HILLS = 3;
+    VERY_STEEP_HILL = 7;
+    VERY_STEEP_HILLS = 4;
+}

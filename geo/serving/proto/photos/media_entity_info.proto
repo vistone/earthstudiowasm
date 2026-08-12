@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "MediaEntityInfoProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message MediaEntityInfo {
+    optional EntityType entity_type = 1;
+    enum EntityType {
+        UNKNOWN_ENTITY_TYPE = 0;
+        DISH = 1;
+    }
+    
+    optional string entity_id = 2;
+    
+    repeated EntityAttributeInfo entity_attribtute_info = 3;
+    message EntityAttributeInfo {
+        optional string entity_attribute_mid = 1;
+    }
+}

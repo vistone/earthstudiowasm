@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package earth.design;
+
+import "google/internal/earth/v1/builtenv/built_environment.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.design";
+
+message DownloadDesignFileRequest {
+    optional int32 request_id = 1;
+    optional google.internal.earth.v1.builtenv.DownloadableFile file = 5;
+    optional string file_name = 3;
+    
+    reserved 2, 4;
+}
+
+message DownloadDesignFileResponse {
+    optional int32 request_id = 1;
+    optional bytes file_bytes = 2;
+    optional string file_name = 3;
+}
+
+message NewBuildToplineMetrics {
+    optional double gfa_sq_m = 1;
+    optional double profit_on_cost = 2;
+    optional double emissions_change = 3;
+    optional double baseline_emissions = 4;
+}
+
+message SolarToplineMetrics {
+    optional double solar_installation_size = 1;
+    optional double annual_generated_solar_energy = 2;
+    optional double emissions_change = 3;
+    optional double baseline_emissions = 4;
+}

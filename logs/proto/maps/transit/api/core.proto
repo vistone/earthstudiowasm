@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "CoreProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedInt32Range {
+    optional int32 low = 1;
+    optional int32 high = 2;
+    optional int32 approx = 3;
+}

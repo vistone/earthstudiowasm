@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package gws;
+
+import "net/proto2/proto/descriptor.proto";
+
+option objc_class_prefix = "GWS";
+
+message DiffDetection {
+    enum Field {
+        NONE = 0;
+        FINE_GRAINED = 2;
+    }
+    
+    enum Module {
+        IGNORE = 2;
+        INSPECT = 3;
+        PRESENCE_ONLY = 4;
+    }
+}
+
+extend .proto2.FieldOptions {
+    optional DiffDetection.Field diff_detection = 69310385 [default = NONE];
+    optional int32 diff_detection_limit = 74319084;
+    optional bool diff_detection_ignore = 90860551;
+}
+
+extend .proto2.EnumValueOptions {
+    optional DiffDetection.Module diff_detection_behavior = 69310387 [default = PRESENCE_ONLY];
+}

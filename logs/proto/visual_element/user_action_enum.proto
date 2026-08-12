@@ -1,0 +1,74 @@
+syntax = "proto2";
+
+package logs;
+
+import "google/api/inclusion.proto";
+import "java/com/google/protobuf/contrib/j2cl/options/js_enum.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_package = "com.google.common.logging";
+
+enum UserAction {
+    UNASSIGNED_USER_ACTION_ID = 0;
+    AUTOMATED = 1;
+    USER = 2;
+    GENERIC_CLICK = 3;
+    TAP = 4;
+    KEYBOARD_ENTER = 5;
+    MOUSE_CLICK = 6;
+    LEFT_CLICK = 7;
+    RIGHT_CLICK = 8;
+    HOVER = 9;
+    INTO_BOUNDING_BOX = 10;
+    OUT_OF_BOUNDING_BOX = 11;
+    PINCH = 12;
+    PINCH_OPEN = 13;
+    PINCH_CLOSED = 14;
+    INPUT_TEXT = 15;
+    INPUT_KEYBOARD = 16;
+    INPUT_VOICE = 17;
+    RESIZE_BROWSER = 18;
+    ROTATE_SCREEN = 19;
+    DIRECTIONAL_MOVEMENT = 20;
+    SWIPE = 21;
+    SCROLL_BAR = 22;
+    MOUSE_WHEEL = 23;
+    ARROW_KEYS = 24;
+    NAVIGATE = 25;
+    BACK_BUTTON = 26;
+    UNKNOWN_ACTION = 27;
+    HEAD_MOVEMENT = 28 [deprecated = true];
+    SHAKE = 29;
+    DRAG = 30;
+    LONG_PRESS = 31;
+    KEY_PRESS = 32;
+    ACTION_BY_TIMER = 33;
+    DOUBLE_CLICK = 34;
+    DOUBLE_TAP = 35;
+    ROLL = 36;
+    DROP = 37;
+    FORCE_TOUCH = 38;
+    MULTI_KEY_PRESS = 39;
+    TWO_FINGER_DRAG = 40;
+    ENTER_PROXIMITY = 41;
+    CAUSAL_USER_ACTION = 45 [deprecated = true];
+    CAUSAL_AUTOMATED = 46;
+    INPUT_STYLUS = 47;
+    TWO_FINGER_DRAG_UP = 48;
+    TWO_FINGER_DRAG_DOWN = 49;
+    BROWSER_ACTION = 50;
+    VIDEO_STATS = 51;
+    DRAW_CIRCLE = 52;
+    DRAW_STRIKETHROUGH = 53;
+    SNAP = 54;
+    TWO_FINGER_TAP = 55;
+}
+
+enum CardinalDirection {
+    UNASSIGNED_DIRECTIONAL_MOVEMENT_ID = 0;
+    LEFT = 1;
+    RIGHT = 2;
+    UP = 3;
+    DOWN = 4;
+}

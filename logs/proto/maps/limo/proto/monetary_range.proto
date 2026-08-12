@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package logs.proto.maps_limo;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedMonetaryRange {
+    optional string currency = 1;
+    optional double low = 2;
+    optional double high = 3;
+}

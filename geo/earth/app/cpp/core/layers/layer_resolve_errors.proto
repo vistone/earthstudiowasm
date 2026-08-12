@@ -1,0 +1,27 @@
+syntax = "editions";
+
+package earth.layers;
+
+import "google/internal/earth/v1/billing/capability.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.layers";
+
+message ResolveError {
+    optional Reason reason = 1;
+    enum Reason {
+        REASON_UNKNOWN = 0;
+        REASON_UNSUPPORTED = 1;
+        REASON_INSUFFICIENT_ENTITLEMENTS = 2;
+        REASON_NETWORK_ERROR = 3;
+        REASON_DOCUMENT_ASSET_LAYER_ASSOCIATED_WITH_DIFFERENT_MAP = 4;
+        REASON_CLASSIFICATION_LAYER_INSUFFICIENT_INPUTS = 5;
+    }
+    
+    optional string error_message = 2;
+    optional string plan_display_name = 3;
+    optional string layer_logging_id = 4;
+    optional google.internal.earth.v1.billing.Capability required_capability = 5;
+}

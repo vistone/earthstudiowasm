@@ -1,0 +1,66 @@
+syntax = "editions";
+
+package logs.proto.maps_limo;
+
+import "logs/proto/maps/limo/proto/fare_breakdown.proto";
+import "logs/proto/maps/limo/proto/monetary_range.proto";
+import "logs/proto/maps/limo/proto/service_provider.proto";
+import "maps/limo/proto/product_category.proto";
+import "maps/limo/proto/product_type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedOfflineTaxiInfo {
+    optional LoggedServiceProvider service_provider = 1;
+    optional LoggedMonetaryRange fare_estimate = 2;
+    optional LoggedFareBreakdown fare_breakdown = 3;
+    optional string display_name = 4;
+    optional string disclaimer = 5;
+    optional bool google_confidential = 6;
+}
+
+message LoggedOnlineTaxiInfo {
+    optional LoggedServiceProvider service_provider = 1;
+    optional string partner_app_link_text = 3;
+    optional int32 waiting_time_seconds = 4;
+    optional LoggedMonetaryRange fare_estimate = 5;
+    
+    optional LoggedSurgePricingInfo surge_pricing_info = 6;
+    message LoggedSurgePricingInfo {
+        optional string surge_icon_id = 1;
+        optional string description = 2;
+    }
+    
+    optional string product_name = 7;
+    optional string details = 8;
+    optional string disclaimer = 10;
+    optional bool show_ad_label = 11;
+    
+    optional LoggedAvailableVehiclesInfo available_vehicles_info = 12;
+    message LoggedAvailableVehiclesInfo {
+        optional double vehicles_per_km2 = 1;
+        optional string vehicle_icon_id = 2;
+    }
+    
+    optional LoggedProductCategoryInfo product_category_info = 13;
+    message LoggedProductCategoryInfo {
+        optional .maps_limo.ProductCategory category = 1;
+        optional string name = 2;
+        optional string category_icon_id = 3;
+    }
+    
+    optional bool google_confidential = 14;
+    
+    optional LoggedInternalData internal_data = 1000;
+    message LoggedInternalData {
+        optional .maps_limo.ProductType product_type = 2;
+        
+        reserved 3;
+    }
+    
+    reserved 9, 15, 16;
+}

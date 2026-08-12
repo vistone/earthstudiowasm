@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package knowledge_graph;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "KLG";
+option java_package = "com.google.knowledge.graph.util";
+
+message DateTimeProto {
+    optional int32 years = 1;
+    optional int32 months = 2;
+    optional int32 days = 3;
+    optional int32 hours = 4;
+    optional int32 minutes = 5;
+    optional int32 seconds = 6;
+    optional int32 microseconds = 7;
+    optional int64 tz_offset = 8;
+}
+
+message DurationProto {
+    optional int32 years = 1;
+    optional int32 months = 2;
+    optional int32 days = 3;
+    optional int32 hours = 4;
+    optional int32 minutes = 5;
+    optional int32 seconds = 6;
+    optional int32 microseconds = 7;
+    optional int32 weeks = 10;
+}

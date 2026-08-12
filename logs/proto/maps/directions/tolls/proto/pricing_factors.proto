@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.tolls.proto;
+
+import "logs/proto/maps/directions/tolls/proto/pass_type.proto";
+import "logs/proto/maps/directions/tolls/proto/vehicle_attributes.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedPricingFactors {
+    optional LoggedVehicleAttributes vehicle_attributes = 1;
+    repeated LoggedPassType toll_passes = 2;
+    optional bool show_toll_pass_prices = 4;
+    optional string payment_method_display_string = 3;
+}

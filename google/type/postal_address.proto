@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package google.type;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GTP";
+option go_package = "google.golang.org/genproto/googleapis/type/postaladdress;postaladdress";
+option java_multiple_files = true;
+option java_outer_classname = "PostalAddressProto";
+option java_package = "com.google.type.proto1api";
+
+message PostalAddress {
+    int32 revision = 1;
+    string region_code = 2;
+    string language_code = 3;
+    string postal_code = 4;
+    string sorting_code = 5;
+    string administrative_area = 6;
+    string locality = 7;
+    string sublocality = 8;
+    repeated string address_lines = 9;
+    repeated string recipients = 10;
+    string organization = 11;
+}

@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/point.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message PointWithHeightProto {
+    required PointProto point = 1;
+    required float altitude_meters = 2;
+}
+
+message ThreeDimensionalModelProto {
+    repeated PointWithHeightProto points = 7;
+    repeated int32 point_indices = 8;
+    
+    reserved 6;
+}

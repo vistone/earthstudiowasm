@@ -1,0 +1,86 @@
+syntax = "proto2";
+
+package maps_tactile.scene;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GMTTS";
+option java_multiple_files = true;
+option java_outer_classname = "SceneConstants";
+option java_package = "com.google.maps.tactile.scene";
+
+enum ContentType {
+    MAP = 0;
+    PANO = 1;
+    PHOTO = 2;
+    SATELLITE = 3;
+    TOUR = 4;
+    VIDEO = 5;
+}
+
+enum ImagerySource {
+    UNKNOWN_SOURCE = 99;
+    ALLEYCAT = 0;
+    PANORAMIO = 1;
+    LEANBACK = 3 [deprecated = true];
+    FIFE = 4 [deprecated = true];
+    FIFE_CONTENT = 9;
+    MEDIA_GUESSABLE_FIFE = 10;
+    DRAGONFLY = 5 [deprecated = true];
+    MOOSEDOG = 6 [deprecated = true];
+    INTERNET = 7;
+    METADATA_GEO_PHOTO_SERVICE = 8;
+    KARTO = 11;
+}
+
+enum ImageryType {
+    OUTDOOR_PANO = 1;
+    INDOOR_PANO = 2;
+    INNERSPACE_PHOTO = 3;
+    ART_PROJECT = 4;
+    SPECIAL_COLLECT = 5;
+    DRAGONFLY_PHOTO = 7;
+    LIGHTFIELD_TOUR = 9;
+    PANORAMIO_PHOTO = 10;
+    USER_GENERATED_PANO = 11;
+    LOCAL_PLUS_PHOTO = 12;
+    STOREFRONT_PANO = 13;
+    DRAGONFLY_TOUR = 14;
+    PHOTO_SERVICE = 15;
+    HELICOPTER_TOUR = 18;
+    INNERSPACE_TOUR = 24;
+    INTERNET_PHOTO = 27;
+}
+
+enum Planet {
+    UNKNOWN_PLANET = 0;
+    EARTH = 1;
+    MARS = 3;
+    MERCURY = 5;
+    VENUS = 6;
+    JUPITER = 7;
+    SATURN = 8;
+    URANUS = 9;
+    NEPTUNE = 10;
+    CERES = 11;
+    PLUTO = 12;
+    ERIS = 13;
+    SEDNA = 14;
+    MOON = 2;
+    ISS = 4;
+    PHOBOS = 15;
+    DEIMOS = 16;
+    VESTA = 17;
+    IO = 18;
+    EUROPA = 19;
+    GANYMEDE = 20;
+    CALLISTO = 21;
+    MIMAS = 22;
+    ENCELADUS = 23;
+    TETHYS = 24;
+    DIONE = 25;
+    RHEA = 26;
+    TITAN = 27;
+    IAPETUS = 28;
+    CHARON = 29;
+}

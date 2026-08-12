@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package earth.document;
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+
+message UmsAdapterCapabilities {
+    optional bool can_destruct = 1;
+    optional bool can_trash = 2;
+    optional bool can_mutate_contents = 3;
+    optional bool can_refresh = 4;
+    optional bool can_share = 5;
+    optional bool can_accept_sharing_policy = 9;
+    optional bool can_request_access = 6;
+    optional bool can_get_link = 7;
+    optional bool can_report_abuse = 8;
+    optional bool can_copy = 10;
+    optional bool can_show_project_details = 11;
+    optional bool can_show_design_view = 12;
+    optional bool can_generate_designs = 13;
+    optional bool can_mutate_properties = 14;
+    optional bool can_paste_document_asset_layers = 15;
+    optional bool can_convert_to_earth_project = 16;
+}

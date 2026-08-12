@@ -1,0 +1,57 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/shared/hotels/hotel-amenity.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "webserver/shared/maps/logging/visibility.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "AnnotationRankingProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message Annotation {
+    optional AnnotationType type = 1;
+    enum AnnotationType {
+        UNKNOWN_ANNOTATION_TYPE = 0;
+        AMENITIES = 2;
+        USER_QUOTES = 7;
+        EDITORIAL_SUMMARY = 8;
+        GENERIC_ANNOTATION = 12;
+    }
+    
+    optional maps_frontend.Visibility visibility = 11;
+    optional int32 ve_type = 12 [default = 0x15389];
+    
+    oneof data {
+        RankedAmenity amenities = 2;
+        EditorialSummary editorial_summary = 8;
+        UserQuotes user_quotes = 9;
+        GenericAnnotation generic_annotation = 10;
+    }
+    
+    reserved 3 to 7;
+    
+    message RankedAmenity {
+        repeated HotelAmenity amenity = 1;
+    }
+    
+    message UserQuotes {
+        
+    }
+    
+    message EditorialSummary {
+        
+    }
+    
+    message GenericAnnotation {
+        optional string localized_text = 1;
+        optional string icon_url = 2;
+    }
+}
+
+message AnnotationRanking {
+    repeated Annotation annotation = 1;
+}

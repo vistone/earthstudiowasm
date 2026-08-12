@@ -1,0 +1,26 @@
+syntax = "editions";
+
+package maps_roadtraffic;
+
+import "net/proto2/bridge/proto/message_set.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMRTC";
+option java_outer_classname = "Incidentmetadata";
+option java_package = "com.google.roadtraffic.proto";
+
+message IncidentMetadata {
+    option features = ;
+    optional fixed64 incident_id = 1;
+    optional string caption_text = 2;
+    optional string description_text = 3;
+    repeated string description_text_expanded = 6;
+    optional int32 incident_type = 4;
+    optional string event_mid = 5;
+    optional bool is_user_moderation_enabled = 7;
+    
+    extend .proto2.bridge.MessageSet {
+        optional IncidentMetadata message_set_extension = 43538507;
+    }
+}

@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "java/com/google/apps/jspb/jspb_lazy_extension.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_outer_classname = "MapsMetadataContainerProto";
+option java_package = "com.google.maps.paint.client";
+
+message MapsMetadataContainer {
+    extensions 25000000 to max;
+}

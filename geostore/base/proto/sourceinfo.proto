@@ -1,0 +1,41 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/datetime.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/rawdata.proto";
+import "geostore/base/proto/url.proto";
+import "geostore/base/proto/user.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message SourceInfoProto {
+    optional FeatureIdProto source_id = 1;
+    repeated RawDataProto raw_data = 2;
+    optional string cookie = 3;
+    optional int32 provider = 4 [default = 4369];
+    optional string release = 5;
+    optional string dataset = 6;
+    optional string layer = 7;
+    optional int64 ogr_fid = 8;
+    optional int64 gaia_id = 9 [deprecated = true];
+    optional UserProto user = 14;
+    optional UserProto impersonation_user = 15;
+    optional DateTimeProto collection_date = 10;
+    repeated UrlProto attribution_url = 12;
+    optional .proto2.bridge.MessageSet temporary_data = 11;
+    optional string stream_id = 16;
+    
+    reserved 13;
+    
+    extend .proto2.bridge.MessageSet {
+        optional SourceInfoProto message_set_extension = 18502900;
+    }
+}

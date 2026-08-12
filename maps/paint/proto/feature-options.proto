@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+;
+option objc_class_prefix = "GMP";
+option java_package = "com.google.maps.paint";
+
+message FeatureOptions {
+    repeated MapFeature enabled_features = 1;
+    enum MapFeature {
+        option features = enum_type: CLOSED
+        ;
+        FEATURE_UNKNOWN = 0;
+        FEATURE_TINIES = 1;
+        FEATURE_FLATTEN_BUILDINGS = 2;
+        FEATURE_ICONIC_ICONS = 3;
+        FEATURE_ATOMIC_BASEMAP = 5;
+        FEATURE_SHOW_HIDDEN_ATOMIC_LANES = 8;
+    }
+}

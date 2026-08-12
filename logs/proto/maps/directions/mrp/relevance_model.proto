@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedRelevanceModelProto {
+    oneof details {
+        LoggedFixedRelevanceModel fixed_relevance_model = 1;
+    }
+    
+    message LoggedFixedRelevanceModel {
+        repeated LoggedEntry entries = 1;
+        message LoggedEntry {
+            optional string cost_function_label = 1;
+            optional double label_score = 2;
+            optional double decay_rate = 3;
+        }
+    }
+}

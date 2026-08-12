@@ -1,0 +1,39 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/ranking_client.proto";
+import "geostore/base/proto/featureid.proto";
+import "google/api/auditing.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureSetProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message PanoSelectionSignal {
+    repeated Point access_point = 1;
+    message Point {
+        optional fixed32 lat_e7 = 1;
+        optional fixed32 lng_e7 = 2;
+    }
+    
+    repeated geostore.FeatureIdProto segment_feature_id = 2;
+    repeated geostore.FeatureIdProto container_feature_id = 3;
+    optional Point location = 4;
+    optional bool pure_service_area_business = 5 [deprecated = true];
+    optional int32 feature_type = 6;
+}
+
+message FeatureSet {
+    optional geostore.FeatureIdProto feature_id = 1;
+    optional string feature_id_string = 5;
+    optional string knowledge_graph_id = 2;
+    optional uint64 cluster_doc_id = 3;
+    optional PanoSelectionSignal pano_selection_signal = 4;
+    optional string primary_gconcept_id = 6;
+    optional RankingClient ranking_client = 7 [deprecated = true];
+}

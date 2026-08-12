@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package geo_serving_proto.omnimaps;
+
+import "geo/serving/proto/geometry/lat_lng.proto";
+import "geo/serving/proto/geometry/lat_lng_rectangle.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/shared/common/geom/geom.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPOM";
+option java_multiple_files = true;
+option java_outer_classname = "MapViewportInfoProto";
+option java_package = "com.google.geo.serving.proto.omnimaps";
+
+message MapViewportInfo {
+    oneof viewport {
+        maps_shared.geom.Camera camera = 1;
+        geo_serving_proto.geometry.LatLngRectangle bounding_box = 2;
+        geo_serving_proto.geometry.LatLng map_center_point = 3;
+    }
+}

@@ -1,0 +1,100 @@
+syntax = "proto2";
+
+package storage_graph_bfg;
+
+import "google/api/inclusion.proto";
+import "google/protobuf/timestamp.proto";
+import "knowledge/graph/data_governance/proto/attributes/location.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.storage.graph.bfg.proto";
+
+message PolicyMetadata {
+    repeated ke.governance.TypedRegions legal_removal_regions = 1;
+    repeated ke.governance.TypedRegions legal_allowed_regions = 4;
+    optional google.protobuf.Timestamp availability_start_timestamp = 5;
+    optional google.protobuf.Timestamp availability_end_timestamp = 6;
+    optional UmpPolicyMetadata ump_policy_metadata = 17;
+    optional LmsPolicyMetadata lms_policy_metadata = 18;
+    optional RwjPolicyMetadata rwj_policy_metadata = 20;
+    optional LlmPolicyMetadata llm_policy_metadata = 21;
+    optional KnowledgePanelSyndicationPolicyMetadata knowledge_panel_syndication_policy_metadata = 22;
+    
+    optional PolicySourceType policy_source_type = 7;
+    enum PolicySourceType {
+        UNKNOWN = 0;
+        VERTICAL = 1;
+        HORIZONTAL = 2;
+    }
+    
+    repeated int32 policy_data_scope_keys = 19 [packed = true];
+    
+    reserved 2, 3, 8 to 16;
+}
+
+message UmpPolicyMetadata {
+    optional ke.governance.TypedRegions regions_allowed = 1;
+    optional google.protobuf.Timestamp availability_starts = 2;
+    optional google.protobuf.Timestamp availability_ends = 3;
+    
+    extend .proto2.bridge.MessageSet {
+        optional UmpPolicyMetadata message_set_extension = 489271632;
+    }
+}
+
+message LmsPolicyMetadata {
+    optional bool is_editorial = 1;
+    optional bool requires_linkback = 2;
+    optional bool requires_attribution = 3;
+    optional bool requires_share_alike = 4;
+    optional bool requires_first_party_only = 5;
+    optional ke.governance.TypedRegions regions_allowed = 6;
+    optional ke.governance.TypedRegions regions_disallowed = 7;
+    repeated string client_ids_allowed = 8;
+    repeated int64 modifications_allowed = 9 [packed = true];
+    
+    extend .proto2.bridge.MessageSet {
+        optional LmsPolicyMetadata message_set_extension = 489093789;
+    }
+}
+
+message RwjPolicyMetadata {
+    repeated int64 eligible_surfaces = 2 [packed = true];
+    
+    reserved 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional RwjPolicyMetadata message_set_extension = 525000454;
+    }
+}
+
+message LlmDataAccessRestrictionEnumWrapper {
+    optional LlmDataAccessRestriction data_access_restriction = 1;
+}
+
+message LlmPolicyMetadata {
+    optional uint32 data_access_restrictions = 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional LlmPolicyMetadata message_set_extension = 525001439;
+    }
+}
+
+message KnowledgePanelSyndicationPolicyMetadata {
+    optional bool is_triple_in_scope = 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional KnowledgePanelSyndicationPolicyMetadata message_set_extension = 525005513;
+    }
+}
+
+enum LlmDataAccessRestriction {
+    LLM_RESTRICTION_UNSPECIFIED = 0;
+    LLM_RESTRICTION_SEARCH_GROUNDING = 1;
+    LLM_RESTRICTION_NON_SEARCH_GROUNDING = 2;
+    LLM_RESTRICTION_SEARCH_TRAINING = 3;
+    LLM_RESTRICTION_NON_SEARCH_TRAINING = 4;
+    LLM_RESTRICTION_GOOGLE_EXTENDED_OPT_OUT = 5;
+    LLM_RESTRICTION_SEARCH_NO_GENAI = 6;
+}

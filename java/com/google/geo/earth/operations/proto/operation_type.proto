@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package google.geo.earth.operations;
+
+option java_outer_classname = "OperationTypeOuterClass";
+option java_package = "com.google.geo.earth.operations";
+
+enum OperationType {
+    option features = ;
+    OPERATION_TYPE_UNSPECIFIED = 0;
+    OPERATION_TYPE_IMPORT_DATASET = 1;
+    OPERATION_TYPE_IMPORT_DATASET_TO_DOCUMENT_ASSET = 2;
+    OPERATION_TYPE_CREATE_ON_DEMAND_LAYER = 3;
+}

@@ -1,0 +1,69 @@
+syntax = "editions";
+
+package geo_serving_proto.electricvehicle;
+
+import "geo/serving/proto/electricvehicle/battery_display_mapping.proto";
+import "geo/serving/proto/electricvehicle/ev_plug_and_charge_capability.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPEV";
+option java_multiple_files = true;
+option java_outer_classname = "ElectricVehicleOptionsProto";
+option java_package = "com.google.geo.serving.proto.electricvehicle";
+
+message ElectricVehicleOptions {
+    repeated ElectricVehicleConnector supported_connector = 1;
+    repeated ElectricVehiclePaymentNetwork preferred_network = 2;
+    optional ElectricVehicleChargingSpeed preferred_charging_speed = 6;
+    optional ElectricVehicleChargingSpeed evcs_layer_preferred_charging_speed = 10;
+    
+    optional FilterPreference connector_filter_preference = 3;
+    enum FilterPreference {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_FILTER_PREFERENCE = 0;
+        FILTER_ON = 1;
+        FILTER_OFF = 2;
+    }
+    
+    optional FilterPreference network_filter_preference = 4;
+    optional FilterPreference evcs_layer_network_filter_preference = 11;
+    optional FilterPreference speed_filter_preference = 5;
+    
+    optional VehicleInfo vehicle_info = 7;
+    message VehicleInfo {
+        optional string make = 1;
+        optional string model = 2;
+        optional int32 year = 3;
+    }
+    
+    optional EvPlugAndChargeCapability plug_and_charge_capability = 8;
+    repeated ElectricVehicleConnector connector_adapter = 9;
+    optional BatteryDisplayMapping battery_display_mapping = 12;
+}
+
+message ElectricVehicleConnector {
+    optional int32 id = 2;
+    
+    reserved 1;
+}
+
+message ElectricVehiclePaymentNetwork {
+    optional string mid = 1;
+}
+
+message ElectricVehicleChargingSpeed {
+    optional float minimum_charging_speed_kw = 1;
+    
+    optional AllowedChargingSpeeds allowed_charging_speeds = 2;
+    message AllowedChargingSpeeds {
+        repeated ChargingSpeedRange charging_speed_range = 1;
+        message ChargingSpeedRange {
+            optional int32 min_charging_speed_kw = 1;
+            optional int32 max_charging_speed_kw = 2;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package geo.earth.app;
+
+import "logs/proto/geo/earth/app/settings_event.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_outer_classname = "StartupFinishedEventProto";
+option java_package = "com.google.geo.earth.app";
+
+message StartupFinishedEvent {
+    optional bool system_app_notifications_enabled = 1;
+    optional bool voyager_notifications_enabled = 2;
+    optional bool poi_notifications_enabled = 3;
+    optional bool animated_clouds_enabled = 4;
+    optional bool gridlines_enabled = 5;
+    optional bool three_d_imagery_enabled = 6;
+    optional bool photos_layer_enabled = 7;
+    optional SettingsEvent.DarkModeState dark_mode_state = 8;
+    optional bool default_config_used = 9;
+}

@@ -1,0 +1,85 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/proto/maps/directions/customization/config/serving_protos/cost_function_inputs.proto";
+import "logs/proto/maps/directions/customization/config/serving_protos/passability_properties.proto";
+import "logs/proto/maps/directions/mrp/annotator_spec.proto";
+import "logs/proto/maps/directions/mrp/money.proto";
+import "logs/proto/maps/pathfinder/client/cost-model-options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedQueryPropertiesProto {
+    optional LoggedQueryUserPropsProto user_properties = 1;
+    optional LoggedQueryClientPropsProto client_properties = 2;
+    optional LoggedQueryVehiclePropsProto vehicle_properties = 3;
+    optional LoggedQueryAreaPropsProto area_properties = 4;
+    optional LoggedQueryDestinationPropsProto destination_properties = 5;
+    optional LoggedQueryTimePropsProto time_properties = 6;
+}
+
+message LoggedQueryUserPropsProto {
+    optional string locale = 1;
+    optional string language = 2;
+    optional string country_code = 3;
+}
+
+message LoggedQueryClientPropsProto {
+    
+}
+
+message LoggedQueryVehiclePropsProto {
+    
+}
+
+message LoggedQueryAreaPropsProto {
+    
+}
+
+message LoggedQueryDestinationPropsProto {
+    
+}
+
+message LoggedQueryTimePropsProto {
+    optional int64 request_timestamp_ms = 1;
+    optional int64 departure_timestamp_ms = 2;
+}
+
+message LoggedTripPropertiesProto {
+    repeated pathfinder.client.LoggedCostModelOptions.LoggedTravelMode travel_modes = 1;
+    optional int64 travel_time_milliseconds = 2;
+    optional int64 relative_travel_time_milliseconds = 3;
+    optional int64 distance_millimeters = 4;
+    optional int64 relative_distance_millimeters = 5;
+    optional bool includes_tolls = 6;
+    optional LoggedMoneyVector toll_price = 7;
+    optional LoggedMoneyVector relative_toll_price = 8;
+    optional int64 assisted_driving_travel_time_milliseconds = 9;
+    optional int64 relative_assisted_driving_travel_time_milliseconds = 10;
+    
+    repeated LoggedTaggedPenalty tagged_penalties = 11;
+    message LoggedTaggedPenalty {
+        optional LoggedAnnotatorSpecProto.LoggedType source = 1;
+        optional string tag = 2;
+        optional double penalty_milliseconds = 3;
+        optional double penalty_before_multiplier_milliseconds = 4;
+    }
+    
+    optional maps_directions_customization_logs_serving_protos.LoggedCostFunctionInputs customization_cost_function_inputs = 16;
+    optional maps_directions_customization_logs_serving_protos.LoggedCustomizationPassabilityProperties customization_passability_trip_properties = 17;
+    optional bool trigger_risk_averse_routing = 18;
+    optional bool includes_hov_only_segments = 19;
+    optional bool has_active_closures_within_one_hour = 20;
+    optional bool is_similar_to_requery_trip = 21;
+    
+    reserved 14, 15;
+    
+    enum LoggedProperty {
+        UNKNOWN_PROPERTY = 0;
+        TRAVEL_TIME = 1;
+        DISTANCE = 2;
+        INCLUDES_TOLLS = 3;
+        TOLL_COST = 4;
+        ASSISTED_DRIVING_TIME = 5;
+    }
+}

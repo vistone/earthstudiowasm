@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TransitLoggingContextProto";
+option java_package = "com.google.maps.transit.api";
+
+message TransitLoggingContext {
+    optional string tripfinder_logging_id = 1;
+    optional bool generate_trip_ids = 2;
+}

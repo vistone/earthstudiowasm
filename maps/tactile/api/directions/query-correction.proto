@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "maps/logs/logging/ve_logging_options.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "QueryCorrectionProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message QueryCorrection {
+    optional string query = 1;
+    optional string highlighted_correction_html = 2;
+    optional string ved = 3;
+}

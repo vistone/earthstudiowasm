@@ -1,0 +1,48 @@
+syntax = "proto2";
+
+package earth.designinput;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "google/internal/earth/v1/builtenv/built_environment.proto";
+import "google/internal/earth/v1/builtenv/new_build_run_inputs.proto";
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.designinput";
+
+message DesignGenerationResult {
+    optional string design_generation_input_id = 1;
+    optional google.internal.earth.v1.builtenv.DesignGenerationInput.DesignGenerationState design_generation_state = 2;
+    repeated google.internal.earth.v1.builtenv.NewBuildRunInputs.UseTypeInput use_type_inputs = 3;
+    optional google.internal.earth.v1.builtenv.NewBuildRunInputs.SustainabilityInputs sustainability_inputs = 8;
+    optional google.internal.earth.v1.builtenv.NewBuildRunInputs.UnitMixInputs unit_mix_inputs = 4;
+    optional google.internal.earth.v1.builtenv.CommonRunInputs common_run_inputs = 5;
+    
+    optional DesignInputType design_input_type = 6;
+    enum DesignInputType {
+        DESIGN_INPUT_TYPE_UNSPECIFIED = 0;
+        DESIGN_INPUT_TYPE_NEW_BUILD = 1;
+        DESIGN_INPUT_TYPE_SOLAR = 2;
+    }
+    
+    optional google.protobuf.Timestamp update_time = 7;
+    optional google.protobuf.Timestamp generate_time = 9;
+}
+
+enum GenerateDesignsRequestState {
+    GENERATE_DESIGNS_REQUEST_STATE_UNSPECIFIED = 0;
+    GENERATE_DESIGNS_REQUEST_STATE_BEFORE = 1;
+    GENERATE_DESIGNS_REQUEST_STATE_IN_PROGRESS = 2;
+    GENERATE_DESIGNS_REQUEST_STATE_COMPLETE = 3;
+}
+
+enum MaxSiteAreaState {
+    MAX_SITE_AREA_STATE_UNSPECIFIED = 0;
+    NOT_EXCEEDED = 1;
+    EXCEEDED_BILLING_DISABLED = 2;
+    EXCEEDED_HIGHEST_CAPABILITY = 3;
+    EXCEEDED_HIGHER_CAPABILITY_VIA_OTHER_LICENSE = 4;
+    EXCEEDED_HIGHER_CAPABILITY_VIA_PLAN_UPGRADE = 5;
+}

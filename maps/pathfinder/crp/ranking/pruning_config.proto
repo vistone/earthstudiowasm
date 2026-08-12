@@ -1,0 +1,27 @@
+syntax = "editions";
+
+package pathfinder.crp;
+
+import "maps/pathfinder/crp/ranking/maneuver_detector_config.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "PruningConfigProto";
+
+message PruningConfig {
+    optional bool prune_same_segment_divergence = 1;
+    optional ETABasedPruningConfig eta_based_pruning = 2;
+    optional UTurnPruningConfig u_turn_pruning = 3;
+    optional ManeuverDetectorConfig maneuver_detector_config = 4;
+}
+
+message ETABasedPruningConfig {
+    optional bool enabled = 1;
+    optional int32 max_abs_eta_difference_seconds = 2;
+    optional int32 max_rel_eta_difference_percent = 3;
+}
+
+message UTurnPruningConfig {
+    optional bool enabled = 1;
+    optional int32 max_abs_eta_difference_seconds = 2;
+    optional int32 max_rel_eta_difference_percent = 3;
+}

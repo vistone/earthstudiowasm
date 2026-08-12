@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "geo/serving/proto/link/link.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/logged-link.proto";
+import "maps/tactile/api/shared/android-intent.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "PlatformIntentProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message PlatformIntent {
+    optional AndroidIntent android_intent = 1;
+    optional IosIntent ios_intent = 2;
+    optional WebIntent web_intent = 3;
+    optional string ved = 4;
+    optional AndroidWebviewIntent android_webview_intent = 5;
+}
+
+message IosIntent {
+    optional string url = 1;
+}
+
+message WebIntent {
+    optional string url = 1 [deprecated = true];
+    optional LoggedLink logged_link = 2 [deprecated = true];
+    optional geo_serving_proto.link.Link.OpenHint open_hint = 3 [deprecated = true];
+    optional geo_serving_proto.link.Link link = 4;
+}
+
+message AndroidWebviewIntent {
+    optional geo_serving_proto.link.Link url = 1;
+}

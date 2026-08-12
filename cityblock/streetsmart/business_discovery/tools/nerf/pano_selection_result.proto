@@ -1,0 +1,89 @@
+syntax = "editions";
+
+package cityblock.streetsmart.biz;
+
+import "cityblock/streetsmart/business_discovery/public/imagery_observation.proto";
+import "geostore/base/proto/cityjson.proto";
+import "geostore/base/proto/featureid.proto";
+import "google/type/latlng.proto";
+
+option java_multiple_files = true;
+
+message PanoSelectionResult {
+    optional geostore.FeatureIdProto feature_id = 9;
+    optional string feature_name = 13;
+    optional string place_id = 11;
+    
+    repeated SingleResult selection_results = 12;
+    message SingleResult {
+        optional RunSelectionMethod run_selection_method = 1;
+        optional string selected_run_id = 2;
+        
+        optional BizviewData bizview_data = 3;
+        message BizviewData {
+            repeated ImageryObservationInfo imagery_observations = 1;
+            map<string, double> distance_by_pano_key = 2;
+        }
+        
+        optional double median_distance_to_storefront = 4;
+        
+        optional Vector3d storefront_facade_center = 5;
+        message Vector3d {
+            optional double x = 1;
+            optional double y = 2;
+            optional double z = 3;
+        }
+        
+        optional uint64 storefront_facade_s2_cell_id = 12;
+        optional string best_imagery_observation_id = 6;
+        optional string best_imagery_pano_key = 10;
+        optional string best_publishable_imagery_pano_key = 13;
+        optional google.type.LatLng best_publishable_imagery_lat_lng = 16;
+        optional string best_published_imagery_pano_key = 15;
+        optional google.type.LatLng best_published_imagery_lat_lng = 17;
+        repeated string publishable_pano_keys = 7;
+        repeated string published_pano_keys = 8;
+        map<string, UnstitchedPanoKeys> usable_unstitched_pano_keys = 14;
+        optional string gmrs_url_for_storefront_geometry_model = 9;
+        
+        optional PoiMatch poi_match = 11;
+        message PoiMatch {
+            map<string, double> poi_match_scores = 1;
+            optional double median_match_score = 2;
+            optional double pc75_match_score = 3;
+        }
+        
+        message UnstitchedPanoKeys {
+            repeated string unstitched_pano_keys = 1;
+        }
+    }
+    
+    optional geostore.CityJsonProto storefront_geometry_model = 10;
+    
+    reserved 1 to 8;
+}
+
+message PanoSelectionConfig {
+    optional int32 max_time_seconds_from_best_imagery_obs = 1 [default = 5];
+    optional int32 num_results_to_keep_per_method = 2 [default = 2];
+    repeated RunSelectionMethod selection_methods_to_include = 3;
+    optional double poi_match_score_threshold = 4 [default = 0.5];
+    optional double distance_threshold = 5 [default = 30];
+}
+
+message StorefrontSurface {
+    repeated Vector3d vertices = 1;
+    message Vector3d {
+        optional double x = 1;
+        optional double y = 2;
+        optional double z = 3;
+    }
+}
+
+enum RunSelectionMethod {
+    RUN_SELECTION_METHOD_UNKNOWN = 0;
+    RUN_SELECTION_METHOD_MOST_PUBLISABLE = 1;
+    RUN_SELECTION_METHOD_CAMERA_CLOSEST_TO_STOREFRONT = 2;
+    RUN_SELECTION_METHOD_MOST_RECENT = 3;
+    RUN_SELECTION_METHOD_HIGHEST_BIZDETECT_SCORE = 4;
+}

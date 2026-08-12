@@ -1,0 +1,74 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+import "geo/imagery/karto/proto/bounding_box.proto";
+import "geo/imagery/karto/proto/cinematic_plan.proto";
+import "geo/imagery/karto/proto/frame.proto";
+import "geo/imagery/karto/proto/karto_pano_selection_result.proto";
+import "geo/imagery/karto/proto/movie_actor_parameters.proto";
+import "geo/render/mirth/apps/mirthrender/batch/mapfacts_params.proto";
+import "geo/render/mirth/apps/mirthrender/batch/poi_animation_params.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "CameraMoveProto";
+option java_package = "com.google.geo.imagery.karto.proto";
+
+message ERSParameters {
+    optional mirth_apps_mirthrender.MapFactsParams map_facts_params = 1;
+    optional mirth_apps_mirthrender.PoiAnimationParams poi_animation_params = 2;
+}
+
+message AerialToPanoParameters {
+    optional string pano_id = 1;
+    optional OrientedBoundingBox bounding_box = 2;
+}
+
+message PanoToAerialParameters {
+    optional string pano_id = 1;
+    optional OrientedBoundingBox bounding_box = 2;
+    optional float max_horizontal_bounds_meters = 3 [default = 0];
+    
+    optional AnimationCurveType animation_curve_type = 4 [default = ANIMATION_CURVE_TYPE_UNSPECIFIED];
+    enum AnimationCurveType {
+        ANIMATION_CURVE_TYPE_UNSPECIFIED = 0;
+        CINE_LINEAR = 1;
+        CINE_EASE_OUT = 2;
+        CINE_EASE_IN = 3;
+    }
+}
+
+message PanoLookAroundParameters {
+    optional string pano_id = 1;
+    optional OrientedBoundingBox bounding_box = 2;
+}
+
+message PrecomputedCameraPath {
+    repeated Frame frames = 1;
+}
+
+message StreetLevelCameraPath {
+    optional KartoPanoSelectionResult.PanoRun pano_run = 6;
+    
+    optional RequestType request_type = 10;
+    enum RequestType {
+        REQUEST_TYPE_UNSPECIFIED = 0;
+        VIDEO = 1;
+        GSPLAT = 2;
+    }
+    
+    reserved 1, 2, 3, 4, 5, 7, 8, 9;
+}
+
+message CameraMove {
+    oneof camera_move {
+        MovieActorParameters movie_actor_parameters = 1;
+        ERSParameters ers_parameters = 2;
+        PrecomputedCameraPath precomputed_camera_path = 3;
+        StreetLevelCameraPath street_level_camera_path = 4;
+        AerialToPanoParameters aerial_to_pano = 6;
+        PanoToAerialParameters pano_to_aerial = 7;
+        PanoLookAroundParameters pano_path = 8;
+        CinematicPlan cinematic_plan = 9;
+    }
+}

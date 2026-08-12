@@ -1,0 +1,490 @@
+syntax = "editions";
+
+package earth.state;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/document/featurekey.proto";
+import "geo/earth/app/cpp/core/protos/drawing_mode.proto";
+import "geo/earth/app/cpp/core/protos/view_group.proto";
+import "geo/earth/proto/mapstyle.proto";
+import "google/internal/earth/v1/layers.proto";
+import "logs/proto/geo/earth/app/earth_log.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl";
+
+message LatLonBox {
+    optional double north = 1;
+    optional double south = 2;
+    optional double east = 3;
+    optional double west = 4;
+}
+
+message State {
+    optional DataState data_state = 1;
+}
+
+message DataState {
+    optional NonRestorableData non_restorable_data = 1;
+}
+
+message NonRestorableData {
+    optional NonRestorableDocumentViewData document_view_data = 1;
+    optional NonRestorableMeasureToolData measure_tool_data = 2;
+    optional NonRestorableKnowledgeCardData knowledge_card_data = 4;
+    optional NonRestorableSearchData search_data = 5;
+    optional NonRestorableStreetViewData street_view_data = 6;
+    optional NonRestorableTourData tour_data = 7;
+    optional NonRestorableFeelingLuckyData feeling_lucky_data = 9;
+    optional NonRestorableDrawingToolData drawing_tool_data = 10;
+    optional NonRestorablePropertyEditorData property_editor_data = 12;
+    optional NonRestorableLightboxData lightbox_data = 13;
+    optional NonRestorableBalloonData balloon_data = 14;
+    optional NonRestorableUserErrorsData user_errors_data = 15;
+    optional NonRestorableOnDocumentLoadedOperation on_document_loaded_operation = 16;
+    optional NonRestorableOnStyleLoadedOperation on_style_loaded_operation = 17;
+    optional NonRestorableDroppedPinData dropped_pin_data = 18;
+    optional NonRestorableLayerFeatureRequestData layer_feature_request_data = 19;
+    optional NonRestorableTimeMachineData time_machine_data = 20;
+    optional NonRestorableTimelapseData timelapse_data = 21;
+    optional NonRestorableCelestialData celestial_data = 22;
+    optional NonRestorableMapStyleData mapstyle_data = 24;
+    optional NonRestorableOperationProgressData operation_progress_data = 25;
+    optional NonRestorableDocumentPickerData document_picker_data = 26;
+    optional NonRestorableSettingsData settings_data = 27;
+    optional NonRestorableSprayPaintData spray_paint_data = 28;
+    optional NonRestorableAppRootData app_root_data = 30;
+    optional NonRestorableFeedbackData feedback_data = 33;
+    optional NonRestorableCreateLinkDialogData create_link_dialog_data = 34;
+    optional NonRestorableAccountData account_data = 35;
+    optional NonRestorableMyLocationData my_location_data = 36;
+    optional bool persistent_local_storage_available = 41;
+    optional NonRestorableSiteSelectionData site_selection_data = 42;
+    optional NonRestorableEarthMateData earth_mate_data = 43;
+    optional NonRestorableDesignInputData design_input_data = 44;
+    optional NonRestorableGcpProjectBillingData gcp_project_billing_data = 45;
+    optional NonRestorableDesignViewerData design_viewer_data = 46;
+    optional NonRestorableNavigationControlsViewData navigation_controls_view_data = 47;
+    optional NonRestorableHomescreenData homescreen_data = 51;
+    optional NonRestorableDesignDetailsData design_details_data = 52;
+    optional NonRestorableDesignBuiltEntityData design_built_entity_data = 54;
+    optional NonRestorablePinnedProjectsData pinned_projects_data = 55;
+    optional NonRestorableIndustrySelectorData industry_selector_data = 57;
+    
+    reserved 11;
+}
+
+message NonRestorableAppRootData {
+    optional bool is_immersive_mode_active = 1;
+    optional bool is_menu_bar_open = 2;
+    optional bool is_menu_bar_collapsed = 3 [default = false];
+    optional bool has_first_scene = 4;
+    optional bool is_startup_complete = 5;
+    
+    optional DefaultLoadingDestination default_loading_destination = 6;
+    enum DefaultLoadingDestination {
+        DEFAULT_LOADING_DESTINATION_UNKNOWN = 0;
+        DEFAULT_LOADING_DESTINATION_HOMESCREEN = 1;
+        DEFAULT_LOADING_DESTINATION_EXPLORE = 2;
+    }
+}
+
+message NonRestorableDocumentViewData {
+    optional int32 focused_document_key = 1 [default = -1];
+    optional bool ums_persisted = 6;
+}
+
+message NonRestorableDrawingToolData {
+    optional .earth.core.drawingmode.DrawingMode mode = 1;
+    optional bool is_session_active = 2;
+}
+
+message NonRestorableMeasureToolData {
+    optional double first_coord_latitude = 1;
+    optional double first_coord_longitude = 2;
+    optional bool has_drawing_intent = 3;
+    optional bool is_session_active = 4;
+}
+
+message NonRestorableKnowledgeCardData {
+    optional StackRootCardId stack_root_card_id = 1;
+    message StackRootCardId {
+        optional string mid = 1;
+        optional OysterId oyster_id = 2;
+        optional .earth.document.proto.FeatureKey feature_key = 3;
+    }
+    
+    optional CardSize card_size = 2 [default = CARD_SIZE_NORMAL];
+    enum CardSize {
+        CARD_SIZE_UNKNOWN = 0;
+        CARD_SIZE_COLLAPSED = 1;
+        CARD_SIZE_NORMAL = 2;
+        CARD_SIZE_EXPANDED = 3;
+    }
+    
+    optional bool card_set_requested = 3;
+    optional bool fly_immediately_requested = 4;
+    repeated string card_stack_mid = 5;
+    optional int32 index = 6;
+    optional bool is_feeling_lucky = 7;
+    
+    message OysterId {
+        optional string feature_id = 1;
+        optional string layer_id = 2;
+        optional double latitude = 3;
+        optional double longitude = 4;
+        optional string query = 5;
+    }
+}
+
+message NonRestorableDroppedPinData {
+    optional double latitude = 1;
+    optional double longitude = 2;
+    optional double accuracy = 4;
+    optional bool show_placemark = 3;
+}
+
+message NonRestorableFeelingLuckyData {
+    optional int32 im_feeling_lucky_count = 1;
+    
+    optional FeelingLuckyRequestStatus feeling_lucky_request_status = 2;
+    enum FeelingLuckyRequestStatus {
+        NONE = 0;
+        PENDING = 1;
+        FAILED = 2;
+    }
+}
+
+message NonRestorableBalloonData {
+    optional bool fly_to_balloon = 5;
+    
+    oneof data {
+        FeatureBalloonData feature_data = 1;
+        HtmlBalloonData html_data = 2;
+        LayerFeatureDetailsData layer_feature_data = 4;
+    }
+    
+    message FeatureBalloonData {
+        optional .earth.document.proto.FeatureKey feature_key = 1;
+    }
+    
+    message HtmlBalloonData {
+        optional string html = 1;
+        optional string base_url = 2;
+    }
+}
+
+message NonRestorableSearchData {
+    optional bool panel_open = 1 [default = false];
+    optional bool suggestions_open = 2;
+    optional bool search_history_open = 3;
+    optional bool is_searching = 4;
+    optional string query = 5;
+    optional int32 caret_position = 6;
+    optional LatLonBox viewport = 7;
+    optional string group_id = 8;
+    optional bool has_results = 9 [default = false];
+    repeated NonRestorableKnowledgeCardData.StackRootCardId result_ids = 10;
+    optional bool suppress_search_flyto = 11 [default = false];
+}
+
+message NonRestorableStreetViewData {
+    optional PanoId pano_id = 1;
+    message PanoId {
+        optional string pano_id = 1;
+        optional PanoFrontEnd front_end = 2;
+    }
+    
+    optional bool coverage_overlay_shown = 2 [default = false];
+    optional bool timeline_available = 3 [default = false];
+    optional bool timeline_visible = 4 [default = false];
+    optional bool timeline_collapsed = 5 [default = false];
+    optional string timeline_selected_date = 6;
+    
+    enum PanoFrontEnd {
+        UNKNOWN = 1;
+        ALLEYCAT = 2;
+        FIFE = 3;
+        FIFE_MEDIA_KEY = 5;
+        LOCAL = 4;
+    }
+}
+
+message NonRestorableTourData {
+    optional bool tour_player_visible = 1;
+}
+
+message NonRestorablePropertyEditorData {
+    optional int32 editor_document_key = 1 [default = -1];
+    optional bool was_document_view_stack_visible = 2;
+    optional bool is_session_active = 3;
+}
+
+message NonRestorableLightboxData {
+    optional bool is_lightbox_visible = 1;
+}
+
+message NonRestorableUserErrorsData {
+    optional bool suppressed = 1;
+}
+
+message NonRestorableOnDocumentLoadedOperation {
+    optional int32 document_key = 1 [default = -1];
+    
+    oneof Operation {
+        FocusDocument focus_document = 2;
+        StartPlayMode start_play_mode = 3;
+        OpenEditor open_editor = 4;
+        bool fly_to = 5;
+    }
+    
+    message FocusDocument {
+        optional bool fly_to = 1;
+    }
+    
+    message StartPlayMode {
+        optional string feature_id = 1;
+    }
+    
+    message OpenEditor {
+        optional string feature_id = 1;
+    }
+}
+
+message NonRestorableOnStyleLoadedOperation {
+    optional .earth.document.proto.FeatureKey feature_key = 1;
+    
+    optional ShowInfoForFeature show_info_for_feature = 2;
+    message ShowInfoForFeature {
+        optional bool fly_to = 1;
+    }
+}
+
+message NonRestorableTimeMachineData {
+    optional bool configured = 1;
+    optional bool enabled = 2;
+    optional bool expanded = 3 [default = true];
+    optional bool expanded_sui = 5 [default = true];
+    optional string date = 4;
+}
+
+message NonRestorableTimelapseData {
+    optional bool available = 1;
+    optional bool enabled = 2;
+    optional bool expanded = 3 [default = true];
+    optional bool expanded_sui = 7 [default = true];
+    optional bool playing = 4;
+    optional double framerate_multiplier = 5;
+    optional int32 paused_at_year = 6;
+}
+
+message NonRestorableLayerFeatureRequestData {
+    optional string feature_id = 1;
+    optional string parent_layer_id = 2;
+}
+
+message NonRestorableCelestialData {
+    optional CelestialBody celestial_body = 1 [default = CELESTIAL_BODY_EARTH];
+    enum CelestialBody {
+        CELESTIAL_BODY_SUN = 0;
+        CELESTIAL_BODY_MERCURY = 1;
+        CELESTIAL_BODY_VENUS = 2;
+        CELESTIAL_BODY_EARTH = 3;
+        CELESTIAL_BODY_MOON = 4;
+        CELESTIAL_BODY_MARS = 5;
+        CELESTIAL_BODY_JUPITER = 6;
+        CELESTIAL_BODY_SATURN = 7;
+        CELESTIAL_BODY_URANUS = 8;
+        CELESTIAL_BODY_NEPTUNE = 9;
+        CELESTIAL_BODY_PHOBOS = 10;
+        CELESTIAL_BODY_DEIMOS = 11;
+        CELESTIAL_BODY_PLUTO = 12;
+        CELESTIAL_BODY_RHEA = 13;
+        CELESTIAL_BODY_TITAN = 14;
+        CELESTIAL_BODY_EUROPA = 15;
+        CELESTIAL_BODY_ENCELADUS = 16;
+        CELESTIAL_BODY_DIONE = 17;
+        CELESTIAL_BODY_CERES = 18;
+        CELESTIAL_BODY_IO = 19;
+        CELESTIAL_BODY_IAPETUS = 20;
+        CELESTIAL_BODY_MIMAS = 21;
+        CELESTIAL_BODY_GANYMEDE = 22;
+        CELESTIAL_BODY_OTHER = 23;
+    }
+    
+    optional bool celestial_time_enabled = 2;
+    
+    oneof date_and_time {
+        double celestial_time_ms = 3;
+        string celestial_time_stamp = 4;
+    }
+}
+
+message NonRestorableMapStyleData {
+    optional layers.MapStyle default_map_style = 1;
+    optional layers.MapStyle voyager_map_style = 2;
+    optional bool discovery_layer_enabled = 3 [default = false];
+    optional bool collapse_pois = 4 [default = false];
+    optional bool is_session_active = 5;
+}
+
+message NonRestorableOperationProgressData {
+    optional TaskIdentifier task_identifier = 1;
+    enum TaskIdentifier {
+        UNSPECIFIED_TASK_IDENTIFIER = 0;
+        TASK_IDENTIFIER_IMPORT_TO_CLOUD_CREATING_MAP = 1;
+        TASK_IDENTIFIER_IMPORT_TO_CLOUD_HOSTING_IMAGES = 2;
+        TASK_IDENTIFIER_IMPORT_TO_CLOUD_FETCHING_ICONS = 3;
+        TASK_IDENTIFIER_IMPORT_TO_CLOUD_DOCUMENT_SETUP = 4;
+        TASK_IDENTIFIER_IMPORT_TO_CLOUD_CREATING_FEATURES = 5;
+        TASK_IDENTIFIER_PASTE_UPLOADING_ASSETS = 6;
+        TASK_IDENTIFIER_PASTE_EMBEDDING_IMAGES = 7;
+    }
+    
+    optional uint32 current_progress = 2;
+    optional uint32 total = 3;
+}
+
+message NonRestorableDocumentPickerData {
+    optional bool document_picker_visible = 1;
+}
+
+message NonRestorableSettingsData {
+    optional bool settings_visible = 1;
+    optional bool is_session_active = 2;
+}
+
+message LayerFeatureDetailsData {
+    optional string title = 1;
+    repeated LayerFeatureAttribute attribute = 2;
+}
+
+message LayerFeatureAttribute {
+    optional string name = 1;
+    optional google.internal.earth.v1.layers.FeatureAttributeValue value = 2;
+    optional string localized_name = 3;
+    optional google.internal.earth.v1.layers.ProcessedFeatureAttribute.AttributeType type = 4;
+}
+
+message NonRestorableSprayPaintData {
+    optional bool is_panel_visible = 1;
+}
+
+message NonRestorableFeedbackData {
+    optional bool is_dialog_visible = 1;
+    map<string, string> product_specific_data = 2;
+}
+
+message NonRestorableCreateLinkDialogData {
+    optional bool create_link_dialog_visible = 1;
+}
+
+message NonRestorableAccountData {
+    optional bool user_is_signed_in = 1;
+    optional bool is_earth_enabled = 2;
+    optional bool is_my_maps_enabled = 3;
+    optional bool is_drive_enabled = 4;
+}
+
+message NonRestorableMyLocationData {
+    optional PermissionState permission_state = 1;
+    enum PermissionState {
+        UNKNOWN_PERMISSION_STATE = 0;
+        PERMISSION_STATE_GRANTED = 1;
+        PERMISSION_STATE_DENIED = 3;
+        PERMISSION_STATE_DISABLED = 4;
+    }
+    
+    optional TrackingState tracking_state = 2;
+    enum TrackingState {
+        UNKNOWN_TRACKING_STATE = 0;
+        TRACKING_STATE_OFF = 1;
+        TRACKING_STATE_REQUESTING = 2;
+        TRACKING_STATE_TRACKING = 3;
+        TRACKING_STATE_FOLLOWING_CAMERA = 4;
+    }
+}
+
+message NonRestorableSiteSelectionData {
+    optional bool is_session_active = 1;
+    
+    optional FeatureSelection selected_feature_keys = 2;
+    message FeatureSelection {
+        repeated .earth.document.proto.FeatureKey feature_key = 1;
+    }
+}
+
+message NonRestorableDesignViewerData {
+    optional bool is_session_active = 1;
+}
+
+message NonRestorableDesignDetailsData {
+    optional bool is_session_active = 1;
+}
+
+message NonRestorableDesignBuiltEntityData {
+    optional bool is_session_active = 1;
+    optional string selected_built_entity_id = 2;
+}
+
+message NonRestorableEarthMateData {
+    optional bool is_chat_active = 1;
+}
+
+message NonRestorableDesignInputData {
+    optional DesignInputMode design_input_mode = 1;
+    enum DesignInputMode {
+        DESIGN_INPUT_MODE_UNSPECIFIED = 0;
+        DESIGN_INPUT_MODE_INACTIVE = 1;
+        DESIGN_INPUT_MODE_SELECTING = 2;
+        DESIGN_INPUT_MODE_SOLAR = 3;
+        DESIGN_INPUT_MODE_NEW_BUILD = 4;
+        DESIGN_INPUT_MODE_SITE_SELECTION = 5;
+    }
+    
+    optional NonRestorableAddBuildingTypesData add_building_types_data = 2;
+    optional NonRestorableBuildingEditorData building_editor_data = 3;
+    optional NonRestorableCopyDesignInputsData copy_design_inputs_data = 4;
+}
+
+message NonRestorableCopyDesignInputsData {
+    optional bool is_session_active = 1;
+}
+
+message NonRestorableAddBuildingTypesData {
+    optional bool is_session_active = 1;
+}
+
+message NonRestorableBuildingEditorData {
+    optional bool is_session_active = 1;
+}
+
+message NonRestorableGcpProjectBillingData {
+    optional bool is_session_active = 1;
+    optional .geo.earth.app.BillingUpgradeDialogSourceView source_view = 2;
+}
+
+message NonRestorableNavigationControlsViewData {
+    optional bool is_session_active = 1;
+}
+
+message NonRestorableHomescreenData {
+    optional bool opened_after_first_load = 2;
+    optional bool is_homescreen_dismissed = 3;
+}
+
+message NonRestorablePinnedProjectsData {
+    optional bool is_pinned_projects_dialog_visible = 1;
+}
+
+message NonRestorableIndustrySelectorData {
+    optional bool is_survey_dialog_visible = 1;
+    optional bool is_banner_visible = 2;
+    optional .earth.core.viewgroup.ViewId active_view_id = 3;
+}

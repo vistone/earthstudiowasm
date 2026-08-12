@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package maps_shared_client_callouts;
+
+option objc_class_prefix = "GMMCL";
+option java_multiple_files = true;
+option java_package = "com.google.maps.shared.client.callouts";
+
+message CalloutMetadata {
+    optional CalloutType callout_type = 1;
+    enum CalloutType {
+        CALLOUT_TYPE_DEFAULT = 0;
+        CALLOUT_TYPE_NAV_MANEUVER = 1;
+        CALLOUT_TYPE_ROUTE = 2;
+        CALLOUT_TYPE_SEARCH_RESULT = 3;
+        CALLOUT_TYPE_ROUTE_DECORATION = 4;
+        CALLOUT_TYPE_INCIDENT = 5;
+        CALLOUT_TYPE_OFF_ROUTE_INCIDENT = 6;
+        CALLOUT_TYPE_CROSS_STREET = 7;
+        CALLOUT_TYPE_CURRENT_ROAD_NAME = 8;
+    }
+    
+    optional int32 labeling_identifier = 2;
+}

@@ -1,0 +1,50 @@
+syntax = "proto2";
+
+package logs;
+
+import "google/api/inclusion.proto";
+import "logs/eventid/eventid.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "logs/proto/visual_element/click_tracking_cgi.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_package = "com.google.common.logging.proto1api";
+
+message VisualElementGrafts {
+    repeated VisualElementGraft graft = 1;
+}
+
+message VisualElementGraft {
+    optional VisualElementTreeRef target = 1;
+    
+    optional GraftType type = 2 [default = UNKNOWN];
+    enum GraftType {
+        UNKNOWN = 0;
+        SHOW = 1;
+        HIDE = 2;
+        INSERT = 3;
+        CLONE = 4 [deprecated = true];
+        COPY = 5;
+    }
+    
+    optional VisualElementTreeRef clone_tree = 3;
+    optional VisualElementTreeRef source_tree = 5;
+    optional int64 graft_time_usec = 4;
+    optional bool dedupe = 6 [default = false];
+    
+    extensions 100;
+}
+
+message VisualElementTreeRef {
+    oneof events {
+        EventIdMessage event = 1;
+        ClientEventIdMessage client_event = 3;
+        string ei = 4;
+    }
+    
+    oneof root {
+        ClickTrackingCGI root_ve = 2;
+        string ved = 5;
+    }
+}

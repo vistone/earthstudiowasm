@@ -1,0 +1,70 @@
+syntax = "proto2";
+
+package logs_tactile;
+
+import "logs/proto/maps/geoevents/annotations.proto";
+import "maps/versatile/proto/annotation-enums.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGST";
+option java_multiple_files = true;
+option java_outer_classname = "AnnotationDataProto";
+option java_package = "com.google.maps.tactile";
+
+message AnnotationImpressionData {
+    optional int32 use_case_client_side = 10;
+    optional maps_versatile.annotations.UseCase use_case = 1 [deprecated = true];
+    optional maps_versatile.annotations.DiscoveryType discovery_type = 2 [deprecated = true];
+    optional int32 personal_use_case = 3;
+    optional int32 relative_boost = 4;
+    optional int32 personal_relative_boost = 5;
+    
+    repeated AnnotationAttribute annotation_attribute = 6;
+    message AnnotationAttribute {
+        optional int32 namespace_id = 1;
+        optional int32 attribute_id = 2;
+    }
+    
+    optional BusynessStatus busyness_status = 7;
+    enum BusynessStatus {
+        BUSYNESS_UNSPECIFIED = 0;
+        WAY_MORE_PEOPLE_THAN_USUAL = 1;
+        AS_BUSY_AS_IT_GETS = 2;
+        BUSIER_THAN_USUAL = 3;
+        A_LITTLE_BUSY = 4;
+        LESS_BUSY_THAN_USUAL = 5;
+        NOT_TOO_BUSY = 6;
+        NOT_BUSY = 7;
+    }
+    
+    optional DealSubtitleType deal_subtitle_type = 8;
+    enum DealSubtitleType {
+        DEAL_SUBTITLE_TYPE_UNSPECIFIED = 0;
+        DEAL_SUBTITLE_TYPE_GENERAL = 1;
+        DEAL_SUBTITLE_TYPE_PERCENT = 2;
+        DEAL_SUBTITLE_TYPE_MONEY = 3;
+    }
+    
+    optional DealType deal_type = 9;
+    enum DealType {
+        DEAL_TYPE_UNSPECIFIED = 0;
+        DEAL_TYPE_GOOGLE_PAY = 1;
+        DEAL_TYPE_PARTNER_PROVIDED = 2;
+        DEAL_TYPE_LOCAL_POST = 3;
+        DEAL_TYPE_EXTRACTED = 4;
+    }
+}
+
+message AnnotationData {
+    optional int32 logging_ve_ui_type = 2;
+    optional AnnotationImpressionData annotation_impression_data = 3;
+    
+    optional ApplicationTarget annotated_target = 4;
+    enum ApplicationTarget {
+        UNKNOWN = 0;
+        PRIMARY_LABEL_GROUP = 1;
+        SECONDARY_LABEL_GROUP = 2;
+    }
+    
+    reserved 1;
+}

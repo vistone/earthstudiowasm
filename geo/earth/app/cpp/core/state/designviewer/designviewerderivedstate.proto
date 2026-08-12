@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Designviewerderivedstate";
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message DesignViewerDerivedState {
+    optional bool active = 1;
+}

@@ -1,0 +1,110 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "geo/photo/proto/metadataservice.proto";
+import "geo/serving/proto/attribution/user_caption.proto";
+import "geo/serving/proto/offerings/offering_type.proto";
+import "geo/serving/proto/photos/media_item_set.proto";
+import "geo/serving/proto/photos/merchant_media_metadata.proto";
+import "geo/serving/proto/photos/photo_user_capabilities.proto";
+import "geo/serving/proto/ugc/publication_info.proto";
+import "geo/serving/proto/userreactions/reaction_stickers.proto";
+import "geo/serving/proto/userreactions/reactions.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/shared/common/geom/geom.proto";
+import "maps/tactile/api/entity-details-common.proto";
+import "maps/tactile/api/logged-link.proto";
+import "maps/tactile/api/scene-constants.proto";
+import "maps/tactile/api/shared/feature-id.proto";
+import "maps/tactile/api/shared/offering/offering-contribution.proto";
+import "maps/tactile/api/shared/photo/experiment-cohort.proto";
+import "maps/tactile/api/shared/photo/photo-preview-action.proto";
+import "maps/tactile/api/shared/photo/rich-content-data.proto";
+import "maps/tactile/api/shared/photo/suggested-video-info.proto";
+import "maps/tactile/api/shared/thumbs-vote.proto";
+import "maps/tactile/api/video-preview.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoDescriptionProto";
+option java_package = "com.google.maps.tactile";
+
+message PhotoDescription {
+    optional int32 ve_type = 31 [default = 5068];
+    optional string ei = 10 [deprecated = true];
+    optional string ved = 11;
+    optional geo_photo_service.PhotoMetadata photo_metadata = 22;
+    optional geo_serving_proto.ugc.PublicationInfo publication_info = 38;
+    repeated RelatedEntity related_entity = 16;
+    optional PhotoEntrypointType entrypoint_type = 23;
+    optional string mutate_key = 24;
+    repeated PhotoOfferingAssociation offering = 29;
+    optional geo_serving_proto.photos.PhotoUserCapabilities user_capabilities = 33;
+    optional string id = 1;
+    optional scene.ImagerySource source = 2;
+    optional scene.ImageryType type = 3;
+    optional string title = 4;
+    optional string translated_title = 46;
+    repeated string subtitle = 18;
+    optional string type_label = 21;
+    optional maps_tactile.shared.photo.RichContentData rich_content_data = 41;
+    repeated PhotoAttribution attribution = 19;
+    optional float score = 6 [deprecated = true];
+    optional PhotoThumbnail thumbnail = 7;
+    optional maps_shared.geom.Camera camera = 9;
+    optional LoggedLink report_a_problem_link = 12;
+    optional geo_serving_proto.offerings.OfferingType offering_type = 26;
+    optional maps_tactile.shared.ThumbsVoteInfo vote_info = 28;
+    optional geo_serving_proto.userreactions.Reactions reactions = 39;
+    optional geo_serving_proto.userreactions.ReactionStickers reaction_stickers = 40;
+    optional maps_tactile.shared.FeatureId feature_id = 30;
+    optional string uprank_photo_descriptor = 32;
+    optional geo_serving_proto.attribution.UserCaption author_caption = 34;
+    optional geo_serving_proto.photos.MerchantMediaMetadata merchant_media_metadata = 35;
+    optional maps_tactile.shared.photo.PhotoPreviewAction photo_preview_action = 36;
+    optional bool autoplay_video = 42;
+    optional bool loop_video = 43;
+    optional geo_serving_proto.photos.MediaMetadata.MediaPostInfo media_post_info = 44;
+    repeated maps_tactile.shared.photo.ExperimentCohort experiment_cohort = 45;
+    
+    oneof video_info {
+        VideoPreview video_preview = 27;
+        maps_tactile.shared.photo.SuggestedVideoInfo video_preview_no_streams = 37;
+    }
+    
+    reserved 5, 8, 13, 14, 15, 17, 20, 25;
+}
+
+message PhotoOfferingAssociation {
+    optional bytes offering_key = 1 [deprecated = true];
+    optional maps_tactile.shared.offering.OfferingContribution offering_contribution = 2;
+}
+
+message PhotoAttribution {
+    optional string ved = 3;
+    optional string text = 1;
+    optional LoggedLink link = 2;
+}
+
+message PhotoThumbnail {
+    optional string url = 1;
+    optional string label = 2;
+    optional maps_shared.geom.Size actual_size = 3;
+    optional maps_shared.geom.Size render_size = 4;
+}
+
+message RelatedEntity {
+    optional Entity entity = 1;
+}
+
+enum PhotoEntrypointType {
+    option deprecated = true;
+    UNKNOWN_PHOTO_ENTRYPOINT = 0;
+    PHOTO = 1;
+    SEE_OUTSIDE = 2;
+    SEE_INSIDE = 3;
+}

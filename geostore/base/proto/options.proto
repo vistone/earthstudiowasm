@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package geostore;
+
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message FieldIdOptions {
+    optional int32 next_available_field_id = 1;
+}
+
+extend .proto2.MessageOptions {
+    optional FieldIdOptions field_id_options = 38142873;
+}

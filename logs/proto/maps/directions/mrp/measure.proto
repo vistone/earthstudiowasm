@@ -1,0 +1,39 @@
+syntax = "editions";
+
+package logs.proto.maps.directions.mrp;
+
+import "logs/proto/maps/directions/mrp/metrics/path_metrics.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+message LoggedMrpMeasureProto {
+    optional double value = 1;
+    
+    optional LoggedType type = 2;
+    enum LoggedType {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_TYPE = 0;
+        DISTINCTNESS = 3;
+        COST_ADVANTAGE = 4;
+        NUM_TRIPS = 5;
+        ABSOLUTE_OPTIMALITY_LOSS = 6;
+        PERCENTAGE_OPTIMALITY_LOSS = 7;
+        RELEVANCE = 8;
+        PENALTY_IMPACT = 9;
+        PENALTY_CONTRIBUTION = 10;
+        ROUTE_THROUGH_RESTRICTION = 11;
+        SEGMENT_HINTS_SIZE = 12;
+    }
+    
+    optional int32 selector_a_index = 3;
+    optional string selector_a_brief_label = 4;
+    optional int32 selector_b_index = 5;
+    optional string selector_b_brief_label = 6;
+}
+
+message LoggedPathMeasureProto {
+    optional metrics.LoggedPathMetricsProto metrics = 1;
+}

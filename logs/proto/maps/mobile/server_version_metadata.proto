@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package logs_gmm;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGGMM";
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.maps.mobile";
+
+message NamedServerVersion {
+    optional int32 server_tag = 1;
+    optional int64 server_version = 2;
+    optional bool enable_stickiness = 3;
+    
+    enum ServerTag {
+        UNKNOWN_SERVER_TAG = 0;
+        GMM_SERVER = 1;
+        MAPS_FE_BOQ = 2;
+        GWS = 3;
+        PAINT = 4;
+        SPOTLIGHT = 5;
+        MAPS_SDK_BOQ = 6;
+        FLEET_ENGINE = 7;
+        SUPERROOT = 8;
+    }
+}
+
+message ServerVersionMetadata {
+    repeated NamedServerVersion seen_servers = 1;
+}

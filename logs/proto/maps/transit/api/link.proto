@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "LinkProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedLinkRef {
+    optional LoggedWebUrl web_url = 1;
+    optional LoggedAndroidIntent android_intent = 2;
+    optional LoggedIosLink ios_link = 3;
+}
+
+message LoggedWebUrl {
+    optional string url = 1;
+    optional string language = 2;
+}
+
+message LoggedAndroidIntent {
+    optional string action = 1;
+    optional string data = 2;
+}
+
+message LoggedIosLink {
+    optional string url = 1;
+}

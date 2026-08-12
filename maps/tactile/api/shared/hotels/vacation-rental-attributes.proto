@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "geo/serving/proto/scalableattributes/scalableattributes.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "VacationRentalAttributesProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message VacationRentalAttributes {
+    optional geo_serving_proto.scalableattributes.ScalableAttributeGroup essential_attributes = 1;
+    optional geo_serving_proto.scalableattributes.ScalableAttributeGroup short_essential_attributes = 3;
+    
+    repeated Verification verification = 2;
+    message Verification {
+        optional string text = 1;
+    }
+}

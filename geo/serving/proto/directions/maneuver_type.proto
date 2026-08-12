@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GSPD";
+option java_multiple_files = true;
+option java_outer_classname = "ManeuverTypeProto";
+option java_package = "com.google.geo.serving.proto.directions";
+
+enum ManeuverType {
+    MANEUVER_UNKNOWN = 0;
+    DEPART = 1;
+    NAME_CHANGE = 2;
+    STRAIGHT = 12;
+    LANE_CHANGE = 29;
+    TURN = 3;
+    COUNTED_TURN = 16;
+    UTURN = 4;
+    ON_RAMP = 5;
+    OFF_RAMP = 6;
+    FORK = 7;
+    MERGE = 8;
+    FERRY = 13;
+    FERRY_TRAIN = 14;
+    EASTER_EGG = 15;
+    ROUNDABOUT_ENTER = 9;
+    ROUNDABOUT_EXIT = 10;
+    ROUNDABOUT_ENTER_AND_EXIT = 11;
+    PEDESTRIAN_WALKWAY = 17;
+    PEDESTRIAN_CROSSING = 18;
+    PEDESTRIAN_OVERPASS_UNDERPASS = 19;
+    PEDESTRIAN_STATION_PATH = 20;
+    PEDESTRIAN_ACCESS_PATH = 21;
+    SIMPLE_PATH = 23;
+    PEDESTRIAN_STAIRWAY = 24;
+    PEDESTRIAN_ELEVATOR = 25;
+    PEDESTRIAN_ESCALATOR = 26;
+    PEDESTRIAN_SLOPEWAY = 27;
+    PEDESTRIAN_LEVEL_CHANGE = 28;
+    DESTINATION = 30;
+    ERROR = 22;
+}

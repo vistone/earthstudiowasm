@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/proto/mapstyle.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Shortcutsderivedstate";
+option java_package = "com.google.geo.earth.app.cpp.state.derivedstate";
+
+message ShortcutsDerivedState {
+    optional bool homescreen_visible = 2;
+    optional layers.MapStyle map_style = 3;
+    optional bool street_view_coverage_overlay_active = 4;
+    optional bool can_export_as_kml = 5;
+    optional bool is_navigation_controls_active = 6;
+}

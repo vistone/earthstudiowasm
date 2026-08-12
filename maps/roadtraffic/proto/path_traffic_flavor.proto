@@ -1,0 +1,75 @@
+syntax = "proto2";
+
+package maps_roadtraffic;
+
+import "frameworks/testing/rpcreplay/processors/rpc_replay_field_option.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_outer_classname = "PathTrafficFlavorProto";
+option java_package = "com.google.roadtraffic.proto.proto1api";
+
+message PathTrafficGeometryOptions {
+    optional bool covered_polylines = 1 [deprecated = true];
+    optional int32 merge_nodata_within_seconds = 2 [default = 30];
+    optional bool use_travel_speeds = 3 [default = false];
+    optional bool return_road_index_presence = 4 [default = false];
+}
+
+message PathTrafficFlavor {
+    optional TimeSpecifier time_specifier = 1;
+    
+    optional TimingType prediction_timing = 2 [default = TIME_GOES_BY];
+    enum TimingType {
+        TIME_GOES_BY = 1;
+    }
+    
+    optional BlendingSpecifier blending = 3;
+    optional PathTrafficGeometryOptions path_traffic_geometry_options = 5;
+    optional bool include_path_traffic_geometry = 4 [deprecated = true];
+    repeated int32 speed_buckets = 7 [packed = true];
+    optional bool level_of_service = 8 [default = false];
+    
+    reserved 6;
+}
+
+message TimeSpecifier {
+    optional TimeInterpretation interpretation = 1 [default = ABSOLUTE_UTC];
+    enum TimeInterpretation {
+        ABSOLUTE_UTC = 1;
+        ABSOLUTE_LOCAL_TIMEZONE = 3;
+    }
+    
+    optional int64 seconds = 2;
+    
+    optional TimeAnchoring anchoring = 3 [default = DEPARTURE];
+    enum TimeAnchoring {
+        DEPARTURE = 1;
+        ARRIVAL = 2;
+    }
+    
+    extensions 115661099 to max;
+}
+
+message BlendingSpecifier {
+    optional BlendingType type = 1 [default = BEST_GUESS];
+    enum BlendingType {
+        BEST_GUESS = 5;
+        BEST_GUESS_PRE_PATH_MODEL = 9;
+        STATIC_HISTORICAL_MODEL = 6;
+        PESSIMISTIC_STATIC_HISTORICAL_MODEL = 7;
+        OPTIMISTIC_STATIC_HISTORICAL_MODEL = 8;
+        FREEFLOW = 4;
+        REALTIME = 3;
+        OBSOLETE_HISTORICAL = 1;
+        OBSOLETE_VOID = 2;
+    }
+    
+    optional bool blend_if_missing = 2 [default = true, deprecated = true];
+    optional int32 horizon_time_start_s = 4 [default = 1800, deprecated = true];
+    optional int32 horizon_time_end_s = 5 [default = 2700, deprecated = true];
+    optional bool use_supersegment = 8 [default = true];
+    optional bool use_path_model = 9 [default = true];
+    optional bool use_override_supersegment = 10 [default = true];
+    
+    reserved 6, 7;
+}

@@ -1,0 +1,97 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "google/internal/earth/v1/builtenv/new_build_metrics.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+
+message SummarizedMetrics {
+    optional SolarSummarizedMetrics solar = 1 [deprecated = true];
+    message SolarSummarizedMetrics {
+        optional OperationalEnergyMetrics building_energy = 1;
+        optional SolarPanelsYieldMetrics solar_panels_yield = 2;
+        optional SustainabilityMetrics sustainability = 3;
+        optional SolarFinancialMetrics financials = 4;
+    }
+    
+    optional double overall_score = 2;
+    optional BuiltEntitySummarizedMetrics new_build_metrics = 3;
+    optional OperationalEnergyMetrics building_energy = 4;
+    optional SolarPanelsYieldMetrics solar_panels_yield = 5;
+    optional SustainabilityMetrics sustainability = 6;
+    optional SolarFinancialMetrics solar_financials = 7;
+}
+
+message OperationalEnergyMetrics {
+    optional double annual_baseline_energy_usage_mwh = 1;
+    optional double annual_energy_usage_mwh = 2;
+}
+
+message SolarPanelsYieldMetrics {
+    optional double annual_generated_solar_energy_mwh = 1;
+    optional double solar_installation_size_mw = 2;
+    optional int32 panel_count = 3;
+    optional double total_solar_surface_area_sq_m = 4;
+}
+
+message SolarFinancialMetrics {
+    optional FinancingScenario purchase_scenario = 1;
+    message FinancingScenario {
+        optional PeriodFinancingMetrics annual_metrics = 1;
+        message PeriodFinancingMetrics {
+            optional double energy_bill_savings_currency = 1;
+            optional double cost_based_incentives_currency = 2;
+            optional double performance_based_incentives_currency = 3;
+            optional double net_metering_savings_currency = 4;
+            optional double upfront_cashflow_currency = 5;
+            optional double cost_including_incentives_currency = 6;
+            optional double investments_excluding_cbi_currency = 7;
+            optional double savings_currency = 8;
+        }
+        
+        optional PeriodFinancingMetrics twenty_five_year_metrics = 2;
+        optional double npv_currency = 3;
+        optional double payback_period_years = 4;
+    }
+    
+    optional FinancingScenario lease_scenario = 2;
+    optional double total_system_cost_currency = 3;
+}
+
+message SustainabilityMetrics {
+    optional PeriodEmissionsMetrics ten_year_emissions = 1;
+    message PeriodEmissionsMetrics {
+        optional EmissionsCategoryMetrics total_emissions = 1;
+        message EmissionsCategoryMetrics {
+            optional double baseline_tco2e = 1;
+            optional double actual_tco2e = 2;
+            optional double emissions_change_tco2e = 3;
+            optional EmissionsCategoryMetricsContext context = 4;
+            optional double emissions_change_percentage = 5;
+        }
+        
+        optional EmissionsSources source_breakdown = 2;
+        message EmissionsSources {
+            optional EmissionsCategoryMetrics operational = 1;
+            optional EmissionsCategoryMetrics embodied = 2;
+            optional EmissionsCategoryMetrics transportation = 3;
+        }
+        
+        optional MitigationStrategies mitigation_strategy_breakdown = 3;
+        message MitigationStrategies {
+            optional EmissionsCategoryMetrics solar_panels = 1;
+            optional EmissionsCategoryMetrics heating_electrification = 2;
+            optional EmissionsCategoryMetrics sustainable_building_materials = 3;
+            optional EmissionsCategoryMetrics reduced_parking = 4;
+        }
+        
+        message EmissionsCategoryMetricsContext {
+            optional double automobile_distance_km = 1;
+        }
+    }
+    
+    optional PeriodEmissionsMetrics annual_emissions = 2;
+    optional PeriodEmissionsMetrics lifetime_emissions = 3;
+}

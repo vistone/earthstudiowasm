@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package maps.mrp;
+
+message AffordanceEnums {
+    enum Class {
+        CLASS_UNSPECIFIED = 0;
+        CLASS_TRUCK = 1;
+        CLASS_TRUCK_IMPASSABLE = 17;
+        CLASS_TRUCK_HAZMAT = 273;
+        CLASS_TRUCK_AVOID_UNLESS_IMPOSSIBLE = 18;
+        CLASS_TRUCK_AVOID = 19;
+        CLASS_TRUCK_PREFER = 20;
+        CLASS_TRUCK_MOST_PREFERRED = 21;
+        CLASS_AVOID = 2;
+        CLASS_PREFER = 3;
+        CLASS_AFFORDANCE_APPLIES = 4;
+    }
+}

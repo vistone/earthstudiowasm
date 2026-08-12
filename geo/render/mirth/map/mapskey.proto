@@ -1,0 +1,40 @@
+syntax = "editions";
+
+package mirth.map;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_outer_classname = "MapsKeyProtos";
+
+message MapsKey {
+    optional TileKey tile_key = 1;
+    optional string url = 2;
+}
+
+message TileKey {
+    optional int32 x = 1;
+    optional int32 y = 2;
+    optional int32 zoom = 3;
+    optional string layer_id = 4;
+    optional string prefiltering_style_name = 8;
+    optional string indoor_level = 6;
+    optional bytes search_pipe_metadata_proto = 13;
+    
+    optional StyleTablesType style_tables_type = 7;
+    enum StyleTablesType {
+        UNKNOWN_STYLE_TABLE = 0;
+        INLINED_STYLE_TABLE = 1;
+        GLOBAL_STYLE_TABLES = 2;
+    }
+    
+    optional string language_code = 10;
+    optional string country_code = 11;
+    optional bool proto_response = 12;
+    optional bool vector_only_rasterization_enabled = 14;
+    
+    reserved 5, 9;
+}

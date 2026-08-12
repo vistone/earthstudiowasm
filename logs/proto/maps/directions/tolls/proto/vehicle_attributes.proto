@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.tolls.proto;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedVehicleAttributes {
+    optional LoggedVehicleEmissionType vehicle_emission_type = 1;
+    enum LoggedVehicleEmissionType {
+        UNKNOWN_EMISSION_TYPE = 0;
+        GAS = 2;
+        ELECTRIC = 3;
+        HYBRID = 4;
+    }
+    
+    optional LoggedVehicleType vehicle_type = 2;
+    enum LoggedVehicleType {
+        UNKNOWN_VEHICLE_TYPE = 0;
+        CAR = 2;
+        TWO_WHEELER = 3;
+        COMPACT = 4;
+    }
+    
+    optional int32 num_occupants = 3;
+}

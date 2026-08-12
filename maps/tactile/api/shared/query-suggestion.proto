@@ -1,0 +1,240 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "geo/serving/proto/localcategorical/intent_type.proto";
+import "geo/serving/proto/ugc/summarization/top_aspect.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "logs/proto/maps/shared/travel_intent_data.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/shared/caching/caching.proto";
+import "maps/tactile/api/shared/experiences.proto";
+import "maps/tactile/api/shared/geo-wholepage-type.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "maps/tactile/api/shared/passiveassist/passiveassist.proto";
+import "maps/tactile/api/shared/place/maps-place-identifier.proto";
+import "maps/tactile/api/shared/public-list.proto";
+import "maps/tactile/api/shared/transit/transit-service-query.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "QuerySuggestionProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message QuerySuggestion {
+    optional int32 ve_type = 8 [default = 23620];
+    optional string ved = 4;
+    optional string title = 1;
+    optional string icon_url = 3;
+    optional string icon_attribution_url = 14;
+    optional string icon_original_image_url = 16;
+    optional string gcid = 5;
+    optional int32 prefetch_priority = 9;
+    
+    optional QueryShortcutType query_shortcut_type = 10;
+    enum QueryShortcutType {
+        UNKNOWN = 0;
+        RESTAURANTS = 1;
+        COFFEE = 2;
+        BARS = 3;
+        ATTRACTIONS = 4;
+        EVENTS = 5;
+        HOTELS = 6;
+        PARKS = 7;
+        DEALS = 50;
+        BRUNCH = 8;
+        DELIVERY = 9;
+        DESSERT = 10;
+        TAKEOUT = 11;
+        RESERVATIONS = 58;
+        POPULAR_PLACES_NOW = 49;
+        APERITIVO = 12;
+        BAKERY = 13;
+        BENTO = 14;
+        DONBURI = 15;
+        IZAKAYA = 16;
+        PUBS = 17;
+        RAMEN = 18;
+        TAPAS = 19;
+        TEISHOKU = 20;
+        ART = 21;
+        GYMS = 22;
+        LIBRARIES = 23;
+        LIVE_MUSIC = 24;
+        MOVIES = 25;
+        MUSEUMS = 26;
+        NIGHTLIFE = 27;
+        PANDALS = 84;
+        ATMS = 28;
+        BEAUTY_SALONS = 29;
+        CAR_RENTALS = 30;
+        CAR_REPAIR = 31;
+        CAR_WASH = 32;
+        DRY_CLEANERS = 33;
+        ELECTRIC_VEHICLE_CHARGING = 47;
+        GAS_STATIONS = 34;
+        HOSPITALS = 35;
+        MAIL = 36;
+        PARKING = 37;
+        PHARMACIES = 48;
+        POST_OFFICES = 53;
+        HARDWARE_STORES = 55;
+        AIRPORTS = 60;
+        REST_STOPS = 61;
+        SHOPPING = 51;
+        BEAUTY_SUPPLIES = 38;
+        CAR_DEALERS = 39;
+        CLOTHING_STORES = 40;
+        CONVENIENCE_STORES = 41;
+        ELECTRONICS = 42;
+        GROCERIES = 43;
+        HOME_IMPROVEMENT_STORES = 44;
+        SHOPPING_CENTERS = 45;
+        SPORTING_GOODS = 46;
+        FLEA_MARKETS = 52;
+        BOOK_STORES = 54;
+        FOOD_BANKS = 56;
+        NIGHT_SHELTERS = 57;
+        SOUP_KITCHENS = 62;
+        BOMB_SHELTERS = 83;
+        LIVE_VIEW_TRANSIT = 63;
+        TOURIST_PLACES = 59;
+        TRANSIT_LONDON = 64;
+        TRANSIT_NEW_YORK_CITY = 65;
+        TRANSIT_BERLIN = 66;
+        TRANSIT_TOKYO = 67;
+        TRANSIT_PARIS = 68;
+        TRANSIT_MADRID = 69;
+        TRANSIT_SYDNEY = 70;
+        TRANSIT_SINGAPORE = 71;
+        TRANSIT_TORONTO = 72;
+        DEPRECATED_TRAVEL_CLUSTER_MUSEUMS = 73 [deprecated = true];
+        DEPRECATED_TRAVEL_CLUSTER_BEACHES = 74 [deprecated = true];
+        DEPRECATED_TRAVEL_CLUSTER_OUTDOORS = 75 [deprecated = true];
+        DEPRECATED_TRAVEL_CLUSTER_HISTORY = 76 [deprecated = true];
+        DEPRECATED_TRAVEL_CLUSTER_MARKETS = 77 [deprecated = true];
+        DEPRECATED_TRAVEL_CLUSTER_CASINOS = 78 [deprecated = true];
+        DEPRECATED_TRAVEL_CLUSTER_WINERIES = 79 [deprecated = true];
+        DEPRECATED_TRAVEL_CLUSTER_SKIING = 80 [deprecated = true];
+        DEPRECATED_TRAVEL_CLUSTER_AMUSEMENT_PARKS = 81 [deprecated = true];
+        DEPRECATED_TRAVEL_CLUSTER_OTHER = 82 [deprecated = true];
+    }
+    
+    optional int32 suggested_set_id = 12;
+    
+    optional FusedTopicMetadata fused_topic_metadata = 17;
+    message FusedTopicMetadata {
+        optional string concept_id = 1;
+        optional geo_serving_proto.ugc.summarization.TopAspect top_aspect = 2;
+        optional string name = 3;
+    }
+    
+    oneof query_data {
+        string query = 2;
+        ExperienceCategoricalQuery experience_categorical_query = 6;
+        LocalCategoricalPresetQuery local_categorical_preset_query = 7;
+        PublicListQuery public_list_query = 11;
+        maps_tactile.shared.transit.TransitServiceQuery transit_service_query = 13;
+        maps_tactile.shared.place.MapsPlaceIdentifier maps_place_identifier = 15;
+    }
+}
+
+message PublicListQuery {
+    optional ListCategory list_category = 1;
+    optional GeoWholepageType page_type = 2;
+}
+
+message ExperienceCategoricalQuery {
+    optional string text_query = 5;
+    optional LatLngRectangle viewport_query = 6;
+    
+    optional PresetQuery preset_query = 1;
+    enum PresetQuery {
+        UNKNOWN_CATEGORY = 0;
+        ARTS_AND_CULTURE = 1;
+        ATTRACTIONS = 2;
+        FITNESS_AND_SPORTS = 3;
+        GAMES_AND_ARCADE = 4;
+        MOVIES = 5;
+        NIGHTLIFE = 6;
+        OUTDOORS = 7;
+        CONCERTS = 9;
+        FESTIVALS = 10;
+        SHOWS = 11;
+        FOOD_AND_DRINK = 12;
+        SPORTS = 13;
+        COMEDY = 14;
+        MUSIC = 15;
+        WORKSHOPS_AND_CLASSES = 16;
+        THEATER = 17;
+        CONFERENCE = 18;
+        DANCE = 19;
+        CHARITY = 20;
+        CULTURAL_EXHIBITS = 21;
+        FUN = 8;
+    }
+    
+    optional TimeFrame time_query = 3;
+    enum TimeFrame {
+        UNKNOWN_TIME = 0;
+        TODAY = 1;
+        TOMORROW = 5;
+        THIS_WEEKEND = 2;
+        THIS_WEEK = 3;
+        THIS_MONTH = 4;
+    }
+    
+    optional ExperiencesParams experiences_params = 2;
+    optional string result_list_title = 4;
+}
+
+message LocalCategoricalPresetQuery {
+    optional geo_serving_proto.localcategorical.IntentType intent_type = 1;
+    optional string query = 2;
+    optional string display_text = 3;
+}
+
+message QuerySuggestionSet {
+    optional int32 ve_type = 9 [default = 0x16a7b];
+    optional string ved = 4;
+    optional maps_tactile.shared.caching.CacheDirective cache_directive = 1;
+    optional string title = 6;
+    optional string icon_url = 7;
+    repeated QuerySuggestion query_suggestion = 2;
+    
+    optional LayoutType ui_type = 5;
+    enum LayoutType {
+        UNKNOWN_LAYOUT_TYPE = 0;
+        TABLE = 1;
+        LIST = 2;
+    }
+    
+    optional maps_tactile.shared.passiveassist.Status status = 3;
+    
+    optional AssistiveShortcutsLoggingInfo assistive_shortcuts_logging_info = 8;
+    message AssistiveShortcutsLoggingInfo {
+        optional int32 ve_type = 1 [default = 0x16a7b];
+        
+        reserved 2;
+    }
+    
+    optional logs_maps_shared.TravelIntentData travel_intent_data = 10;
+}
+
+message PresetQueryRequestMetadata {
+    optional Source source = 1;
+    enum Source {
+        UNKNOWN_SOURCE = 0;
+        EXPLORE_TAB_SHORTCUT_PREFETCH = 1;
+        EXPLORE_TAB_SHORTCUT_CLICK = 2;
+        EXPLORE_TAB_SHORTCUT_FOLLOWUP = 3;
+        SOCIAL_PLANNING_SHORTLIST = 4;
+        SUGGESTED_SET_ITEM_CLICK = 5;
+        SEARCH_NEARBY_SHORTCUT_CLICK = 6;
+        LIVE_VIEW_SEARCH_CHIP_CLICK = 7;
+        PROJECTED_SEARCH = 8;
+        RECENT_BUNDLES_SEARCH = 9;
+        SEARCH_IN_DIRECTIONS = 10;
+    }
+}

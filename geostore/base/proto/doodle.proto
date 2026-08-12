@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "geostore/base/proto/options.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message DoodleProto {
+    optional TypeCategory type = 1;
+    enum TypeCategory {
+        TYPE_ANY = 0;
+        TYPE_USER_DEFINED_LABEL = 1;
+        TYPE_POINT_ANNOTATION = 2;
+        TYPE_LINE_ANNOTATION = 3;
+        TYPE_AREA_ANNOTATION = 4;
+    }
+}

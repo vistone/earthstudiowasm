@@ -1,0 +1,13 @@
+syntax = "editions";
+
+package maps_directions_customization_logs_serving_protos;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedSegmentLengthList {
+    repeated int64 lengths_millimeters = 1;
+}
+
+message LoggedSegmentTraversalTimeList {
+    repeated int64 times_milliseconds = 1;
+}

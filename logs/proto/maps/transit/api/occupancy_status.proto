@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "OccupancyStatusProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedOccupancyStatus {
+    optional LoggedOccupancySource source = 1;
+    enum LoggedOccupancySource {
+        OCCUPANCY_SOURCE_UNKNOWN = 0;
+        PREDICTED_BY_UGC = 1;
+        REALTIME_FROM_AGENCY = 2;
+        REALTIME_FROM_UGC = 3;
+        PREDICTED_BY_HULK = 4;
+        PREDICTED_BY_AGENCY_HISTORICAL_REALTIME = 5;
+        STATIC_FROM_AGENCY = 6;
+        STATIC_FROM_OPERATORS = 7;
+    }
+    
+    optional LoggedOccupancyRate occupancy_rate = 2;
+    enum LoggedOccupancyRate {
+        OCCUPANCY_RATE_UNKNOWN = 0;
+        EMPTY = 1;
+        MANY_SEATS_AVAILABLE = 2;
+        FEW_SEATS_AVAILABLE = 3;
+        STANDING_ROOM_ONLY = 4;
+        CRUSHED_STANDING_ROOM_ONLY = 5;
+        FULL = 6;
+        NOT_ACCEPTING_PASSENGERS = 7;
+        NOT_BOARDABLE = 8;
+    }
+}

@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "MapsLiveQueryResultProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message MapsLiveQueryResult {
+    optional bytes token = 1;
+    optional bool success = 2;
+}

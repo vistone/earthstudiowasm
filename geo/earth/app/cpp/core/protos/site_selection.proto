@@ -1,0 +1,21 @@
+syntax = "editions";
+
+package earth.siteselection;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTHBE";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.siteselection";
+
+message Parcel {
+    optional string name = 1;
+    optional document.protos.Polygon polygon = 2;
+}
+
+message SiteSelectionResult {
+    repeated Parcel parcels = 1;
+}

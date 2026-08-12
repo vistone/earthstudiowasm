@@ -1,0 +1,135 @@
+syntax = "proto2";
+
+package geo.earth.proto.earth_mate;
+
+import "geo/earth/app/cpp/core/config_id.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+import "geo/earth/proto/documentnamespace.proto";
+import "geo/earth/proto/earth_mate/file_attachment.proto";
+import "geo/earth/proto/earth_mate/image.proto";
+import "geo/earth/proto/user_industry.proto";
+import "google/internal/earth/v1/shared.proto";
+import "google/research/researchpartnerships/v1/rsgeofm/overhead_image_query.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.proto";
+
+message EarthMateRequestWrapper {
+    optional EarthMateTechStack tech_stack = 3;
+    
+    oneof request_type {
+        EarthMateQueryRequest query_request = 1;
+        EarthMateAreaDescriptionRequest area_description_request = 4;
+    }
+    
+    reserved 2;
+}
+
+message InternalDebugOptions {
+    optional EarthMateTechStack tech_stack_override = 1;
+    optional string agency_agent_id_override = 2;
+    
+    reserved 3;
+}
+
+message EarthMateQueryRequest {
+    optional string query_string = 1;
+    optional EarthMateAppContext app_context = 2;
+    optional EarthMateChatContext chat_context = 3;
+    optional string request_id = 4;
+    optional InternalDebugOptions debug_options = 5;
+}
+
+message EarthMateRateRequest {
+    optional EarthMateRating rating = 1;
+    optional string request_id = 2;
+}
+
+message EarthMateAreaDescriptionRequest {
+    repeated .earth.document.protos.Polygon polygons = 1;
+    optional EarthUserIndustry industry = 2;
+    optional EarthMateAreaDescriptionFormat format = 3 [default = FORMAT_SHORT];
+    optional string query_string = 4;
+    optional EarthMateAppContext app_context = 5;
+}
+
+message EarthMateAppContext {
+    optional CreationContext creation_context = 1;
+    optional ViewContext view_context = 2;
+    optional google.internal.earth.v1.ClientMetadata client_metadata = 3;
+    optional .earth.ConfigId config_id = 4;
+    optional string test_gaia_email = 5;
+    optional bool is_open_vocab_tool_selected = 7;
+    optional OverheadImagerySearchContext overhead_imagery_search_context = 8;
+    
+    reserved 6;
+}
+
+message CreationContext {
+    optional int32 document_key = 1;
+    optional string document_id = 2;
+    optional string resource_key = 3;
+    optional .earth.document.DocumentNamespace document_namespace = 4;
+    repeated string selected_feature_ids = 5;
+    optional .earth.document.protos.ModelVersion document_model_version = 6;
+}
+
+message ViewContext {
+    optional LatLonBox viewport = 1;
+    message LatLonBox {
+        optional double north = 1;
+        optional double south = 2;
+        optional double east = 3;
+        optional double west = 4;
+    }
+    
+    optional Image viewport_image = 3;
+    optional double ground_coverage_width_meters = 4;
+    
+    reserved 2;
+}
+
+message OverheadImagerySearchContext {
+    optional float similarity_threshold = 1;
+    optional google.research.researchpartnerships.v1.rsgeofm.MergeOptions merge_options = 2;
+}
+
+message EarthMateChatHistory {
+    repeated EarthMateChatMessage messages = 1;
+    message EarthMateChatMessage {
+        optional string text = 1;
+        optional bool is_bard = 2;
+        optional string request_id = 3;
+        optional FileAttachment viewport_file_attachment = 4;
+    }
+}
+
+message EarthMateChatContext {
+    optional EarthMateChatHistory chat_history = 3;
+    optional string chat_id = 4;
+    
+    reserved 1, 2;
+}
+
+enum EarthMateTechStack {
+    STACK_UNKNOWN = 0;
+    STACK_ALS = 2 [deprecated = true];
+    STACK_AGENCY = 3;
+    STACK_GRF = 4 [deprecated = true];
+    STACK_EAIA_ON_AGENCY = 5;
+}
+
+enum EarthMateAreaDescriptionFormat {
+    FORMAT_UNKNOWN = 0;
+    FORMAT_SHORT = 1;
+    FORMAT_LONG = 2;
+    FORMAT_SHORT_AND_LONG = 3;
+}
+
+enum EarthMateRating {
+    RATING_UNKNOWN = 0;
+    RATING_THUMB_UP = 1;
+    RATING_THUMB_DOWN = 2;
+}

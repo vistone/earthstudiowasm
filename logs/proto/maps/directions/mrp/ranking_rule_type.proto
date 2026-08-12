@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+enum LoggedType {
+    RULE_UNSPECIFIED = 0;
+    RULE_SINGLE_RANK = 1;
+    RULE_RISK_AVERSE = 2;
+    RULE_ASSISTED_DRIVING = 3;
+    RULE_RATE_CARD_PLUS_TOLL = 4;
+    RULE_TOLL_FREE_ALTERNATE = 5;
+    RULE_TOLL_AND_FERRY_FREE_ALTERNATE = 6;
+    RULE_FERRY_FREE_ALTERNATE = 7;
+}

@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "google/internal/earth/v1/builtenv/building_edit.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message ConvertParkToParkingLotEdit {
+    optional string park_id = 1;
+}
+
+message ConvertParkToBuildingEdit {
+    optional string park_id = 1;
+    optional ConvertToBuildingEdit new_building_inputs = 2;
+}

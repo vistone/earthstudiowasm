@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "RoadsideFacilityOptionsProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message RoadsideFacilityOptions {
+    optional bool include_roadside_facilities = 1 [default = false];
+    optional int32 min_segment_priority = 2 [default = 128];
+}

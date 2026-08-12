@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "maps/paint/proto/client-vector-tile.proto";
+
+option java_package = "com.google.maps.paint.client";
+
+message PointMetadataProto {
+    optional sfixed32 lat_e7 = 1;
+    optional sfixed32 lng_e7 = 2;
+}
+
+extend ClientVectorTile {
+    optional PointMetadataProto unaddressed_feature_callout_metadata = 467593307;
+}

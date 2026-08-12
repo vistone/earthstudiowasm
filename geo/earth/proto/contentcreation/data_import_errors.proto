@@ -1,0 +1,445 @@
+syntax = "proto2";
+
+package earth.document.protos;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.core.document";
+
+message DataImportErrorStatus {
+    optional string default_error_message = 20;
+    
+    oneof ImportError {
+        FeatureExtractionFailed feature_extraction_failed = 3;
+        CannotBeParsed cannot_be_parsed = 4;
+        FileTooLarge file_too_large = 5;
+        TooManyGeometryErrors too_many_geometry_errors = 6;
+        TooManyFeatures too_many_features = 7;
+        TooManyGeometryVertices too_many_geometry_vertices = 8;
+        TooManyGeocodingErrors too_many_geocoding_errors = 9;
+        MapReachedFeatureLimit map_reached_feature_limit = 10;
+        ExtractedFeaturesExceedMapFeatureLimit extracted_features_exceed_map_feature_limit = 11;
+        FileSizeOverDriveExportLimit file_size_over_drive_export_limit = 12;
+        EmptyDataset empty_dataset = 13;
+        ResourceTooLarge resource_too_large = 14;
+        StorageQuotaExceeded storage_quota_exceeded = 15;
+        UnsupportedFileType unsupported_file_type = 16;
+        MissingRequiredFiles missing_required_files = 17;
+        UncompressedSizeTooLarge uncompressed_size_too_large = 18;
+        SourceFileTooLarge source_file_too_large = 19;
+    }
+    
+    reserved 1, 2;
+}
+
+message FeatureError {
+    optional ErrorLocation location = 52;
+    optional string default_error_message = 57;
+    
+    oneof error {
+        MissingSchemaId missing_schema_id = 19;
+        MissingAttributeFieldName missing_attribute_field_name = 20;
+        MissingAttributeFieldType missing_attribute_field_type = 21;
+        InvalidAttributeFieldType invalid_attribute_field_type = 22;
+        DuplicateAttributeFieldName duplicate_attribute_field_name = 23;
+        InvalidTimestampCamera invalid_timestamp_camera = 24;
+        InvalidTimestampLookAt invalid_timestamp_lookat = 25;
+        MissingCorrespondingSchema missing_corresponding_schema = 26;
+        MissingAttributeName missing_attribute_name = 27;
+        AttributeNotFound attribute_not_found = 28;
+        CannotConvertToBoolean cannot_convert_to_boolean = 29;
+        CannotConvertToDouble cannot_convert_to_double = 30;
+        CannotConvertToInteger cannot_convert_to_integer = 31;
+        InvalidAttributeType invalid_attribute_type = 32;
+        CoordinateMissingLatitude coordinate_missing_latitude = 33;
+        CoordinateMissingLongitude coordinate_missing_longitude = 34;
+        LineMustHaveTwoUniqueCoordinates line_must_have_two_unique_coordinates = 35;
+        LinearRingFirstAndLastCoordinatesMustBeEqual linear_ring_first_and_last_coordinates_must_be_equal = 37;
+        PolygonMustHaveOuterBoundary polygon_must_have_outer_boundary = 38;
+        AddressFailedGeocoding address_failed_geocoding = 39;
+        StyleCycleDetected style_cycle_detected = 40;
+        StyleDoesNotExist style_does_not_exist = 41;
+        BalloonStyleInvalidDisplayMode balloon_style_invalid_display_mode = 42;
+        HotspotInvalidXunit hotspot_invalid_xunit = 43;
+        HotspotInvalidYunit hotspot_invalid_yunit = 44;
+        UnfetchedExternalStyle unfetched_external_style = 45;
+        UnsupportedImageFormat unsupported_image_format = 46;
+        InvalidBase64EncodedPng invalid_base64_encoded_png = 47;
+        ImageDoesNotExist image_does_not_exist = 48;
+        FailedToFetchExternalImage failed_to_fetch_external_image = 49;
+        FailedToSanitizeAndResizeImage failed_to_sanitize_and_resize_image = 50;
+        InternalImageError internal_image_error = 51;
+        ReachedMaxImageFetchLimit reached_max_image_fetch_limit = 53;
+        UnsupportedNonExternalBalloonImage unsupported_non_external_balloon_image = 54;
+        UnsupportedNonExternalFeatureDescriptionImage unsupported_non_external_feature_description_image = 55;
+        UnsupportedNonExternalSnippetImage unsupported_non_external_snippet_image = 56;
+        LinearRingMustHaveThreeUniqueCoordinates linear_ring_must_have_three_unique_coordinates = 58;
+        InvalidLongitude invalid_longitude = 59;
+        InvalidLatitude invalid_latitude = 60;
+        MissingGeography missing_geography = 62;
+        PolygonContainsDuplicateVertices polygon_contains_duplicate_vertices = 63;
+        UnknownFeatureError unknown_feature_error = 61;
+    }
+    
+    reserved 1 to 18, 36;
+}
+
+message ErrorLocation {
+    oneof location {
+        Schema schema = 1;
+        SharedStyle shared_style = 2;
+        LocalStyle local_style = 3;
+        Document document = 4;
+        Feature feature = 6;
+    }
+    
+    message Schema {
+        optional string original_id = 1;
+    }
+    
+    message SharedStyle {
+        optional string original_id = 1;
+    }
+    
+    message LocalStyle {
+        optional Feature parent_feature = 1;
+    }
+    
+    message Document {
+        
+    }
+    
+    message Feature {
+        optional string original_id = 2;
+        
+        optional Type type = 3;
+        enum Type {
+            TYPE_UNKNOWN = 0;
+            TYPE_FOLDER = 1;
+            TYPE_FEATURE = 2;
+            TYPE_OVERLAY = 3;
+            TYPE_NETWORK_LINK = 4;
+        }
+        
+        optional string name = 4;
+    }
+}
+
+message FeatureExtractionFailed {
+    optional string error_message = 1;
+}
+
+message CannotBeParsed {
+    optional string error_message = 1;
+    optional int64 line_number = 2;
+    optional int64 column_number = 3;
+    
+    optional Reason reason = 4;
+    enum Reason {
+        REASON_UNKNOWN = 0;
+        REASON_INVALID_XML_HEADING = 1;
+        REASON_NOT_UTF8 = 2;
+        REASON_INVALID_TOKEN = 3;
+        REASON_INVALID_ROOT_ELEMENT = 4;
+        REASON_SYNTAX_ERROR = 5;
+        REASON_TAG_MISMATCH = 6;
+        REASON_UNEXPECTED_DATA_AFTER_KML_TAG = 7;
+        REASON_DUPLICATE_ATTRIBUTE = 8;
+        REASON_NO_ELEMENT_FOUND = 9;
+        REASON_OUT_OF_MEMORY = 10;
+        REASON_INCORRECT_ENCODING = 11;
+        REASON_UNCLOSED_CDATA_SECTION = 12;
+        REASON_UNCLOSED_TOKEN = 13;
+        REASON_UNDEFINED_ENTITY = 14;
+        REASON_XML_DECLARATION_NOT_FIRST = 15;
+        REASON_KML_TAG_NOT_FIRST = 16;
+        REASON_KMZ_HAS_NO_KML_FILE = 23;
+        REASON_KMZ_COULD_NOT_BE_OPENED = 24;
+        REASON_KMZ_REFERENCES_EXTERNAL_FILE = 25;
+        REASON_GEOJSON_COULD_NOT_BE_PARSED = 18;
+        REASON_GEOJSON_MISSING_FEATURE_COLLECTION = 19;
+        REASON_GEOJSON_MISSING_TYPE_FIELD = 20;
+        REASON_GEOJSON_TYPE_FIELD_NOT_STRING = 21;
+        REASON_GEOJSON_MISSING_FEATURES_ARRAY = 22;
+        REASON_ZIP_COULD_NOT_BE_OPENED = 26;
+        REASON_OTHER = 17;
+    }
+}
+
+message FileTooLarge {
+    optional int32 max_file_size = 1;
+}
+
+message TooManyGeometryErrors {
+    optional int32 max_geometry_errors = 1;
+}
+
+message TooManyFeatures {
+    optional int32 max_features = 1;
+}
+
+message TooManyGeometryVertices {
+    optional int32 max_geometry_vertices = 1;
+    optional int64 total_geometry_vertices = 2;
+}
+
+message TooManyGeocodingErrors {
+    optional int32 max_geocoding_errors = 1;
+}
+
+message MapReachedFeatureLimit {
+    optional int32 max_feature_limit = 1;
+}
+
+message ExtractedFeaturesExceedMapFeatureLimit {
+    optional int32 max_feature_limit = 1;
+    optional int32 num_features_in_map = 2;
+    optional int32 num_features_in_dataset = 3;
+}
+
+message FileSizeOverDriveExportLimit {
+    
+}
+
+message EmptyDataset {
+    
+}
+
+message ResourceTooLarge {
+    optional int32 max_resource_size = 1;
+    optional string resource_name = 2;
+}
+
+message StorageQuotaExceeded {
+    optional int64 total_storage_used = 1;
+    optional int64 storage_quota_limit = 2;
+}
+
+message UnsupportedFileType {
+    
+}
+
+message SourceFileTooLarge {
+    optional int32 max_file_size = 1;
+}
+
+message MissingRequiredFiles {
+    repeated string missing_files = 1;
+}
+
+message UncompressedSizeTooLarge {
+    optional int32 max_uncompressed_size = 1;
+}
+
+message FeatureErrorList {
+    repeated FeatureError errors = 1;
+}
+
+message UnsupportedElement {
+    optional string name = 1;
+    optional int64 count = 2;
+}
+
+message MissingSchemaId {
+    
+}
+
+message MissingAttributeFieldName {
+    reserved 1;
+}
+
+message MissingAttributeFieldType {
+    optional string attribute_field_name = 2;
+    
+    reserved 1;
+}
+
+message InvalidAttributeFieldType {
+    optional string attribute_field_name = 2;
+    optional string attribute_field_type = 3;
+    
+    reserved 1;
+}
+
+message DuplicateAttributeFieldName {
+    optional string duplicate_attribute_field_name = 2;
+    
+    reserved 1;
+}
+
+message InvalidTimestamp {
+    optional string timestamp = 1;
+}
+
+message InvalidTimestampCamera {
+    optional string timestamp = 1;
+}
+
+message InvalidTimestampLookAt {
+    optional string timestamp = 1;
+}
+
+message MissingCorrespondingSchema {
+    
+}
+
+message MissingAttributeName {
+    optional string schema_id = 1;
+}
+
+message AttributeNotFound {
+    optional string schema_id = 1;
+    optional string attribute_field_name = 2;
+}
+
+message CannotConvertToBoolean {
+    optional string schema_id = 1;
+    optional string attribute_field_name = 2;
+    optional string attribute_value = 3;
+}
+
+message CannotConvertToDouble {
+    optional string schema_id = 1;
+    optional string attribute_field_name = 2;
+    optional string attribute_value = 3;
+}
+
+message CannotConvertToInteger {
+    optional string schema_id = 1;
+    optional string attribute_field_name = 2;
+    optional string attribute_value = 3;
+}
+
+message InvalidAttributeType {
+    optional string schema_id = 1;
+    optional string attribute_field_name = 2;
+    optional string attribute_value = 3;
+}
+
+message CoordinateMissingLatitude {
+    
+}
+
+message CoordinateMissingLongitude {
+    
+}
+
+message LineMustHaveTwoUniqueCoordinates {
+    
+}
+
+message LinearRingMustHaveThreeUniqueCoordinates {
+    
+}
+
+message LinearRingFirstAndLastCoordinatesMustBeEqual {
+    
+}
+
+message PolygonMustHaveOuterBoundary {
+    
+}
+
+message AddressFailedGeocoding {
+    optional string address = 1;
+    optional string error_message = 2;
+}
+
+message InvalidLongitude {
+    optional double longitude = 1;
+}
+
+message InvalidLatitude {
+    optional double latitude = 1;
+}
+
+message MissingGeography {
+    
+}
+
+message PolygonContainsDuplicateVertices {
+    
+}
+
+message UnknownFeatureError {
+    
+}
+
+message StyleCycleDetected {
+    optional string style_id = 1;
+}
+
+message StyleDoesNotExist {
+    optional string style_id = 1;
+}
+
+message BalloonStyleInvalidDisplayMode {
+    
+}
+
+message HotspotInvalidXunit {
+    
+}
+
+message HotspotInvalidYunit {
+    
+}
+
+message UnfetchedExternalStyle {
+    optional string external_style_url = 1;
+}
+
+message UnsupportedImageFormat {
+    optional string image_identifier = 1;
+}
+
+message InvalidBase64EncodedPng {
+    optional string image_identifier = 1;
+}
+
+message ImageDoesNotExist {
+    optional string image_identifier = 1;
+    optional string error_message = 2;
+}
+
+message FailedToFetchExternalImage {
+    optional string external_image_url = 1;
+    optional string error_message = 2;
+}
+
+message FailedToSanitizeAndResizeImage {
+    optional string image_identifier = 1;
+    optional string error_message = 2;
+}
+
+message InternalImageError {
+    optional string image_identifier = 1;
+    optional string error_message = 2;
+}
+
+message ReachedMaxImageFetchLimit {
+    optional string image_identifier = 1;
+    optional int32 max_image_fetch_limit = 2;
+    optional ImageType image_type = 3;
+}
+
+message UnsupportedNonExternalBalloonImage {
+    optional string image_identifier = 1;
+}
+
+message UnsupportedNonExternalFeatureDescriptionImage {
+    optional string image_identifier = 1;
+}
+
+message UnsupportedNonExternalSnippetImage {
+    optional string image_identifier = 1;
+}
+
+enum ImageType {
+    IMAGE_TYPE_UNKNOWN = 0;
+    IMAGE_TYPE_ICON = 1;
+    IMAGE_TYPE_CAROUSEL = 2;
+    IMAGE_TYPE_GROUND_OVERLAY = 3;
+}

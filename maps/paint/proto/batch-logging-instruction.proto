@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint.client";
+
+message BatchLoggingInstruction {
+    optional int32 batch_logged_feature_type = 1;
+    
+    enum FeatureType {
+        TYPE_UNKNOWN = 0;
+        ROAD_LABEL = 1;
+        ROAD_SHIELD = 2;
+        BODY_OF_WATER = 3;
+        AREA = 4;
+        THREE_DIMENSIONAL_BUILDING = 5;
+        ATOMIC_MAPS_LANES = 6;
+        INDOOR_AIRPORT_LABEL = 7;
+        INDOOR_AIRPORT_GEOMETRY = 8;
+        DETAILED_3D_MODEL_BUILDING = 9;
+    }
+}

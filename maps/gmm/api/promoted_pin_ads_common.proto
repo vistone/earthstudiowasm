@@ -1,0 +1,284 @@
+syntax = "proto2";
+
+package gmm;
+
+import "geo/serving/proto/ads/my_ad_center_panel_data.proto";
+import "geo/serving/proto/ads/sitelink_data.proto";
+import "geo/serving/proto/ads/why_this_ad.proto";
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "maps/tactile/api/shared/ads/advertiser-preferred-action.proto";
+import "maps/tactile/api/shared/ads/product-offer-list-ad.proto";
+import "maps/tactile/api/shared/ads/promoted-pin-ads-callout-info.proto";
+import "maps/tactile/api/shared/augmented-reality-geometry.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "maps/tactile/api/shared/hotels/hotel-booking-options.proto";
+import "maps/tactile/api/shared/hotels/hotel-booking.proto";
+
+option objc_class_prefix = "GMM";
+option java_multiple_files = true;
+option java_outer_classname = "PromotedPinAdsCommonProto";
+option java_package = "com.google.maps.gmm";
+
+message PromotedPin {
+    optional string feature_id = 1;
+    optional string business_name = 2;
+    optional PromotionalPinInfo promotional_pin_info = 3;
+    optional geo_serving_proto.ads.SitelinkData sitelink_data = 20;
+    optional ClickTrackingInfo click_tracking_info = 5;
+    optional geo_serving_proto.ads.WhyThisAd why_this_ad = 6;
+    optional geo_serving_proto.ads.MyAdCenterPanelData my_ad_center_panel_data = 14;
+    optional string business_attribution = 15;
+    optional bool is_first_party = 16 [deprecated = true];
+    optional DisplayOptions display_options = 7;
+    optional int32 model_id = 8 [default = 0];
+    optional bool charge_on_placesheet_expansion = 12;
+    
+    optional PromotedPinType pin_type = 9;
+    enum PromotedPinType {
+        UNKNOWN_PROMOTED_PIN_TYPE = 0;
+        FIRST_PARTY = 1;
+        AGGREGATOR = 2;
+        MANUFACTURER = 3;
+        FIRST_PARTY_LOGOLESS = 4;
+        SHOPPING = 5;
+        KEYWORD_AD = 6;
+        TRAVEL_AD = 7;
+        TRAVEL_AD_LOGOLESS = 8;
+        TRAVEL_ACTIVITY_AD = 9;
+    }
+    
+    optional HotelMetadata hotel_metadata = 13;
+    message HotelMetadata {
+        optional bytes hotel_price_state_token = 1 [deprecated = true];
+        optional maps_tactile.HotelBookingOptions hotel_booking_options = 2;
+        optional maps_tactile.HotelBookingPartner hotel_booking_partner = 3;
+        optional string hotel_impression_url = 4;
+        optional string hotel_partner_price = 5;
+        optional string booking_date_string = 6;
+    }
+    
+    repeated maps_tactile.shared.ads.AdvertiserPreferredAction advertiser_preferred_action_set = 17;
+    optional bool is_ablated = 18;
+    optional string cache_consistency_token = 19;
+    optional int32 pin_level_min_duration_until_impression_millis = 21 [default = -1];
+    
+    optional LabelCollisionOptions label_collision_options = 22;
+    message LabelCollisionOptions {
+        optional int32 extra_collision_margin_dp = 1;
+        optional int32 extra_collision_margin_min_zoom = 2;
+        optional int32 extra_collision_margin_max_zoom = 3;
+    }
+    
+    oneof banner_info {
+        PromotionalBannerInfo promotional_banner_info = 4;
+        maps_tactile.shared.ads.ProductOfferListAd product_offer_list_ad = 10;
+        NavigationPrompt navigation_prompt = 11;
+    }
+}
+
+message DisplayOptions {
+    optional int32 rank = 1;
+    optional int32 min_zoom = 2;
+    optional bool is_counterfactual = 3 [deprecated = true];
+    optional int32 counterfactual_zoom = 4;
+    
+    optional NamedStylesInfo named_styles_info = 5;
+    message NamedStylesInfo {
+        optional int32 label_layout_enum_value = 1;
+        optional int32 icon_enum_value = 2;
+        optional int32 text_title_enum_value = 3;
+        optional int32 text_subtitle_enum_value = 4;
+        optional int32 text_subtitle_ad_badge_enum_value = 5;
+        optional int32 extended_icon_enum_value = 6;
+        optional bytes data_bound_values_token = 8;
+        
+        reserved 7;
+    }
+    
+    optional bool secondary_text_label_group_required = 6;
+    
+    optional LabelTextPositionType preferred_title_position = 8;
+    enum LabelTextPositionType {
+        UNKNOWN_LABEL_TEXT_POSITION_TYPE = 0;
+        TOP = 1;
+        BOTTOM = 2;
+        LEFT = 3;
+        RIGHT = 4;
+    }
+    
+    optional bool is_required_with_clobbering = 7;
+    optional maps_tactile.shared.AugmentedRealityGeometrySet augmented_reality_geometry_set = 9 [deprecated = true];
+    
+    optional XViewRenderingConfig xview_rendering_config = 10;
+    message XViewRenderingConfig {
+        optional maps_tactile.shared.AugmentedRealityGeometrySet augmented_reality_geometry_set = 1;
+        optional string icon_sign_layer_url = 2;
+        optional int32 icon_container_layer_highlight_color = 3;
+        optional string logo_pin_image_url = 4;
+        optional string three_d_logo_pin_image_url = 5;
+    }
+}
+
+message PromotionalPinInfo {
+    optional maps_tactile.shared.LatLng lat_lng = 1;
+    optional string pin_icon_image_url = 2;
+    
+    repeated IconInfo icon_info = 3;
+    message IconInfo {
+        optional string pin_icon_image_url = 1;
+    }
+    
+    optional SubtitleInfo subtitle_info = 4;
+    message SubtitleInfo {
+        optional string text = 1;
+        optional string ad_badge_text = 2;
+    }
+    
+    optional maps_tactile.shared.ads.PromotedPinAdsCalloutInfo callout_info = 5;
+    optional bool is_eligible_for_prominent_format = 6;
+    optional float star_rating = 7;
+}
+
+message PromotionalBannerInfo {
+    optional string thumbnail_url = 1;
+    optional string banner_text_line_1 = 2 [deprecated = true];
+    optional string banner_text_line_2 = 3 [deprecated = true];
+    optional string banner_text_line_3 = 4 [deprecated = true];
+    optional string on_click_url = 5;
+    optional string visible_url = 6;
+    
+    optional HotelBannerInfo hotel_banner_info = 9;
+    message HotelBannerInfo {
+        optional string booking_tips = 1;
+    }
+    
+    optional TravelActivityAdBannerInfo travel_activity_ad_banner_info = 10;
+    message TravelActivityAdBannerInfo {
+        optional string localized_activity_annotation = 1;
+        optional string display_price = 2;
+        optional int64 num_reviews = 3;
+        optional string formatted_num_reviews = 5;
+        optional float rating = 4;
+    }
+    
+    optional string deal_justification_text = 11 [deprecated = true];
+    
+    optional DealInfo deal_info = 12;
+    message DealInfo {
+        optional string localized_badge_text = 1;
+        optional string localized_deal_justification_text = 2;
+    }
+    
+    oneof banner {
+        BannerText banner_v3 = 8;
+    }
+    
+    reserved 7;
+    
+    message BannerText {
+        optional string headline = 1;
+        optional string body = 2;
+        optional string call_to_action = 3;
+    }
+}
+
+message NavigationPrompt {
+    optional string thumbnail_url = 1;
+    optional float star_rating = 2;
+    optional string open_status = 3;
+    optional string open_hours = 4;
+}
+
+message ClickTrackingInfo {
+    optional string ad_viewed_url = 1;
+    optional string ad_clicked_url = 2;
+    optional string interaction_ping_url_base = 3;
+    optional string dynamic_call_tracking_url = 4;
+    optional string placesheet_website_tracking_url = 5;
+    optional string ad_engaged_view_url = 6;
+}
+
+message PromotedPinAdsParameters {
+    optional float min_zoom_level = 1;
+    optional int32 promoted_places_response_ttl_seconds = 2;
+    optional bool is_counterfactual = 3;
+    optional bool enable_ad_blocking = 4;
+    optional string user_ads_settings_url = 5;
+    optional int32 refetch_on_pan_distance_meters = 6;
+    optional int32 small_background_image_size_dp = 7;
+    optional int32 large_background_image_size_dp = 8;
+    optional int32 small_image_size_dp = 9;
+    optional int32 large_image_size_dp = 10;
+    optional string background_image_url = 11;
+    optional bool log_only_when_camera_stable = 12 [deprecated = true];
+    optional bool refetch_on_pan = 13;
+    optional float icon_resize_zoom_level = 14;
+    optional float subtitle_min_zoom_level = 33;
+    optional int32 client_side_pin_density = 15;
+    optional float client_side_pin_pixel_density = 40 [default = 1];
+    
+    optional TextLabelOptions text_label_options = 16;
+    message TextLabelOptions {
+        optional int32 max_label_lines = 1;
+        optional int32 max_characters_per_label_line = 2;
+    }
+    
+    optional TextLabelOptions subtitle_text_label_options = 26;
+    
+    optional BeckIconOptions beck_icon_options = 17 [deprecated = true];
+    message BeckIconOptions {
+        optional string small_bg_image_url = 1;
+        optional string large_bg_image_url = 2;
+        optional int32 fg_small_image_x_center_offset = 3;
+        optional int32 fg_small_image_y_center_offset = 4;
+        optional int32 fg_large_image_x_center_offset = 5;
+        optional int32 fg_large_image_y_center_offset = 6;
+    }
+    
+    optional bool enable_named_styles = 18;
+    optional bool enable_placesheet_promo = 19;
+    optional bool enable_server_side_named_styles = 20;
+    optional bool enable_server_resized_icons = 32;
+    optional bool show_pins_with_multi_search_results = 21;
+    optional bool enable_reserved_labels = 22;
+    optional int32 invariable_pin_size = 23;
+    optional int32 invariable_soft_max_size = 24;
+    optional bool agmm_generate_labels_on_main_thread = 27;
+    optional bool send_additional_data_in_adview_ping = 28;
+    optional bool agmm_use_serialized_background_threadpool_for_labeling = 29;
+    optional bool agmm_enable_multi_position_label_options = 30;
+    optional bool agmm_fetch_on_programmatic_animation_completion = 31;
+    optional int32 navads_max_nav_log_impression_count = 34 [default = 5];
+    optional int32 navads_ad_log_impression_duration_threshold_millis = 35 [default = 3000];
+    optional int32 navads_min_time_between_logging_label_snapshot_samples_millis = 36 [default = 200];
+    
+    optional EngagedViewOptions engaged_view_options = 37 [deprecated = true];
+    message EngagedViewOptions {
+        optional int32 minimum_duration_millis = 1 [default = 3000];
+        optional int32 nav_minimum_duration_millis = 2 [default = 5000];
+    }
+    
+    optional LongViewOptions non_navigation_long_view_options = 38;
+    message LongViewOptions {
+        optional int32 min_time_between_logging_label_snapshot_samples_millis = 1 [default = 200];
+        optional int32 min_duration_until_impression_millis = 2 [default = 1000];
+    }
+    
+    optional LongViewOptions navigation_long_view_options = 39;
+    
+    optional CacheOptions cache_options = 41;
+    message CacheOptions {
+        optional int32 cache_max_size = 1 [default = 5];
+        optional int32 cache_ttl_seconds = 2 [default = 900];
+    }
+    
+    repeated PixelDensityCap browse_mode_pixel_density_cap = 42;
+    message PixelDensityCap {
+        optional int32 zoom_level = 1;
+        optional float cap_percentage = 2;
+    }
+    
+    repeated PixelDensityCap directions_mode_pixel_density_cap = 43;
+    
+    reserved 25;
+}

@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "TransitTripResultProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message TripResultDisplayStylesMap {
+    map<string, TripResultDisplayStyle> trip_result_display_style_map = 1;
+}
+
+enum TripResultDisplayStyle {
+    TRIP_RESULT_DISPLAY_STYLE_UNSPECIFIED = 0;
+    TRIP_RESULT_DISPLAY_STYLE_DEFAULT = 1;
+    TRIP_RESULT_DISPLAY_STYLE_GLANCEABLE = 2;
+}

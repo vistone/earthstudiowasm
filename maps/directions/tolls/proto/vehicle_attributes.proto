@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package maps_tolls;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.directions.tolls.proto.proto1api";
+
+message VehicleAttributes {
+    VehicleEmissionType vehicle_emission_type = 1;
+    enum VehicleEmissionType {
+        UNKNOWN_EMISSION_TYPE = 0;
+        GAS = 2;
+        ELECTRIC = 3;
+        HYBRID = 4;
+    }
+    
+    VehicleType vehicle_type = 2;
+    enum VehicleType {
+        UNKNOWN_VEHICLE_TYPE = 0;
+        CAR = 2;
+        TWO_WHEELER = 3;
+        COMPACT = 4;
+    }
+    
+    int32 num_occupants = 3;
+}

@@ -1,0 +1,105 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "logs/proto/maps/tactile/annotations.proto";
+import "maps/tactile/api/shared/alias.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "CommonProto";
+option java_package = "com.google.maps.tactile";
+
+message LocalizationContext {
+    optional string language = 1;
+    optional string country = 2;
+    optional string country_name = 3;
+}
+
+message BuildingLevel {
+    optional string feature_id = 1;
+    optional float level_number = 2;
+    optional string level_name = 3;
+    optional string building_name = 4;
+}
+
+message AliasId {
+    optional maps_tactile.shared.AliasType type = 1;
+    optional string sub_id = 3;
+    
+    reserved 2;
+}
+
+message Alias {
+    optional AliasId id = 1;
+    optional string nickname = 2;
+    optional string kg_concept_id = 3;
+    optional string bigtop_id = 4;
+    optional uint32 sticker_id = 5;
+    optional int32 origin_ve_type = 6;
+    optional bool is_ads_join_compliant = 7;
+    
+    optional EvInfo user_provided_ev_info = 8;
+    message EvInfo {
+        optional bool ev_charging_available = 1;
+    }
+    
+    optional bytes alias_provenance = 9;
+}
+
+message AliasLocationInterpretation {
+    optional Alias alias = 1;
+}
+
+message DisplayCount {
+    optional Count count = 1;
+    message Count {
+        oneof count_value {
+            int32 count = 1;
+            string rounded_count = 2;
+        }
+    }
+    
+    optional string label = 2;
+}
+
+enum SuggestIconType {
+    SUGGEST_ICON_SEARCH = 0;
+    SUGGEST_ICON_LOCATION = 1;
+    SUGGEST_ICON_HISTORY = 2;
+    DEPRECATED_SUGGEST_ICON_DIRECTIONS = 3 [deprecated = true];
+    SUGGEST_ICON_TRAFFIC = 4;
+    SUGGEST_ICON_TRANSIT = 5;
+    SUGGEST_ICON_BIKING = 6;
+    SUGGEST_ICON_AD = 7;
+    DEPRECATED_SUGGEST_ICON_NO_LAYERS = 8 [deprecated = true];
+    SUGGEST_ICON_HOME = 9;
+    SUGGEST_ICON_WORK = 10;
+    SUGGEST_ICON_CONTACT = 11;
+    SUGGEST_ICON_ACTIVITY = 12;
+    SUGGEST_ICON_TERRAIN = 13;
+    DEPRECATED_SUGGEST_ICON_SEARCH_NEARBY = 14 [deprecated = true];
+    SUGGEST_ICON_STARRED = 15;
+    SUGGEST_ICON_REVIEWED = 16;
+    SUGGEST_ICON_SHARED = 17;
+    SUGGEST_ICON_TRAIN_STATION = 18;
+    SUGGEST_ICON_BUS_STATION = 19;
+    SUGGEST_ICON_PLACE_PIN = 20;
+    SUGGEST_ICON_WEB = 21;
+    DEPRECATED_SUGGEST_ICON_RESTAURANT = 22 [deprecated = true];
+    DEPRECATED_SUGGEST_ICON_HOTEL = 23 [deprecated = true];
+    DEPRECATED_SUGGEST_ICON_PUB_AND_BAR = 24 [deprecated = true];
+    SUGGEST_ICON_ALIAS = 25;
+    SUGGEST_ICON_FAVORITES_LIST = 26;
+    SUGGEST_ICON_WANT_TO_GO_LIST = 27;
+    SUGGEST_ICON_YOUR_LOCATION = 28;
+    DEPRECATED_SUGGEST_ICON_ATTRACTION = 29 [deprecated = true];
+    DEPRECATED_SUGGEST_ICON_FAST_FOOD = 30 [deprecated = true];
+}
+
+enum DistanceUnits {
+    DEFAULT = 0;
+    IMPERIAL = 1;
+    METRIC = 2;
+}

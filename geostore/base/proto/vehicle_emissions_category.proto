@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+enum VehicleEmissionsCategory {
+    VEHICLE_EMISSIONS_CATEGORY_UNSPECIFIED = 0;
+    VEHICLE_EMISSIONS_CATEGORY_GAS = 1;
+    VEHICLE_EMISSIONS_CATEGORY_DIESEL = 2;
+    VEHICLE_EMISSIONS_CATEGORY_ELECTRIC = 3;
+    VEHICLE_EMISSIONS_CATEGORY_HYDROGEN = 4;
+    VEHICLE_EMISSIONS_CATEGORY_HYBRID = 5;
+    VEHICLE_EMISSIONS_CATEGORY_PLUGIN_HYBRID = 6;
+}

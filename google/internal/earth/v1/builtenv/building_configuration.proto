@@ -1,0 +1,249 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "geo/enterprise/platform/proto/ares_type_annotations.proto";
+import "google/internal/earth/v1/builtenv/use_type_class.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message BuildingTemplate {
+    optional string building_template_id = 1;
+    optional string name = 2;
+    optional BuildingConfiguration building_configuration = 3;
+    optional BuildingTemplateType building_template_type = 4;
+}
+
+message BuildingInput {
+    optional string building_input_id = 1;
+    optional string name = 2;
+    optional BuildingConfiguration building_configuration = 3;
+    optional bool is_selected = 4;
+    optional bool is_recommended = 5;
+}
+
+message BuildingConfiguration {
+    repeated FloorGroup floor_groups = 1;
+    repeated FloorGroup basement_floor_groups = 2;
+    optional double max_height_m = 3;
+    
+    optional LotSizeConstraints lot_size_constraints = 4;
+    message LotSizeConstraints {
+        optional double min_lot_area_sq_m = 1;
+        optional double realistic_max_lot_area_sq_m = 2;
+        optional double min_lot_depth_m = 3;
+        optional double max_lot_area_sq_m = 4;
+    }
+    
+    optional ConstructionComposition construction_composition = 5;
+    message ConstructionComposition {
+        optional string core_composition_id = 1;
+        optional string foundation_composition_id = 2;
+        optional string structure_display_name = 3;
+    }
+    
+    oneof thumbnail_file {
+        string url = 6;
+    }
+}
+
+message FloorGroup {
+    optional UseTypeClasses use_type_classes = 1;
+    message UseTypeClasses {
+        repeated UseTypeClass use_type_classes = 1;
+    }
+    
+    optional UseTypeIds use_type_ids = 8;
+    message UseTypeIds {
+        repeated string use_type_ids = 1;
+    }
+    
+    optional string floor_group_id = 2;
+    optional double height_m = 3;
+    optional int32 min_count = 4;
+    optional int32 max_count = 5;
+    optional double loss_factor = 6;
+    repeated string floor_composition_ids = 7;
+    
+    optional GeometryConfiguration geometry_configuration = 9;
+    message GeometryConfiguration {
+        repeated GeometryOperation geometry_operations = 1;
+        message GeometryOperation {
+            oneof params {
+                BarOperationParams bar_operation_params = 1;
+                SetbackOperationParams setback_operation_params = 2;
+                SimplifyOperationParams simplify_operation_params = 3;
+                FloatingOperationParams floating_operation_params = 4;
+                WrapOperationParams wrap_operation_params = 5;
+            }
+            
+            message BarOperationParams {
+                optional BarType bar_type = 16;
+                repeated SnapToEdge snap_to_edge_list = 2 [packed = true];
+                optional double min_rear_width_m = 3;
+                optional double corridor_width_m = 4;
+                optional double gap_width_m = 5;
+                optional double lease_depth_m = 6;
+                optional double max_area_sq_m = 7;
+                optional double max_dist_to_snap_to_m = 8;
+                optional double max_length_m = 9;
+                optional bool snapped_edge_only = 10;
+                optional double width_m = 11;
+                optional bool capped = 12;
+                optional bool ignore_previous_axis = 13;
+                optional bool default_to_original = 14;
+                optional bool random_weighted_starting_edge = 15;
+                repeated BarType bar_types = 1 [packed = true, deprecated = true];
+            }
+            
+            message SetbackOperationParams {
+                optional double front_m = 1;
+                optional double trim_width_m = 2;
+                optional double side_m = 3;
+                optional double back_m = 4;
+                optional double max_front_distance_to_street_m = 5;
+            }
+            
+            message SimplifyOperationParams {
+                optional double tolerance_m = 1;
+                optional bool convex = 2;
+                optional bool trim = 3;
+                optional double trim_width_m = 4;
+            }
+            
+            message FloatingOperationParams {
+                optional Shape shape = 1;
+                enum Shape {
+                    SHAPE_UNSPECIFIED = 0;
+                    SHAPE_POLYGON = 1;
+                    SHAPE_RECTANGLE = 2;
+                }
+                
+                optional CapStyle cap_style = 2;
+                enum CapStyle {
+                    CAP_STYLE_UNSPECIFIED = 0;
+                    CAP_STYLE_INTERSECT = 1;
+                    CAP_STYLE_NO_CAP = 2;
+                    CAP_STYLE_OVERHANG = 3;
+                    CAP_STYLE_WITHIN = 4;
+                }
+                
+                optional double length_m = 3;
+                optional double num_sides = 4;
+                
+                optional OrientTo orient_to = 5;
+                enum OrientTo {
+                    ORIENT_TO_UNSPECIFIED = 0;
+                    ORIENT_TO_NORTH = 1;
+                    ORIENT_TO_NORTHEAST = 2;
+                    ORIENT_TO_NORTHWEST = 3;
+                    ORIENT_TO_SITE = 4;
+                    ORIENT_TO_SOUTH = 5;
+                    ORIENT_TO_SOUTHEAST = 6;
+                    ORIENT_TO_SOUTHWEST = 7;
+                    ORIENT_TO_WEST = 8;
+                    ORIENT_TO_EAST = 9;
+                }
+                
+                optional double orient_tolerance_m = 6;
+                optional double radius_m = 7;
+                optional double width_m = 8;
+            }
+            
+            message WrapOperationParams {
+                repeated SnapToEdge snap_to_edge_list = 1 [packed = true];
+                optional double min_interior_width_m = 2;
+                optional BarType bar_type = 5;
+                optional double min_rear_width_m = 6;
+                optional double corridor_width_m = 7;
+                optional double lease_depth_m = 8;
+                optional double max_dist_to_snap_to_m = 9;
+                optional bool snapped_edge_only = 10;
+                optional double width_m = 11;
+                repeated string wrap_composition_ids = 12;
+                
+                oneof interior_use_type {
+                    UseTypeClass interior_use_type_class = 3;
+                    string interior_use_type_id = 4;
+                }
+            }
+            
+            enum BarType {
+                BAR_TYPE_UNSPECIFIED = 0;
+                BAR_TYPE_COURTYARD = 1;
+                BAR_TYPE_L_SHAPED = 2;
+                BAR_TYPE_MULTI_COURTYARD = 3;
+                BAR_TYPE_SINGLE_BAR = 4;
+                BAR_TYPE_U_SHAPED = 5;
+            }
+            
+            enum SnapToEdge {
+                SNAP_TO_EDGE_UNSPECIFIED = 0;
+                SNAP_TO_EDGE_BLOCK_EDGE = 1;
+                SNAP_TO_EDGE_LONGEST = 2;
+                SNAP_TO_EDGE_RANDOM = 3;
+                SNAP_TO_EDGE_SHORTEST = 4;
+                SNAP_TO_EDGE_STREET_WIDTH = 5;
+                SNAP_TO_EDGE_PARK = 6;
+                SNAP_TO_EDGE_WATER_BODY = 7;
+            }
+        }
+        
+        repeated Conditional checks = 2;
+        message Conditional {
+            optional double value = 1;
+            
+            optional ConditionalOperator conditional_operator = 2;
+            enum ConditionalOperator {
+                CONDITIONAL_OPERATOR_UNSPECIFIED = 0;
+                CONDITIONAL_OPERATOR_GREATER_THAN = 1;
+                CONDITIONAL_OPERATOR_GREATER_THAN_OR_EQUAL_TO = 2;
+                CONDITIONAL_OPERATOR_LESS_THAN = 3;
+                CONDITIONAL_OPERATOR_LESS_THAN_OR_EQUAL_TO = 4;
+                CONDITIONAL_OPERATOR_EQUAL_TO = 5;
+            }
+            
+            optional ConditionalAttribute conditional_attribute = 3;
+            enum ConditionalAttribute {
+                CONDITIONAL_ATTRIBUTE_UNSPECIFIED = 0;
+                CONDITIONAL_ATTRIBUTE_AREA = 1;
+                CONDITIONAL_ATTRIBUTE_DEPTH = 2;
+                CONDITIONAL_ATTRIBUTE_DIAGONAL_LENGTH = 3;
+                CONDITIONAL_ATTRIBUTE_LENGTH = 5;
+                CONDITIONAL_ATTRIBUTE_LEVEL = 6;
+            }
+        }
+    }
+}
+
+enum BuildingTemplateType {
+    BUILDING_TEMPLATE_TYPE_UNSPECIFIED = 0;
+    BUILDING_TEMPLATE_TYPE_POINT_LOADED_WITH_STREET_PODIUM = 1;
+    BUILDING_TEMPLATE_TYPE_HIGH_RISE_MULTIFAMILY_PODIUM = 2;
+    BUILDING_TEMPLATE_TYPE_HIGH_RISE_MULTIFAMILY_WRAP_PODIUM = 3;
+    BUILDING_TEMPLATE_TYPE_HIGH_RISE_MULTIFAMILY_TOWER_PODIUM = 4;
+    BUILDING_TEMPLATE_TYPE_HIGH_RISE_MULTIFAMILY = 5;
+    BUILDING_TEMPLATE_TYPE_MID_RISE_MULTIFAMILY = 6;
+    BUILDING_TEMPLATE_TYPE_MID_RISE_MULTIFAMILY_COURTYARD = 7;
+    BUILDING_TEMPLATE_TYPE_LOW_MID_RISE_MULTIFAMILY = 8;
+    BUILDING_TEMPLATE_TYPE_LOW_MID_RISE_MULTIFAMILY_RETAIL = 9;
+    BUILDING_TEMPLATE_TYPE_LOW_RISE_MULTIFAMILY_ROWHOUSE = 10;
+    BUILDING_TEMPLATE_TYPE_STICK_BUILT_TEXAS_DONUT_WRAP = 11;
+    BUILDING_TEMPLATE_TYPE_STICK_BUILT_MULTIFAMILY_PODIUM = 12;
+    BUILDING_TEMPLATE_TYPE_LOW_RISE_MULTIFAMILY_TOWER = 13;
+    BUILDING_TEMPLATE_TYPE_HIGH_RISE_OFFICE = 14;
+    BUILDING_TEMPLATE_TYPE_MID_RISE_OFFICE = 15;
+    BUILDING_TEMPLATE_TYPE_MID_RISE_OFFICE_TOWER = 16;
+    BUILDING_TEMPLATE_TYPE_MID_RISE_OFFICE_PODIUM = 17;
+    BUILDING_TEMPLATE_TYPE_LOW_MID_RISE_OFFICE_RETAIL = 18;
+    BUILDING_TEMPLATE_TYPE_LOW_MID_RISE_OFFICE = 19;
+    BUILDING_TEMPLATE_TYPE_HIGH_RISE_HOTEL_PODIUM = 20;
+    BUILDING_TEMPLATE_TYPE_MID_RISE_HOTEL = 21;
+    BUILDING_TEMPLATE_TYPE_COMMUNITY_BUILDING = 22;
+    BUILDING_TEMPLATE_TYPE_LIFE_SCIENCES_BUILDING = 23;
+    BUILDING_TEMPLATE_TYPE_SCHOOL_BUILDING = 24;
+    BUILDING_TEMPLATE_TYPE_RETAIL = 25;
+    BUILDING_TEMPLATE_TYPE_PARKING_GARAGE = 26;
+}

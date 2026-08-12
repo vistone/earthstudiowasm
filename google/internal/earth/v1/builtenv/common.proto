@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message Range {
+    optional double min = 1;
+    optional double max = 2;
+}
+
+message ValueOrRange {
+    oneof value_or_range {
+        double value = 1;
+        Range range = 2;
+    }
+}

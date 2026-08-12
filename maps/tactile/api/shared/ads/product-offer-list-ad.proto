@@ -1,0 +1,47 @@
+syntax = "proto2";
+
+package maps_tactile.shared.ads;
+
+import "geo/serving/proto/ads/why_these_ads.proto";
+import "geo/serving/proto/products/availability.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHADS";
+option java_multiple_files = true;
+option java_outer_classname = "ProductOfferListAdProto";
+option java_package = "com.google.maps.tactile.shared.ads";
+
+message ProductOfferListAd {
+    optional ProductOfferListAdInfo info = 1;
+    message ProductOfferListAdInfo {
+        optional string headline = 1;
+        optional string view_all_url = 2;
+        optional geo_serving_proto.ads.WhyTheseAds why_these_ads = 3;
+        optional string batch_ad_view_url = 4;
+    }
+    
+    repeated ProductOfferAdInfo offer = 2;
+    message ProductOfferAdInfo {
+        optional string title = 1;
+        optional string thumbnail_url = 2;
+        optional string website_redirect_url = 3;
+        optional string website_redirect_free_url = 15;
+        optional string formatted_price = 4;
+        optional string original_formatted_price = 5;
+        optional string original_formatted_price_aria = 10;
+        optional bool show_sales_tag = 11;
+        
+        optional ProductRating rating = 6;
+        message ProductRating {
+            optional float num_rating_stars = 1;
+            optional string formatted_review_count = 2;
+            optional string formatted_review_count_aria = 3;
+        }
+        
+        optional string formatted_installments_info = 7;
+        optional string formatted_installments_info_aria = 12;
+        optional geo_serving_proto.products.Availability availability = 13;
+        optional string ad_view_url = 8;
+        optional string ved = 9;
+    }
+}

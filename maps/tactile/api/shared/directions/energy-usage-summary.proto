@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "EnergyUsageSummaryProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message EnergyUsageSummary {
+    optional int32 energy_required_wh = 1;
+}

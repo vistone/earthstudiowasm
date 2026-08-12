@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package logs.proto.maps.directions.mrp;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+enum LoggedTripResultStatus {
+    UNKNOWN = 0;
+    RETAINED = 1;
+    CULLED = 2;
+}

@@ -1,0 +1,29 @@
+syntax = "editions";
+
+package maps_api;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+;
+option objc_class_prefix = "GMA";
+
+message MapsApiLayer {
+    optional PoiDensity poi_density = 1;
+    enum PoiDensity {
+        POI_DENSITY_UNSPECIFIED = 0;
+        POI_DENSITY_SMALL_INCREASE = 1;
+        POI_DENSITY_MEDIUM_INCREASE = 2;
+        POI_DENSITY_SMALL_DECREASE = 3;
+        POI_DENSITY_MEDIUM_DECREASE = 4;
+    }
+    
+    optional bool exclude_iconic_places_from_deboosting = 2;
+}
+
+enum MapsApiPoiBoostingAttribute {
+    MAPS_API_POI_BOOSTING_UNSPECIFIED = 0;
+    MAPS_API_POI_BOOSTING_ALL_POIS = 1;
+    MAPS_API_POI_BOOSTING_NON_ICONIC_POIS = 2;
+}

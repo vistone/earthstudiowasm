@@ -1,0 +1,35 @@
+syntax = "editions";
+
+package pathfinder.crp;
+
+import "maps/pathfinder/crp/modules/path_finding/path_finding_module_config.proto";
+import "maps/pathfinder/crp/modules/ranking/ranking_module_config.proto";
+import "maps/pathfinder/crp/path_finding/iterative_search_config.proto";
+import "maps/pathfinder/crp/searcher/alternates/alternates_config.proto";
+import "maps/pathfinder/crp/searcher/highway_ramp_fixup/highway_ramp_fixup_config.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "CrpDynamicConfigProto";
+
+message CrpDynamicConfig {
+    optional IterativeSearchConfig iterative_search_config = 2;
+    optional AlternatesConfig alternates_config = 3;
+    optional HighwayRampFixupConfig highway_ramp_fixup_config = 4;
+    optional PathFindingModuleConfig path_finding_module_config = 5;
+    optional RankingModuleConfig ranking_module_config = 6;
+    
+    reserved 1;
+}
+
+message CounterfactualInfo {
+    optional CrpDynamicConfig config_override = 1;
+    optional CounterfactualArm arm = 2;
+    optional string experiment_name = 3;
+}
+
+enum CounterfactualArm {
+    COUNTERFACTUAL_ARM_UNSPECIFIED = 0;
+    COUNTERFACTUAL_ARM_CONTROL = 1;
+    COUNTERFACTUAL_ARM_TEST = 2;
+}

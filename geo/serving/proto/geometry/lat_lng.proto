@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geo_serving_proto.geometry;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPGEOM";
+option java_multiple_files = true;
+option java_outer_classname = "LatLngProto";
+option java_package = "com.google.geo.serving.proto.geometry";
+
+message LatLng {
+    optional double lat = 1;
+    optional double lng = 2;
+}

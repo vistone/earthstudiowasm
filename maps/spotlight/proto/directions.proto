@@ -1,0 +1,97 @@
+syntax = "editions";
+
+package maps_spotlight;
+
+import "maps/directions/tilerenderer/proto/directions_pipe_parameters.proto";
+import "maps/tactile/api/directions-request.proto";
+import "maps/tactile/api/geometry.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMSL";
+option java_multiple_files = true;
+option java_outer_classname = "DummyDirectionsMetadata";
+option java_package = "com.google.maps.spotlight";
+
+message WaypointMetadata {
+    optional int32 index = 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional WaypointMetadata message_set_extension = 30783503;
+    }
+}
+
+message AccessPointMetadata {
+    optional int32 index = 1;
+    optional int32 trip_index = 3;
+    optional maps_tactile.LatLng location = 2;
+    
+    extend .proto2.bridge.MessageSet {
+        optional AccessPointMetadata message_set_extension = 66616348;
+    }
+}
+
+message ViaMetadata {
+    optional int32 index = 1;
+    optional int32 trip_index = 2;
+    
+    extend .proto2.bridge.MessageSet {
+        optional ViaMetadata message_set_extension = 40251316;
+    }
+}
+
+message PolylineMetadata {
+    optional int32 distance_offset = 1;
+    optional int32 global_length = 2;
+}
+
+message TripMetadata {
+    repeated PolylineMetadata polyline = 1;
+    optional maps_tactile.DirectionsRequest directions_request = 2;
+    optional int32 index = 3;
+    optional int32 path_index = 5;
+    optional int32 step_index = 6;
+    optional int32 via_index = 7;
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 9;
+    optional DirectionsCacheStatus cache_status = 10 [default = DIRECTIONS_CACHE_NONE];
+    optional string xuikit_command_data_store_key = 11;
+    optional maps_directions_tilerenderer.LoggingParameters logging_parameters = 13;
+    
+    reserved 12;
+    
+    extend .proto2.bridge.MessageSet {
+        optional TripMetadata message_set_extension = 28927125;
+    }
+}
+
+message DraggingMetadata {
+    optional bool failed_route = 1 [default = false];
+    optional maps_tactile.DirectionsRequest directions_request = 2;
+    optional string transport_mode_name = 3;
+    optional string trip_title = 4;
+    optional string trip_subtitle = 5;
+    
+    extend .proto2.bridge.MessageSet {
+        optional DraggingMetadata message_set_extension = 48344961;
+    }
+}
+
+message StepInspectionMetadata {
+    optional int32 path_index = 1;
+    optional int32 step_index = 2;
+    
+    extend .proto2.bridge.MessageSet {
+        optional StepInspectionMetadata message_set_extension = 49043590;
+    }
+}
+
+enum DirectionsCacheStatus {
+    option features = enum_type: CLOSED
+    ;
+    DIRECTIONS_CACHE_NONE = 0;
+    DIRECTIONS_CACHE_HIT = 1;
+    DIRECTIONS_CACHE_REQUERY_MATCH = 2;
+    DIRECTIONS_CACHE_REQUERY_MISMATCH = 3;
+}

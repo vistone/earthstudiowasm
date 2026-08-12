@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package geo_imagery_common;
+
+import "java/com/google/apps/jspb/jspb_generate_object_format.proto";
+import "third_party/redwood/infrastructure/proto/linear_algebra.proto";
+
+option java_multiple_files = true;
+
+message AffineTransformationProto {
+    optional .redwood.Vector3fProto scale = 1;
+    optional .redwood.Vector3fProto rotate = 2;
+    optional .redwood.Vector3Proto translate = 3;
+}
+
+message RigidTransformationProto {
+    optional .redwood.Vector3fProto rotate = 2;
+    optional .redwood.Vector3Proto translate = 3;
+    
+    reserved 1;
+    
+    reserved "scale";
+}

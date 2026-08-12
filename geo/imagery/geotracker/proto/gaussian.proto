@@ -1,0 +1,118 @@
+syntax = "editions";
+
+package geotracker;
+
+import "geo/imagery/geotracker/proto/observation_tag.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+
+option features = enum_type: CLOSED
+;
+
+message ValueKeyProto {
+    optional ValueType type = 2;
+    enum ValueType {
+        ECEF_X = 0;
+        ECEF_Y = 1;
+        ECEF_Z = 2;
+        CLASS_CONFIDENCE = 3;
+        CLASS_HIGH_CONFIDENCE_THRESHOLD = 30;
+        COUNT = 4;
+        DISTANCE = 5;
+        ECEF_RX = 6;
+        ECEF_RY = 7;
+        ECEF_RZ = 8;
+        HEIGHT = 9;
+        WIDTH = 23;
+        APPARENT_WIDTH = 15;
+        APPARENT_HEIGHT = 10;
+        ECEF_NORMAL_RY = 11;
+        ECEF_NORMAL_RZ = 12;
+        GOOGLE_SECONDS_SINCE_UNIX_EPOCH = 13;
+        SCORE = 14;
+        MAX = 16;
+        MIN = 17;
+        MEAN = 18;
+        MEDIAN = 19;
+        PERCENTILE_NINETY = 75;
+        MEAN_L2 = 20;
+        ANGLE_RADIANS_CCW_FROM_EAST = 21;
+        ANGLE_RADIANS = 22;
+        SUM = 24;
+        LENGTH = 25;
+        FRACTION_OF_TOTAL = 26;
+        AGE = 27;
+        LOG_HAZARD_MEAN = 28;
+        AREA = 29;
+        CONCENTRATION = 31;
+        REPROJECTION_ERROR = 32;
+        DISTANCE_SV_LABEL_TO_MAPFACTS_OUTLINE = 33;
+        DISTANCE_AERIAL_LABEL_TO_MAPFACTS_OUTLINE = 34;
+        DISTANCE_SV_LABEL_TO_AERIAL_LABEL = 38;
+        DISTANCE_MAPFACTS_OUTLINE_POINTS_MISMATCH = 39;
+        DISTANCE_SV_LABEL_TO_MAPFACTS_CORNER = 40;
+        DISTANCE_AERIAL_LABEL_TO_MAPFACTS_CORNER = 41;
+        DISTANCE_MAPFACTS_CORNERS_MISMATCH = 42;
+        HEIGHT_ABOVE_CAMERA = 35;
+        ANGLE_BETWEEN_RAYS = 36;
+        ECEF_LOCATION_LARGEST_UNCERTAINTY = 37;
+        AREA_COVERAGE_FRACTION = 43;
+        PRESENCE_AREA = 45;
+        EXTRA_AREA = 46;
+        NORMALIZED_AREA_WEIGHTED_MEAN = 47;
+        SCALED_AREA_WEIGHTED_MEAN = 48;
+        PIXEL_SIZE = 49;
+        SELF_OVERLAP_AREA = 50;
+        SELF_OVERLAP_COUNT = 51;
+        POLYLINE_INTRUSION_LENGTH = 52;
+        AREA_SUM = 53;
+        OVERLAP_COUNT = 54;
+        NUMERIC_ENUM_VALUE = 56;
+        VERTICES = 57;
+        MEAN_ONE_TO_MANY_PRECISION = 62;
+        MEAN_ONE_TO_MANY_RECALL = 63;
+        MEAN_ONE_TO_MANY_F1 = 64;
+        MEAN_ONE_TO_MANY_IOU = 65;
+        ONE_TO_MANY_PRECISION = 71;
+        ONE_TO_MANY_RECALL = 72;
+        ONE_TO_MANY_F1 = 73;
+        ONE_TO_MANY_IOU = 74;
+        ONE_TO_MANY_EVALUATED_AREA = 78;
+        ONE_TO_MANY_OVERLAP_AREA = 79;
+        CENTROIDS_IN_BUCKET = 66;
+        OTHER = -1;
+    }
+    
+    optional ObservationTag tag = 3;
+    
+    reserved 1;
+}
+
+message ValueEstimateProto {
+    optional ValueKeyProto key = 1;
+    optional double value = 2;
+}
+
+message CovarianceProto {
+    optional ValueKeyProto property1 = 1;
+    optional ValueKeyProto property2 = 2;
+    optional double covariance = 3;
+}
+
+message GaussianProto {
+    repeated ValueEstimateProto value = 1;
+    repeated CovarianceProto covariance = 2;
+}
+
+enum ValueTypeGroup {
+    VALUE_TYPE_GROUP_UNKNOWN = 0;
+    POSITION = 1;
+    ATTITUDE = 2;
+    NORMAL_ATTITUDE = 8;
+    HEIGHT = 3;
+    WIDTH = 4;
+    APPARENT_HEIGHT = 6;
+    APPARENT_WIDTH = 7;
+    DISTANCE = 5;
+    ANGLE = 9;
+    ANGLE_CCW_FROM_EAST = 10;
+}

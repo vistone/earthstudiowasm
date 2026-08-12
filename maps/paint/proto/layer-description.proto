@@ -1,0 +1,73 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_generate_object_format.proto";
+import "maps/api/shared/paint/proto/maps-api-layer.proto";
+import "maps/paint/proto/overlay.proto";
+import "maps/spotlight/proto/spotlight-description.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "LayerDescriptionProto";
+option java_package = "com.google.maps.paint";
+
+message LayerDescription {
+    optional Type type = 1 [default = TYPE_MAP];
+    enum Type {
+        TYPE_MAP = 0;
+        TYPE_SATELLITE_IMAGERY = 1;
+        TYPE_TERRAIN = 3;
+        TYPE_PLAIN_TERRAIN = 4;
+        TYPE_TERRAIN_SHADING = 5;
+        TYPE_TERRAIN_CONTOURS = 6;
+        TYPE_AUX = 2;
+        TYPE_ROAD_GRAPH = 7;
+        TYPE_CANNED = 8;
+    }
+    
+    optional string id = 2;
+    optional int32 epoch = 3;
+    optional bool prefer_canary_epoch = 12;
+    
+    repeated AuxiliaryParameter aux_param = 4 [deprecated = true];
+    message AuxiliaryParameter {
+        required string key = 1;
+        optional string value = 2;
+    }
+    
+    optional OverlayLayerProto overlay = 6;
+    repeated int32 extended_content_id = 5;
+    optional bool is_optional = 7 [deprecated = true];
+    
+    optional LaunchOptions launch_options = 11 [deprecated = true];
+    message LaunchOptions {
+        option deprecated = true;
+        
+        optional DarkLaunch dark_launch = 1 [default = NO_LAUNCH];
+        enum DarkLaunch {
+            NO_LAUNCH = 0;
+            DARK_LAUNCH_NON_BLOCKING = 1;
+        }
+    }
+    
+    optional maps_spotlight.SpotlightDescription spotlight_description = 8 [deprecated = true];
+    optional maps_api.MapsApiLayer maps_api_layer = 9;
+    
+    optional ThickZoomConfig thick_zoom_config = 13;
+    message ThickZoomConfig {
+        repeated int32 thick_zooms = 1 [packed = true];
+    }
+    
+    extensions 10000 to 524999999, 525000000 to max;
+    
+    reserved 10;
+    
+    enum ExtendedContentId {
+        EXTENDED_CONTENT_BASIC = 1;
+        EXTENDED_CONTENT_MAX_RESERVED = 10000;
+    }
+}

@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package geo_serving_proto.openhours;
+
+import "geo/serving/proto/openhours/special_hours_message_type.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPOPH";
+option java_multiple_files = true;
+option java_outer_classname = "SpecialHoursMessageProto";
+option java_package = "com.google.geo.serving.proto.openhours";
+
+message SpecialHoursMessage {
+    optional string note = 1;
+    optional string label = 2;
+    optional SpecialHoursMessageType special_hours_message_type = 3;
+}

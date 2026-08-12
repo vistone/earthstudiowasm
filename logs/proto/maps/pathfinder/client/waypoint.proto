@@ -1,0 +1,79 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "geostore/base/proto/accesspoint.proto";
+import "geostore/base/proto/feature.proto";
+import "logs/maps/featureid.proto";
+import "logs/proto/maps/pathfinder/client/boarded_transit_vehicle.proto";
+import "logs/proto/maps/pathfinder/client/building-level.proto";
+import "logs/proto/maps/shared/geometry_e7.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "WaypointProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedSegmentLocation {
+    optional logs_maps.FeatureIdProto segment_id = 1;
+    optional double interpolation_fraction = 2;
+    optional int32 node_id = 3;
+    optional int32 external_penalty = 4 [default = 0];
+}
+
+message LoggedAccessPointInfo {
+    optional logs_maps.FeatureIdProto feature_id = 1;
+    optional geostore.FeatureProto.TypeCategory feature_type = 2;
+    optional geostore.AccessPointProto.PriorityCategory priority = 3;
+    repeated geostore.AccessPointProto.TravelMode unsuitable_travel_mode = 4;
+    optional bool is_strict = 5;
+}
+
+message LoggedLocation {
+    optional LoggedSegmentLocation segment = 1;
+    optional logs_maps_shared.PointE7 point = 2;
+    optional int32 snap_zoom_level = 3;
+    optional LoggedBuildingLevel building_level = 6;
+    optional int32 heading = 4;
+    optional LoggedAccessPointInfo access_point = 5;
+    optional LoggedBoardedTransitVehicle boarded_transit_vehicle = 8;
+    optional bool has_side_of_road_preference = 9 [default = false];
+    optional int32 preferred_segment_heading = 10;
+    optional logs_maps.FeatureIdProto boarded_transit_last_station_id = 12;
+    
+    repeated LoggedLocationFilter filter = 7 [packed = true];
+    enum LoggedLocationFilter {
+        FILTER_ELEVATED = 0;
+        FILTER_FERRY = 1;
+        FILTER_LIMITED_ACCESS = 2;
+        FILTER_UNDERGROUND = 3;
+        ALLOW_HOV = 4;
+    }
+}
+
+message LoggedWaypoint {
+    repeated LoggedLocation location = 1;
+    optional bool is_via = 2 [default = false];
+    optional geostore.FeatureProto.TypeCategory feature_type = 3;
+    optional string country_code = 5;
+    
+    optional LoggedSnappingType snapping_type = 6;
+    enum LoggedSnappingType {
+        SNAP_NORMAL = 0;
+        SNAP_TRANSIT_STATION = 1;
+        SNAP_PARKING_FACILITY = 2;
+    }
+    
+    optional LoggedEntityType entity_type = 9 [default = ENTITY_TYPE_DEFAULT];
+    enum LoggedEntityType {
+        ENTITY_TYPE_DEFAULT = 4;
+        ENTITY_TYPE_MY_LOCATION = 0;
+        ENTITY_TYPE_HOME = 1;
+        ENTITY_TYPE_WORK = 2;
+        ENTITY_TYPE_AD = 3;
+        ENTITY_TYPE_NICKNAME = 5;
+        ENTITY_TYPE_CONTACT = 6;
+    }
+    
+    reserved 8, 10;
+}

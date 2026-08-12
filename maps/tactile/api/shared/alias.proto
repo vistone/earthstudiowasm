@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "AliasProto";
+option java_package = "com.google.maps.tactile.shared";
+
+enum AliasType {
+    UNKNOWN_ALIAS_TYPE = -1;
+    HOME = 0;
+    WORK = 1;
+    CONTACT = 2;
+    NICKNAME = 3;
+    INFERRED_HOME = 4;
+    INFERRED_WORK = 5;
+}
+
+enum AliasProvenance {
+    UNKNOWN_ALIAS_PROVENANCE = 0;
+    ACCURATE = 1;
+    STALE = 2;
+    VAGUE = 3;
+}

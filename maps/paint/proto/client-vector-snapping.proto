@@ -1,0 +1,40 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_outer_classname = "ClientVectorSnapping";
+option java_package = "com.google.maps.paint.client";
+
+message GeometrySnapParameters {
+    optional Strategy strategy = 1;
+    enum Strategy {
+        STRATEGY_NONE = 0;
+        STRATEGY_MAX = 1;
+        STRATEGY_NEAREST = 2;
+    }
+    
+    optional Data allowed_data = 2;
+    enum Data {
+        DATA_NONE = 0;
+        DATA_TERRAIN = 1;
+        DATA_ALL = 2;
+    }
+    
+    optional FaceDirection allowed_face_direction = 3;
+    enum FaceDirection {
+        DIRECTION_UNSPECIFIED = 0;
+        DIRECTION_UP = 1;
+    }
+}
+
+message GeometryProjectionParameters {
+    optional Strategy strategy = 4;
+    enum Strategy {
+        STRATEGY_NONE = 0;
+        STRATEGY_ZERO_ALTITUDE = 1;
+    }
+}

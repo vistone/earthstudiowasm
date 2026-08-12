@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "maps/tactile/api/shared/feature-id.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "DynamicClosureOptionsProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message DynamicClosureOptions {
+    repeated DynamicClosure dynamic_closure = 1;
+    message DynamicClosure {
+        optional FeatureId feature_id = 2;
+        
+        reserved 1;
+    }
+    
+    optional UserReportedClosure user_reported_closure = 2 [deprecated = true];
+    message UserReportedClosure {
+        optional bool user_reported_closure_at_current_location = 1;
+    }
+}

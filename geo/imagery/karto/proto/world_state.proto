@@ -1,0 +1,87 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+import "geo/ar/protos/pose.proto";
+import "geo/imagery/karto/proto/traffic_sim_options.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_outer_classname = "WorldStateProto";
+option java_package = "com.google.geo.imagery.karto.proto";
+
+message WorldState {
+    optional KartoMode mode = 1;
+    enum KartoMode {
+        UNKNOWN_MODE = 0;
+        VIDEO_RENDERING = 1;
+        NATIVE = 2;
+        PIXEL_STREAM = 3;
+    }
+    
+    optional ar.LatLngAlt origin = 2;
+    
+    optional MaterialType material_type = 4 [default = LIT_STANDARD];
+    enum MaterialType {
+        UNKNOWN_MATERIALS = 0;
+        LIT_STANDARD = 1;
+        LIT_NO_TANGENTS = 2;
+        UNSHADOWED = 3;
+    }
+    
+    optional float time_of_day = 5 [default = 8];
+    optional bool enable_time_of_day = 17 [default = false];
+    optional bool enable_timelapse = 20 [default = false];
+    
+    optional WeatherType weather_type = 6 [default = PARTLY_CLOUDY];
+    enum WeatherType {
+        UNKNOWN_WEATHER = 0;
+        CLEAR_SKIES = 1;
+        PARTLY_CLOUDY = 2;
+        CLOUDY = 3;
+        OVERCAST = 4;
+        FOGGY = 5;
+        LIGHT_RAIN = 6;
+        RAIN = 7;
+        THUNDERSTORM = 8;
+        LIGHT_SNOW = 9;
+        SNOW = 10;
+        BLIZZARD = 11;
+    }
+    
+    optional WaterType water_type = 12;
+    enum WaterType {
+        UNKNOWN_WATER_TYPE = 0;
+        COASTAL_LOW_QUALITY = 1;
+        COASTAL_HIGH_QUALITY = 2;
+        RIVER_LOW_QUALITY = 3;
+        RIVER_HIGH_QUALITY = 4;
+        DISABLED = 5;
+        HIGH_FIDELITY = 6;
+        MESH_ANNOTATION = 7;
+    }
+    
+    optional string night_light_id = 15;
+    
+    optional ColorGradingLut color_grading_lut = 18;
+    enum ColorGradingLut {
+        UNKNOWN_LUT = 0;
+        GENERIC_NO_OP_LUT = 1;
+        GENERIC_NEUTRAL_LUT = 2;
+        METRO_AMSTERDAM_LUT = 3;
+        METRO_DUBLIN_LUT = 4;
+        METRO_FLORENCE_LUT = 5;
+        METRO_LOS_ANGELES_LUT = 6;
+        METRO_LONDON_UK_LUT = 7;
+        METRO_NEW_YORK_CITY_LUT = 8;
+        METRO_SAN_FRANCISCO_LUT = 9;
+        METRO_TOKYO_LUT = 10;
+        METRO_VENICE_LUT = 11;
+    }
+    
+    optional TrafficSimOptions traffic_sim_options = 19;
+    
+    reserved 3, 7 to 11, 13, 14;
+}

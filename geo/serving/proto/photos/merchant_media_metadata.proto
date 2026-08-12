@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "geo/serving/proto/photos/merchant_photo_type.proto";
+import "geo/serving/proto/photos/processing_state.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "MerchantMediaMetadataProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message MerchantMediaMetadata {
+    optional ProcessingStateMetadata processing_state_metadata = 1;
+    message ProcessingStateMetadata {
+        optional ProcessingState processing_state = 1;
+        optional string localized_processing_state_label = 2;
+        optional string localized_processing_state_text = 3;
+        optional string localized_learn_more_text = 4;
+    }
+    
+    optional Insights insights = 2;
+    message Insights {
+        optional int64 view_count = 1;
+        optional string view_count_label = 2;
+    }
+    
+    optional MerchantPhotoType photo_type = 3;
+    optional string photo_type_label = 4;
+}

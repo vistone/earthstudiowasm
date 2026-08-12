@@ -1,0 +1,26 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/proto/mapstyle.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derivedstate";
+
+message TopToolbarDerivedState {
+    optional string street_view_pano_id = 5;
+    optional bool data_loading_in_progress = 6;
+    optional bool is_search_open_pui = 7;
+    optional bool is_search_open_sui = 8;
+    optional layers.MapStyle map_style = 10;
+    optional bool is_balloon_open = 11;
+    
+    message PreviewDataLayerToolbar {
+        optional string earth_data_layer_identifier = 1;
+    }
+}

@@ -1,0 +1,441 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/paint/proto/field-options.proto";
+import "maps/paint/proto/output-debug-options.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint";
+
+message ImageOptions {
+    optional ImageType image_type = 1 [default = TYPE_PNG];
+    enum ImageType {
+        TYPE_PNG = 0;
+        TYPE_JPEG = 1;
+        TYPE_GIF = 2;
+        TYPE_WEBP = 3;
+        TYPE_TEXTURE = 4;
+        TYPE_ZIPPY = 9;
+        TYPE_AVIF = 10;
+    }
+    
+    optional AvifOptions avif_options = 11;
+    optional PngOptions png_options = 2;
+    optional JpegOptions jpeg_options = 3;
+    optional WebPOptions webp_options = 7;
+    optional TextureOptions texture_options = 8;
+    optional bool allow_image_resize = 4;
+    optional float scale = 5 [default = 1];
+    optional bool include_copyrights = 6;
+    optional bool generate_alternate_representations = 10;
+    
+    reserved 9;
+}
+
+message AvifOptions {
+    optional int32 avif_quality = 1 [default = 80];
+    optional int32 avif_speed = 2 [default = 6];
+}
+
+message PngOptions {
+    optional bool palettize = 1;
+    optional int32 png_max_colors = 2 [default = 256];
+}
+
+message JpegOptions {
+    optional int32 jpeg_quality = 1 [default = 88];
+    optional int32 quantization_bias = 2 [default = 120];
+    optional int32 qdelta_max_luma = 3 [default = 12];
+    optional int32 qdelta_max_chroma = 4 [default = 1];
+    optional bool chroma_subsampling = 5 [default = true];
+    
+    optional OutputFormat output_format = 6 [default = FORMAT_COLOR];
+    enum OutputFormat {
+        FORMAT_COLOR = 0;
+        FORMAT_GRAYSCALE = 1;
+    }
+}
+
+message WebPOptions {
+    optional bool lossless = 1;
+    optional int32 quality = 2;
+    optional int32 max_palette_size = 3 [default = 256];
+}
+
+message TextureOptions {
+    repeated EncodingType encoding_type = 1;
+    enum EncodingType {
+        TYPE_DXT1 = 0;
+        TYPE_DXT5 = 1;
+        TYPE_ETC1 = 2;
+    }
+}
+
+message AnnotationOptions {
+    optional AnnotationApplicationOptions annotation_application_options = 1 [default = ANNOTATIONS_PREAPPLY];
+    enum AnnotationApplicationOptions {
+        ANNOTATIONS_NONE = 0;
+        ANNOTATIONS_PASSTHROUGH = 1;
+        ANNOTATIONS_PREAPPLY = 2;
+    }
+    
+    optional bool remove_maps_api_annotation_attribute = 2;
+    optional bool filter_style_transforms_for_sdk = 3;
+}
+
+message VectorOptions {
+    optional VectorOutputType type = 1 [default = TYPE_DRIVEABOUT];
+    enum VectorOutputType {
+        TYPE_DRIVEABOUT = 0;
+        TYPE_UNIFIED_VECTOR = 12;
+        TYPE_ENCRYPTED_PROTO = 1;
+    }
+    
+    optional RasterizationPolicy rasterization_policy = 28 [default = ZOOM_LEVEL_BASED];
+    enum RasterizationPolicy {
+        ZOOM_LEVEL_BASED = 0;
+        IMPORTANCE_BASED = 1;
+        RASTERIZE_NON_LABEL = 2;
+        RASTERIZE_NON_INTERACTIVE = 3;
+        ALL_VECTOR = 4;
+        ONLY_VECTOR = 6;
+        VECTOR_POLYLINES = 5;
+    }
+    
+    optional int32 version = 2;
+    
+    optional ClientClass client_class = 44;
+    enum ClientClass {
+        UNKNOWN = 0;
+        VECTORTOWN_WEBGL = 1;
+        VECTORTOWN_CANVAS = 2;
+        MIRTH_MOBILE_API = 3;
+        MIRTH_EARTH = 4;
+        MIRTH_GMM = 5;
+        GMM_OFFLINE = 6;
+        TRIPS_OFFLINE = 7;
+    }
+    
+    optional CompressionType compression = 8 [default = COMPRESSION_FLATE];
+    enum CompressionType {
+        COMPRESSION_FLATE = 0;
+        COMPRESSION_ZLIB = 1;
+        COMPRESSION_NONE = 2;
+    }
+    
+    optional ObfuscationType obfuscation = 16 [default = OBFUSCATION_ARC4];
+    enum ObfuscationType {
+        OBFUSCATION_ARC4 = 0;
+        OBFUSCATION_FAST = 1;
+        OBFUSCATION_NONE = 2;
+    }
+    
+    optional TileContents tile_contents = 11 [default = FULL_TILE, deprecated = true];
+    enum TileContents {
+        FULL_TILE = 0;
+        TILE_EDITS = 1;
+        DIFF_TILE = 2;
+        DIFF_TILE_2014 = 3;
+    }
+    
+    optional bool use_legend_style_ids = 43;
+    optional bool allow_supersampled_icons = 7;
+    optional bool allow_clickable_locality_types = 17;
+    optional bool tessellate_geometry = 18 [default = true];
+    optional bool filter_clickable_features = 21;
+    repeated int32 whitelisted_clickable_feature_type = 22;
+    optional IndoorOptions indoor_options = 26;
+    optional StaticRealtimeOptions static_realtime_options = 59 [deprecated = true];
+    optional ElectricVehicleOptions electric_vehicle_options = 72;
+    optional VectorRasterOptions raster_options = 30;
+    optional bool enable_3d_building_meshes = 32 [default = true];
+    optional bool always_include_building_footprints = 73;
+    optional bool include_building_raster = 36;
+    
+    repeated FeatureLogOption feature_log_option = 41;
+    enum FeatureLogOption {
+        FEATURE_LOG_OPTION_ALL_INTERACTIVE = 1;
+    }
+    
+    repeated int32 delta_zoom_for_additional_style_table = 42;
+    optional bool include_geometry_styled_at_next_zoom = 58 [default = false];
+    optional bool include_ugc_feature_points = 75;
+    
+    optional StructuredDebugDataOption structured_debug_data_option = 33 [default = STRUCTURED_DEBUG_DATA_NONE];
+    enum StructuredDebugDataOption {
+        STRUCTURED_DEBUG_DATA_NONE = 0;
+        STRUCTURED_DEBUG_DATA_ALSO = 1;
+        STRUCTURED_DEBUG_DATA_INSTEAD = 2;
+    }
+    
+    optional bool include_global_style_ids = 5;
+    optional bool clip_geometry = 6 [default = true];
+    optional bool binary_data_in_base64 = 9;
+    optional bool filter_rtl_labels = 14;
+    optional bool widen_zoom_14_roads = 29;
+    optional bool attach_visual_element_metadata = 40;
+    
+    optional VertexDataEncoding vertex_data_encoding = 38 [default = VERTEX_DATA_ENCODING_ZIG_ZAG_DELTA_VARINT];
+    enum VertexDataEncoding {
+        VERTEX_DATA_ENCODING_ZIG_ZAG_DELTA_VARINT = 1;
+        VERTEX_DATA_ENCODING_FIXED_WIDTH16 = 2;
+        VERTEX_DATA_ENCODING_VARINT = 3;
+    }
+    
+    optional VertexDataResolution vertex_data_resolution = 50 [default = VERTEX_DATA_RESOLUTION_16TH_PX_ONLY];
+    enum VertexDataResolution {
+        VERTEX_DATA_RESOLUTION_16TH_PX_ONLY = 0;
+        VERTEX_DATA_RESOLUTION_4TH_THROUGH_128TH_PX = 1;
+        VERTEX_DATA_RESOLUTION_4TH_THROUGH_256KTH_PX_AND_4MTH_LABELS = 2;
+    }
+    
+    optional bool include_copyrights = 10;
+    optional RasterPointLabelOptions raster_point_label_options = 19;
+    optional RasterLineLabelOptions raster_line_label_options = 20;
+    optional bool use_full_water_tile_optimization = 25;
+    optional bool client_supports_layered_icons = 45;
+    optional bool inline_nine_patch_icon_styles = 71;
+    
+    optional VertexOrdering geometry_vertex_ordering = 51 [default = VERTEX_ORDERING_MIXED];
+    enum VertexOrdering {
+        VERTEX_ORDERING_MIXED = 1;
+        VERTEX_ORDERING_OPENGL = 2;
+    }
+    
+    optional int32 prune_with_ancestor_zoom = 52;
+    
+    optional TessellationSupport tessellation_support = 54 [default = TESSELLATION_ALL_SERVER];
+    enum TessellationSupport {
+        TESSELLATION_ALL_SERVER = 0;
+        TESSELLATION_PARTIAL_SERVER = 1;
+        TESSELLATION_NO_SERVER = 2;
+    }
+    
+    optional bool include_render_op_feature_types = 55;
+    optional bool enable_business_type_categories_for_earth = 91;
+    optional bool force_inline_styles_for_mirth_earth_8 = 56;
+    optional bool send_style_ids_only = 39;
+    optional bool include_additional_data_at_thick_zooms = 57;
+    repeated int32 thick_zooms_override = 62;
+    repeated int32 thick_viewing_zooms_override = 63;
+    optional bool enable_thick_tiles_in_modifiers = 82;
+    optional AnnotationOptions annotation_options = 67;
+    optional bool include_debug_geometry_data = 46;
+    optional bool include_invisible_keep_in_tile_labels = 60;
+    optional bool include_invisible_keep_in_tile_polylines = 87;
+    optional bool include_factile_data = 61;
+    optional bool send_tags_and_untransformed_style_ids = 64;
+    optional bool buildings_in_navigation_enabled = 65;
+    optional bool use_country_codes_whitelisted_for_offline_dogfood = 68;
+    optional VectorDebugOptions debug_options = 69;
+    optional bool enable_label_metadata_in_container = 79;
+    
+    optional GlobeMode globe_mode = 80;
+    enum GlobeMode {
+        UNKNOWN_GLOBE_MODE = 0;
+        GLOBE_MODE_DRAPED = 1;
+        GLOBE_MODE_SCREEN = 2;
+    }
+    
+    optional bool include_disputed_area_info = 81;
+    optional bool include_legendary_tags = 86;
+    optional bool ensure_entity_query_is_present = 89;
+    optional bool enable_shader_data_ops = 1000 [default = true];
+    optional bool use_binary_coverage_raster = 1002;
+    optional int32 fractional_blur_denominator = 1004 [default = 2, deprecated = true];
+    optional bool serve_2d_data_for_jp_buildings = 1006;
+    repeated int32 attach_road_metadata_for_zooms = 1007;
+    optional bool prevent_decreasing_multi_zoom_stroke_counts = 1008;
+    optional bool mark_low_and_high_lines = 1014;
+    optional bool inline_legend_ids_in_uwf = 1016;
+    optional bool allow_fans_and_strips_in_uwf = 1017;
+    optional bool omit_tile_background_geometry = 1018;
+    optional bool optionally_send_vertex_counts = 1019;
+    optional bool include_compound_grounds_with_driveabout_styler = 1020 [deprecated = true];
+    optional bool enable_z14_road_line_hint = 1022 [default = true];
+    optional bool prevent_single_stroke_lines_for_gmm_api = 1023;
+    optional bool disable_new_enums_in_uwf = 1025;
+    optional bool enable_unclipped_buildings = 1026;
+    optional bool generate_tinies = 1027;
+    optional bool enable_boost_limiting = 1028;
+    optional bool send_corridor_feature_ids = 74;
+    optional bool enable_tappable_indoor_building = 77;
+    optional bool enable_tappable_indoor_pob = 78;
+    optional bool attach_maps_api_metadata_buildings = 1029;
+    optional bool output_traffic_road_features = 12 [default = true, deprecated = true];
+    optional bool output_line_meshes = 13 [deprecated = true];
+    optional bool split_excluded_road_labels = 15 [deprecated = true];
+    optional bool synthesize_end_of_layer = 34 [deprecated = true];
+    optional bool rasterize_non_label_features = 4 [deprecated = true];
+    optional bool rasterize_non_interactive_features = 24 [deprecated = true];
+    optional bool use_bua_masking = 1013 [deprecated = true];
+    optional bool reduce_rendering_complexity = 47 [deprecated = true];
+    optional bool include_depature_board_metadata = 1024 [deprecated = true];
+    optional bool send_expanded_water_coverage = 48 [deprecated = true];
+    optional bool enable_road_label_ids = 83;
+    optional bool use_name_based_road_label_ids = 85;
+    optional bool enable_top_level_styles_for_line_labels = 84 [default = false];
+    optional bool use_icon_style_primary_3d_overrides = 88;
+    optional bool use_fake_epoch = 90;
+    optional bool include_dogfood_only_bike_countries = 92;
+    optional bool make_unplaceable_boostable_elements_experiment_only = 93;
+    
+    reserved 70, 1005, 1021;
+    
+    enum VersionLimits {
+        option allow_alias = true;
+        DRIVEABOUT_MIN_VERSION = 1;
+        DRIVEABOUT_MAX_VERSION = 7;
+        DRIVEABOUT_DEFAULT_VERSION = 1;
+        UWF_MIN_VERSION = 1;
+        UWF_MAX_VERSION = 2;
+        UWF_DEFAULT_VERSION = 1;
+    }
+}
+
+message VectorRasterOptions {
+    optional float scale = 1 [default = 1];
+}
+
+message RasterPointLabelOptions {
+    optional RasterLabelType type = 1 [default = RASTER_NONE];
+    enum RasterLabelType {
+        RASTER_NONE = 0;
+        RASTER_LINE_BY_LINE = 1;
+        RASTER_LINE_BY_LINE_WITH_OUTLINES = 2;
+    }
+    
+    optional RasterStyleType style_type = 2 [default = STYLE_SIMPLE1X];
+    enum RasterStyleType {
+        STYLE_SIMPLE1X = 0;
+        STYLE_COLOR1X = 2;
+        STYLE_OUTLINED1X = 1;
+    }
+    
+    optional ImageOptions image_options = 4;
+}
+
+message RasterLineLabelOptions {
+    optional RasterLabelType type = 1 [default = RASTER_NONE];
+    enum RasterLabelType {
+        RASTER_NONE = 0;
+        RASTER_INLINE_SPRITEMAPS = 1;
+        RASTER_INLINE_SPRITEMAPS_WITH_OUTLINES = 2;
+    }
+    
+    optional RasterStyleType style_type = 2 [default = STYLE_SIMPLE1X];
+    enum RasterStyleType {
+        STYLE_SIMPLE1X = 0;
+        STYLE_COLOR1X = 4;
+        STYLE_SIMPLE2X = 1;
+        STYLE_COLOR2X = 5;
+        STYLE_DISTANCE2X = 2;
+        STYLE_SIMPLEFIXED2X = 3;
+        STYLE_COLORFIXED2X = 6;
+    }
+    
+    optional ImageOptions image_options = 3;
+}
+
+message StaticRealtimeOptions {
+    optional bool include_opening_hours = 1;
+}
+
+message ElectricVehicleOptions {
+    optional bool include_station_metadata = 1;
+}
+
+message IndoorOptions {
+    optional bool include_building_metadata_in_map_layer = 1;
+    optional bool include_building_metadata_in_indoor_layer = 2;
+    optional bool include_metadata_for_interactivity = 3;
+    optional bool include_relation_metadata_for_all_indoor = 4;
+    optional bool include_unplaced_indoor_labels = 5 [deprecated = true];
+    optional bool merge_coverage_polygons = 6;
+    optional bool include_internal_only_levels = 7;
+    optional bool include_indoor_building_metadata_on_buildings = 8;
+    optional int32 minimum_zoom_for_metadata = 9;
+    optional bool metadata_only = 10;
+    optional bool limit_min_rendering_zoom = 11;
+}
+
+message KmzOptions {
+    option deprecated = true;
+    
+    optional RequestType type = 1;
+    enum RequestType {
+        REGIONATION = 0;
+        SKELETON = 1;
+        DATA = 2;
+    }
+    
+    optional double accurate_lat_center = 2;
+    optional double accurate_lng_center = 3;
+    optional int32 regionation_level = 4;
+    optional string region_path = 5;
+    optional string base_url = 6;
+    optional string user_agent = 7;
+}
+
+message PerTileOptions {
+    optional Version version = 1 [default = BASIC_VERSION];
+    enum Version {
+        BASIC_VERSION = 0;
+        JSON_AREAS_PROTO = 1;
+        PERTILE_MATRIX = 2;
+        PERTILE_MATRIX_BINARY_PROTO = 3;
+    }
+    
+    optional bool expand_region = 2 [default = true];
+}
+
+message FeaturemapOptions {
+    optional FeaturemapOutputType type = 1 [default = TYPE_JSON];
+    enum FeaturemapOutputType {
+        TYPE_JSON = 0;
+        TYPE_JSPB = 1;
+        TYPE_JSON_V2 = 2;
+        TYPE_PROTO = 3;
+    }
+    
+    optional bool clickable_cities = 2;
+    optional float scale = 3 [default = 1];
+    optional bool debug_raster = 4;
+    optional bool quote_field_names = 5;
+    optional bool include_full_feature_id = 6;
+}
+
+message CopyrightsOptions {
+    optional bool split_by_layer = 1;
+}
+
+message SvgOptions {
+    optional bool produce_verbose_svg = 1;
+    optional bool alpha_color_support = 2 [default = true];
+    optional bool inline_styles = 3;
+    optional bool inline_images = 4 [default = true];
+    optional bool group_point_labels = 5;
+    optional bool add_type_category_to_class = 6;
+}
+
+message RoadGraphTileOptions {
+    optional bool include_metadata = 1;
+    
+    optional EncryptionType encryption = 2 [default = ENCRYPTION_AES_CTR];
+    enum EncryptionType {
+        ENCRYPTION_AES_CTR = 0;
+        ENCRYPTION_NONE = 1;
+    }
+    
+    optional int32 allow_update_at_routile_format_version = 3;
+    optional int32 allow_update_at_snaptile_format_version = 4;
+}
+
+message GlbOptions {
+    optional bool project_to_world_space = 1;
+}

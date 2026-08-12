@@ -1,0 +1,35 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "google/internal/earth/v1/builtenv/block_edit.proto";
+import "google/internal/earth/v1/builtenv/building_edit.proto";
+import "google/internal/earth/v1/builtenv/park_edit.proto";
+import "google/internal/earth/v1/builtenv/parking_lot_edit.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+message EditDesignInputs {
+    optional string original_design_id = 1;
+    
+    repeated Edit edits = 2;
+    message Edit {
+        oneof edit {
+            AddFloorsEdit add_floors_edit = 5;
+            RemoveFloorEdit remove_floor_edit = 6;
+            ConvertBuildingToParkEdit convert_building_to_park_edit = 7;
+            ConvertBuildingToParkingLotEdit convert_building_to_parking_lot_edit = 8;
+            RegenerateBuildingEdit regenerate_building_edit = 9;
+            ConvertBlockToParkEdit convert_block_to_park_edit = 10;
+            AdjustBlockProgramEdit adjust_block_program_edit = 11;
+            ConvertParkToParkingLotEdit convert_park_to_parking_lot_edit = 12;
+            ConvertParkToBuildingEdit convert_park_to_building_edit = 13;
+            ConvertParkingLotToParkEdit convert_parking_lot_to_park_edit = 14;
+            ConvertParkingLotToBuildingEdit convert_parking_lot_to_building_edit = 15;
+        }
+        
+        reserved 1, 2, 3, 4;
+    }
+}

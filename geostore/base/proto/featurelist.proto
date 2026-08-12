@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/feature.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message FeatureListProto {
+    optional bytes key = 1;
+    optional bytes secondary_key = 2;
+    repeated FeatureProto feature = 3;
+    
+    extend .proto2.bridge.MessageSet {
+        optional FeatureListProto message_set_extension = 1244700;
+    }
+}
+
+message UnparsedFeatureListProto {
+    optional bytes key = 1;
+    optional bytes secondary_key = 2;
+    repeated bytes unparsed_feature = 3 [ctype = CORD];
+}

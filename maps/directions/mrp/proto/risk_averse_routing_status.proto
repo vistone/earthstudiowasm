@@ -1,0 +1,15 @@
+syntax = "editions";
+
+package maps.mrp;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option features = enum_type: CLOSED
+;
+
+enum RiskAverseRoutingStatus {
+    RISK_AVERSE_ROUTING_STATUS_UNKNOWN = 0;
+    RISK_AVERSE_ROUTING_STATUS_NOT_TRIGGERED = 1;
+    RISK_AVERSE_ROUTING_STATUS_PRIMARY_TRIP_UNMODIFIED = 2;
+    RISK_AVERSE_ROUTING_STATUS_PRIMARY_TRIP_MODIFIED = 3;
+}

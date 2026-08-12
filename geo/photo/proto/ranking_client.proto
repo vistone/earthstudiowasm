@@ -1,0 +1,26 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "RankingClientProto";
+option java_package = "com.google.geo.photo";
+
+enum RankingClient {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_RANKING_CLIENT = 0;
+    CLIENT_TRAVEL = 1;
+    CLIENT_THINGS_TO_DO = 2;
+    CLIENT_CONNECT_PEOPLE = 3;
+    CLIENT_VACATION_RENTAL = 4;
+    CLIENT_HOTEL_ADS = 5;
+    CLIENT_HOTEL_SERVICE = 6;
+    CLIENT_TRAVEL_TTD = 7;
+    CLIENT_HOTEL_ROOMS = 8;
+    CLIENT_MAPS_VISUAL_SEARCH = 9;
+    CLIENT_MAGI = 10;
+}

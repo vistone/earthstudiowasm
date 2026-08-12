@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package geo_serving_proto.userreactions;
+
+import "geo/serving/proto/userreactions/reaction_type.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPUR";
+option java_multiple_files = true;
+option java_outer_classname = "ReactionStickersProto";
+option java_package = "com.google.geo.serving.proto.userreactions";
+
+message ReactionStickers {
+    repeated ReactionSticker stickers = 1;
+    message ReactionSticker {
+        optional ReactionType reaction_type = 1;
+        optional string image_url = 2;
+    }
+}

@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package geo_serving_proto.omnimaps;
+
+import "geo/serving/proto/omnimaps/map_viewport_info.proto";
+import "geo/serving/proto/omnimaps/published_map_info.proto";
+import "geo/serving/proto/omnimaps/selected_item_info.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPOM";
+option java_multiple_files = true;
+option java_outer_classname = "OmnimapsDataProto";
+option java_package = "com.google.geo.serving.proto.omnimaps";
+
+message OmniMapsData {
+    optional PublishedMapInfo map_info = 1;
+    optional SelectedItemInfo item_info = 2;
+    optional MapViewportInfo target_viewport = 3;
+    
+    optional FeatureData feature_data = 4;
+    message FeatureData {
+        optional bytes proto_message = 1;
+    }
+}

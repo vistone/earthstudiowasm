@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geo_serving_proto.hotels.livequery;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "DisplayPriceStateProto";
+option java_package = "com.google.geo.serving.proto.hotels.livequery";
+
+message DisplayPriceState {
+    optional State state = 1;
+    enum State {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_STATE = 0;
+        BOOKABLE = 1;
+        ESTIMATE = 2;
+        NO_PRICE = 3;
+    }
+    
+    optional bool finalized = 2;
+}

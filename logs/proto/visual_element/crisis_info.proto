@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package logs;
+
+import "knowledge/verticals/crisisresponse/sos/proto/alert_severity_level.proto";
+import "knowledge/verticals/crisisresponse/sos/proto/event_type.proto";
+import "maps/crisis/proto/crisis_category.proto";
+import "maps/tactile/api/shared/crisis-user-mode.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_outer_classname = "CrisisInfoProto";
+option java_package = "com.google.common.logging";
+
+message CrisisInfo {
+    optional string crisis_id = 1;
+    optional maps_tactile.shared.CrisisUserMode crisis_user_mode = 2;
+    optional knowledge.verticals.crisisresponse.sos.proto.AlertSeverityLevel alert_severity_level = 3;
+    optional maps.crisis.proto.CrisisCategory crisis_category = 4 [deprecated = true];
+    optional knowledge.verticals.crisisresponse.sos.proto.EventType event_type = 7;
+    optional string attribution = 5;
+    
+    optional AlertSourceType alert_source_type = 6;
+    enum AlertSourceType {
+        UNKNOWN_ALERT_SOURCE_TYPE = 0;
+        SOS_ALERT = 1;
+        PUBLIC_ALERT = 2;
+    }
+}

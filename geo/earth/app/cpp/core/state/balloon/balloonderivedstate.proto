@@ -1,0 +1,36 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/document/featurekey.proto";
+import "geo/earth/app/cpp/core/state/state.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derived";
+
+message BalloonDerivedState {
+    optional .earth.document.proto.FeatureKey balloon_feature_key = 1;
+    repeated .earth.document.proto.FeatureKey selected_feature_keys = 12;
+    optional string html = 2;
+    optional .earth.document.protos.BalloonStyle.DisplayMode balloon_display_mode = 3;
+    optional string base_url = 4;
+    
+    optional ToolbarButtonVisibility toolbar_button_visibility = 5;
+    message ToolbarButtonVisibility {
+        optional bool fly_to_button_visible = 1;
+    }
+    
+    optional string layer_feature_request_feature_id = 6;
+    optional string layer_feature_request_layer_id = 7;
+    optional string layer_feature_title = 8;
+    repeated LayerFeatureAttribute layer_feature_attribute = 9;
+    optional bool fly_to_balloon = 10;
+    
+    reserved 11;
+}

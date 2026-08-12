@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "logs/proto/maps/shared/geometry_e7.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "PositionProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedPosition {
+    optional LoggedType type = 1 [default = INTERPOLATED_PREDICTION];
+    enum LoggedType {
+        TYPE_UNKNOWN = 0;
+        INTERPOLATED_PREDICTION = 1;
+        RAW = 2;
+    }
+    
+    optional logs_maps_shared.PointE7 location = 2;
+    optional int64 timestamp = 3;
+}
+
+message LoggedPositionSeries {
+    repeated LoggedPosition position = 1;
+}

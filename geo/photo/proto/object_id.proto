@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "geo/contentflows/proto/content_reference.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/knowledgegraphreference.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ObjectIdProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message ObjectId {
+    optional geostore.KnowledgeGraphReferenceProto knowledge_graph_id = 1;
+    optional geostore.FeatureIdProto feature_id = 2;
+    optional CulturalInstituteId ci_id = 3;
+    optional uint64 cluster_doc_id = 4;
+    optional geo_content_flows.ContentReferenceProto content_reference = 7;
+    
+    reserved 5, 6;
+}
+
+message CulturalInstituteId {
+    optional string id = 1;
+}

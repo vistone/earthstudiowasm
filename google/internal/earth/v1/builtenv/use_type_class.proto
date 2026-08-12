@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package google.internal.earth.v1.builtenv;
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.builtenv";
+
+enum UseTypeClass {
+    USE_TYPE_CLASS_UNSPECIFIED = 0;
+    USE_TYPE_CLASS_RESIDENTIAL = 1;
+    USE_TYPE_CLASS_OFFICE = 2;
+    USE_TYPE_CLASS_INDUSTRIAL = 3;
+    USE_TYPE_CLASS_RETAIL = 4;
+    USE_TYPE_CLASS_COMMUNITY = 5;
+    USE_TYPE_CLASS_HOTEL = 6;
+    USE_TYPE_CLASS_EDUCATION = 7;
+    USE_TYPE_CLASS_MECHANICAL = 8;
+    USE_TYPE_CLASS_PARKING = 9;
+    USE_TYPE_CLASS_OTHER = 10;
+}

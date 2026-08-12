@@ -1,0 +1,38 @@
+syntax = "editions";
+
+package maps_spotlight;
+
+import "geo/serving/proto/ads/ad_ref.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMSL";
+option java_multiple_files = true;
+option java_outer_classname = "AdMetadataProto";
+option java_package = "com.google.maps.spotlight.proto";
+
+message AdMetadata {
+    optional geo_serving_proto.ads.AdRef ad_ref = 1;
+    optional ExperimentalChainAd chain_ad = 3;
+    
+    reserved 2;
+    
+    reserved "inline_ad";
+    
+    extend .proto2.bridge.MessageSet {
+        optional AdMetadata message_set_extension = 29974456;
+    }
+}
+
+message ExperimentalChainAd {
+    
+}
+
+message ExperimentalInlineAd {
+    optional string line1 = 1;
+    optional string line2 = 2;
+    optional string line3 = 3;
+    optional string visible_url = 4;
+    optional string destination_url = 5;
+}

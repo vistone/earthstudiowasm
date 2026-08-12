@@ -1,0 +1,20 @@
+syntax = "editions";
+
+package pathfinder.crp;
+
+import "maps/pathfinder/crp/searcher/cost_type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "PathFindingModuleConfigProto";
+
+message PathFindingModuleConfig {
+    optional CostType cost_type_for_search = 1;
+    optional CostType cost_type_for_alternate_search = 2;
+    optional CostType cost_type_for_path_evaluation = 3;
+    optional double max_timeout_ms = 4;
+    optional float main_timeout_fraction = 5;
+    optional bool enable_areas_to_avoid = 7;
+    optional bool add_reference_route_as_alternate = 8;
+    
+    reserved 6;
+}

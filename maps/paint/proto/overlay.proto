@@ -1,0 +1,195 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/point.proto";
+import "geostore/base/proto/polyline.proto";
+import "java/com/google/apps/jspb/jspb_disable_randomization.proto";
+import "maps/paint/proto/legend-named-style.proto";
+import "maps/paint/proto/resource.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint";
+
+message OverlayLayerProto {
+    repeated OverlayIcon overlay_icon = 1;
+    repeated OverlayPolyline polyline = 2;
+    
+    repeated OverlayElement element = 3;
+    enum OverlayElement {
+        ELEMENT_COPYRIGHTS = 1;
+        ELEMENT_FRAME = 2;
+        ELEMENT_GOOGLE_LOGO = 3;
+        ELEMENT_GOOGLE_TEXT_ATTRIBUTION = 4;
+        ELEMENT_DEVELOPMENT_ONLY_WATERMARK = 5;
+    }
+    
+    repeated OverlayCircle circle = 4;
+}
+
+message OverlayIcon {
+    optional geostore.PointProto location = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    
+    optional IconType type = 2;
+    enum IconType {
+        ICON_MARKER = 1;
+        ICON_MARKER_MEDIUM = 2;
+        ICON_MARKER_SMALL = 3;
+        ICON_MARKER_TINY = 4;
+        ICON_CIRCLE = 5;
+        ICON_CIRCLE_MEDIUM = 19;
+        ICON_CIRCLE_MEDIUM_NO_SHADOW = 40;
+        ICON_CIRCLE_SMALL_NO_SHADOW = 46;
+        ICON_CIRCLE_MEDIUM_BLUE_BORDER = 47;
+        ICON_CIRCLE_MEDIUM_WHITE_BORDER = 51;
+        ICON_ARROW = 6;
+        ICON_GOOGLE_LOGO = 15;
+        ICON_GOOGLE_LOGO_SMALL = 16;
+        ICON_USER_LOCATION = 18;
+        ICON_USER_LOCATION_MEDIUM = 20;
+        ICON_USER_LOCATION_SMALL = 21;
+        ICON_MY_LOCATION = 45;
+        ICON_SPOTLIGHT_CIRCLE = 24;
+        ICON_SPOTLIGHT_CIRCLE_NO_DOT = 38;
+        ICON_SPOTLIGHT_GREEN_CIRCLE_NO_DOT = 57;
+        ICON_SPOTLIGHT_MARKER_BLUE = 31;
+        ICON_SPOTLIGHT_MARKER_GREEN = 25;
+        ICON_SPOTLIGHT_MARKER_RED = 26;
+        ICON_SPOTLIGHT_ENCIRCLED_PIN_SMALL = 27;
+        ICON_SPOTLIGHT_ENCIRCLED_PIN_MEDIUM = 28;
+        ICON_SPOTLIGHT_ENCIRCLED_PIN_LARGE = 29;
+        ICON_SPOTLIGHT_POI = 22;
+        ICON_SPOTLIGHT_POI_MEDIUM = 30;
+        ICON_SPOTLIGHT_GENERIC_SEARCH_SMALL = 32;
+        ICON_SPOTLIGHT_GENERIC_SEARCH_MEDIUM = 33;
+        ICON_SPOTLIGHT_GENERIC_SEARCH_LARGE = 34;
+        ICON_SPOTLIGHT_MEASLE_SMALL = 35;
+        ICON_SPOTLIGHT_MEASLE_MEDIUM = 36;
+        ICON_SPOTLIGHT_MEASLE_LARGE = 37;
+        ICON_MAYFLOWER_HOTEL = 100;
+        ICON_MAYFLOWER_HOTEL_IMPRECISE = 113;
+        ICON_MAYFLOWER_VACATION_RENTAL = 120;
+        ICON_MAYFLOWER_POI = 101;
+        ICON_MAYFLOWER_AIRPORT = 102;
+        ICON_MAYFLOWER_BUS = 103;
+        ICON_MAYFLOWER_FERRY = 104;
+        ICON_MAYFLOWER_MONORAIL = 105;
+        ICON_MAYFLOWER_TRAM = 106;
+        ICON_MAYFLOWER_TRAIN = 107;
+        ICON_MAYFLOWER_HOTEL_PIVOT = 114;
+        ICON_MAYFLOWER_MEASLE_RED = 115;
+        ICON_MAYFLOWER_AIRPORT_RED = 116;
+        ICON_MAYFLOWER_TRANSIT_RED = 117;
+        ICON_MAYFLOWER_SIMILAR_HOTEL_RED = 118;
+        ICON_MAYFLOWER_POI_RED = 119;
+        ICON_DESTINATIONS_PICO_GENERIC = 111;
+        ICON_DESTINATIONS_PINLET_SRP_GENERIC = 112;
+        ICON_SANTA_PIN = 39;
+        ICON_SANTA = 44;
+        ICON_GAS_STATION_SEARCH_SMALL = 41;
+        ICON_GAS_STATION_SEARCH_MEDIUM = 42;
+        ICON_GAS_STATION_SEARCH_LARGE = 43;
+        ICON_UNKNOWN_PLACE_SMALL = 48;
+        ICON_UNKNOWN_PLACE_MEDIUM = 49;
+        ICON_UNKNOWN_PLACE_LARGE = 50;
+        ICON_TRAFFIC_INCIDENT_ACCIDENT = 52;
+        ICON_TRAFFIC_INCIDENT_CONSTRUCTION = 53;
+        ICON_TRAFFIC_INCIDENT_JAM = 54;
+        ICON_TRAFFIC_INCIDENT_OTHER = 55;
+        ICON_TRAFFIC_INCIDENT_ROAD_CLOSED = 56;
+        ICON_DYNAMICWORLD_GENERIC_EVENT = 58;
+        ICON_DYNAMICWORLD_GENERIC_EVENT_MEASLE = 59;
+        ICON_DYNAMICWORLD_RIO_SAMBODROMO = 147095841;
+        ICON_HOME = 60;
+        ICON_WORK = 61;
+        ICON_3_APARTMENT = 62;
+        ICON_4_BARN = 63;
+        ICON_5_BACHELORPAD = 64;
+        ICON_6_CAMPER = 65;
+        ICON_7_CASTLE = 66;
+        ICON_8_COTTAGE = 67;
+        ICON_9_CONSTRUCTION = 68;
+        ICON_10_HIGHRISE = 69;
+        ICON_11_BRICKHOUSE = 70;
+        ICON_12_IGLOO = 71;
+        ICON_13_LIGHTHOUSE = 72;
+        ICON_14_LOGCABIN = 73;
+        ICON_15_MODERNOFFICE = 74;
+        ICON_16_OFFICE = 75;
+        ICON_17_PAGODA = 76;
+        ICON_18_PIRATESHIP = 77;
+        ICON_19_SAILBOAT = 78;
+        ICON_20_SCHOOL = 79;
+        ICON_21_SUBMARINE = 80;
+        ICON_22_TEEPEE = 81;
+        ICON_23_TREEHOUSE = 82;
+        ICON_24_ADOBE = 83;
+        ICON_25_BAKERY = 84;
+        ICON_26_BOUTIQUE = 85;
+        ICON_27_COUCH = 86;
+        ICON_28_DUOMO = 87;
+        ICON_29_DRAGON = 88;
+        ICON_30_GYM = 89;
+        ICON_31_GREEN = 90;
+        ICON_32_OLIVE = 91;
+        ICON_33_PINK = 92;
+        ICON_34_SHOE = 93;
+        ICON_35_MANSIONPURPLE = 94;
+        ICON_36_SHERIFF = 95;
+        ICON_37_RETAIL = 96;
+        ICON_38_STRIPMALL = 97;
+        ICON_39_TENT = 98;
+        ICON_40_WINDMILL = 99;
+        ICON_SPOTLIGHT_PINLET_NO_DOT = 108;
+        ICON_SPOTLIGHT_PINLET = 109;
+        ICON_SPOTLIGHT_PINLET_WHITE = 122;
+        ICON_SPOTLIGHT_PINLET_SMALL = 121;
+        ICON_SPOTLIGHT_PINLET_SMALL_WHITE = 123;
+        ICON_SPOTLIGHT_PINLET_EXTRA_SMALL_WHITE = 124;
+        ICON_SPOTLIGHT_GREEN_PINLET_NO_DOT = 110;
+        ICON_QUESTION_PIN = 125;
+        ICON_EV_END_OF_RANGE = 127;
+    }
+    
+    optional maps_paint_client.LegendNamedStyle legend_named_style = 13;
+    optional maps_paint_client.LegendNamedStyle overall_named_style = 14;
+    optional string title_text = 15;
+    optional maps_paint_client.LegendNamedStyle title_named_style = 16;
+    optional uint32 color_filter_argb = 3;
+    optional string text = 4;
+    optional uint32 text_color_argb = 5 [default = 0xff000000];
+    optional IconRequest hacky_custom_icon = 12;
+    optional geostore.FeatureIdProto feature_id = 6;
+    optional bool visible_in_viewport = 7;
+    optional .proto2.bridge.MessageSet extended_data = 8;
+    optional int32 offset_x = 9 [deprecated = true];
+    optional int32 offset_y = 10 [deprecated = true];
+    optional IconType align_to_icon = 11 [deprecated = true];
+}
+
+message OverlayPolyline {
+    optional geostore.PolyLineProto polyline = 1;
+    optional bytes encoded_polyline = 5;
+    optional uint32 color_argb = 2;
+    optional float width = 3 [default = 1];
+    optional bool visible_in_viewport = 4;
+    optional maps_paint_client.LegendNamedStyle legend_named_style = 6;
+}
+
+message OverlayCircle {
+    optional geostore.PointProto center = 1;
+    optional float radius_in_meters = 2;
+    optional uint32 stroke_color_argb = 3;
+    optional float stroke_width = 4 [default = 1];
+    optional uint32 fill_color_argb = 5;
+}

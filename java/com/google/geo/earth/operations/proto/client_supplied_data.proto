@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package google.geo.earth.operations;
+
+option java_outer_classname = "ClientSuppliedDataOuterClass";
+option java_package = "com.google.geo.earth.operations";
+
+message ClientSuppliedData {
+    optional string display_name = 1;
+    optional int64 file_size_bytes = 2;
+    optional UserImportSource import_source = 3;
+    optional OnDemandEvaluationType on_demand_evaluation_type = 4;
+}
+
+enum UserImportSource {
+    IMPORT_SOURCE_UNKNOWN = 0;
+    IMPORT_SOURCE_LOCAL_FILE = 1;
+    IMPORT_SOURCE_DRIVE = 2;
+}
+
+enum OnDemandEvaluationType {
+    ON_DEMAND_EVALUATION_TYPE_UNKNOWN = 0;
+    ON_DEMAND_EVALUATION_TYPE_ELEVATION_CONTOUR = 1;
+    ON_DEMAND_EVALUATION_TYPE_CUT_AND_FILL = 2;
+}

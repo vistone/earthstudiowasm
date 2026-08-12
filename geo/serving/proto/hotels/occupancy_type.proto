@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package geo_serving_proto.hotels;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPH";
+option java_multiple_files = true;
+option java_outer_classname = "OccupancyTypeProto";
+option java_package = "com.google.geo.serving.proto.hotels";
+
+enum OccupancyType {
+    UNKNOWN_OCCUPANCY_TYPE = 0;
+    OCCUPANCY_UNSPECIFIED = 1;
+    OCCUPANCY_DEFAULT = 2;
+    OCCUPANCY_USER_REQUESTED = 3;
+    OCCUPANCY_USER_HISTORY = 4;
+    OCCUPANCY_INFERRED = 5;
+}

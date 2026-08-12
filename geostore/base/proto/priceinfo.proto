@@ -1,0 +1,196 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/price_info_category.proto";
+import "geostore/base/proto/price_info_food_attribute_details.proto";
+import "geostore/base/proto/pricerange.proto";
+import "geostore/base/proto/timeschedule.proto";
+import "geostore/base/proto/url.proto";
+import "geostore/base/proto/urllist.proto";
+import "google/api/inclusion.proto";
+import "google/protobuf/duration.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message PriceInfoProto {
+    repeated UrlListProto price_list_url = 1;
+    repeated PriceListProto price_list = 2;
+    optional PriceInfoStatus status = 3;
+    
+    extend .proto2.bridge.MessageSet {
+        optional PriceInfoProto message_set_extension = 49520153;
+    }
+}
+
+message PriceInfoStatus {
+    optional bool is_verified = 1 [default = false];
+}
+
+message PriceListProto {
+    repeated PriceListNameInfoProto name_info = 1;
+    optional UrlListProto source_url = 2;
+    optional TimeScheduleProto available_time = 3;
+    repeated PriceListSectionProto section = 4;
+    repeated PriceInfoFoodCuisine cuisines = 5;
+    optional uint64 aggregator_id = 6;
+    
+    reserved 7;
+}
+
+message PriceListNameInfoProto {
+    optional string name = 1;
+    optional string description = 2;
+    optional string language = 3;
+    optional string id = 4;
+}
+
+message PriceListSectionProto {
+    repeated PriceListNameInfoProto name_info = 1;
+    repeated PriceInfoCategory item_type = 2;
+    repeated FoodMenuItemProto food_item = 3;
+    repeated ComposableItemProto item = 4;
+    repeated MediaItemProto media = 5;
+    optional CallToActionProto call_to_action = 6;
+    optional string language = 7;
+}
+
+message FoodMenuItemProto {
+    repeated PriceListNameInfoProto name_info = 1;
+    repeated FoodMenuItemOptionProto item_option = 2;
+}
+
+message ComposableItemProto {
+    repeated PriceListNameInfoProto name_info = 1;
+    repeated MediaItemProto media = 2;
+    optional PriceRangeProto price = 3;
+    
+    optional PriceFormat price_format = 7;
+    enum PriceFormat {
+        PRICE_FORMAT_DEFAULT = 0;
+        PRICE_FORMAT_VARIES = 1;
+    }
+    
+    optional CallToActionProto call_to_action = 4;
+    
+    optional Offered offered = 5;
+    enum Offered {
+        OFFERED_UNSPECIFIED = 0;
+        OFFERED = 1;
+        OFFERED_NOT = 2;
+        OFFERED_ON_WEBSITE = 3;
+    }
+    
+    optional float ranking_hint = 8;
+    
+    oneof type_specific_metadata {
+        JobMetadata job_metadata = 6;
+    }
+}
+
+message JobMetadata {
+    optional string job_type_id = 1;
+    repeated JobRelatedCategory job_related_categories = 2;
+    optional google.protobuf.Duration duration = 3;
+    optional string job_type_mid = 4;
+}
+
+message JobRelatedCategory {
+    optional string name = 1;
+    optional string language = 2;
+    optional string gcid = 3;
+}
+
+message CallToActionProto {
+    optional CtaType cta_type = 1;
+    enum CtaType {
+        CTA_TYPE_UNSPECIFIED = 0;
+        CTA_TYPE_BOOK = 1;
+        CTA_TYPE_BUY = 2;
+        CTA_TYPE_ORDER_ONLINE = 3;
+        CTA_TYPE_LEARN_MORE = 4;
+        CTA_TYPE_SIGN_UP = 5;
+        CTA_TYPE_GET_OFFER = 6;
+    }
+    
+    oneof payload {
+        UrlProto url = 2;
+    }
+}
+
+message MediaItemProto {
+    optional string google_url = 1;
+    optional string media_key = 4;
+    
+    optional MediaSize media_size = 2;
+    message MediaSize {
+        optional int32 original_width_px = 1;
+        optional int32 original_height_px = 2;
+    }
+    
+    optional MediaFormat media_format = 3;
+    enum MediaFormat {
+        MEDIA_FORMAT_UNSPECIFIED = 0;
+        MEDIA_FORMAT_PHOTO = 1;
+    }
+}
+
+message FoodMenuItemOptionProto {
+    repeated PriceListNameInfoProto name_info = 1;
+    optional PriceRangeProto price = 2;
+    optional int32 calories = 3;
+    
+    optional Spiciness spiciness = 4 [default = SPICINESS_NONE];
+    enum Spiciness {
+        SPICINESS_NONE = 0;
+        SPICINESS_MILD = 1;
+        SPICINESS_MEDIUM = 2;
+        SPICINESS_HOT = 3;
+    }
+    
+    repeated FoodAllergen allergen_present = 5;
+    enum FoodAllergen {
+        ALLERGEN_DAIRY = 0;
+        ALLERGEN_EGG = 1;
+        ALLERGEN_FISH = 2;
+        ALLERGEN_PEANUT = 3;
+        ALLERGEN_SHELLFISH = 4;
+        ALLERGEN_SOY = 5;
+        ALLERGEN_TREE_NUT = 6;
+        ALLERGEN_WHEAT = 7;
+    }
+    
+    repeated FoodAllergen allergen_absent = 6;
+    
+    repeated DietaryRestriction restriction = 7;
+    enum DietaryRestriction {
+        DIET_HALAL = 0;
+        DIET_KOSHER = 1;
+        DIET_ORGANIC = 2;
+        DIET_VEGAN = 3;
+        DIET_VEGETARIAN = 4;
+    }
+    
+    optional PriceInfoFoodNutritionFacts nutrition_facts = 8;
+    
+    repeated Ingredient ingredients = 9;
+    message Ingredient {
+        repeated PriceListNameInfoProto name_info = 2;
+        
+        reserved 1;
+    }
+    
+    optional int32 serves_num_people = 10;
+    repeated PriceInfoFoodPreparationMethod preparation_methods = 11;
+    repeated MediaItemProto media = 12;
+    
+    optional PortionSize portion_size = 13;
+    message PortionSize {
+        optional int32 quantity = 1;
+        repeated PriceListNameInfoProto unit = 2;
+    }
+}

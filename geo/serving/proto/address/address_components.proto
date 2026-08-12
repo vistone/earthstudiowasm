@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package geo_serving_proto.address;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPADR";
+option java_multiple_files = true;
+option java_outer_classname = "AddressComponentsProto";
+option java_package = "com.google.geo.serving.proto.address";
+
+message AddressComponents {
+    optional string neighborhood = 1;
+    optional string thoroughfare = 2;
+    optional string thoroughfare_with_number = 3;
+    optional string municipality = 4;
+    optional string postal_code = 5;
+    optional string state = 6;
+    optional string country_code = 7;
+    
+    optional FloorLevel floor_level = 8;
+    message FloorLevel {
+        optional string formatted_floor_level = 1;
+    }
+}

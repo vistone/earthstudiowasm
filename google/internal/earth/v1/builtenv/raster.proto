@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.builtenv;
+
+import "google/internal/earth/v1/builtenv/geometry.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+
+message Vector3 {
+    optional float x = 1;
+    optional float y = 2;
+    optional float z = 3;
+}
+
+message Channel {
+    optional string name = 1;
+    optional float null_value = 4;
+    
+    oneof values {
+        FloatBuffer floats = 2;
+        float single_value_float = 3;
+    }
+    
+    message FloatBuffer {
+        repeated float values = 1 [packed = true];
+    }
+}
+
+message Raster {
+    oneof raster_data {
+        RasterPlane planes = 1;
+    }
+    
+    message RasterPlane {
+        optional Point origin_lla = 1;
+        optional Vector3 normal = 2;
+        optional Vector3 x_axis_dir = 3;
+        optional float rx_extent_meters = 4;
+        optional float ry_extent_meters = 5;
+        optional int32 rows = 6;
+        optional int32 cols = 7;
+        repeated Channel channels = 8;
+    }
+}

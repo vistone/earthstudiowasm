@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package i18n.phonenumbers;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "I18NPHN";
+option java_package = "com.google.i18n.phonenumbers";
+
+message PhoneNumber {
+    required int32 country_code = 1;
+    required uint64 national_number = 2 [jstype = JS_NUMBER];
+    optional string extension = 3;
+    optional bool italian_leading_zero = 4;
+    optional int32 number_of_leading_zeros = 8 [default = 1];
+    optional string raw_input = 5;
+    
+    optional CountryCodeSource country_code_source = 6;
+    enum CountryCodeSource {
+        UNSPECIFIED = 0;
+        FROM_NUMBER_WITH_PLUS_SIGN = 1;
+        FROM_NUMBER_WITH_IDD = 5;
+        FROM_NUMBER_WITHOUT_PLUS_SIGN = 10;
+        FROM_DEFAULT_COUNTRY = 20;
+    }
+    
+    optional string preferred_domestic_carrier_code = 7;
+}

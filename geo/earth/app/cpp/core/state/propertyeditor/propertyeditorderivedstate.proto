@@ -1,0 +1,15 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Propertyeditorderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derivedstate";
+
+message PropertyEditorDerivedState {
+    optional bool property_editor_visible = 1;
+    optional int32 document_key = 2 [default = -1];
+}

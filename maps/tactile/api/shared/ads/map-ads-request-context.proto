@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package maps_tactile.shared.ads;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHADS";
+option java_multiple_files = true;
+option java_outer_classname = "MapAdsRequestContextProto";
+option java_package = "com.google.maps.tactile.shared.ads";
+
+enum MapAdsRequestContext {
+    UNKNOWN_MAP_ADS_REQUEST_CONTEXT = 0;
+    POI_CLICK_CONTEXT = 1;
+    NAVIGATIONAL_SEARCH_CONTEXT = 2;
+    CATEGORICAL_SEARCH_PREFETCH_CONTEXT = 3;
+    CATEGORICAL_SEARCH_RESULT_SELECTION_CONTEXT = 4;
+    NAVIGATION_ARRIVAL_DASHBOARD_CONTEXT = 5;
+    CHILD_PLACE_SELECTION_CONTEXT = 6;
+    PLACESHEET_RELATED_PLACE_SELECTION_CONTEXT = 7;
+}

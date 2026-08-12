@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package geo_serving_proto.hotels;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPH";
+option java_multiple_files = true;
+option java_outer_classname = "SupportedOccupancyProto";
+option java_package = "com.google.geo.serving.proto.hotels";
+
+message SupportedOccupancy {
+    optional int32 min_adults = 1;
+    optional int32 min_children = 2;
+    optional int32 max_adults = 3;
+    optional int32 max_children = 4;
+}

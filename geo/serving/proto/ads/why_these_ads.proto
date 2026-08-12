@@ -1,0 +1,16 @@
+syntax = "editions";
+
+package geo_serving_proto.ads;
+
+import "geo/serving/proto/ads/why_this_ad.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPADS";
+option java_multiple_files = true;
+option java_outer_classname = "WhyTheseAdsProto";
+option java_package = "com.google.geo.serving.proto.ads";
+
+message WhyTheseAds {
+    repeated WhyThisAd why_this_ad = 1;
+}

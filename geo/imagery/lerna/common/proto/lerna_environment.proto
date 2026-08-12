@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package lerna;
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.imagery.lerna.common.proto";
+
+enum LernaEnvironment {
+    option features = enum_type: CLOSED
+    ;
+    ENV_UNKNOWN = 0;
+    ENV_PROD = 1;
+    ENV_DEV = 2;
+}

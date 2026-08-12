@@ -1,0 +1,63 @@
+syntax = "proto2";
+
+package maps_directions.copilot;
+
+import "geo/experience/proto/geo_experience_category.proto";
+import "maps/dynamicworld/proto/geo_event_category.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TrafficReportIconProto";
+option java_package = "com.google.maps.directions.copilot.proto";
+
+message TrafficReportIcon {
+    optional IconType type = 1 [default = NO_ICON];
+    enum IconType {
+        option allow_alias = true;
+        NO_ICON = 0;
+        ROAD_CLOSED = 1;
+        CRASH = 2;
+        ACCIDENT = 2;
+        CONSTRUCTION = 3;
+        JAM = 4;
+        SUSPECTED_CLOSURE = 22;
+        REROUTE = 5;
+        THUMBS_UP = 6;
+        EXCLAMATION_MARK = 7;
+        INFORMATIONAL = 8;
+        TRENDING_UP = 9;
+        TRENDING_DOWN = 10;
+        LIGHT_TRAFFIC = 13;
+        MEDIUM_TRAFFIC = 11;
+        HEAVY_TRAFFIC = 12;
+        EXTRA_HEAVY_TRAFFIC = 18;
+        TRAFFIC_TREND_WORSE = 14;
+        TRAFFIC_TREND_FLAT = 15;
+        TRAFFIC_TREND_BETTER = 16;
+        EVENT = 17;
+        SPEED_CAMERA = 20;
+        POLICE_PRESENCE = 34;
+        MOBILE_SPEED_CAMERA = 35;
+        SPEED_CAMERA_ZONE = 43;
+        SPEED_CONTROL_ZONE = 44;
+        RED_LIGHT_CAMERA = 45;
+        LANE_CLOSURE = 23;
+        STALLED_VEHICLE = 24;
+        OBJECT_ON_ROAD = 25;
+        SNOW = 27;
+        FOG = 28;
+        FLOOD = 29;
+        LANDSLIDE = 37;
+        CYCLONE = 38;
+        EARTHQUAKE = 39;
+        THUNDERSTORM = 40;
+        HEAVY_RAIN = 41;
+        HAIL = 42;
+        CRISIS = 30;
+        RAILROAD_CROSSING = 33;
+        CRASH_PRONE_SPOT = 36;
+    }
+    
+    optional maps_dynamicworld.GeoEventCategory event_category = 2;
+    optional geo.experience.GeoExperienceCategory experience_category = 3;
+}

@@ -1,0 +1,166 @@
+syntax = "proto2";
+
+package maps_spotlight;
+
+import "geo/experience/proto/geo_experience_category.proto";
+import "i18n/localization/proto/localized_text.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/spotlight/proto/ads-layer-params.proto";
+import "maps/spotlight/proto/search-params.proto";
+import "maps/spotlight/proto/selected-item.proto";
+import "maps/spotlight/proto/spotlight-flags.proto";
+import "maps/tactile/api/ads-spotlight.proto";
+import "maps/tactile/api/directions-request.proto";
+import "maps/tactile/api/entity-details-common.proto";
+import "maps/tactile/api/geometry.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMSL";
+option java_multiple_files = true;
+option java_outer_classname = "DummySpotlightDescription";
+option java_package = "com.google.maps.spotlight";
+
+message SpotlightDescription {
+    optional maps_tactile.Entity entity = 2;
+    optional bool is_nav_intent = 14;
+    optional string display_name = 10 [deprecated = true];
+    optional SearchParams search_params = 12;
+    optional maps_tactile.DirectionsRequest directions_request = 8;
+    
+    repeated WaypointClass directions_waypoint_class = 21;
+    enum WaypointClass {
+        POINT = 0;
+        AREA = 1;
+    }
+    
+    optional AdsLayerParams ads = 5;
+    optional maps_tactile.AdsEntity ads_entity = 6;
+    
+    optional ClientType client_type = 11 [default = CLIENT_DESKTOP];
+    enum ClientType {
+        CLIENT_MOBILE_PHONE = 0;
+        CLIENT_MOBILE_TABLET = 6;
+        CLIENT_MOBILE_WEB = 9;
+        CLIENT_MOBILE_GSA = 13;
+        CLIENT_DESKTOP = 1;
+        CLIENT_DESKTOP_LITE = 10;
+        CLIENT_IFRAME_API = 11;
+        CLIENT_JS_API = 12;
+        CLIENT_LU_RICHLIST_MAP = 2;
+        CLIENT_LU_RICHLISTDESKTOP_FULLLIST_MAP = 3;
+        CLIENT_LU_MAPS_LITE = 7;
+        CLIENT_MOBILE_LU_MAPS_LITE = 15;
+        CLIENT_MOBILE_IMMERSIVE_LU_MAPS_LITE = 17;
+        CLIENT_TABLET_LU_MAPS_LITE = 16;
+        CLIENT_IOS_GSA_LU = 4;
+        CLIENT_IOS_GSA_IMMERSIVE = 5;
+        CLIENT_LU = 8;
+        CLIENT_EARTH = 14;
+        CLIENT_ASSISTANT_TRAVEL = 18;
+    }
+    
+    repeated uint32 experiment_id = 19;
+    optional SpotlightFlags flags = 13;
+    repeated SelectedItem selected_item = 16;
+    optional string selected_indoor_level_id = 17;
+    repeated PersonalizedDataPersistenceKey persistence_key = 18;
+    optional ClientOptions client_options = 20;
+    optional CrisisOptions crisis_options = 22;
+    optional HotelOptions hotel_options = 24;
+    optional maps_tactile.LatLng user_location = 23;
+    optional SpotlightDescription context = 1;
+    
+    optional SpotlightMigrationOptions migration_options = 25;
+    message SpotlightMigrationOptions {
+        optional bool force_geoapis_for_hotels = 5;
+        
+        reserved 1, 2, 3, 4;
+    }
+    
+    reserved 15;
+    
+    extend .proto2.bridge.MessageSet {
+        optional SpotlightDescription message_set_extension = 36174267;
+    }
+}
+
+message ClientOptions {
+    optional MapType map_type = 1;
+    enum MapType {
+        MAP_STANDARD = 0;
+        MAP_GMM_ONE_THIRD_LIST_VIEW = 1;
+        MAP_COMMUTE = 2;
+        MAP_LU_NAVIGATIONAL = 3;
+        MAP_RICHLIST = 4;
+        MAP_RICHLIST_HOTELS = 5;
+        MAP_DIRECTIONS = 7;
+        MAP_HOTEL_SETS = 9;
+        MAP_SEARCH_RESULTS = 6;
+        MAP_TACTILE_HOTELS = 8;
+        MAP_LU_DESKTOP_SRP_DEFAULT = 10;
+        MAP_LU_DESKTOP_SRP_LETTERED = 11;
+    }
+    
+    optional PlaceListOptions place_list_options = 2;
+    message PlaceListOptions {
+        repeated string hidden_list_id = 1;
+        optional uint64 last_write_timestamp = 2;
+    }
+}
+
+message PersonalizedDataPersistenceKey {
+    optional PersistenceDestination destination = 1;
+    enum PersistenceDestination {
+        LISTING_PROFILE = 0;
+        ALIASED_LOCATIONS = 1;
+    }
+    
+    optional string token = 2;
+}
+
+message CrisisOptions {
+    repeated CrisisFilter crisis_filter = 1;
+    optional string time_zone = 2 [deprecated = true];
+    optional string topic_server_experiment_id = 3 [deprecated = true];
+    optional int64 now_override_seconds = 4 [deprecated = true];
+    repeated maps_tactile.LatLng earthquake_epicenter = 5;
+    optional int32 num_primary_earthquake_epicenters = 6 [deprecated = true];
+    optional bool hide_labels = 7;
+    repeated ClientSpecifiedCrisis client_specified_crisis = 8 [deprecated = true];
+}
+
+message HotelOptions {
+    optional string params = 1;
+    optional int32 max_zoom_to_show_sets = 2 [default = -1];
+    optional bool enable_client_side_markers = 3;
+}
+
+message CrisisFilter {
+    optional EventType event_type = 5;
+    enum EventType {
+        UNSPECIFIED = 0;
+        TROPICAL_STORM = 1;
+        EARTHQUAKE = 2;
+        FLOOD = 3;
+        GENERIC = 4;
+        WILDFIRE = 5;
+    }
+    
+    optional string publisher_key = 2 [deprecated = true];
+    repeated string event_id = 3;
+    optional bool is_optional = 4 [deprecated = true];
+    
+    reserved 1;
+}
+
+message ClientSpecifiedCrisis {
+    optional geo.experience.GeoExperienceCategory crisis_category = 1;
+    repeated maps_tactile.LatLng location = 2;
+    optional i18n.localization.LocalizedTextSetProto title_label = 5;
+    optional i18n.localization.LocalizedTextSetProto subtitle_label = 6;
+    
+    reserved 3, 4;
+}

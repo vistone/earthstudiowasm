@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package geo.tasking.dynamic.proto;
+
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: IMPLICIT
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.tasking.dynamic.proto";
+
+message TaskResourceId {
+    optional string task_id = 1;
+}

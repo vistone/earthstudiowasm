@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package maps_tolls;
+
+import "maps/directions/tolls/proto/pass_type.proto";
+import "maps/directions/tolls/proto/vehicle_attributes.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.directions.tolls.proto.proto1api";
+
+message PricingFactors {
+    VehicleAttributes vehicle_attributes = 1;
+    repeated PassType toll_passes = 2;
+    bool show_toll_pass_prices = 4;
+    string payment_method_display_string = 3;
+}

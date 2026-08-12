@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package maps_tactile.shared.layer;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHLR";
+option java_multiple_files = true;
+option java_outer_classname = "MapLayerTypeProto";
+option java_package = "com.google.maps.tactile.shared.layer";
+
+enum MapLayerType {
+    UNKNOWN_MAP_LAYER_TYPE = 0;
+    TRAFFIC = 1;
+    TRANSIT = 2;
+    SATELLITE = 3;
+    BIKE = 4;
+    TERRAIN = 5;
+    THREE_DIMENSIONAL = 6;
+    FULL_THREE_DIMENSIONAL = 11;
+    STREET_VIEW = 7;
+    AIR_QUALITY = 8;
+    WILDFIRES = 9;
+    GLOBE = 10;
+}

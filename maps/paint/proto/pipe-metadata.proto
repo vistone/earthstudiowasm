@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "PipeMetadataProto";
+option java_package = "com.google.maps.paint";
+
+message PipeMetadata {
+    extensions 12345, 299174093, 300847074, 302736094, 302736095, 303205372, 307825621, 361256598, 361814206, 387468233, 394071029, 399996237, 411114513, 421707520, 436338559, 448600681, 453298169, 462018071, 496503080, 512761271, 525000000 to max;
+}

@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package geo_serving_proto.directions.decorations;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPDD";
+option java_multiple_files = true;
+option java_outer_classname = "StepSummaryDecorationsProto";
+option java_package = "com.google.geo.serving.proto.directions.decorations";
+
+message StepSummaryDecorations {
+    optional NarrowRoad narrow_road = 1;
+    message NarrowRoad {
+        
+    }
+}

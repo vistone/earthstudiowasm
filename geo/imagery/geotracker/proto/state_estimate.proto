@@ -1,0 +1,160 @@
+syntax = "editions";
+
+package geotracker;
+
+import "geo/imagery/common/geometry_3d/geometry_3d.proto";
+import "geo/imagery/geotracker/proto/extended_user_data.proto";
+import "geo/imagery/geotracker/proto/gaussian.proto";
+import "geo/imagery/geotracker/proto/geometry.proto";
+import "geo/imagery/geotracker/proto/observation_tag.proto";
+import "geo/imagery/geotracker/proto/source.proto";
+import "geostore/base/proto/featureid.proto";
+import "google/protobuf/timestamp.proto";
+
+option features = utf8_validation: NONE
+;
+option java_package = "com.google.geo.imagery.geotracker.proto";
+
+message StateEstimateProto {
+    optional GeometryProto geometry = 1;
+    repeated geo_imagery_common.Geometry3DSetProto geometry_3d = 19;
+    optional GaussianProto gaussian = 2;
+    map<string, TranscriptionProto> text_transcriptions = 3;
+    map<string, EmbeddingSpaceProto> embeddings = 4;
+    map<string, LegacyClassificationGroupProto> classification_groups_map = 7;
+    repeated ClassificationGroupProto classification_groups = 16;
+    optional double precise_capture_timestamp = 5;
+    map<string, AssociationSetProto> associations = 8;
+    map<string, MapFactsAssociationProto> features = 14;
+    optional AssociationSetProto tracked_observations = 9;
+    map<string, AssociationSetProto> decoration_tracked_observations = 18;
+    optional QualityMeasuresProto quality_measures = 15;
+    optional google.protobuf.Timestamp maybe_capture_time = 10;
+    optional google.protobuf.Timestamp capture_time = 11;
+    optional google.protobuf.Timestamp capture_end_time = 12;
+    optional google.protobuf.Timestamp maybe_capture_end_time = 13;
+    optional string country_code = 17;
+    optional string datum_epoch_id = 20;
+    
+    reserved 6;
+}
+
+message QualityMeasuresProto {
+    optional int64 collection_count = 1;
+    optional double detection_yaw_deviation = 2;
+    optional double location_max_eigenvalue = 3 [deprecated = true];
+    optional double location_min_information = 5;
+    optional double overall_score = 6;
+    
+    repeated GaussianQualityMeasuresProto gaussian_quality_measures = 4;
+    message GaussianQualityMeasuresProto {
+        optional ObservationTag tag = 1;
+        optional ValueTypeGroup value_type_group = 2;
+        optional double max_eigenvalue = 3 [deprecated = true];
+        optional double min_information = 4;
+        optional double r1_score = 5;
+        optional double spread = 6;
+    }
+    
+    optional StatsProto detection_confidence_stats = 7;
+    message StatsProto {
+        optional double mean = 1;
+        optional double min = 2;
+        optional double max = 3;
+        optional double median = 4;
+        optional double std_dev = 5;
+    }
+}
+
+message MapFactsFeatureProto {
+    optional geostore.FeatureIdProto id = 1;
+    optional float confidence = 2 [default = 1];
+    optional float probability = 3 [default = 1];
+    
+    repeated FeatureSource sources = 6;
+    message FeatureSource {
+        optional string source_name = 1;
+        optional double confidence = 2;
+        optional string associated_id = 3;
+        optional int32 distance_meters = 4;
+        optional fixed64 original_feature_location_s2 = 5;
+    }
+    
+    optional string deprecated_source = 4 [deprecated = true];
+    optional google.protobuf.Timestamp source_timestamp = 5;
+    optional ExtendedUserData edge_extended_user_data = 7;
+}
+
+message MapFactsAssociationProto {
+    repeated MapFactsFeatureProto features = 1;
+}
+
+message TranscriptionProto {
+    optional string text = 1;
+    optional double confidence = 2;
+    optional double high_confidence_threshold = 3;
+    optional string source_observation_id = 4;
+}
+
+message EmbeddingSpaceProto {
+    repeated float embedding = 1;
+}
+
+message LegacyClassificationGroupProto {
+    repeated MultiClassDistributionProto ordinal_distribution = 2;
+    map<string, MultiClassDistributionProto> named_distribution = 3;
+    
+    reserved 1;
+}
+
+message ClassificationGroupProto {
+    optional string model = 1;
+    optional string attribute = 2;
+    repeated MultiClassDistributionProto distributions = 3;
+}
+
+message MultiClassDistributionProto {
+    repeated ClassProbabilityProto class_probability = 1;
+}
+
+message ClassProbabilityProto {
+    optional string label = 1;
+    optional float probability = 2;
+}
+
+message VersionedIdProto {
+    optional string id = 1;
+    
+    oneof version_or_group {
+        int64 version = 2;
+        string group = 3;
+    }
+}
+
+message AssociationProto {
+    optional VersionedIdProto source_id = 1;
+    optional VersionedIdProto target_id = 2;
+    repeated VersionedIdProto vertex_id = 3;
+    optional double weight = 4 [default = 1];
+    optional double probability = 5 [default = 1];
+    optional StateEstimateProto edge_state = 6;
+    optional AssociationSourceInfoProto source_info = 9;
+    optional ExtendedUserData edge_extended_user_data = 8;
+    
+    optional AssociationReferenceType reference_type = 10 [default = DEFAULT_STRONG];
+    enum AssociationReferenceType {
+        option features = enum_type: CLOSED
+        ;
+        DEFAULT_STRONG = 0;
+        WEAK = 1;
+    }
+    
+    reserved 7;
+}
+
+message AssociationSetProto {
+    repeated AssociationProto positive_edges = 2;
+    repeated AssociationProto negative_edges = 4;
+    
+    reserved 1;
+}

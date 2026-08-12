@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/object_id.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "OfferingContributionProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message OfferingContributions {
+    repeated OfferingContribution offerings = 1;
+}
+
+message OfferingContribution {
+    optional ObjectId object_id = 1;
+    repeated string ugc_offering_ids = 2;
+}

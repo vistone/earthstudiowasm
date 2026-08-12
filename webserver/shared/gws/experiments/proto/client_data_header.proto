@@ -1,0 +1,134 @@
+syntax = "proto2";
+
+package webserver.gws;
+
+import "experiments/framework/extensions/heterodyne/proto/experiment_ids.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "wireless/android/gsa_dynamic_updates/release/proto/velour_compat.proto";
+
+option objc_class_prefix = "GWS";
+option java_outer_classname = "ClientDataHeaderProto";
+option java_package = "com.google.webserver.shared.gws.experiments";
+
+message BlobIncrement {
+    optional string base_id = 1;
+    optional IncrementType type = 2;
+}
+
+message BlobPostProcess {
+    optional BlobIncrement increment = 1;
+}
+
+message Blob {
+    optional string name = 1;
+    optional string id = 2;
+    optional BlobType type = 3;
+    optional BlobState state = 4;
+    optional bool metered_allowed = 5;
+    optional string download_path = 6;
+    optional bool roaming_allowed = 7;
+    optional int32 download_priority = 8 [default = 0];
+    optional BlobCompression compression = 9 [default = NONE];
+    optional BlobPostProcess post_process = 10;
+    optional string fallback_download_path = 11;
+    
+    optional DownloadInstruction fallback_instruction = 12;
+    message DownloadInstruction {
+        optional string download_path = 1;
+        optional bool metered_allowed = 2;
+        optional bool roaming_allowed = 3;
+    }
+}
+
+message Plugin {
+    optional string plugin_name = 1;
+    optional PluginState plugin_state = 2 [default = DOWNLOADABLE];
+    optional int32 plugin_index = 3;
+}
+
+message PluginSet {
+    optional string release_version = 1;
+    repeated Plugin plugins = 2;
+}
+
+message BlobSet {
+    optional string encoding_version = 1;
+    repeated int32 active_blob_index = 2;
+}
+
+message ClientVersionInfo {
+    optional string app_name = 5;
+    optional string version = 1;
+    repeated Blob blob = 2;
+    repeated BlobSet blob_set = 3;
+    repeated PluginSet plugin_sets = 8;
+    optional int32 velour_sdk_int = 4 [default = -1];
+    optional velour.VelourCompatInfo compat_info = 10;
+    optional string debug_only_version = 9;
+    
+    reserved 6, 7;
+}
+
+message FeatureUsageData {
+    repeated Entry entry = 1;
+    message Entry {
+        optional string name = 1;
+        repeated int64 timestamp = 2;
+    }
+}
+
+message DeviceProperties {
+    optional int32 density_dpi = 1;
+    optional int32 width_pixels = 2;
+    optional int32 height_pixels = 3;
+    repeated string supported_abi = 4;
+}
+
+message ClientDataHeader {
+    optional bytes gzip_compressed = 13;
+    repeated int32 experiment_id = 1 [packed = true];
+    optional int64 config_time_usec = 2;
+    repeated int32 trigger_experiment_id = 3 [packed = true];
+    repeated string server_token = 10;
+    optional string override_zwieback_nid = 7;
+    repeated Blob downloaded_blob = 4;
+    optional ClientVersionInfo version_info = 5;
+    optional DeviceProperties device_properties = 9;
+    optional experiments.heterodyne.ExperimentIds external_client_experiment_ids = 15;
+    
+    reserved 6, 8, 11, 12;
+}
+
+enum BlobState {
+    BLOB_STATE_AVAILABLE = 1;
+    BLOB_STATE_INACTIVE = 2;
+    BLOB_STATE_ACTIVE = 3;
+    BLOB_STATE_FAILED = 4;
+}
+
+enum BlobType {
+    BLOB_TYPE_UNKNOWN = 0;
+    BLOB_TYPE_DEFAULT = 1;
+    BLOB_TYPE_JAR = 2;
+    BLOB_TYPE_WEB_SUGGEST = 3;
+    BLOB_TYPE_BRAIN_SUGGEST = 4;
+}
+
+enum BlobCompression {
+    NONE = 0;
+    GZIP = 1;
+    BROTLI = 2;
+    UNKNOWN = 3;
+}
+
+enum IncrementType {
+    BLOB_INCREMENT_NOOP = 0;
+    BLOB_INCREMENT_BSDIFF = 1;
+    BLOB_INCREMENT_FILEBYFILE = 2;
+}
+
+enum PluginState {
+    DOWNLOADABLE = 0;
+    DOWNLOADED = 1;
+}

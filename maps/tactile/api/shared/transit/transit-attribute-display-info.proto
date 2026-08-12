@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package maps_tactile.shared.transit;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHTR";
+option java_multiple_files = true;
+option java_outer_classname = "TransitAttributeDisplayInfoProto";
+option java_package = "com.google.maps.tactile.shared.transit";
+
+message TransitAttributeDisplayInfo {
+    optional Polarity polarity = 1;
+    enum Polarity {
+        UNKNOWN_STATE = 0;
+        NEUTRAL = 1;
+        NEGATIVE = 2;
+    }
+    
+    optional string name = 2;
+    optional string condensed_name = 3;
+    optional string description = 4;
+    optional string icon_url = 5;
+    optional string icon_url_dark = 8;
+    optional string condensed_icon_url = 6;
+    optional string condensed_icon_url_dark = 9;
+    optional string selected_icon_url = 7;
+    optional string selected_icon_url_dark = 10;
+}

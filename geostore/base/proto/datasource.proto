@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/datasourceprovider.proto";
+import "geostore/base/proto/datetime.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/rawmetadata.proto";
+import "geostore/base/proto/url.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message DataSourceProto {
+    optional string description = 1;
+    optional string copyright_owner = 2;
+    optional int32 copyright_year = 3;
+    optional DateTimeProto release_date = 4;
+    optional string release = 13;
+    repeated RawMetadataProto raw_metadata = 6;
+    optional DataSourceProvider.Provider provider = 7 [default = PROVIDER_UNKNOWN];
+    optional string importer_timestamp = 8;
+    optional string importer_build_info = 9;
+    optional string importer_build_target = 10;
+    optional string importer_client_info = 11;
+    optional string source_dataset = 12;
+    repeated UrlProto attribution_url = 14;
+    optional string importer_mpm_version = 15;
+    
+    reserved 5;
+}

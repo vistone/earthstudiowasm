@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "LicensingInfoProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message LicensingInfo {
+    repeated LicenseUsageFlags license_flags = 4;
+    enum LicenseUsageFlags {
+        option allow_alias = true;
+        UNKNOWN_LICENSE_USAGE_FLAGS = 0;
+        NO_IMAGE_MOD = 0;
+        ATTRIB_LINK = 3;
+        NO_SYNDICATION = 5;
+        UGC = 7;
+        NO_LOCAL_HOSTING = 8;
+        CRAWLED = 9;
+        LIMITED_SYNDICATION = 11;
+    }
+    
+    optional int32 max_thumbnail_size_in_pixels = 6;
+    
+    reserved 1, 2, 3, 5;
+}

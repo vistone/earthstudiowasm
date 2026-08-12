@@ -1,0 +1,389 @@
+syntax = "editions";
+
+package mapcore;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/paint/proto/client-vector-label.proto";
+import "maps/paint/proto/client-vector-style.proto";
+import "maps/paint/proto/client-vector-tile.proto";
+import "maps/paint/proto/legendary/legendary.proto";
+import "maps/util/tile_coordinate.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "SMC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.shared";
+
+message ZoomLevelStyle {
+    optional int32 zoom = 1 [default = 0];
+    optional float scale = 2 [default = 1];
+    optional float overlap_percentage = 3 [default = 0];
+}
+
+message MapActions {
+    repeated MapAction action = 1;
+    
+    repeated LegendaryTags legendary_tags = 100;
+    message LegendaryTags {
+        repeated maps_paint.CustomStyleFeatureTag custom_style_feature_tag = 7;
+    }
+    
+    repeated ZoomLevelStyle zoom_level_style = 2;
+    optional TinyOptions tiny_options = 3;
+}
+
+message MapAction {
+    oneof action_type {
+        AddLabel add_label = 1;
+        AddPredefinedLabel add_predefined_label = 12;
+        AddArea add_area = 2;
+        AddPredefinedArea add_predefined_area = 11;
+        AddLine add_line = 3;
+        RestyleLabel restyle_label = 4;
+        RestyleGeometry restyle_geometry = 5;
+        SetCamera set_camera = 6;
+        AddRaster add_raster = 7;
+        AdjustRoadLabels adjust_road_labels = 8;
+        AdjustBaseLabels adjust_base_labels = 9;
+        AdjustSubstrate adjust_substrate = 10;
+        RestyleMap restyle_map = 13;
+    }
+}
+
+message Point {
+    optional double lat = 1;
+    optional double lng = 2;
+}
+
+message BoundingBox {
+    optional double n = 1;
+    optional double s = 2;
+    optional double e = 3;
+    optional double w = 4;
+}
+
+message Metadata {
+    optional fixed64 fprint = 1;
+    optional string description = 2;
+    optional string attribution = 4;
+    optional fixed64 cell_id = 5;
+}
+
+message IconStyle {
+    optional fixed32 icon_container_color = 1;
+    optional fixed32 icon_outline_color = 2;
+    optional fixed32 icon_pictogram_color = 3;
+    optional string icon_url = 4;
+}
+
+message TextStyle {
+    optional float text_size = 1;
+    optional fixed32 text_color = 2;
+    optional fixed32 text_bubble_color = 3;
+    optional fixed32 text_outline_color = 4;
+    optional fixed32 text_box_fill_color = 5;
+    optional maps_paint_client.TextBoxStyle.ShapeType text_box_shape_type = 6;
+    optional int32 text_box_corner_radius = 7;
+}
+
+message PoiLabelStyle {
+    optional IconStyle icon_style = 1;
+    optional TextStyle title_text_style = 2;
+    optional TextStyle subtitle_text_style = 3;
+}
+
+message ExtendedPinIcon {
+    optional IconStyle icon_style = 1;
+}
+
+message ExtendedPinText {
+    optional string text = 1;
+    optional TextStyle text_style = 2;
+}
+
+message ExtendedPinComponent {
+    oneof extended_pin_component {
+        ExtendedPinIcon extended_pin_icon = 1;
+        ExtendedPinText extended_pin_text = 2;
+    }
+}
+
+message ExtendedPinContainerStyle {
+    optional fixed32 container_color = 1;
+    optional fixed32 outline_color = 2;
+}
+
+message ExtendedPin {
+    repeated ExtendedPinComponent extended_pin_components = 1;
+    optional ExtendedPinContainerStyle style = 2;
+}
+
+message TinyOptions {
+    optional StyleSource style_source = 1 [default = STYLE_SOURCE_ORIGINAL_ICON];
+    enum StyleSource {
+        STYLE_SOURCE_UNSPECIFIED = 0;
+        STYLE_SOURCE_ORIGINAL_ICON = 1;
+        STYLE_SOURCE_INLINE_STYLE = 2;
+    }
+    
+    repeated TinyIconStyle tiny_icon_style = 2;
+    message TinyIconStyle {
+        optional string icon_url = 1;
+        optional fixed32 icon_color_rgb = 2;
+    }
+    
+    optional bool clobbering = 3 [default = false];
+    optional float tiny_additional_scale = 4 [default = 1];
+}
+
+message InteractionMetadata {
+    optional InteractionType interaction_type = 1;
+    optional string interaction_key = 2;
+}
+
+message AddLabel {
+    optional LabelType label_type = 8;
+    enum LabelType {
+        LABEL_TYPE_POI = 0;
+        LABEL_TYPE_LARGE_ICON = 1;
+        LABEL_TYPE_TEXT_BUBBLE = 2;
+        LABEL_TYPE_MAP_TITLE = 3;
+    }
+    
+    optional float label_scale = 9 [default = 1];
+    repeated ZoomLevelStyle zoom_level_style = 24;
+    optional Point point = 1;
+    optional string text = 2;
+    optional string subtitle = 6;
+    optional PoiLabelStyle poi_label_style = 18;
+    optional string icon_url = 3;
+    optional int32 font_size = 4;
+    optional fixed32 text_color_argb = 5;
+    optional fixed32 text_bubble_color_argb = 7;
+    optional fixed32 outline_color_argb = 10;
+    optional fixed32 text_box_fill_color_argb = 15;
+    optional maps_paint_client.TextBoxStyle.ShapeType text_box_shape_type = 16;
+    optional int32 text_box_corner_radius = 17;
+    
+    optional FontWeight font_weight = 19;
+    enum FontWeight {
+        FONT_WEIGHT_NORMAL = 0;
+        FONT_WEIGHT_LIGHT = 1;
+        FONT_WEIGHT_MEDIUM = 2;
+        FONT_WEIGHT_BOLD = 3;
+    }
+    
+    optional FontStyle font_style = 20;
+    enum FontStyle {
+        FONT_STYLE_NORMAL = 0;
+        FONT_STYLE_ITALIC = 1;
+    }
+    
+    optional string font_family = 23;
+    optional int32 text_outline_width = 21;
+    optional maps_paint_client.AbsoluteLabelPosition.AnchorPoint primary_group_anchor_point = 11;
+    optional int32 anchor_offset_x = 12;
+    optional int32 anchor_offset_y = 13;
+    optional Metadata metadata = 14;
+    repeated InteractionMetadata label_interaction_metadata = 22;
+    optional string icon_prompt = 1000;
+    optional string icon_container_prompt = 1001;
+    
+    optional IconContainmentType icon_containment_type = 1002;
+    enum IconContainmentType {
+        STANDALONE = 0;
+        SHAPE_CONTAINED = 1;
+        PIN_CONTAINED = 2;
+    }
+    
+    optional fixed32 icon_outline_color_argb = 1003;
+    optional int32 icon_outline_width = 1007;
+    
+    optional IconPinType icon_pin_type = 1005;
+    enum IconPinType {
+        CIRCLE_PIN = 0;
+    }
+    
+    optional fixed32 icon_content_window_background_color_argb = 1006;
+    optional bool icon_outline_present = 1004 [deprecated = true];
+}
+
+message AddPredefinedLabel {
+    optional fixed64 fprint = 1;
+    optional PoiLabelStyle poi_label_style_map = 2;
+    optional string gcid = 3;
+    optional string subtitle = 4;
+    optional IconShape icon_shape = 5;
+    repeated InteractionMetadata label_interaction_metadata = 6;
+    
+    optional LabelPlacement label_placement = 7;
+    enum LabelPlacement {
+        LABEL_PLACEMENT_DEFAULT = 0;
+        LABEL_PLACEMENT_REQUIRED = 1;
+        LABEL_PLACEMENT_REQUIRED_NON_CLOBBERING = 2;
+    }
+    
+    optional ExtendedPin extended_pin = 8;
+    
+    extensions 10000 to 10100;
+}
+
+message AreaStyle {
+    optional fixed32 fill_color = 1;
+    optional fixed32 outline_color = 2;
+    optional int32 outline_width = 3;
+}
+
+message AddArea {
+    repeated Point point = 1;
+    optional AreaStyle style = 5;
+    optional fixed32 fill_color = 2;
+    optional fixed32 outline_color = 3;
+    optional int32 outline_width = 4;
+}
+
+message AddPredefinedArea {
+    optional fixed64 fprint = 1;
+    optional AreaStyle style = 2;
+    
+    extensions 10000 to 10100;
+}
+
+message AddLine {
+    repeated Point point = 1;
+    optional fixed32 color = 2;
+    optional int32 width = 3;
+    optional bool dashed = 4;
+    optional bool arrow = 5;
+    optional string texture_url = 6;
+    optional string texture_prompt = 1000;
+}
+
+message RestyleLabel {
+    optional maps_paint.CustomStyleFeatureTag csft_tag = 1;
+    optional uint64 fprint = 2;
+    optional fixed32 text_color_argb = 3;
+    optional string icon_url = 4;
+    optional bool hidden = 5;
+    optional fixed32 outline_color_argb = 6;
+    optional string font_family = 7;
+    
+    repeated CategoricalPoiIconStyle categorical_poi_icon_style = 8;
+    message CategoricalPoiIconStyle {
+        optional IconLayer layer = 1;
+        enum IconLayer {
+            ICON_LAYER_UNSPECIFIED = 0;
+            PICTOGRAM_LAYER = 1;
+            CONTAINER_LAYER = 2;
+            OUTLINE_LAYER = 3;
+        }
+        
+        optional fixed32 color_argb = 2;
+    }
+    
+    optional int32 text_size = 9;
+    optional string icon_prompt = 1000;
+}
+
+message RestyleMap {
+    optional string font_family = 1;
+}
+
+message RestyleGeometry {
+    optional maps_paint.CustomStyleFeatureTag csft_tag = 1;
+    optional uint64 fprint = 2;
+    optional fixed32 fill_color_argb = 3;
+    optional fixed32 line_color_argb = 4;
+    optional string area_texture_url = 5;
+    optional float area_texture_scale = 7;
+    optional bool hidden = 6;
+    optional string area_texture_prompt = 1000;
+}
+
+message SetCamera {
+    optional Point center = 1;
+    optional int32 zoom = 2 [deprecated = true];
+    optional float zoom_level = 5;
+    optional float tilt = 3;
+    optional float heading = 4;
+    optional BoundingBox viewport_bounds = 1000;
+}
+
+message AddRaster {
+    optional string image_url = 1;
+    repeated float color_transform_matrix = 2;
+    optional maps_util.TileCoordinateProto tile_coord = 3;
+    optional int32 z_plane = 4;
+    optional string prompt = 1000;
+    optional string lat_lng_bounds = 1001;
+}
+
+message AdjustRoadLabels {
+    optional maps_paint_client.LabelAnnotationBoost.BoostAmount boost_amount = 1;
+    
+    optional RoadLabelType road_label_type = 2;
+    enum RoadLabelType {
+        UNSPECIFIED = 0;
+        NON_TRAFFIC = 1;
+        TERMINAL = 2;
+        LOCAL = 3;
+        MINOR_ARTERIAL = 4;
+        MAJOR_ARTERIAL = 5;
+    }
+}
+
+message AdjustBaseLabels {
+    optional maps_paint.CustomStyleFeatureTag csft_tag = 1;
+    optional maps_paint_client.LabelAnnotationBoost.BoostAmount boost_amount = 2;
+}
+
+message AreaRestyle {
+    optional string feature = 1;
+    optional fixed32 fill_color = 2;
+    optional fixed32 outline_color = 3;
+    optional bool hidden = 4;
+    optional string texture_prompt = 5;
+    optional float texture_scale = 6;
+}
+
+message LineRestyle {
+    optional string feature = 1;
+    optional fixed32 fill_color = 2;
+    optional fixed32 outline_color = 3;
+    optional bool hidden = 4;
+}
+
+message LabelRestyle {
+    optional string feature = 1;
+    optional fixed32 text_color = 2;
+    optional fixed32 text_outline_color = 3;
+    optional bool hidden = 4;
+    optional maps_paint_client.LabelAnnotationBoost.BoostAmount boost_amount = 5;
+    optional string font_family = 6;
+}
+
+message PinRestyle {
+    optional string feature = 1;
+    optional fixed32 text_color = 2;
+    optional fixed32 text_outline_color = 3;
+    optional string icon_prompt = 4;
+    optional bool hidden = 5;
+    optional maps_paint_client.LabelAnnotationBoost.BoostAmount boost_amount = 6;
+}
+
+message AdjustSubstrate {
+    repeated AreaRestyle area_restyle = 1;
+    repeated LineRestyle line_restyle = 2;
+    repeated LabelRestyle label_restyle = 3;
+    repeated PinRestyle pin_restyle = 4;
+}
+
+enum IconShape {
+    ICON_TYPE_UNSPECIFIED = 0;
+    ICON_TYPE_CIRCLE_PIN = 1;
+}
+
+enum InteractionType {
+    INTERACTION_TYPE_UNSPECIFIED = 0;
+    INTERACTION_TYPE_ON_TAP = 1;
+}

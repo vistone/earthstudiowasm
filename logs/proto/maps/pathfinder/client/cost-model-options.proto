@@ -1,0 +1,81 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "logs/proto/maps/pathfinder/client/mrp-ranking-options.proto";
+import "logs/proto/maps/pathfinder/client/mrp-vehicle-info.proto";
+import "logs/proto/maps/roadtraffic/proto/path_traffic_flavor.proto";
+import "logs/proto/maps/transit/api/transit_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "CostModelOptionsProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedCostModelTrafficOptions {
+    optional bool dynamic_route_around_traffic = 1;
+}
+
+message LoggedCostModelOptions {
+    optional LoggedTravelMode travel_mode = 1 [default = DRIVE];
+    enum LoggedTravelMode {
+        DRIVE = 0;
+        BICYCLE = 1;
+        WALK = 2;
+        TWO_WHEELER = 9;
+        TAXICAB = 10;
+        TRANSIT = 3;
+        FLY = 4;
+        MIXED = 6;
+        UNKNOWN = 7;
+        TAXI = 8;
+        BIKESHARING = 11;
+    }
+    
+    repeated LoggedBooleanOption boolean_option = 2;
+    enum LoggedBooleanOption {
+        AVOID_HIGHWAYS = 0;
+        AVOID_TOLLS = 1;
+        AVOID_FERRIES = 2;
+        ALLOW_HOV = 20;
+        ALLOW_INDOOR = 7;
+        AVOID_LICENSE_PLATE_RESTRICTIONS = 8;
+        AVOID_INACCESSIBLE = 9;
+        PREFER_INDOOR_WALKING = 14;
+        PREFER_TAXI_LANES = 11;
+        USE_ENERGY_CONSCIOUS_ROUTING = 12;
+        USE_FUEL_CONSUMPTION_ROUTING = 17;
+        USE_MRP_EVALUATOR_COST_MODEL = 13;
+        IS_API_REQUEST = 3;
+        IS_ENTERPRISE_API_REQUEST = 5 [deprecated = true];
+        INTERNAL_TRAFFIC_MODEL_1 = 1001;
+        INTERNAL_TRAFFIC_MODEL_2 = 1002;
+        USE_TRAFFIC = 6;
+        IS_INTERNAL_REQUEST = 4;
+        IS_TRUSTED_PARTNER_REQUEST = 10;
+        USE_DISTANCE_COST = 15;
+        INTERNAL_RESTRICT_TIME_BASED_RESTRICTIONS_NEAR_FUTURE = 1010;
+        INTERNAL_RESTRICT_TIME_BASED_RESTRICTIONS_DISTANT_FUTURE = 1011;
+        INTERNAL_UNRESTRICT_ALWAYS_ACTIVE_RESTRICTIONS_NEAR_FUTURE = 1012;
+        INTERNAL_UNPENALIZE_TIME_BASED_RESTRICTIONS_NEAR_FUTURE = 1013;
+        INTERNAL_UNPENALIZE_CONSTRUCTION_RESTRICTIONS_NEAR_FUTURE = 1014;
+        AVOID_RANDOMLY_SELECTED_SEGMENTS = 16;
+        ENABLE_CUSTOMIZATION_ID_IN_REQUERY = 18;
+        USE_OPTIONS_FROM_REQUERY_TOKEN = 19;
+        PREFER_SHADED = 21;
+    }
+    
+    optional LoggedCostModelTrafficOptions traffic_options = 9;
+    
+    optional LoggedTrafficType traffic_type = 3 [default = TRAFFIC_NONE];
+    enum LoggedTrafficType {
+        TRAFFIC_NONE = 0;
+        TRAFFIC_PESSIMISTIC = 1;
+        TRAFFIC_CURRENT = 2;
+    }
+    
+    repeated roadtraffic.proto.LoggedPathTrafficFlavor traffic_flavor = 8;
+    optional maps_transit.api.LoggedTransitOptions transit_options = 4;
+    optional LoggedMRPRankingOptions mrp_ranking_options = 10;
+    optional LoggedMRPVehicleInfo mrp_vehicle_info = 11 [deprecated = true];
+}

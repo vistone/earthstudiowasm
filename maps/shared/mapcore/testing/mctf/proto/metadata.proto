@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package mapcore.testing.mctf.proto;
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "MCTF";
+option java_outer_classname = "Metadata";
+option java_package = "com.google.maps.shared.mctf";
+
+message MctfMetadata {
+    optional string renderop_id = 1 [features = ];
+    optional bool is_callout = 2 [deprecated = true];
+    
+    optional BitmapIconStyle primary_bitmap_icon_style = 3;
+    message BitmapIconStyle {
+        repeated ZoomLevelToIcon zoom_level_to_icon = 1;
+        message ZoomLevelToIcon {
+            optional int32 zoom_level = 1;
+            optional string icon_base64 = 2 [features = ];
+        }
+    }
+}

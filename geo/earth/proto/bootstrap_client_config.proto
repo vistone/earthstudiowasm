@@ -1,0 +1,13 @@
+syntax = "editions";
+
+package geo.earth.proto;
+
+import "google/internal/earth/v1/client_config.proto";
+
+option objc_class_prefix = "RTH";
+option java_outer_classname = "BootstrapClientConfigOuterClass";
+
+message BootstrapClientConfig {
+    option features = ;
+    optional google.internal.earth.v1.config.ServiceConfig earth_service_config = 1;
+}

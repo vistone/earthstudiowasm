@@ -1,0 +1,70 @@
+syntax = "proto2";
+
+package gws.mothership.api.v1.common.text;
+
+import "google/api/inclusion.proto";
+import "google/type/color.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "MSP";
+option java_multiple_files = true;
+option java_outer_classname = "StyleProto";
+option java_package = "com.google.gws.mothership.api.v1.common.text";
+
+message TextStyle {
+    optional FontWeight font_weight = 1;
+    optional google.type.Color color = 2;
+    optional BaselineOffset baseline_offset = 3;
+    optional Directionality directionality = 4;
+    optional FontSize font_size = 5;
+    optional FontStyle font_style = 6;
+    optional bool emphasis = 7 [default = false];
+    optional bool underline = 8 [default = false];
+    optional bool strike_through = 9 [default = false];
+    optional string background_color = 11;
+    
+    extensions 10;
+}
+
+message FontWeight {
+    optional Value value = 1;
+    enum Value {
+        DEFAULT_WEIGHT = 0;
+        THIN = 1;
+        LIGHT = 2;
+        NORMAL = 3;
+        MEDIUM = 4;
+        BOLD = 5;
+        BLACK = 6;
+    }
+}
+
+message FontSize {
+    optional int32 size = 1;
+    
+    optional Unit unit = 2;
+    enum Unit {
+        UNIT_UNSPECIFIED = 0;
+        PIXELS = 1;
+    }
+}
+
+message FontStyle {
+    optional Value value = 1;
+    enum Value {
+        NORMAL = 0;
+        ITALIC = 1;
+    }
+}
+
+enum BaselineOffset {
+    NONE = 0;
+    SUPERSCRIPT = 1;
+    SUBSCRIPT = 2;
+}
+
+enum Directionality {
+    DIRECTIONALITY_UNSPECIFIED = 0;
+    LTR = 1;
+    RTL = 2;
+}

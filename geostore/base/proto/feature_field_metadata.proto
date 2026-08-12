@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/datasourceprovider.proto";
+import "geostore/base/proto/stable_field_path.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message FeatureFieldMetadataProto {
+    repeated FieldProvenance field_provenance = 1;
+    message FieldProvenance {
+        repeated StableFieldPathProto field_path = 1;
+        optional ProvenanceProto provenance = 2;
+    }
+    
+    extensions 1000 to max;
+}
+
+message ProvenanceProto {
+    optional DataSourceProvider.Provider provider = 1;
+    optional string dataset = 2;
+}

@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/feature_set.proto";
+import "geo/photo/proto/photo_query_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoByFeatureQueryProto";
+option java_package = "com.google.geo.photo";
+
+message PhotoByFeatureQuery {
+    repeated FeatureSet feature_set = 1;
+    optional PhotoQueryOptions query_options = 2 [deprecated = true];
+    optional PhotoQueryOptionList query_option_list = 5;
+    optional string tag = 3 [deprecated = true];
+    
+    reserved 4;
+}

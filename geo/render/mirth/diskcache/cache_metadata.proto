@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package mirth.diskcache;
+
+option features = utf8_validation: NONE
+;
+
+message CacheMetadata {
+    optional double hard_expiration_seconds = 2;
+    optional double soft_expiration_seconds = 3;
+    optional bool persist_longer = 4;
+    
+    extensions 1001 to max;
+}
+
+message DiffTileMetadata {
+    optional string version_id = 1;
+}
+
+extend CacheMetadata {
+    optional DiffTileMetadata difftile_data = 1002;
+}

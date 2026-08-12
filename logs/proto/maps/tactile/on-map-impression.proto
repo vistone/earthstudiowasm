@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package logs_tactile;
+
+import "geo/serving/proto/photos/image_key.proto";
+import "logs/gws/public/tags/tag_options.proto";
+import "logs/proto/maps/geoevents/annotations.proto";
+import "logs/proto/maps/tactile/ad-ref.proto";
+import "logs/proto/maps/tactile/annotation-data.proto";
+import "logs/proto/maps/tactile/label-content.proto";
+import "logs/proto/maps/tactile/offers.proto";
+import "logs/proto/visual_element/disruptions-impression-data.proto";
+import "logs/proto/visual_element/element_value_data.proto";
+import "logs/proto/visual_element/place_list_data.proto";
+import "maps/tactile/api/onmap/on-map-impression-enums.proto";
+import "maps/tactile/api/shared/money.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGST";
+option java_multiple_files = true;
+option java_outer_classname = "OnMapImpressionProto";
+option java_package = "com.google.common.logging.tactile";
+
+message OnMapImpression {
+    repeated maps_tactile.onmap.Appearance appearance = 1;
+    repeated maps_tactile.onmap.PersonalAppearance personal_appearance = 2;
+    optional geo_serving_proto.photos.ImageKey image_key = 25;
+    optional LoggedAdRef ad_ref = 3;
+    optional maps_tactile.onmap.Visibility visibility = 4;
+    optional maps_tactile.onmap.VisibilityReason visibility_reason = 5;
+    optional maps_tactile.onmap.IncidentProvider incident_provider = 6;
+    optional OfferData offer_data = 7;
+    repeated int32 haptic_place_list_source = 8;
+    repeated maps_tactile.onmap.PersonalFeatureProvider personal_feature_provider = 9;
+    optional int32 model_id = 10;
+    optional AnnotationImpressionData annotation_impression_data = 11;
+    optional int32 establishment_type_id = 12 [deprecated = true];
+    optional maps_tactile.shared.Money gas_price = 13;
+    optional int32 rating = 14;
+    repeated LoggedLabelContent label_content = 15;
+    optional int32 rendering_category_id = 16;
+    optional logs.ElementValueData element_value_data = 17;
+    optional logs.PlaceListData place_list_data = 18;
+    optional logs.DisruptionsImpressionData disruptions_impression_data = 20;
+}

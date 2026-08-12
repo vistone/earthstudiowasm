@@ -1,0 +1,120 @@
+syntax = "proto2";
+
+package earth.legend;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/protos/unit_type.proto";
+import "geo/earth/app/l10n_message_id.proto";
+import "geo/earth/proto/contentcreation/content_editing_model.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.legend";
+
+message HSVColor {
+    optional float hue = 1;
+    optional float saturation = 2;
+    optional float value = 3;
+    optional float alpha = 4;
+}
+
+message Item {
+    optional Icon icon = 3;
+    enum Icon {
+        ICON_UNDEFINED = 0;
+        ICON_LOCATION_ON = 1;
+    }
+    
+    optional Visibility visibility = 7;
+    enum Visibility {
+        VISIBILITY_UNDEFINED = 0;
+        VISIBILITY_HIDDEN = 1;
+        VISIBILITY_VISIBLE = 2;
+    }
+    
+    oneof name {
+        string localized_name = 1;
+        .earth.core.L10nMessageId.MessageId message_id = 8;
+    }
+    
+    oneof color {
+        document.protos.Color rgb_color = 2;
+        HSVColor hsv_color = 6;
+    }
+    
+    oneof numeric_value {
+        int64 int_value = 4;
+        double double_value = 5;
+    }
+}
+
+message Categorical {
+    repeated Item items = 1;
+}
+
+message ChoroplethContinuous {
+    repeated Item items = 1;
+}
+
+message ChoroplethDiscrete {
+    oneof type {
+        Custom custom = 1;
+        Interpolated interpolated = 2;
+    }
+    
+    message Custom {
+        repeated Item items = 1;
+    }
+    
+    message Interpolated {
+        optional Item left_bound = 1;
+        optional Item right_bound = 2;
+        optional int32 stops = 3;
+    }
+}
+
+message LegendLayer {
+    optional Id id = 1;
+    enum Id {
+        UNDEFINED = 0;
+        NEW_BUILD_BY_BUILDING_USE_TYPE = 1;
+        NEW_BUILD_BY_APARTMENT_TYPE = 2;
+        SOLAR = 3;
+        NEW_BUILD_SOLAR_ENERGY_POTENTIAL = 4;
+        NEW_BUILD_GROUND_SUNLIGHT_HOURS = 5;
+        NEW_BUILD_VIEWS = 6 [deprecated = true];
+        GROUND_LAYERS = 7;
+    }
+    
+    optional string localized_name = 2;
+    optional string description = 3;
+    optional string learn_more_url = 4;
+    
+    optional FormatConfig format_config = 7;
+    message FormatConfig {
+        optional string currency_code = 1;
+        optional .earth.core.unittype.UnitType unit_type = 2;
+    }
+    
+    oneof layer_type {
+        Categorical categorical = 5;
+        ChoroplethContinuous choropleth_continuous = 6;
+        ChoroplethDiscrete choropleth_discrete = 8;
+    }
+}
+
+message LegendSection {
+    optional Id id = 1;
+    enum Id {
+        UNDEFINED = 0;
+        BUILDING_DESIGN = 1;
+    }
+    
+    optional string localized_name = 2;
+    repeated LegendLayer layers = 3;
+    optional LegendLayer.Id initialized_layer = 4;
+}
+
+message Legend {
+    repeated LegendSection sections = 1;
+}

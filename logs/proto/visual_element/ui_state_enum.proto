@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package logs;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_package = "com.google.common.logging";
+
+message UIState {
+    optional ToggleState toggle = 1 [default = TOGGLE_UNDEFINED];
+    enum ToggleState {
+        TOGGLE_UNDEFINED = 0;
+        TOGGLE_ON = 1;
+        TOGGLE_OFF = 2;
+    }
+}

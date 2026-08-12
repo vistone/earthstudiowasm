@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package maps_limo;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "ContextOuterClass";
+option java_package = "com.google.maps.limo";
+
+enum Context {
+    UNKNOWN_CONTEXT_DO_NOT_USE = 0;
+    GMM = 1;
+    LOCAL_UNIVERSAL = 4;
+    ASSISTANT = 5;
+    SPOTLIGHT = 6;
+}

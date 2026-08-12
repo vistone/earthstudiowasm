@@ -1,0 +1,135 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+import "geo/contentflows/serving/api/proto/location.proto";
+import "geo/contentflows/serving/api/proto/pano_info.proto";
+import "geo/photo/proto/image_attribute.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GGIMGK";
+option java_multiple_files = true;
+option java_package = "com.google.geo.imagery.karto.proto";
+
+message Audio {
+    optional string narration_transcript = 1;
+    optional float duration_seconds = 3;
+    
+    reserved 2;
+}
+
+message Media {
+    optional StreetView street_view = 1;
+    message StreetView {
+        optional string pano_id = 1;
+        
+        optional CameraMove camera_move = 2;
+        enum CameraMove {
+            CAMERA_MOVE_UNSPECIFIED = 0;
+            PANO_PAN_UP = 1;
+            PANO_PAN_DOWN = 2;
+            PANO_PAN_SIDEWAYS = 3;
+            PANO_ZOOM_IN = 4;
+            PANO_ZOOM_OUT = 5;
+        }
+        
+        optional geo_contentflows_serving.PanoInfo pano_info = 3;
+        optional geo_contentflows_serving.Location location = 4;
+        repeated geo_photo_service.ImageContentTags content_tags = 5;
+        optional geo_photo_service.ImageAffiliation affiliation = 6;
+        optional string report_url = 7;
+    }
+    
+    optional Aerial aerial = 2;
+    message Aerial {
+        optional CameraMove camera_move = 1;
+        enum CameraMove {
+            CAMERA_MOVE_UNSPECIFIED = 0;
+            AERIAL_DOLLY_IN = 1;
+            AERIAL_DOLLY_OUT = 2;
+            AERIAL_FLYOVER = 3;
+            AERIAL_OVERVIEW = 4;
+            AERIAL_PEDESTAL = 5;
+            AERIAL_FLY_TO_PLACE = 6;
+            AERIAL_ORBIT = 7;
+            AERIAL_GLIDE = 8;
+            AERIAL_HIGH_ORBIT = 9;
+            AERIAL_LOW_ORBIT = 10;
+            AERIAL_TILT = 11;
+            AERIAL_ARC_IN = 12;
+        }
+        
+        optional string fly_from_place_id = 2;
+        optional string fly_to_place_id = 3;
+    }
+    
+    optional UGCPhotoCarousel ugc_photo_carousel = 4;
+    message UGCPhotoCarousel {
+        repeated CarouselPhoto carousel_photos = 1;
+        message CarouselPhoto {
+            optional string content_id = 1;
+            optional string report_url = 2;
+            
+            optional UserProfile user_profile = 3;
+            message UserProfile {
+                optional string user_display_name = 1;
+                optional string user_profile_photo_url = 2;
+                optional string user_profile_url = 3;
+            }
+        }
+        
+        repeated CarouselPhoto extra_carousel_photos = 2;
+    }
+    
+    optional Polyline polyline = 5;
+    message Polyline {
+        optional CameraMove camera_move = 1;
+        enum CameraMove {
+            CAMERA_MOVE_UNSPECIFIED = 0;
+            POLYLINE_FOLLOW = 1;
+            POLYLINE_ARC_JUMP = 2;
+            DESTINATION_ARRIVAL_VIEW = 3;
+            ORIGIN_DEPARTURE_VIEW = 4;
+            SV_TURN_VIEW = 5;
+        }
+        
+        optional int32 start_index = 2;
+        optional int32 end_index = 3;
+    }
+    
+    reserved 3;
+}
+
+message PlaceInfo {
+    optional string location_pin_emoji = 1;
+    
+    optional PriceInfo price_info = 2;
+    message PriceInfo {
+        optional double min_price = 1;
+        optional double max_price = 2;
+        optional string currency = 3;
+        optional int32 price_level = 4;
+    }
+    
+    optional double rating = 3;
+    optional int32 user_rating_count = 4;
+}
+
+message VisualSegment {
+    optional float start_percentage = 1;
+    optional Media media = 2;
+    optional string place_id = 3;
+    optional PlaceInfo place_info = 4;
+}
+
+message Shot {
+    optional Audio audio = 1;
+    repeated VisualSegment visual_segments = 2;
+}
+
+message CinematicPlan {
+    optional string query_summary = 2;
+    repeated Shot shots = 1;
+}

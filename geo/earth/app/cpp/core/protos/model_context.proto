@@ -1,0 +1,51 @@
+syntax = "editions";
+
+package earth.modelcontext;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message Schema {
+    optional string name = 1;
+    optional string title = 2;
+    optional string description = 3;
+    
+    oneof value {
+        string text = 4;
+        bytes binary = 5;
+        google.protobuf.Any proto = 6;
+    }
+}
+
+message Update {
+    optional Schema update = 1;
+    optional google.protobuf.FieldMask mask = 2;
+}
+
+message Context {
+    optional string uri = 1;
+    optional string name = 2;
+    optional string title = 3;
+    optional string description = 4;
+    optional string mime_type = 5;
+    
+    oneof value {
+        string text = 6;
+        bytes binary = 7;
+        google.protobuf.Any proto = 8;
+    }
+}
+
+message Resource {
+    map<string, string> parameters = 3;
+    optional string name = 4;
+    optional string title = 5;
+    optional string description = 6;
+    
+    oneof uri_type {
+        string uri = 1;
+        string uri_template = 2;
+    }
+}

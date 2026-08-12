@@ -1,0 +1,57 @@
+syntax = "editions";
+
+package photos;
+
+import "net/proto2/contrib/validator/annotations.proto";
+import "net/proto2/proto/descriptor.proto";
+import "photos/serving/client/urls/environments/osid_domain.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "PHTS";
+option java_package = "com.google.photos.serving.integrations.identifiers.signingkeys";
+
+message KeystoreInfo {
+    optional int32 config_id = 1;
+    optional string service_key = 2;
+    
+    optional Permissions permissions = 5;
+    message Permissions {
+        optional bool manually_managed = 3;
+        repeated string included_role = 1;
+        repeated string eligible_role = 2;
+    }
+    
+    oneof url_expiration_options {
+        bool supports_stable_url = 3;
+        int32 max_ttl_days = 4 [default = 30];
+    }
+}
+
+message GuessableInfo {
+    
+}
+
+message RequestSigningKeyAuthInfo {
+    repeated int32 allowed_scopes = 1;
+}
+
+message RequestSigningKeyInfo {
+    optional string prefix = 1;
+    optional string assigned_agent = 7;
+    optional serving.OsidDomain.Type osid_domain = 8;
+    optional RequestSigningKeyAuthInfo auth_info = 9;
+    
+    oneof format {
+        KeystoreInfo keystore_info = 5;
+        GuessableInfo guessable_info = 6;
+    }
+    
+    reserved 2 to 4;
+}
+
+extend .proto2.EnumValueOptions {
+    optional RequestSigningKeyInfo key_info = 114803840;
+}

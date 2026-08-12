@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package travel.guide.attractile;
+
+option objc_class_prefix = "TGA";
+option deprecated = true;
+option java_multiple_files = true;
+option java_outer_classname = "CategoryProto";
+option java_package = "com.google.travel.guide.attractile";
+
+enum Category {
+    UNKNOWN_CATEGORY = 0;
+    ARTS_AND_CULTURE = 1;
+    HISTORY = 2;
+    OUTDOORS = 3;
+}

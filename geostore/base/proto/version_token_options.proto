@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package geostore;
+
+import "net/proto2/proto/descriptor.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+extend .proto2.FieldOptions {
+    optional bool version_token = 433813166;
+}

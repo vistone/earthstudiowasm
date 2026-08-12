@@ -1,0 +1,70 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message AttributeProto {
+    optional AttributeIdProto item_class_id = 1 [deprecated = true];
+    optional AttributeIdProto canonical_attribute_id = 2;
+    optional AttributeIdProto value_space_id = 3 [deprecated = true];
+    
+    required ValueType value_type = 4;
+    enum ValueType {
+        NONE = 0 [deprecated = true];
+        STRING = 1;
+        INTEGER = 2;
+        DOUBLE = 3;
+        BOOLEAN = 4;
+        PROTO_VALUE = 5 [deprecated = true];
+        INT64 = 6;
+        FLOAT = 7;
+        DISPLAY_ONLY = 8 [deprecated = true];
+        UINT32 = 9;
+        ENUM_ID = 10;
+    }
+    
+    optional string string_value = 5;
+    optional int32 integer_value = 6;
+    optional int64 int64_value = 14;
+    optional fixed32 uint32_value = 18;
+    optional double double_value = 7;
+    optional float float_value = 15;
+    optional bool boolean_value = 8;
+    optional string enum_id_value = 19;
+    optional .proto2.bridge.MessageSet proto_value = 9 [deprecated = true];
+    repeated AttributeValueDisplayProto attribute_display = 11 [deprecated = true];
+    repeated AttributeValueDisplayProto value_display = 12 [deprecated = true];
+    optional .proto2.bridge.MessageSet application_data = 13 [deprecated = true];
+    optional FieldMetadataProto metadata = 500;
+    
+    reserved 10, 16, 17;
+}
+
+message AttributeIdProto {
+    required string id = 1;
+    required string provider_id = 2;
+    
+    required EntityType type = 3;
+    enum EntityType {
+        ITEMCLASS = 1;
+        ATTRIBUTE = 2;
+        VALUESPACE = 3;
+        DATASTORE = 4;
+    }
+}
+
+message AttributeValueDisplayProto {
+    optional string language = 1;
+    optional string synonym = 5;
+    
+    reserved 2, 3, 4, 6, 7;
+}

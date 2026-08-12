@@ -1,0 +1,107 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TimeProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedDuration {
+    optional LoggedTimeSource source = 1;
+    optional LoggedTimeStatus status = 2;
+    optional LoggedSimpleDuration expected = 3;
+    optional LoggedSimpleDuration scheduled = 4;
+}
+
+message LoggedSimpleDuration {
+    optional int32 seconds = 1;
+}
+
+message LoggedSimpleDurationRange {
+    optional LoggedSimpleDuration low = 1;
+    optional LoggedSimpleDuration high = 2;
+    optional LoggedSimpleDuration approx = 3;
+}
+
+message LoggedDurationRange {
+    optional LoggedTimeSource source = 1;
+    optional LoggedTimeStatus status = 2;
+    optional LoggedSimpleDurationRange expected = 3;
+    optional LoggedSimpleDurationRange scheduled = 4;
+}
+
+message LoggedSimpleTime {
+    optional int64 utc_seconds = 1;
+    optional string time_zone = 2;
+}
+
+message LoggedTime {
+    optional LoggedTimeSource source = 1;
+    optional LoggedTimeStatus status = 2;
+    optional LoggedSimpleTime expected = 3;
+    optional LoggedSimpleTime scheduled = 4;
+}
+
+message LoggedSimpleTimeRange {
+    optional LoggedSimpleTime low = 1;
+    optional LoggedSimpleTime high = 2;
+    optional LoggedSimpleTime approx = 3;
+}
+
+message LoggedTimeRange {
+    optional LoggedTimeSource source = 1;
+    optional LoggedTimeStatus status = 2;
+    optional LoggedSimpleTimeRange expected = 3;
+    optional LoggedSimpleTimeRange scheduled = 4;
+}
+
+message LoggedSimpleDeparture {
+    oneof departure {
+        LoggedTimedDeparture timed_departure = 1;
+        LoggedIntervalDeparture interval_departure = 2;
+    }
+    
+    message LoggedTimedDeparture {
+        optional LoggedSimpleTime time = 1;
+        optional bool time_is_identifier = 2 [default = false];
+    }
+    
+    message LoggedIntervalDeparture {
+        optional LoggedSimpleDuration periodicity = 1;
+        optional LoggedSimpleTime earliest = 2;
+        optional LoggedSimpleTime latest = 3;
+    }
+}
+
+message LoggedDeparture {
+    optional LoggedTimeSource source = 1;
+    optional LoggedTimeStatus status = 2;
+    optional LoggedSimpleDeparture expected = 3;
+    optional LoggedSimpleDeparture scheduled = 4;
+    
+    reserved 5;
+}
+
+enum LoggedTimeSource {
+    SOURCE_UNKNOWN = 0;
+    SOURCE_STATIC = 1;
+    SOURCE_REALTIME = 2;
+    SOURCE_STATIC_AND_REALTIME = 3;
+}
+
+enum LoggedTimeStatus {
+    STATUS_UNKNOWN = 0;
+    STATUS_NO_SCHEDULE = 1;
+    STATUS_PER_SCHEDULE = 2;
+    STATUS_MINOR_DIFFERENCE = 3;
+    STATUS_MAJOR_DIFFERENCE = 4;
+}
+
+enum LoggedAlertsAvailability {
+    ALERTS_AVAILABILITY_UNKNOWN = 0;
+    ALERTS_RELIABLE = 1;
+    ALERTS_CONFIGURED = 2;
+    ALERTS_UNAVAILABLE = 3;
+}

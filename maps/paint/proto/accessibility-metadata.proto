@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package maps_paint;
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "AccessibilityMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message AccessibilityMetadata {
+    optional string label_accessibility_description = 1;
+    optional bool is_clickable = 2;
+}

@@ -1,0 +1,48 @@
+syntax = "proto2";
+
+package maps_transit.api;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "FareProto";
+option java_package = "com.google.maps.transit.api";
+
+message Price {
+    optional double amount = 1;
+    optional string currency = 2;
+}
+
+message PriceRange {
+    optional string currency = 4;
+    optional double low_amount = 5;
+    optional double high_amount = 6;
+    optional double approx_amount = 7;
+    repeated FareOrigin fare_origin = 8 [packed = true];
+    
+    reserved 1, 2, 3;
+}
+
+message Fare {
+    optional PriceRange price = 1;
+    optional FareType fare_type = 2;
+}
+
+message FareInfo {
+    repeated Fare fare = 1;
+    
+    extensions 100 to 199;
+}
+
+enum FareOrigin {
+    FARE_ORIGIN_UNSPECIFIED = 0;
+    FARE_ORIGIN_GTFS = 1;
+    FARE_ORIGIN_JP_FARE_ENGINE = 2;
+    FARE_ORIGIN_TRAVEL_TRANSPORT = 3;
+}
+
+enum FareType {
+    UNKNOWN_FARE = 0;
+    NORMAL_FARE = 1;
+    IC_FARE = 2;
+}

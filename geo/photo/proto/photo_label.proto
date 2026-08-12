@@ -1,0 +1,38 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "i18n/localization/proto/localized_text.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_outer_classname = "PhotoLabelProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message PhotoLabel {
+    optional string mid = 1;
+    
+    optional Source source = 2;
+    enum Source {
+        UNKNOWN_SOURCE = 0;
+        DISH = 1;
+        RANKING = 2;
+        ICA = 3;
+        FUSED_TOPIC = 4;
+    }
+    
+    optional RankingLabelSubType ranking_sub_type = 4;
+    enum RankingLabelSubType {
+        UNKNOWN_RANKING_LABEL_TYPE = 0;
+        KG = 1;
+        KG_IDENTITY = 2;
+        FOODNET = 3;
+        NATURAL_WORLD = 4;
+    }
+    
+    optional i18n.localization.LocalizedTextProto name = 3;
+    optional string concept_id = 5;
+}

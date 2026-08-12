@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package geo_serving_proto.electricvehicle;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPEV";
+option java_multiple_files = true;
+option java_outer_classname = "EvPlugAndChargeCapabilityProto";
+option java_package = "com.google.geo.serving.proto.electricvehicle";
+
+enum EvPlugAndChargeCapability {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_EV_PLUG_AND_CHARGE_CAPABILITY = 0;
+    ISO_15118_2 = 1;
+    ISO_15118_20 = 2;
+}

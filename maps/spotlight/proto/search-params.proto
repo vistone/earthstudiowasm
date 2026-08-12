@@ -1,0 +1,149 @@
+syntax = "proto2";
+
+package maps_spotlight;
+
+import "geo/case/map/search/proto/verticalized-label-style.proto";
+import "geo/serving/proto/localcategorical/intent_type.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/rect.proto";
+import "maps/spotlight/proto/alternate-id.proto";
+import "maps/tactile/api/entity-details-common.proto";
+import "maps/tactile/api/geometry.proto";
+import "maps/tactile/api/search-restrict-params.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "maps/tactile/api/shared/maps-activity-place-list-common.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMSL";
+option java_multiple_files = true;
+option java_outer_classname = "DummySearchParams";
+option java_package = "com.google.maps.spotlight.proto";
+
+message SearchParams {
+    optional string query = 1;
+    optional geo_serving_proto.localcategorical.IntentType preset_query_type = 22;
+    optional string query_location = 5 [deprecated = true];
+    optional string aqua_query = 12;
+    optional bool is_dense = 10;
+    optional bool is_chain = 11;
+    optional bool is_enroute = 24;
+    optional bool enable_additional_hotels = 25 [default = true];
+    optional maps_tactile.LatLngRectangle latlng_bound = 8;
+    optional geostore.RectProto bound = 6 [deprecated = true];
+    optional maps_tactile.Entity location_entity = 13;
+    optional TruffleOptions truffle_options = 2 [deprecated = true];
+    repeated ExplicitFeature explicit_feature = 3;
+    optional maps_tactile.SearchRestrictParams search_restrict_params = 4;
+    optional string gws_cgis = 18;
+    optional ConversationalSearchParams cpl_params = 19;
+    optional ExploreSearchParams explore_search_params = 23;
+    optional SearchVertical vertical = 20 [default = SEARCH_VERTICAL_NOT_SPECIFIED];
+    optional maps_tactile.shared.placelist.PlaceListDescriptor place_list_descriptor = 21;
+    
+    reserved 17;
+}
+
+message ExplicitFeature {
+    optional geostore.FeatureIdProto feature_id = 1;
+    optional string feature_id_hex = 3;
+    optional maps_tactile.shared.LatLng lat_lng_fallback = 5;
+    optional HotelSetData hotel_set_data = 6;
+    optional AlternateId alternate_id = 7;
+}
+
+message HotelSetData {
+    optional float avg_price = 1;
+    optional string currency_code = 2;
+}
+
+message TruffleOptions {
+    optional string min_score = 1;
+    optional string crowding_hint = 2 [deprecated = true];
+    optional string country = 3;
+    optional float density_threshold_skew_multiplier = 4;
+    optional float density_threshold_hint_multiplier = 5;
+}
+
+message ConversationalSearchParams {
+    optional bool enable_local_recall_intents = 1;
+    optional string enabled_happyhour_types = 2;
+    repeated string explicit_feature_id_hex = 3;
+}
+
+message ExploreSearchParams {
+    optional bool enable_search_result_pin_alignment = 1 [deprecated = true];
+    optional bool enable_search_result_pin_animation = 5;
+    optional int32 num_head_results = 2;
+    
+    optional ResultsPerZoomMap num_head_results_per_zoom_level = 8;
+    message ResultsPerZoomMap {
+        repeated ResultsPerZoom results_per_zoom = 1;
+        message ResultsPerZoom {
+            optional int32 zoom_level = 1;
+            optional int32 results = 2;
+        }
+    }
+    
+    optional bool subdivide_shallow_zoom_searches = 11;
+    optional int32 num_torso_results = 3;
+    optional ResultsPerZoomMap num_torso_results_per_zoom_level = 9;
+    
+    optional ResultDisplayMode result_display_mode = 4;
+    enum ResultDisplayMode {
+        UNSPECIFIED = 0;
+        REQUIRED = 1;
+        OPTIONAL = 2;
+    }
+    
+    optional VerticalizedGasStationPinOption verticalized_gas_station_pin_option = 7 [deprecated = true];
+    enum VerticalizedGasStationPinOption {
+        UNKNOWN_VERTICALIZED_GAS_STATION_PIN_OPTION = 0;
+        GAS_STATION_PIN_SIMPLE_PRICE_CALLOUT_RED = 1;
+        GAS_STATION_PIN_SIMPLE_PRICE_CALLOUT_BLUE = 2;
+        GAS_STATION_PIN_SIMPLE_PRICE_CALLOUT_WHITE = 3;
+        GAS_STATION_PIN_BRAND_PRICE_CALLOUT = 4;
+        GAS_STATION_PIN_COLOR_CODED_BRAND_PRICE_CALLOUT = 5;
+    }
+    
+    optional VerticalizedRestaurantPinOption verticalized_restaurant_pin_option = 12 [deprecated = true];
+    enum VerticalizedRestaurantPinOption {
+        RESTAURANT_PIN_UNKNOWN = 0;
+        RESTAURANT_PIN_SEARCH_RESULTS_COLOR = 1;
+        RESTAURANT_PIN_CATEGORY_COLOR = 2;
+        RESTAURANT_PIN_BLANK_CANVAS = 3;
+        RESTAURANT_PIN_VARIED_SATURATION = 4;
+        RESTAURANT_PIN_CATEGORY_ICON = 5;
+        RESTAURANT_PIN_CATEGORY_ICON_SEARCH_RESULTS_COLOR = 6;
+        RESTAURANT_PIN_TEXT_ONLY_SEARCH_RESULTS_COLOR = 7;
+    }
+    
+    optional PlaceDetailsFetch place_details_fetch = 10;
+    enum PlaceDetailsFetch {
+        UNKNOWN_PLACE_DETAILS_FETCH = 0;
+        DOCFETCH_DETAILS = 1;
+        MINIMAL_DETAILS = 2;
+    }
+    
+    optional TextLabelLinesPerZoomMap text_label_lines_per_zoom_level = 13;
+    message TextLabelLinesPerZoomMap {
+        repeated TextLabelLinesPerZoom text_label_lines_per_zoom = 1;
+        message TextLabelLinesPerZoom {
+            optional int32 zoom_level = 1;
+            optional int32 num_of_total_lines = 2;
+            optional int32 num_of_title_lines = 3;
+            optional int32 num_of_subtitle_lines = 4;
+        }
+    }
+    
+    optional geo.casemap.search.VerticalizedLabelStyle verticalized_label_style = 14;
+    optional bool force_lslite_results = 15;
+    optional int32 annotations_min_zoom = 16;
+    
+    reserved 6, 17;
+}
+
+enum SearchVertical {
+    SEARCH_VERTICAL_NOT_SPECIFIED = 1;
+    SEARCH_VERTICAL_INDOOR_LODGING = 2;
+    SEARCH_VERTICAL_RESTAURANT = 3;
+}

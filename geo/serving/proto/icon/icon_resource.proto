@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package geo_serving_proto.icon;
+
+import "geo/serving/proto/color/color_set.proto";
+import "geo/serving/proto/icon/icon_type.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPI";
+option java_multiple_files = true;
+option java_outer_classname = "IconResourceProto";
+option java_package = "com.google.geo.serving.proto.icon";
+
+message IconResource {
+    optional IconType type = 1;
+    optional geo_serving_proto.color.ColorSet color = 2;
+    
+    optional IconUrlSet web_icon_url_set = 3;
+    message IconUrlSet {
+        optional string light_mode_url = 1;
+        optional string dark_mode_url = 2;
+    }
+}

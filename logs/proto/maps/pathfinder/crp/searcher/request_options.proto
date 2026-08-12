@@ -1,0 +1,72 @@
+syntax = "editions";
+
+package logs.proto.maps.pathfinder.crp.searcher;
+
+import "google/protobuf/duration.proto";
+import "logs/proto/maps/pathfinder/client/find-path-input.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+;
+
+message LoggedExperimentalOptions {
+    optional int32 alternates_num_dijkstras = 1;
+    optional int32 alternates_alts_per_dijkstra = 2;
+    optional double alternates_alpha = 3;
+    optional double max_duration_multiplier = 6;
+    optional double cuspiness_limit = 7;
+    optional double diversity_min = 8;
+    optional double max_cost_multiplier = 9;
+    
+    optional LoggedCostType cost_type_for_search = 10 [default = TIME_DEPENDENT_COST];
+    enum LoggedCostType {
+        INVALID = 0;
+        TIME_DEPENDENT_COST = 1;
+        FIRST_BUCKET_COST = 2;
+        DEFAULT_COST = 3;
+        FIRST_BUCKET_COST_WITH_FALLBACK_TO_DEFAULT = 4;
+        REFERENCE_COST = 5;
+    }
+    
+    optional LoggedCostType cost_type_for_alternate_search = 12 [default = DEFAULT_COST];
+    optional int32 cache_max_level = 11 [default = -1];
+    optional bool force_reverse_search = 4;
+    
+    optional LoggedAlternateGeneratorType alternates_algorithm = 5 [default = NONE];
+    enum LoggedAlternateGeneratorType {
+        NONE = 0;
+        SIMPLE_BIDIRECTIONAL_SEARCH = 1;
+        ELECTRICAL_FLOWS = 2;
+        VIA_ALTERNATES = 3;
+    }
+    
+    optional LoggedL2Algorithm l2_algorithm = 13 [default = DEFAULT];
+    enum LoggedL2Algorithm {
+        L2_UNSPECIFIED = 0;
+        DEFAULT = 1;
+        OPT = 2;
+    }
+    
+    optional uint32 l2_penalty_multiplier = 14;
+    optional uint32 l2_penalty_addend = 15;
+}
+
+message LoggedCrpOptionsProto {
+    optional bool include_debug_info = 1;
+    optional int32 search_within_starting_partition_at_level = 2 [deprecated = true];
+    optional google.protobuf.Duration max_cost_staleness = 3 [deprecated = true];
+    optional bool test_only_coerce_start_time_to_bucket = 4 [deprecated = true];
+    optional LoggedExperimentalOptions experimental_options = 5;
+    optional int32 max_query_level = 6 [default = -1];
+    optional bool include_search_bloom = 7 [deprecated = true];
+    optional bool disable_crp_for_depart_at = 8 [deprecated = true];
+    optional bool enable_crp_for_depart_at = 9 [default = false, deprecated = true];
+    optional bool repair_off_on_ramp_from_crp = 10 [default = false, deprecated = true];
+    optional bool shadow_repair_off_on_ramp_from_crp = 11 [default = false, deprecated = true];
+    optional int32 repair_off_on_ramp_from_crp_version = 12;
+    optional bool enable_legacy_avoids_ccm_shortcuts = 16 [deprecated = true];
+    
+    extend client.LoggedFindPathInput {
+        optional LoggedCrpOptionsProto ext = 247288563;
+    }
+}

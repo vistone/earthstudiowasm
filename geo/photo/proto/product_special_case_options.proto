@@ -1,0 +1,36 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "ProductSpecialCaseOptionsProto";
+option java_package = "com.google.geo.photo";
+
+message ApiUseCase {
+    optional bool allow_restricted_hotel_photos = 1 [default = false];
+    optional bool include_legacy_pano_neighbor_data = 2 [default = true];
+}
+
+message InternalUseCase {
+    optional bool allow_ineligible_photos = 1 [default = false];
+}
+
+message TactileUseCase {
+    optional bool include_annotations = 1 [default = false];
+    optional bool allow_ineligible_photos = 2 [default = false];
+}
+
+message TakedownUseCase {
+    optional bool include_viper_cid = 1 [default = false];
+    optional bool include_attribution_accounts = 2 [default = true];
+}
+
+message ProductSpecialCaseOptions {
+    optional ApiUseCase api_use_case = 1;
+    optional TactileUseCase tactile_use_case = 2;
+    optional TakedownUseCase takedown_use_case = 3;
+    optional InternalUseCase internal_use_case = 4;
+}

@@ -1,0 +1,39 @@
+syntax = "editions";
+
+package earth.document;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "FeatureIconProto";
+
+message ProtoRequiresAtLeastOneMessageInFileFeatureIcon {
+    
+}
+
+enum FeatureIcon {
+    FEATURE_ICON_UNKNOWN = 0;
+    ICON_POINT = 1;
+    ICON_LINESTRING = 2;
+    ICON_POLYGON = 3;
+    ICON_MODEL = 4;
+    ICON_GROUNDOVERLAY = 5;
+    ICON_SCREENOVERLAY = 6;
+    ICON_PHOTOOVERLAY = 7;
+    ICON_FOLDER = 8;
+    ICON_DOCUMENT = 9;
+    ICON_NETWORKLINK = 10;
+    ICON_TRACK = 11;
+    ICON_MULTITRACK = 12;
+    ICON_TOUR = 13;
+    ICON_PANEL = 14;
+    ICON_VIEW = 15;
+    ICON_MULTIGEOMETRY = 16;
+    ICON_MAPTILEPYRAMID = 17;
+    ICON_3D_MODEL = 18;
+    ICON_STREETVIEW = 19;
+    ICON_DATALAYER = 20;
+    ICON_UNSUPPORTED = 21;
+    ICON_LOCKED = 22;
+    ICON_GENERATED_IMAGERY = 23;
+}

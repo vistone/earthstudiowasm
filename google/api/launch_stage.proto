@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package google.api;
+
+import "google/api/inclusion.proto";
+
+option objc_class_prefix = "GAPI";
+option java_multiple_files = true;
+option java_outer_classname = "LaunchStageProto";
+option java_package = "com.google.api";
+
+enum LaunchStage {
+    LAUNCH_STAGE_UNSPECIFIED = 0;
+    UNIMPLEMENTED = 6;
+    PRELAUNCH = 7;
+    EARLY_ACCESS = 1;
+    ALPHA = 2;
+    BETA = 3;
+    GA = 4;
+    DEPRECATED = 5;
+}

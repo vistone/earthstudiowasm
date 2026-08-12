@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package geo_serving_proto.userreactions;
+
+import "geo/serving/proto/userreactions/reaction_stats.proto";
+import "geo/serving/proto/userreactions/reaction_type.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPUR";
+option java_multiple_files = true;
+option java_outer_classname = "ReactionsProto";
+option java_package = "com.google.geo.serving.proto.userreactions";
+
+message Reactions {
+    optional ReactionType user_own_reaction = 1;
+    repeated ReactionStats reaction_stats = 2;
+    
+    reserved 3, 4;
+}

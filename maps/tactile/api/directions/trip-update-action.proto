@@ -1,0 +1,43 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/tactile/api/directions/traffic-report-prompt.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "TripUpdateActiontProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message TripUpdateAction {
+    optional Type type = 1 [default = REQUERY_FAILED];
+    enum Type {
+        REQUERY_SUCCEEDED = 1;
+        REQUERY_FAILED = 2;
+        BETTER_ROUTE_PROMPT = 3;
+    }
+    
+    optional BetterRoutePromptDetails better_route_prompt_details = 2;
+    message BetterRoutePromptDetails {
+        optional maps_tactile.shared.directions.RerouteType reroute_type = 1 [default = REROUTE_TYPE_BETTER_ETA];
+        
+        optional DefaultValue default_value = 2 [default = REJECT];
+        enum DefaultValue {
+            REJECT = 1;
+            ACCEPT = 2;
+            FORCE = 3;
+        }
+        
+        optional TrafficReportPrompt traffic_report_prompt = 5;
+        optional bytes accept_trip_update_token = 6;
+        optional bytes reject_trip_update_token = 7;
+        
+        reserved 3, 4;
+    }
+    
+    optional bool polyline_fingerprint_matches = 3 [default = false];
+}

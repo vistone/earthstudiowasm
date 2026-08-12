@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package kg_schema.fmt;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "net/proto2/proto/descriptor.proto";
+
+option objc_class_prefix = "KGSCF";
+
+message SortByOptions {
+    repeated string fields = 1;
+}
+
+message MessageFormatOptions {
+    optional bool single_line = 1;
+    optional SortByOptions sort_by = 2;
+    optional bool sort_fields_by_default = 3;
+}
+
+message FieldFormatOptions {
+    optional bool is_sorted = 1;
+}
+
+extend .proto2.MessageOptions {
+    optional MessageFormatOptions msg_opts = 304711012;
+}
+
+extend .proto2.FieldOptions {
+    optional FieldFormatOptions field_opts = 304711012;
+}

@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message CallerInfo {
+    optional string user_agent = 1;
+    optional string ja3 = 2;
+    optional string ja4 = 3;
+    optional string asn = 4;
+    optional string header_order = 5;
+    optional string referer = 6;
+}

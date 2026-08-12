@@ -1,0 +1,25 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "EntryPointProto";
+option java_package = "com.google.geo.photo";
+
+message EntryPointOptions {
+    repeated EntryPointType entry_point_type = 1;
+}
+
+enum EntryPointType {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_ENTRY_POINT_TYPE = 0;
+    LEGACY_SEE_INSIDE = 1;
+    LEGACY_SEE_OUTSIDE = 2;
+    LEGACY_FLAT_PHOTO = 3;
+}

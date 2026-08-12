@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "maps/tactile/api/shared/real-time-data-type.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "RealTimeCommonProto";
+option java_package = "com.google.maps.tactile";
+
+message RealTimeData {
+    optional maps_tactile.shared.RealTimeDataType real_time_data_type = 1 [default = UNKNOWN];
+    
+    reserved 2;
+}

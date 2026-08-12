@@ -1,0 +1,72 @@
+syntax = "editions";
+
+package geo_serving_proto.directions.request;
+
+import "geo/serving/proto/directions/request/bikesharing_decorations_version.proto";
+import "geo/serving/proto/directions/request/cycling_decorations_version.proto";
+import "geo/serving/proto/directions/request/trailering_decorations_version.proto";
+import "geo/serving/proto/directions/request/walking_decorations_version.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GSPDR";
+option java_multiple_files = true;
+option java_outer_classname = "DecorationOptionsProto";
+option java_package = "com.google.geo.serving.proto.directions.request";
+
+message DecorationOptions {
+    optional CyclingDecorationsVersion cycling_decorations_version = 1;
+    optional TraileringDecorationsVersion trailering_decorations_version = 2;
+    optional WalkingDecorationsVersion walking_decorations_version = 3;
+    optional BikesharingDecorationsVersion bikesharing_decorations_version = 9;
+    
+    optional TollDecorations toll_decorations = 4;
+    message TollDecorations {
+        optional bool decorate_toll_roads = 1;
+        
+        repeated SupportedVignette supported_vignette = 2;
+        message SupportedVignette {
+            optional string country_code = 1;
+        }
+        
+        optional bool decorate_vignettes = 3;
+        optional bool decorate_etc_only_toll_gates = 4;
+    }
+    
+    optional RoadTypeDecorations road_type_decorations = 5;
+    message RoadTypeDecorations {
+        optional bool decorate_ferries = 1;
+        optional bool decorate_highways = 2;
+        optional bool decorate_tunnels = 4;
+        optional bool decorate_unpaved_roads = 5 [deprecated = true];
+        optional bool return_unpaved_road_notices = 10;
+        optional bool decorate_flyovers = 6;
+        optional bool decorate_weather_conditions = 7;
+        optional bool decorate_narrow_roads = 8 [deprecated = true];
+        optional bool return_narrow_road_notices = 11;
+        optional bool return_accident_prone_zone_notices = 9;
+        optional bool return_trucking_notices = 12;
+        optional bool return_underpass_notices = 13;
+        
+        reserved 3;
+    }
+    
+    optional VehicleRestrictionDecorations vehicle_restriction_decorations = 6;
+    message VehicleRestrictionDecorations {
+        optional bool decorate_height_restrictions = 1;
+    }
+    
+    optional HovDecorations hov_decorations = 7;
+    message HovDecorations {
+        optional bool decorate_hov_stretches = 1;
+        
+        reserved 2;
+    }
+    
+    optional SlopeDecorations slope_decorations = 8;
+    message SlopeDecorations {
+        optional bool decorate_slope_stretches = 1;
+    }
+}

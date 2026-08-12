@@ -1,0 +1,13 @@
+syntax = "editions";
+
+package cityblock;
+
+message CollectionType {
+    enum Type {
+        option features = enum_type: CLOSED
+        ;
+        UNSPECIFIED = 0;
+        PRODUCTION = 1;
+        EXPERIMENTAL = 2;
+    }
+}

@@ -1,0 +1,116 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/cityobject_attributes.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.geostore.base.proto";
+
+message CityJsonProto {
+    optional Transform transform = 1;
+    message Transform {
+        optional double DEPRECATED_scale = 1;
+        
+        optional Scale scale = 3;
+        message Scale {
+            optional double x = 1;
+            optional double y = 2;
+            optional double z = 3;
+        }
+        
+        optional Translate translate = 2;
+        message Translate {
+            optional double x = 1;
+            optional double y = 2;
+            optional double z = 3;
+        }
+    }
+    
+    repeated int32 flattened_vertices = 2 [packed = true];
+    
+    repeated CityObject city_objects = 4;
+    message CityObject {
+        optional string id = 3;
+        
+        optional Type type = 1;
+        enum Type {
+            TYPE_UNSPECIFIED = 0;
+            BUILDING = 1;
+            OTHER_CONSTRUCTION = 2;
+        }
+        
+        repeated Geometry geometries = 2;
+        message Geometry {
+            optional string lod = 2;
+            
+            repeated Semantic semantics = 6;
+            message Semantic {
+                optional Type type = 1;
+                enum Type {
+                    TYPE_UNSPECIFIED = 0;
+                    WINDOW = 2;
+                    DOOR = 3;
+                }
+            }
+            
+            oneof boundaries {
+                MultiPoint multipoint = 3;
+                MultiSurface multisurface = 4;
+                Solid solid = 5;
+            }
+            
+            message MultiPoint {
+                repeated int32 x_indices = 2 [packed = true];
+                
+                reserved 1;
+            }
+            
+            message Surface {
+                repeated MultiPoint loops = 1;
+                optional int32 semantics_index = 2;
+                repeated MaterialSpec material_specs = 3;
+            }
+            
+            message MultiSurface {
+                repeated Surface surfaces = 1;
+            }
+            
+            message Solid {
+                repeated MultiSurface shells = 1;
+            }
+            
+            message MaterialSpec {
+                optional int32 materials_index = 1;
+            }
+        }
+        
+        optional CityObjectAttributes attributes = 5;
+        
+        reserved 4;
+    }
+    
+    optional Appearance appearance = 5;
+    message Appearance {
+        repeated Material materials = 1;
+        message Material {
+            optional string name = 2;
+            
+            optional RgbColor diffuse_color = 3;
+            message RgbColor {
+                optional float red = 1;
+                optional float green = 2;
+                optional float blue = 3;
+            }
+            
+            optional float shininess = 4;
+            optional float transparency = 5;
+            optional bool is_smooth = 6;
+            
+            reserved 1;
+        }
+    }
+    
+    reserved 3;
+}

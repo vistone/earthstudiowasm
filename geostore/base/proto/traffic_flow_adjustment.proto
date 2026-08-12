@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message TrafficFlowAdjustment {
+    oneof speed_adjustment {
+        Stop stop = 1;
+        SlowDown slow_down = 2;
+    }
+    
+    message Stop {
+        
+    }
+    
+    message SlowDown {
+        
+    }
+}

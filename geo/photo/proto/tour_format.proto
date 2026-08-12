@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "TourFormatProto";
+option java_package = "com.google.geo.photo";
+
+enum TourFormat {
+    UNKNOWN_TOUR_FORMAT = 0;
+    LIGHTFIELD_LEANBACK_TOUR = 1 [deprecated = true];
+    EARTH_JSPB_TOUR = 2;
+    EARTH_KML_TOUR = 3;
+    ALLEYCAT_PANO_TOUR = 4 [deprecated = true];
+    GEO_PHOTO_SERVICE_TOUR = 5 [deprecated = true];
+    KARTO_STREAM = 6;
+}

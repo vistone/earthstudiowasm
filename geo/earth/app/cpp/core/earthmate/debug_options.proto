@@ -1,0 +1,30 @@
+syntax = "editions";
+
+package earth.earthmate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.earthmate";
+
+message ServerType {
+    optional Type type = 1;
+    enum Type {
+        SERVER_TYPE_UNKNOWN = 0;
+        SERVER_TYPE_EARTH_AI_SERVICE = 1;
+        SERVER_TYPE_JETWAY = 3;
+    }
+}
+
+message TechStack {
+    optional Type type = 1;
+    enum Type {
+        STACK_UNKNOWN = 0;
+        STACK_ALS = 2 [deprecated = true];
+        STACK_AGENCY = 3;
+        STACK_GRF = 4 [deprecated = true];
+        STACK_EAIA_ON_AGENCY = 5;
+    }
+    
+    optional string agency_id = 2;
+}

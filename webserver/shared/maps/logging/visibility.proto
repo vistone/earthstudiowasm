@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package maps_frontend;
+
+option objc_class_prefix = "GMFE";
+option java_outer_classname = "Enums";
+option java_package = "com.google.protos.maps_frontend";
+
+enum Visibility {
+    VISIBILITY_VISIBLE = 0;
+    VISIBILITY_HIDDEN = 1;
+    VISIBILITY_CHILDREN_HIDDEN = 3;
+    VISIBILITY_REPRESSED_COUNTERFACTUAL = 2;
+    VISIBILITY_REPRESSED_PRIVACY = 4;
+}

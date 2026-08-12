@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "LoggedLinkProto";
+option java_package = "com.google.maps.tactile";
+
+message LoggedLink {
+    optional string ved = 4;
+    optional string url = 1;
+    optional string redirect = 5;
+    optional string anchor_text = 2;
+    optional string image = 3;
+    optional string help_context = 6;
+}
+
+message LinkSentence {
+    optional string pre_link_text = 1;
+    optional LoggedLink link = 2;
+    optional string post_link_text = 3;
+}

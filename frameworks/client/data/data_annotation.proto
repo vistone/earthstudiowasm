@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package frameworks.client.data;
+
+import "net/proto2/proto/descriptor.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "FCD";
+option cc_enable_arenas = true;
+option java_multiple_files = true;
+option java_package = "com.google.frameworks.client.data";
+
+extend .proto2.FieldOptions {
+    optional bool key = 251314410;
+}
+
+extend .proto2.MessageOptions {
+    optional bool injectable = 255041413;
+    optional bool embeddable = 346203047;
+    optional bool used_as_extension_in_ees = 289671734;
+}
+
+extend .proto2.MethodOptions {
+    repeated string register_middleware = 363266140;
+}

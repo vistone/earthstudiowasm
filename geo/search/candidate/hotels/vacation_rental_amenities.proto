@@ -1,0 +1,61 @@
+syntax = "proto2";
+
+package geo.search.hotels;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.hotels";
+
+message VacationRentalAmenities {
+    repeated VacationRentalAmenity amenities = 1;
+}
+
+message VacationRentalAmenity {
+    optional VacationRentalAmenityType type = 1;
+    
+    oneof value {
+        AmenityPresence is_amenity_present = 2;
+    }
+    
+    enum AmenityPresence {
+        AMENITY_PRESENCE_UNSPECIFIED = 0;
+        POSITIVE = 1;
+        NEGATIVE = 2;
+    }
+}
+
+enum VacationRentalAmenityType {
+    VACATION_RENTAL_AMENITY_TYPE_UNSPECIFIED = 0;
+    HOT_TUB = 2;
+    AC = 4;
+    HEATING = 5;
+    BBQ = 6;
+    WASHER_DRYER = 8;
+    TV = 9;
+    FIREPLACE = 10;
+    BALCONY = 11;
+    PATIO = 12;
+    OVEN = 13;
+    MICROWAVE = 14;
+    KITCHEN = 15;
+    GYM = 16;
+    IRON = 17;
+    CRIB = 18;
+    AIRPORT_SHUTTLE = 19;
+    BEACH_ACCESS = 20;
+    CHILD_FRIENDLY = 21;
+    ELEVATOR = 22;
+    BREAKFAST = 23;
+    PETS_ALLOWED = 24;
+    SMOKING_FREE = 25;
+    WHEELCHAIR_ACCESSIBLE = 26;
+    FREE_PARKING = 27;
+    PAID_PARKING = 28;
+    FREE_WIFI = 29;
+    PAID_WIFI = 30;
+    INDOOR_POOL = 31;
+    OUTDOOR_POOL = 32;
+    TEST_AMENITY_TYPE = 33;
+}

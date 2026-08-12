@@ -1,0 +1,260 @@
+syntax = "proto2";
+
+package earth.designdetails;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/protos/design_actions.proto";
+import "google/internal/earth/v1/builtenv/built_entity.proto";
+import "google/internal/earth/v1/builtenv/built_environment.proto";
+import "google/internal/earth/v1/builtenv/design_content.proto";
+import "google/internal/earth/v1/builtenv/metrics.proto";
+import "google/internal/earth/v1/builtenv/use_type_class.proto";
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.designdetails";
+
+message DesignDetailsViewModelState {
+    optional string selected_design_id = 1;
+    optional string selected_design_name = 19;
+    optional string design_generation_input_id = 2;
+    optional google.internal.earth.v1.builtenv.Design.DesignType design_type = 3;
+    optional string map_id = 12;
+    optional bool is_saved = 13;
+    optional google.internal.earth.v1.builtenv.DesignContent.DesignState design_state = 16;
+    repeated google.internal.earth.v1.builtenv.Design.DesignTag design_tags = 14 [packed = true];
+    repeated google.internal.earth.v1.builtenv.DownloadableFile downloadable_files = 15;
+    optional SelectedProgramTable selected_program_table = 6;
+    optional bool show_design_details_loading_state = 7;
+    optional google.internal.earth.v1.builtenv.SummarizedMetrics summarized_metrics = 8;
+    optional string deep_link_path = 20;
+    
+    oneof design_inputs {
+        NewBuildInputs new_build_inputs = 4;
+        SolarInputs solar_inputs = 5;
+    }
+    
+    oneof topline_metrics {
+        design.NewBuildToplineMetrics new_build_topline_metrics = 17;
+        design.SolarToplineMetrics solar_topline_metrics = 18;
+    }
+    
+    oneof design_metrics {
+        NewBuildMetrics new_build_metrics = 9;
+        SolarMetrics solar_metrics = 10;
+    }
+    
+    oneof viewmodel_event {
+        design.DownloadDesignFileResponse download_file_response = 11;
+    }
+}
+
+message SelectedProgramTable {
+    optional ProgramTable program_table = 1;
+    enum ProgramTable {
+        UNSPECIFIED = 0;
+        SUMMARY = 1;
+        DESIGN_STATS = 2;
+        BY_PARCEL = 3;
+        BY_UNIT_TYPE = 4;
+        PARKING = 5;
+        PARK_QUALITY = 6;
+    }
+}
+
+message NewBuildInputs {
+    repeated UseTypeInput use_type_input = 1;
+    repeated UserGeneratedName parcel = 2;
+    repeated UserGeneratedName unit_mix = 3;
+    optional google.protobuf.Timestamp update_time = 4;
+    optional google.internal.earth.v1.builtenv.DesignGenerationInput.DesignGenerationState design_generation_state = 5;
+    optional SustainabilityInputs sustainability_inputs = 6;
+    optional google.protobuf.Timestamp generate_time = 7;
+}
+
+message SolarInputs {
+    repeated UserGeneratedName parcel = 1;
+    optional google.protobuf.Timestamp update_time = 2;
+    optional google.protobuf.Timestamp generate_time = 3;
+    optional google.internal.earth.v1.builtenv.DesignGenerationInput.DesignGenerationState design_generation_state = 5;
+}
+
+message UserGeneratedName {
+    optional string id = 1;
+    optional string display_name = 2;
+}
+
+message UseTypeInput {
+    optional UserGeneratedName use_type = 1;
+    optional google.internal.earth.v1.builtenv.UseTypeClass use_type_class = 2;
+}
+
+message SustainabilityInputs {
+    optional bool rooftop_solar_panels_enabled = 1;
+    optional bool heating_electrification_enabled = 2;
+    optional bool sustainble_building_materials_enabled = 3;
+    optional bool parking_reduction_enabled = 4;
+}
+
+message NewBuildMetrics {
+    optional ProgramMetrics program_metrics = 1;
+    optional NewBuildSustainabilityMetrics sustainability_metrics = 2;
+}
+
+message SolarMetrics {
+    optional SolarFinancialSummaryMetrics solar_financial_metrics = 1;
+}
+
+message ProgramMetrics {
+    optional SummaryMetrics summary_metrics = 1;
+    optional DesignStatsMetrics design_stats_metrics = 2;
+    optional ParcelMetrics by_parcel_metrics = 3;
+    optional UseMixMetricsByUseType unit_mix_metrics_by_use_type = 4;
+    optional ParkingMetrics parking_metrics = 5;
+    optional ParkQualityMetrics park_quality_metrics = 6;
+}
+
+message NewBuildSustainabilityMetrics {
+    optional EmissionsSummaryMetrics emissions_summary_metrics = 1;
+}
+
+message AreaMetrics {
+    optional string use_type_id = 1;
+    optional double percent_of_gfa = 2;
+    optional double gfa_sq_m = 3;
+    optional double nia_sq_m = 4;
+    optional double loss_factor_per = 5;
+    optional int32 units = 6;
+    optional double efficiency_per = 7;
+}
+
+message TotalAreaMetrics {
+    optional double percent_of_gfa = 1;
+    optional double gfa_sq_m = 2;
+    optional double nia_sq_m = 3;
+    optional double loss_factor_per = 4;
+    optional double efficiency_per = 5;
+}
+
+message SummaryMetrics {
+    repeated AreaMetrics summary_by_use_type = 1;
+    optional TotalAreaMetrics site_total = 2;
+}
+
+message DesignStatsMetrics {
+    optional double building_coverage_percentage = 1;
+    optional double street_wall_percentage = 2;
+    optional int32 number_of_buildings = 3;
+    optional double average_building_height_m = 4;
+    optional double tallest_building_height_m = 5;
+    optional double shortest_building_height_m = 6;
+    optional double facade_area_sq_m = 7;
+}
+
+message ParcelMetrics {
+    repeated Parcel metrics_by_parcel = 1;
+    message Parcel {
+        optional string parcel_id = 1;
+        repeated AreaMetrics metrics_by_use_type = 3;
+        optional AreaMetrics subtotal = 4;
+        optional string input_id = 5;
+    }
+    
+    optional TotalAreaMetrics site_total = 2;
+}
+
+message UseMixMetricsByUseType {
+    repeated BuildingUnitTypeMetrics unit_metrics_by_use_type = 1;
+    message BuildingUnitTypeMetrics {
+        optional string use_type_id = 1;
+        repeated UnitType unit = 2;
+        optional UnitTypeMetrics subtotal = 3;
+    }
+    
+    message UnitType {
+        optional string id = 1;
+        optional UnitTypeMetrics metrics = 2;
+    }
+    
+    message UnitTypeMetrics {
+        optional double percentage_of_total_units = 2;
+        optional double average_size_per_unit_sq_m = 3;
+        optional int32 number_of_units = 4;
+        optional double nia_sq_m = 5;
+    }
+}
+
+message ParkingMetrics {
+    repeated ParkingType parking_types = 1;
+    message ParkingType {
+        optional google.internal.earth.v1.builtenv.BuiltEntity.ParkingLot.ParkingType type = 1;
+        optional ParkingTypeMetrics subtotal = 2;
+        repeated LotMetrics lots = 3;
+    }
+    
+    optional ParkingTypeMetrics total = 2;
+    message ParkingTypeMetrics {
+        optional int32 number_of_spaces = 2;
+        optional double parking_gross_area_sq_m = 3;
+        optional int32 number_of_parking_facilities = 4;
+    }
+    
+    message LotMetrics {
+        optional int32 lot_number = 1;
+        optional int32 number_of_spaces = 2;
+        optional double parking_gross_area_sq_m = 3;
+    }
+}
+
+message ParkQualityMetrics {
+    optional double park_area_sq_m = 1;
+    optional double private_space_percentage = 2;
+    optional double green_access_percentage = 3;
+    optional double shadow_hours = 4;
+    optional double sun_hours = 5;
+}
+
+message EmissionsSummaryMetrics {
+    repeated CategoryMetrics category_metrics = 1;
+    message CategoryMetrics {
+        optional EmissionsSummaryCategory category = 1;
+        optional double value = 2;
+        optional double energy_reduction_mwh = 3;
+        optional double ten_year_emissions_tco2e = 4;
+        optional Strategy strategy = 5;
+        optional double emissions_reduction_percentage = 6;
+    }
+    
+    optional CategoryMetrics total = 2;
+    
+    enum EmissionsSummaryCategory {
+        UNSPECIFIED_CATEGORY = 0;
+        OPERATIONAL_ENERGY_USAGE = 1;
+        OPERATIONAL_ENERGY_OFFSET = 2;
+        AUTOMOBILE_DISTANCE_TRAVELLED = 3;
+        MATERIALS_USED = 4;
+        TOTAL_EMISSIONS = 5;
+    }
+    
+    enum Strategy {
+        UNSPECIFIED_STRATEGY = 0;
+        SOLAR_PANELS = 1;
+        PARKING_REDUCTION = 2;
+        HEATING_ELECTRIFICATION = 3;
+        SUSTAINABILE_MATERIALS = 4;
+    }
+}
+
+message SolarFinancialSummaryMetrics {
+    optional FinancialMetrics purchase_scenario = 1;
+    message FinancialMetrics {
+        optional double net_present_value = 1;
+        optional double upfront_cost_after_incentives = 2;
+        optional double savings = 3;
+        optional double payback_period_years = 4;
+    }
+    
+    optional FinancialMetrics lease_scenario = 2;
+}

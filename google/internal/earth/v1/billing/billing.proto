@@ -1,0 +1,84 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.billing;
+
+import "google/internal/earth/v1/billing/capability.proto";
+import "google/internal/earth/v1/billing/limit.proto";
+import "google/internal/earth/v1/billing/plantype.proto";
+import "google/internal/earth/v1/shared.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.billing";
+
+message License {
+    optional int64 gcp_project_number = 1;
+    optional string gcp_project_id = 2;
+    repeated Feature enabled_features = 3 [deprecated = true];
+    optional string gcp_project_display_name = 4;
+    optional PlanType plan_type = 6;
+    repeated Capability enabled_capabilities = 7 [packed = true];
+    repeated Limit limits = 8;
+    optional GoogleOneSubscriptionInfo google_one_subscription_info = 9;
+    
+    reserved 5;
+    
+    enum SkuType {
+        option deprecated = true;
+        SKU_TYPE_UNSPECIFIED = 0 [deprecated = true];
+        BASE = 1 [deprecated = true];
+        BEST = 2 [deprecated = true];
+    }
+}
+
+message GoogleOneSubscriptionInfo {
+    optional GoogleOnePlanType google_one_plan_type = 1;
+}
+
+message Feature {
+    oneof feature {
+        DesignGeneration design_generation = 1;
+    }
+    
+    message DesignGeneration {
+        
+    }
+}
+
+message GetLicenseRequest {
+    optional int64 gcp_project_number = 1;
+    optional ClientMetadata client_metadata = 2;
+    
+    reserved 3;
+}
+
+message ListLicensesRequest {
+    optional int32 page_size = 1;
+    optional string page_token = 2;
+    optional ClientMetadata client_metadata = 3;
+    
+    reserved 4;
+}
+
+message ListLicensesResponse {
+    repeated License licenses = 1;
+    optional string next_page_token = 2;
+}
+
+message DeleteLicenseRequest {
+    optional int64 gcp_project_number = 1;
+    optional ClientMetadata client_metadata = 2;
+}
+
+message GetActiveRateCardRequest {
+    optional ClientMetadata client_metadata = 1;
+}
+
+enum GoogleOnePlanType {
+    GOOGLE_ONE_PLAN_TYPE_UNSPECIFIED = 0;
+    GOOGLE_ONE_PLAN_TYPE_NON_PREMIUM = 1;
+    GOOGLE_ONE_PLAN_TYPE_PREMIUM_AI_PRO = 2;
+    GOOGLE_ONE_PLAN_TYPE_PREMIUM_AI_PLUS = 3;
+    GOOGLE_ONE_PLAN_TYPE_PREMIUM_AI_ULTRA = 4;
+}

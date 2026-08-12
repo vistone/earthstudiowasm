@@ -1,0 +1,153 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "geo/serving/proto/directions/duration.proto";
+import "maps/tactile/api/directions-common.proto";
+import "maps/tactile/api/directions-result-common.proto";
+import "maps/tactile/api/geometry.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "maps/tactile/api/shared/directions/monetary-cost-range.proto";
+import "maps/tactile/api/shared/platform-intent.proto";
+import "maps/tactile/api/shared/taxi/taxi.proto";
+import "maps/tactile/api/traffic.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "DirectionsOnDemandTransportationProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message OnDemandServiceProvider {
+    optional string token = 1;
+    optional string name = 2;
+    optional ComponentIcon icon = 3;
+}
+
+message SimpleTravelModeAlternateSummary {
+    optional geo_serving_proto.directions.Duration travel_time = 1;
+    optional string name = 2;
+    optional ComponentIcon icon = 3;
+    optional maps_tactile.shared.directions.TravelMode travel_mode = 4;
+    optional TrafficData.DelayCategory delay_category = 5;
+}
+
+message OnlineTaxiDetails {
+    optional OnDemandServiceProvider service_provider = 7;
+    optional geo_serving_proto.directions.Duration waiting_time = 1;
+    optional maps_tactile.shared.directions.MonetaryCostRange fare_estimate = 2;
+    repeated RenderableComponent fare_annotation_renderable = 3;
+    optional string disclaimer = 4;
+    optional string details = 5;
+    optional string promotion = 6 [deprecated = true];
+    optional string product_name = 8;
+    optional string partner_app_link_text = 15;
+    optional maps_tactile.shared.PlatformIntent partner_app_intent = 9;
+    
+    optional AvailableVehiclesParameters available_vehicles_parameters = 10;
+    message AvailableVehiclesParameters {
+        optional double vehicles_per_km2 = 1;
+        optional ComponentIcon vehicle_icon = 2;
+    }
+    
+    optional ProductCategory product_category = 11;
+    message ProductCategory {
+        optional string name = 1;
+        optional ComponentIcon icon = 2;
+    }
+    
+    optional double ranking_score = 12 [deprecated = true];
+    
+    optional TripEstimateParameters trip_estimate_parameters = 13 [deprecated = true];
+    message TripEstimateParameters {
+        optional bytes token = 1 [deprecated = true];
+        optional string product_id = 2 [deprecated = true];
+    }
+    
+    reserved 14;
+}
+
+message OnlineTaxiAlternateSummary {
+    optional OnDemandServiceProvider service_provider = 1;
+    optional geo_serving_proto.directions.Duration travel_time = 8;
+    optional geo_serving_proto.directions.Duration waiting_time = 2;
+    optional maps_tactile.shared.directions.MonetaryCostRange fare_estimate = 3;
+    optional maps_tactile.shared.PlatformIntent partner_app_intent = 4;
+    optional string product_name = 5;
+    optional ComponentIcon product_category_icon = 6;
+    optional ComponentIcon travel_mode_icon = 7;
+    optional TrafficData.DelayCategory delay_category = 9;
+}
+
+message OfflineTaxiDetails {
+    optional OnDemandServiceProvider service_provider = 1;
+    optional maps_tactile.shared.directions.MonetaryCostRange fare_estimate = 2;
+    optional maps_tactile.shared.taxi.FareBreakdown fare_breakdown = 4;
+    optional string display_name = 3;
+    optional string disclaimer = 5;
+}
+
+message OfflineTaxiAlternateSummary {
+    optional OnDemandServiceProvider service_provider = 1;
+    optional geo_serving_proto.directions.Duration travel_time = 4;
+    optional maps_tactile.shared.directions.MonetaryCostRange fare_estimate = 2;
+    optional string display_name = 3;
+    optional TrafficData.DelayCategory delay_category = 5;
+}
+
+message BikesharingVehicle {
+    optional string vehicle_id = 10 [deprecated = true];
+    optional string reroute_token = 11;
+    optional LatLng location = 2;
+    optional ComponentIcon vehicle_icon = 12;
+    optional geo_serving_proto.directions.Duration walking_time = 3;
+    optional maps_tactile.shared.PlatformIntent partner_app_intent = 4;
+    optional string product_name = 5;
+    optional string product_description = 6;
+    optional ComponentIcon map_icon = 7;
+    
+    optional BatteryState battery_state = 9;
+    message BatteryState {
+        optional int32 percentage = 1;
+        optional Distance range = 2;
+    }
+    
+    reserved 1, 8;
+}
+
+message DocklessBikesharingDetails {
+    optional maps_tactile.shared.directions.MonetaryCostRange fare_estimate = 1;
+    optional BikesharingVehicle recommended = 2;
+    repeated BikesharingVehicle alternative = 3;
+    optional string disclaimer = 4;
+    optional OnDemandServiceProvider service_provider = 5;
+    optional string additional_details = 7;
+    optional string partner_app_link_text = 8;
+    optional string geofence_disclaimer = 9;
+    
+    reserved 6;
+}
+
+message DockedBikesharingDetails {
+    optional OnDemandServiceProvider service_provider = 1;
+    
+    optional BikeStation recommended_pick_up_station = 2;
+    message BikeStation {
+        optional string reroute_token = 5;
+        optional LatLng location = 1;
+        optional string provider_station_name = 2;
+        optional int32 num_available_bikes = 3;
+        optional int32 num_available_electric_bikes = 6;
+        optional int32 num_available_docks = 4;
+        optional string map_icon_id = 7;
+    }
+    
+    repeated BikeStation alternative_pick_up_station = 3;
+    optional BikeStation recommended_drop_off_station = 4;
+    repeated BikeStation alternative_drop_off_station = 5;
+    optional maps_tactile.shared.PlatformIntent partner_app_intent = 6;
+    optional string partner_app_link_text = 7;
+    optional string additional_details = 9;
+    optional maps_tactile.shared.directions.MonetaryCostRange fare_estimate = 8;
+}

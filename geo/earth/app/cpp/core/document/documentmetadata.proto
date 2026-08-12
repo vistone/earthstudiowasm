@@ -1,0 +1,127 @@
+syntax = "proto2";
+
+package earth.document;
+
+import "geo/earth/app/cpp/core/document/capability.proto";
+import "geo/earth/app/cpp/core/document/icon.proto";
+import "geo/earth/app/cpp/core/document/role.proto";
+import "geo/earth/proto/documentnamespace.proto";
+import "geo/earth/proto/map_type.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "DocumentMetadataProto";
+option java_package = "com.google.android.apps.earth.document";
+
+message DocumentMetadata {
+    optional int32 key = 1;
+    optional string title = 3;
+    optional string snippet = 4;
+    optional string description = 5;
+    optional string thumbnail_url = 6;
+    optional string hero_image_url = 7;
+    repeated Capability capability = 8;
+    optional SharingVisibility sharing_visibility = 42;
+    optional string storage_error = 10;
+    optional Icon icon = 11;
+    optional bool has_balloon = 12;
+    
+    optional IoOperation io_operation = 13;
+    enum IoOperation {
+        IO_OPERATION_NONE = 0;
+        IO_OPERATION_LOAD = 1;
+        IO_OPERATION_CREATE = 2;
+        IO_OPERATION_COPY = 3;
+        IO_OPERATION_REMOVE = 4;
+        IO_OPERATION_MUTATE = 5;
+        IO_OPERATION_RELOAD = 6;
+    }
+    
+    optional bool is_loaded = 14;
+    optional bool is_loading = 15;
+    optional bool has_unsaved_changes_offline = 22;
+    optional bool had_failed_changes = 23;
+    optional bool load_failed_with_access_denied = 28;
+    optional bool load_failed_with_bad_request = 36;
+    optional bool is_updating_storage = 16;
+    optional bool is_reloading = 29;
+    optional bool is_transient = 17;
+    optional int32 icon_color = 18;
+    optional int64 last_modified_timestamp_milliseconds = 19;
+    optional int64 last_accessed_timestamp_milliseconds = 41;
+    optional int64 last_focused_timestamp_milliseconds = 40;
+    optional bool is_pinned = 20;
+    optional bool is_focused = 35;
+    optional StorageIcon storage_icon = 21;
+    optional RequestQueueState request_queue_state = 24;
+    optional bool may_be_visible = 25;
+    optional string owner_name = 26;
+    optional string owner_photo_url = 27;
+    optional string owner_filter_token = 45;
+    optional bool is_recovered_from_lfs = 31;
+    optional bool is_copying = 32;
+    optional Role role = 33;
+    optional bool is_empty = 34;
+    optional bool touch_selection_mode_active = 37;
+    optional uint32 pending_touch_selection_count = 38;
+    optional uint32 pending_touch_available_to_select = 39;
+    optional MapType map_type = 43;
+    optional DocumentKind document_kind = 44;
+    optional bool using_design_feature = 46;
+    optional int64 consumed_quota_bytes = 47;
+    optional DocumentNamespace document_namespace = 48;
+    
+    reserved 2, 30;
+}
+
+message RequestQueueState {
+    optional QueueState state = 1;
+    enum QueueState {
+        STATE_UNKNOWN = 0;
+        STATE_IDLE = 1;
+        STATE_AWAITING_RESPONSE = 2;
+        STATE_PAUSED_ON_ERROR = 3;
+        STATE_DISCARDING_REQUEST = 4;
+        STATE_ABOUT_TO_RETRY_REQUEST = 5;
+    }
+    
+    optional Error error = 2;
+    enum Error {
+        ERROR_UNKNOWN = 0;
+        ERROR_OFFLINE = 1;
+        ERROR_UNAUTHENTICATED = 2;
+        ERROR_PERMISSION_DENIED = 3;
+        ERROR_NOT_FOUND = 4;
+        ERROR_DEADLINE_EXCEEDED = 5;
+        ERROR_INTERNAL = 6;
+    }
+    
+    optional int64 auto_retry_timestamp_ms = 3;
+    optional string request_endpoint = 4;
+}
+
+message DocumentMetadataList {
+    repeated DocumentMetadata metadata = 1;
+}
+
+enum DocumentKind {
+    DOCUMENT_KIND_UNKNOWN = 0;
+    DOCUMENT_KIND_CLOUD = 1;
+    DOCUMENT_KIND_LOCAL = 2;
+    DOCUMENT_KIND_EXTERNAL = 3;
+}
+
+enum StorageIcon {
+    STORAGE_ICON_UNKNOWN = 0;
+    STORAGE_ICON_LOCAL = 1;
+    STORAGE_ICON_UMS = 2;
+    STORAGE_ICON_EXTERNAL = 3;
+}
+
+enum SharingVisibility {
+    SHARING_VISIBILITY_UNKNOWN = 0;
+    SHARING_VISIBILITY_PRIVATE = 1;
+    SHARING_VISIBILITY_EXPLICITLY_SHARED = 2;
+    SHARING_VISIBILITY_LINK_SHARED = 3;
+}

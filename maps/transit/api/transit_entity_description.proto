@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package maps_transit.api;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/transitline.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TransitEntityDescriptionProto";
+option java_package = "com.google.maps.transit.api";
+
+message TransitEntityDescription {
+    optional geostore.TransitLineProto.VehicleTypeCategory vehicle_type = 1;
+    repeated geostore.FeatureIdProto agency_ids = 2;
+    repeated geostore.FeatureIdProto line_ids = 3;
+    optional string system_tag = 5;
+    repeated geostore.FeatureIdProto station_ids = 4;
+}

@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package geo_earth_proto;
+
+import "net/proto2/proto/descriptor.proto";
+
+option java_multiple_files = true;
+
+enum Storage {
+    STORAGE_UNKNOWN = 0;
+    STORAGE_NONE = 1;
+    STORAGE_DOCUMENTSTORAGEMETADATA = 2;
+    STORAGE_DEEPLINK = 3;
+    STORAGE_LEGACYDATASTATE = 4;
+    STORAGE_KMLEXTENSION = 5;
+}
+
+extend .proto2.FileOptions {
+    repeated Storage default_allowed_storage = 525000020;
+}
+
+extend .proto2.MessageOptions {
+    repeated Storage allowed_message_storage = 535801185;
+}
+
+extend .proto2.EnumOptions {
+    repeated Storage allowed_enum_storage = 525000033;
+}

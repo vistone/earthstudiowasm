@@ -1,0 +1,61 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/name.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/pricerange.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/i18n/phonenumbers/phonenumber.proto";
+import "location/country/telephonenumber.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message TelephoneProto {
+    optional TelephoneNumber number = 1 [deprecated = true];
+    optional .i18n.phonenumbers.PhoneNumber phone_number = 9;
+    
+    optional TelephoneType type = 2 [default = VOICE];
+    enum TelephoneType {
+        VOICE = 0;
+        FAX = 1;
+        TDD = 2;
+        DATA = 3 [deprecated = true];
+        MOBILE = 4 [deprecated = true];
+        MESSAGING = 5;
+    }
+    
+    repeated NameProto label = 3;
+    repeated string language = 4;
+    optional bool is_shared_number = 5 [default = false];
+    
+    repeated FlagCategory flag = 7;
+    enum FlagCategory {
+        FLAG_NO_COLD_CALLS = 1;
+        FLAG_PREFERRED = 2;
+    }
+    
+    repeated PriceRangeProto call_rate = 8;
+    
+    optional ContactCategory contact_category = 10;
+    enum ContactCategory {
+        CONTACT_CATEGORY_UNSPECIFIED = 0;
+        CUSTOMER_SERVICE = 1;
+        RESERVATIONS = 2;
+        SALES = 3;
+    }
+    
+    optional FieldMetadataProto metadata = 500;
+    repeated FeatureIdProto service_location_feature = 11;
+    
+    reserved 6;
+    
+    extend .proto2.bridge.MessageSet {
+        optional TelephoneProto message_set_extension = 12773310;
+    }
+}

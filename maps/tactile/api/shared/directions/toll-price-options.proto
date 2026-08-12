@@ -1,0 +1,52 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "TollPriceOptionsProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message TollPriceOptions {
+    repeated TollPass toll_pass = 1;
+    message TollPass {
+        optional PassType type = 1;
+    }
+    
+    optional bool show_toll_pass_prices = 2 [default = false];
+    
+    optional VehicleEmissionType vehicle_emission_type = 3;
+    enum VehicleEmissionType {
+        UNKNOWN_VEHICLE_EMISSION_TYPE = 0;
+        GAS = 1;
+        ELECTRIC = 2;
+        HYBRID = 3;
+    }
+    
+    optional VehicleType vehicle_type = 4;
+    enum VehicleType {
+        UNKNOWN_VEHICLE_TYPE = 0;
+        CAR = 1;
+        TWO_WHEELER = 2;
+        COMPACT = 3;
+    }
+    
+    optional ClientId originator = 5;
+    enum ClientId {
+        UNKNOWN_CLIENT_ID = 0;
+        GMM_INTERNAL = 1;
+        GMM_PUBLIC = 2;
+    }
+    
+    optional bool want_price_in_directions_toll_label = 6 [default = false];
+    optional bool want_price_in_nav_toll_label = 7 [default = false];
+    
+    enum PassType {
+        UNKNOWN_PASS_TYPE = 0;
+        US_WA_GOOD_TO_GO = 1;
+        JP_ETC = 16;
+        JP_ETC2 = 17;
+    }
+}

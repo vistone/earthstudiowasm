@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message InferredGeometryProto {
+    optional GeometryComposition geometry_composition = 4;
+    repeated FeatureIdProto defines_geometry_for = 3;
+    
+    reserved 1, 2;
+}
+
+message GeometryComposition {
+    repeated FeatureIdProto includes_geometry_of = 1;
+    repeated FeatureIdProto excludes_geometry_of = 2;
+}

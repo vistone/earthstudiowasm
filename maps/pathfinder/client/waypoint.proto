@@ -1,0 +1,101 @@
+syntax = "editions";
+
+package pathfinder;
+
+import "geostore/base/proto/accesspoint.proto";
+import "geostore/base/proto/feature.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/point.proto";
+import "maps/pathfinder/client/boarded_transit_vehicle.proto";
+import "maps/pathfinder/client/building-level.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option java_outer_classname = "WaypointProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message SegmentLocation {
+    optional geostore.FeatureIdProto segment_id = 1;
+    optional double interpolation_fraction = 2;
+    optional int32 node_id = 3;
+    optional int32 external_penalty = 4 [default = 0];
+}
+
+message AccessPointInfo {
+    optional geostore.FeatureIdProto feature_id = 1;
+    optional geostore.FeatureProto.TypeCategory feature_type = 2;
+    optional geostore.AccessPointProto.PriorityCategory priority = 3;
+    
+    optional TransitPriority transit_priority = 6;
+    enum TransitPriority {
+        TRANSIT_PRIORITY_UNSPECIFIED = 0;
+        TRANSIT_PRIORITY_BOOSTED = 1;
+        TRANSIT_PRIORITY_PRIMARY_PREFERRED = 2;
+        TRANSIT_PRIORITY_PRIMARY = 3;
+        TRANSIT_PRIORITY_SECONDARY = 4;
+    }
+    
+    optional int32 transit_sub_priority = 7;
+    repeated geostore.AccessPointProto.TravelMode unsuitable_travel_mode = 4;
+    optional bool is_strict = 5;
+}
+
+message Location {
+    optional geostore.PointProto point = 2;
+    optional SegmentLocation segment = 1;
+    optional int32 snap_zoom_level = 3;
+    optional BuildingLevel building_level = 6;
+    optional int32 heading = 4;
+    optional AccessPointInfo access_point = 5;
+    optional BoardedTransitVehicle boarded_transit_vehicle = 8;
+    optional bytes boarded_transit_vehicle_token = 11;
+    optional geostore.FeatureIdProto boarded_transit_last_station_id = 12;
+    optional bool has_side_of_road_preference = 9 [default = false];
+    optional int32 preferred_segment_heading = 10;
+    
+    repeated LocationFilter filter = 7;
+    enum LocationFilter {
+        FILTER_ELEVATED = 0;
+        FILTER_FERRY = 1;
+        FILTER_LIMITED_ACCESS = 2;
+        FILTER_UNDERGROUND = 3;
+        ALLOW_HOV = 4;
+    }
+    
+    extensions 20000 to max;
+}
+
+message Waypoint {
+    repeated Location location = 1;
+    optional bool is_via = 2 [default = false];
+    optional geostore.FeatureProto.TypeCategory feature_type = 3;
+    optional string country_code = 5;
+    
+    optional SnappingType snapping_type = 6;
+    enum SnappingType {
+        SNAP_NORMAL = 0;
+        SNAP_TRANSIT_STATION = 1;
+        SNAP_PARKING_FACILITY = 2;
+    }
+    
+    optional string display_name = 8;
+    optional string formatted_address = 10;
+    
+    optional EntityType entity_type = 9 [default = ENTITY_TYPE_DEFAULT];
+    enum EntityType {
+        ENTITY_TYPE_DEFAULT = 4;
+        ENTITY_TYPE_MY_LOCATION = 0;
+        ENTITY_TYPE_HOME = 1;
+        ENTITY_TYPE_WORK = 2;
+        ENTITY_TYPE_AD = 3;
+        ENTITY_TYPE_NICKNAME = 5;
+        ENTITY_TYPE_CONTACT = 6;
+    }
+    
+    extensions 20000 to max;
+    
+    reserved 4, 7;
+}

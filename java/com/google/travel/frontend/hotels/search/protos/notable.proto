@@ -1,0 +1,58 @@
+syntax = "proto2";
+
+package boq.travelfrontendhotelssearch.protos;
+
+import "java/com/google/travel/frontend/hotels/search/protos/map.proto";
+import "java/com/google/travel/frontend/hotels/search/protos/nearby_entity.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "travel/frontend/common/proto/image.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.travel.frontend.hotels.search.protos";
+
+message ThingsToDo {
+    repeated Activity activities = 1;
+    message Activity {
+        optional .travel.frontend.common.proto.Image image = 1;
+        optional NearbyEntity nearby_entity = 2;
+        optional string mid = 3;
+        optional string things_to_do_url = 4;
+    }
+}
+
+message Amenity {
+    repeated .travel.frontend.common.proto.Image images = 1;
+}
+
+message Transits {
+    repeated Transportation transportations = 1;
+    message Transportation {
+        optional StaticMap static_map = 1;
+        optional NearbyEntitiesAndMap.NearbyEntityType description = 2;
+        optional NearbyEntity transit_info = 3;
+    }
+}
+
+enum NotablesLinkTarget {
+    LINK_TARGET_UNSPECIFIED = 0;
+    LINK_TARGET_REVIEWS = 1;
+    LINK_TARGET_ABOUT = 2;
+    LINK_TARGET_LOCATION = 3;
+    LINK_TARGET_WEBSITE = 4;
+    LINK_TARGET_SEARCH_PAGE_REQUERY = 5;
+    LINK_TARGET_INLINE_EXPANSION = 6;
+}
+
+enum NotableSentimentType {
+    NOTABLE_SENTIMENT_TYPE_UNKNOWN = 0;
+    NOTABLE_SENTIMENT_TYPE_POSITIVE_SENTIMENT = 1;
+    NOTABLE_SENTIMENT_TYPE_NEGATIVE_SENTIMENT = 2;
+    NOTABLE_SENTIMENT_TYPE_POSITIVE_NEGATIVE_SENTIMENT = 3;
+    NOTABLE_SENTIMENT_TYPE_NEGATIVE_POSITIVE_SENTIMENT = 4;
+    NOTABLE_SENTIMENT_TYPE_NEUTRAL_SENTIMENT_POSITIVE_DESCRIPTION = 5;
+    NOTABLE_SENTIMENT_TYPE_NEUTRAL_SENTIMENT_NEGATIVE_DESCRIPTION = 6;
+    NOTABLE_SENTIMENT_TYPE_NEUTRAL_SENTIMENT_MIXED_DESCRIPTION = 9;
+    NOTABLE_SENTIMENT_TYPE_POSITIVE_SENTIMENT_NEGATIVE_DESCRIPTION = 7;
+    NOTABLE_SENTIMENT_TYPE_NEGATIVE_SENTIMENT_POSITIVE_DESCRIPTION = 8;
+}

@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "PlacesListMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message PlacesListMetadata {
+    optional string list_id = 1;
+    
+    extend .proto2.bridge.MessageSet {
+        optional PlacesListMetadata message_set_extension = 525003718;
+    }
+}

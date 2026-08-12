@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message SkiTrailProto {
+    optional Type type = 1 [default = TYPE_TRAIL];
+    enum Type {
+        TYPE_ANY = 0;
+        TYPE_GLADE = 1;
+        TYPE_TRAIL_TERRAIN = 2;
+        TYPE_TRAIL = 3;
+        TYPE_RACE_COURSE = 4;
+        TYPE_BOWL = 5;
+    }
+    
+    optional Difficulty difficulty = 2;
+    enum Difficulty {
+        DIFFICULTY_EASIEST = 0;
+        DIFFICULTY_EASY = 1;
+        DIFFICULTY_INTERMEDIATE = 2;
+        DIFFICULTY_ADVANCED_INTERMEDIATE = 3;
+        DIFFICULTY_DIFFICULT = 4;
+        DIFFICULTY_ADVANCED_DIFFICULT = 5;
+    }
+}

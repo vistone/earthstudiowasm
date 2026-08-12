@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/fieldmetadata.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/point.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message AccessPointProto {
+    optional PointProto point = 9;
+    optional FeatureIdProto feature_id = 10;
+    optional int32 feature_type = 11;
+    optional float segment_position = 2;
+    optional PointProto point_on_segment = 3;
+    optional PointProto point_off_segment = 4;
+    optional bool can_enter = 5;
+    optional bool can_exit = 6;
+    
+    optional PriorityCategory priority = 8 [default = TYPE_PRIMARY];
+    enum PriorityCategory {
+        TYPE_PRIMARY = 1;
+        TYPE_SECONDARY = 2;
+    }
+    
+    repeated TravelMode unsuitable_travel_mode = 12;
+    enum TravelMode {
+        TRAVEL_MODE_MOTOR_VEHICLE = 1;
+        TRAVEL_MODE_AUTO = 17;
+        TRAVEL_MODE_TWO_WHEELER = 18;
+        TRAVEL_MODE_BICYCLE = 2;
+        TRAVEL_MODE_PEDESTRIAN = 3;
+        TRAVEL_MODE_PUBLIC_TRANSIT = 4 [deprecated = true];
+    }
+    
+    optional FeatureIdProto level_feature_id = 13;
+    optional FieldMetadataProto metadata = 500;
+    
+    reserved 1, 7;
+}

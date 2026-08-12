@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "AndroidIntentProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message AndroidIntent {
+    optional string action = 1;
+    optional string data = 2;
+    optional string component = 3;
+    optional int32 flags = 4;
+    
+    repeated Extra extra = 5;
+    message Extra {
+        optional string name = 1;
+        
+        oneof value {
+            string string_value = 2;
+            bytes bytes_value = 3;
+            int32 int_value = 4;
+            bool bool_value = 5;
+        }
+    }
+}

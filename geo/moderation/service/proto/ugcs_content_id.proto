@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package geo_moderation;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_package = "com.google.geo.moderation.proto1api";
+
+message UgcsContentId {
+    optional string content_id = 1;
+    optional string version_token = 2;
+}

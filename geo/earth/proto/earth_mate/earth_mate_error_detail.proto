@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package geo.earth.proto.earth_mate;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.proto";
+
+message EarthMateErrorDetail {
+    optional Type error_type = 1;
+    enum Type {
+        UNSPECIFIED = 0;
+        UNEXPECTED_TOOL_ERROR = 1;
+        RPC_TIMEOUT = 2;
+        POI_TYPE_SENSITIVE = 3;
+        POI_TYPE_NOT_FOUND = 4;
+        LOCATION_NOT_FOUND = 5;
+        ANYTHING_MAPPER_UNAVAILABLE = 6;
+        PROBLEM_TOO_COMPLEX = 7;
+        AGENT_FRAMEWORK_OVERLOADED = 8;
+    }
+    
+    optional string error_message = 2;
+}

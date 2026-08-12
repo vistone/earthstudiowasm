@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package maps_tactile.shared.savedplaces;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "SavedPlacesClientIdProto";
+option java_package = "com.google.maps.tactile.shared.savedplaces";
+
+enum SavedPlacesClientId {
+    UNKNOWN_SAVED_PLACES_CLIENT_ID = 0;
+    CONSTELLATIONS_LU = 1;
+    CONSTELLATIONS_TACTILE = 2;
+    CONSTELLATIONS_MAPS_COMPANION = 3;
+}

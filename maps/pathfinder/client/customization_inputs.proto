@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "frameworks/testing/rpcreplay/processors/rpc_replay_field_option.proto";
+import "maps/directions/customization/config/serving_protos/parameter_value.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message CustomizationInputs {
+    optional string id = 1;
+    repeated string decoration_ids = 4;
+    map<string, maps_directions_customization.ParameterValue> parameters = 3;
+    map<string, maps_directions_customization.ParameterValue> decoration_parameters = 5;
+}

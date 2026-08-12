@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "i18n/localization/proto/localized_text.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "DateTimeProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message DateTime {
+    optional int32 year = 1;
+    optional uint32 month = 2;
+    optional uint32 day = 3;
+    optional uint32 hour = 4;
+    optional uint32 minute = 5;
+    optional uint32 microseconds = 7;
+    optional float precision_in_seconds = 8;
+    optional i18n.localization.LocalizedTextProto relative_label = 9;
+    
+    enum PrecisionHelpers {
+        PRECISION_SECONDS = 1;
+        PRECISION_MINUTES = 60;
+        PRECISION_HOURS = 3600;
+        PRECISION_DAYS = 86400;
+        PRECISION_YEARS = 31536000;
+    }
+}

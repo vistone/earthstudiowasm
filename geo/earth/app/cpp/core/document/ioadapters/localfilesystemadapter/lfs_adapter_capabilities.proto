@@ -1,0 +1,13 @@
+syntax = "editions";
+
+package earth.document;
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+
+message LfsAdapterCapabilities {
+    optional bool can_create = 1;
+    optional bool can_load = 2;
+    optional bool can_mutate = 3;
+    optional bool can_destroy = 4;
+}

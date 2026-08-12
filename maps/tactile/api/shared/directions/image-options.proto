@@ -1,0 +1,44 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "ImageOptionsProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message ImageOptions {
+    repeated UiContext requested_context = 1;
+    enum UiContext {
+        CONTEXT_DEFAULT = 0;
+        CONTEXT_DESKTOP_STEP_THROUGH = 1;
+        CONTEXT_MOBILE_STEP_THROUGH = 2;
+        CONTEXT_DARK_BACKGROUND = 3;
+        CONTEXT_MAP = 4;
+        CONTEXT_MAP_NIGHT_MODE = 5;
+        CONTEXT_DEFAULT_WITH_MONOCHROME_CALLOUTS = 6;
+        CONTEXT_DARK_BACKGROUND_WITH_MONOCHROME_CALLOUTS = 7;
+    }
+    
+    optional bool supports_png_sprites = 2 [default = true];
+    
+    repeated Format supported_format = 3;
+    enum Format {
+        PNG = 0;
+        SVG = 1;
+        JPG = 2;
+    }
+    
+    optional Dpi device_dpi = 4 [default = DPI_WEB];
+    enum Dpi {
+        DPI_WEB = 0;
+        MOBILE_MDPI = 1;
+        MOBILE_HDPI = 2;
+        MOBILE_XHDPI = 3;
+        MOBILE_XXHDPI = 4;
+    }
+}

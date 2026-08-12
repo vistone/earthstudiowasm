@@ -1,0 +1,30 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "geo/serving/proto/geometry/lat_lng.proto";
+import "geo/serving/proto/link/link.proto";
+import "geo/serving/proto/weather/air_quality_index.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "AirQualityHeatmapMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message AirQualityHeatmapMetadata {
+    optional geo_serving_proto.weather.AirQualityIndex air_quality_index = 1;
+    
+    optional Link about_link = 2;
+    message Link {
+        optional string display_text = 1;
+        optional geo_serving_proto.link.Link link = 2;
+    }
+    
+    optional geo_serving_proto.geometry.LatLng lat_lng = 3;
+    
+    extend .proto2.bridge.MessageSet {
+        optional AirQualityHeatmapMetadata message_set_extension = 525000429;
+    }
+}

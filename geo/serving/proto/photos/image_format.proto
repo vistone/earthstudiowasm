@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "ImageFormatProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+enum ImageFormat {
+    UNKNOWN = 0;
+    TOUR = 1;
+    PANO = 2;
+    PHOTO = 3;
+    VIDEO = 4;
+    VOLUMETRIC_IMAGE = 5;
+}

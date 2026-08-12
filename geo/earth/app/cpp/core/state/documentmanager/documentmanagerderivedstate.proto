@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/state/state.proto";
+
+option objc_class_prefix = "RTH";
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "Documentmanagerderivedstate";
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derivedstate";
+
+message DocumentManagerDerivedState {
+    optional int32 document_key = 1 [default = -1];
+    optional NonRestorableOnDocumentLoadedOperation on_document_loaded_operation = 2;
+    optional NonRestorableOnStyleLoadedOperation on_style_loaded_operation = 3;
+}

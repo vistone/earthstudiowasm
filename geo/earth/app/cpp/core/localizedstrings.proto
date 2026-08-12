@@ -1,0 +1,80 @@
+syntax = "editions";
+
+package earth;
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_package = "com.google.android.apps.earth";
+
+message LocalizedStrings {
+    optional string untitled_map = 50;
+    optional string recovery_project = 3;
+    optional string default_folder_name = 4;
+    optional string default_slide_name = 5;
+    optional string default_overlay_name = 6;
+    optional string default_line_string_name = 7;
+    optional string default_point_name = 8;
+    optional string default_polygon_name = 9;
+    optional string default_measurement_name = 10;
+    optional string default_street_view_name = 34;
+    optional string default_parcel_name = 36;
+    optional string default_design_name = 41;
+    optional string default_network_link_name = 63;
+    optional string search_history_group_title = 11;
+    optional string search_history_command_label = 12;
+    optional string search_local_projects_group_title = 37;
+    optional string equator = 13;
+    optional string arctic_circle = 14;
+    optional string antarctic_circle = 15;
+    optional string tropic_of_cancer = 16;
+    optional string tropic_of_capricorn = 17;
+    optional string prime_meridian = 18;
+    optional string anti_meridian = 19;
+    optional string map_style_clean = 20;
+    optional string map_style_clean_description = 21;
+    optional string map_style_exploration = 22;
+    optional string map_style_exploration_description = 23;
+    optional string map_style_everything = 24;
+    optional string map_style_everything_description = 25;
+    optional string map_style_custom = 26;
+    optional string map_style_custom_description = 27;
+    optional string basemap_style_satellite = 28;
+    optional string basemap_style_satellite_description = 29;
+    optional string basemap_style_roadmap = 30;
+    optional string basemap_style_roadmap_description = 31;
+    optional string basemap_style_terrain = 32;
+    optional string basemap_style_terrain_description = 33;
+    optional string accuracy_column_name = 35;
+    optional string copy_of_project = 38;
+    optional string mechanical_building_use_type_display_name = 39;
+    optional string parking_building_use_type_display_name = 40;
+    optional string solar_legend_layer_name = 42;
+    optional string by_building_use_type_legend_layer_name = 43;
+    optional string residential_building_use_type_display_name = 45;
+    optional string one_bedroom_unit_type_display_name = 46;
+    optional string two_bedroom_unit_type_display_name = 47;
+    optional string retail_building_use_type_display_name = 48;
+    optional string community_building_use_type_display_name = 49;
+    optional string by_apartment_type_legend_layer_name = 51;
+    optional string default_apartment_type_display_name = 52;
+    optional string sunlight_hours_legend_layer_name = 53;
+    optional string views_legend_layer_name = 54;
+    optional string parks_legend_name = 55;
+    optional string roads_legend_name = 56;
+    optional string contours_layer_status_name = 57;
+    optional string default_classification_layer_name = 58;
+    optional string slope_layer_status_name = 59;
+    optional string aspect_layer_status_name = 60;
+    optional string on_demand_layer_status_name = 61;
+    optional string cut_and_fill_layer_status_name = 62;
+    optional string change_detection_layer_status_name = 64;
+    
+    reserved 1, 2, 44;
+}
+
+message LocalizedStringsState {
+    
+}

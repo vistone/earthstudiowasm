@@ -1,0 +1,99 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_package = "com.google.maps.tactile";
+
+enum TimeType {
+    ANY_TIME = 0;
+    NOW = 1;
+    UNIX_TIME = 2;
+    OPEN_24_7 = 3;
+}
+
+enum AllowedPriceLevel {
+    PRICE_LEVEL_1 = 0;
+    PRICE_LEVEL_2 = 1;
+    PRICE_LEVEL_3 = 2;
+    PRICE_LEVEL_4 = 3;
+}
+
+enum AllowedMinZagatRating {
+    RATING_16 = 16;
+    RATING_20 = 20;
+    RATING_23 = 23;
+    RATING_26 = 26;
+}
+
+enum AllowedStars {
+    STARS_0_5 = 5;
+    STARS_1 = 0;
+    STARS_1_5 = 6;
+    STARS_2 = 1;
+    STARS_2_5 = 7;
+    STARS_3 = 2;
+    STARS_3_5 = 8;
+    STARS_4 = 3;
+    STARS_4_5 = 9;
+    STARS_5 = 4;
+}
+
+enum AllowedHotelAmenity {
+    UNKNOWN_ALLOWED_HOTEL_AMENITY = 0;
+    AIR_CONDITIONED = 1;
+    BAR = 2;
+    CHILD_FRIENDLY = 3;
+    FREE_BREAKFAST = 4;
+    FREE_PARKING = 5;
+    PARKING_AVAILABLE = 20;
+    FREE_WIFI = 6;
+    GYM = 7;
+    PETS_ALLOWED = 8;
+    POOL = 9;
+    INDOOR_POOL = 18;
+    OUTDOOR_POOL = 19;
+    RESTAURANT = 10;
+    AIRPORT_SHUTTLE = 11;
+    BEACH_ACCESS = 12;
+    CASINO = 13;
+    HOT_TUB = 14;
+    ROOM_SERVICE = 15;
+    SPA = 16;
+    ALL_INCLUSIVE = 17;
+    WHEELCHAIR_ACCESSIBLE = 21;
+    ONSEN = 22;
+    EV_CHARGING = 23;
+}
+
+enum AllowedVacationRentalAmenity {
+    UNKNOWN_ALLOWED_VACATION_RENTAL_AMENITY = 0;
+    VACATION_RENTAL_AIR_CONDITIONED = 1;
+    VACATION_RENTAL_CHILD_FRIENDLY = 2;
+    VACATION_RENTAL_CRIB = 3;
+    VACATION_RENTAL_FIREPLACE = 4;
+    VACATION_RENTAL_FREE_WIFI = 5;
+    VACATION_RENTAL_GYM_FITNESS_EQUIPMENT = 6;
+    VACATION_RENTAL_HOT_TUB = 7;
+    VACATION_RENTAL_KITCHEN = 8;
+    VACATION_RENTAL_OUTDOOR_GRILL = 9;
+    VACATION_RENTAL_PATIO = 10;
+    VACATION_RENTAL_PETS_ALLOWED = 11;
+    VACATION_RENTAL_POOL = 12;
+}
+
+enum AllowedPropertyType {
+    UNKNOWN_ALLOWED_PROPERTY_TYPE = 0;
+    ALTERNATIVE_LODGING = 1;
+}
+
+enum RefinementsSortOrder {
+    UNKNOWN_SORT_ORDER = 0;
+    RELEVANCE = 1;
+    DISTANCE_ASC = 2;
+    HOTEL_PRICE_ASC = 3;
+    USER_RATING_DESC = 4;
+}

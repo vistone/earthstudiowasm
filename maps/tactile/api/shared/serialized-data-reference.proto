@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_outer_classname = "SerializedDataReferenceProto";
+option java_package = "com.google.maps.tactile";
+
+message SerializedDataReference {
+    optional bool data_event_expected = 1;
+    optional string data_event = 2;
+    optional string action_event = 3;
+}

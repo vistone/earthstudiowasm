@@ -1,0 +1,20 @@
+syntax = "editions";
+
+package geo.earth.app;
+
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_outer_classname = "DeeplinkEventProto";
+option java_package = "com.google.geo.earth.app";
+
+message DeeplinkEvent {
+    optional string path = 1;
+    optional string utm_source = 2;
+    optional string utm_campaign = 3;
+    optional string utm_term = 4;
+}

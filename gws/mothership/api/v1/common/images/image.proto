@@ -1,0 +1,58 @@
+syntax = "proto2";
+
+package gws.mothership.api.v1.common.images;
+
+import "gws/mothership/api/v1/common/images/image_id.proto";
+import "gws/mothership/api/v1/common/images/image_source.proto";
+import "gws/mothership/api/v1/common/net/url.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "MSPI";
+option java_multiple_files = true;
+option java_outer_classname = "ImageProto";
+option java_package = "com.google.gws.mothership.api.v1.common.images";
+
+message Image {
+    optional ImageId id = 1;
+    optional ImageSource source_data = 2;
+    optional net.Url crawled_referrer_url = 3;
+    optional string crawled_referrer_encrypted_docid = 4;
+    optional bool disallow_cropping = 5;
+    optional ReportImagePolicyViolationAction flag_inappropriate = 6;
+    optional PlaceholderImageType placeholder_image_type = 7;
+    optional bool is_placeholder = 8;
+    optional ImageLicense image_license = 10;
+    optional string alt_text = 11;
+    optional float score = 12;
+    
+    extensions 9;
+}
+
+message ReportImagePolicyViolationAction {
+    optional net.Url url = 1;
+}
+
+message ImageLicense {
+    optional string name = 1;
+    optional string uri = 2;
+    
+    repeated ImageLicenseAttribution attribution = 4;
+    message ImageLicenseAttribution {
+        optional string language = 1;
+        optional string text = 2;
+    }
+}
+
+enum PlaceholderImageType {
+    PLACEHOLDER_IMAGE_TYPE_UNSPECIFIED = 0;
+    ALBUM_OR_SONG = 1;
+    ANIMAL = 2;
+    BOOK = 3;
+    MOVIE = 4;
+    PERSON = 5;
+    PLACE = 6;
+    TV_SHOW = 7;
+    DRUG = 8;
+    MEDICAL_CONDITION = 9;
+    TRAIN = 10;
+}

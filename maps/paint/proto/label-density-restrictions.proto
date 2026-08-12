@@ -1,0 +1,41 @@
+syntax = "editions";
+
+package maps_paint_client;
+
+import "maps/versatile/proto/vector-render-op.proto";
+
+option objc_class_prefix = "GMPC";
+option java_outer_classname = "LabelDensityRestrictionsProto";
+option java_package = "com.google.maps.paint.client";
+
+message LabelDensityRestrictions {
+    repeated Bucket buckets = 1;
+    message Bucket {
+        optional int32 restriction_bucket_id = 1;
+        optional int32 max_num_labels = 2;
+        optional float pixel_density_percentage_cap = 3;
+        repeated PixelDensityCapEntry zoom_based_pixel_density_cap = 4;
+    }
+    
+    message PixelDensityCapEntry {
+        optional int32 zoom_level = 1;
+        optional float cap_percentage = 2;
+    }
+    
+    extend maps_versatile.VectorRenderOpProto {
+        optional LabelDensityRestrictions label_density_restrictions = 1002;
+    }
+}
+
+enum RestrictionBucketId {
+    option features = enum_type: CLOSED
+    ;
+    RESTRICTION_BUCKET_ID_UNKNOWN = 0;
+    RESTRICTION_BUCKET_ID_BASE_MAP_PROMOTED_PINS = 1;
+    RESTRICTION_BUCKET_ID_ON_ROUTE_PROMOTED_PINS = 2;
+    RESTRICTION_BUCKET_ID_NAVIGATION_PROMOTED_PINS = 3;
+    RESTRICTION_BUCKET_ID_PLACE_DETAILS_PROMOTED_PINS = 4;
+    RESTRICTION_BUCKET_ID_SEARCH_PROMOTED_PINS = 5;
+    RESTRICTION_BUCKET_ID_BASEMAP_DYNAMIC_DENSITY = 11;
+    RESTRICTION_BUCKET_ID_SUDDENLY_IMPORTANT_ML = 12;
+}

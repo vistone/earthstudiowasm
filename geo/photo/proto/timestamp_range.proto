@@ -1,0 +1,15 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "TimestampRangeProto";
+option java_package = "com.google.geo.photo";
+
+message TimestampRange {
+    optional double start_seconds = 1;
+    optional double end_seconds = 2;
+}

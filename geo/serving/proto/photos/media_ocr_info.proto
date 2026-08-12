@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "MediaOcrInfoProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message MediaOcrInfo {
+    repeated MediaOcrLanguage ocr_language = 1;
+    message MediaOcrLanguage {
+        optional string language_code = 1;
+    }
+    
+    optional float avg_text_confidence = 2;
+    
+    optional MediaOcrArea ocr_area = 3;
+    message MediaOcrArea {
+        optional float fraction_area_ocr = 1;
+        optional float xmin = 2;
+        optional float xmax = 3;
+        optional float ymin = 4;
+        optional float ymax = 5;
+    }
+}

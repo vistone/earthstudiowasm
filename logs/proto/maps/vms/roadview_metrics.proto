@@ -1,0 +1,99 @@
+syntax = "proto2";
+
+package logs.vms.roadview;
+
+import "google/protobuf/timestamp.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.logging.geo.vms.roadview";
+
+message RoadViewMetric {
+    optional MetaData metadata = 1;
+    
+    oneof metric {
+        CoverageMetric current_location_coverage_metric = 2 [deprecated = true];
+        CoverageMetric mlp_path_coverage_metric = 3 [deprecated = true];
+        CoverageMetric published_map_area_coverage_metric = 4 [deprecated = true];
+        SkipLocationEvent skip_location_event = 5;
+        CoverageMetric coverage_metric = 6;
+    }
+}
+
+message SkipLocationEvent {
+    optional bytes segment_id = 1;
+    optional bytes branch_id = 2;
+    optional float off_main_path_probability = 3;
+}
+
+message MetaData {
+    optional Source log_source = 1;
+    enum Source {
+        UNSPECIFIED = 0;
+        PUBLISHERS = 1;
+        SDK = 2;
+        LH_PUBLISHERS = 3;
+        HORIZON_SDK = 4;
+    }
+    
+    optional google.protobuf.Timestamp mapfacts_timestamp = 2;
+    optional string sdk_version = 3;
+    optional int64 session_id = 4;
+}
+
+message CoverageMetric {
+    optional int32 total_segments = 1;
+    optional float total_segments_length_meters = 2;
+    optional AttributeCoverage speed_limit = 3 [deprecated = true];
+    optional AttributeCoverage segment_point_curvature = 4 [deprecated = true];
+    optional AttributeCoverage elevation = 5 [deprecated = true];
+    optional AttributeCoverage altitude = 6 [deprecated = true];
+    optional AttributeCoverage predicted_speed = 7 [deprecated = true];
+    
+    optional CoverageType coverage_type = 8;
+    enum CoverageType {
+        UNSPECIFIED = 0;
+        CURRENT_LOCATION_COVERAGE = 1;
+        MLP_PATH_COVERAGE = 2;
+        PUBLISHERD_MAP_AREA_COVERAGE = 3;
+        MLP_SUB_PATH_COVERAGE = 4;
+    }
+    
+    repeated AttributeCoverage attributes_coverage = 9;
+    repeated SegmentInfoByFunctionalRoadClass segment_info_functional_road_class = 10;
+}
+
+message AttributeCoverage {
+    optional int32 segments_count = 1;
+    optional float segments_length_meters = 2;
+    repeated SegmentInfo segments_missing_coverage = 3;
+    
+    optional AttributeType attribute_type = 4;
+    enum AttributeType {
+        UNSPECIFIED = 0;
+        SPEED_LIMIT = 1;
+        SEGMENT_POINT_CURVATURE = 2;
+        ELEVATION = 3;
+        ALTITUDE = 4;
+        PREDICTED_SPEED = 5;
+        CURVATURE = 6;
+        AZIMUTH = 7;
+        LINKED_INDEX = 8;
+        SPEED_LIMIT_SOURCE = 9;
+    }
+}
+
+message SegmentInfo {
+    optional bytes segment_id = 1;
+    optional int32 travel_direction = 2;
+    optional float segment_length_meters = 3;
+    optional int32 functional_road_class = 4;
+    optional int32 road_priority = 5;
+    optional int32 usage_category = 6;
+}
+
+message SegmentInfoByFunctionalRoadClass {
+    optional int32 functional_road_class = 1;
+    optional int32 total_segments = 2;
+    optional float total_segments_length_meters = 3;
+}

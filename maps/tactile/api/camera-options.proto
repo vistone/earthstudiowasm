@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "maps/tactile/api/geometry.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "CameraOptionsProto";
+option java_package = "com.google.maps.tactile";
+
+message CameraOptions {
+    repeated RasterRectangle avoid_area = 1;
+    optional bool use_input_camera = 2;
+    optional bool require_all_results_in_viewport = 3;
+}

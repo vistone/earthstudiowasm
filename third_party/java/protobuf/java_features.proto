@@ -1,0 +1,68 @@
+syntax = "proto2";
+
+package pb;
+
+import "net/proto2/proto/descriptor.proto";
+
+option java_outer_classname = "JavaFeaturesProto";
+option java_package = "com.google.protobuf";
+
+message JavaFeatures {
+    optional bool legacy_closed_enum = 1 [retention = RETENTION_RUNTIME, targets = TARGET_TYPE_FIELD, TARGET_TYPE_FILE, edition_defaults = [value: "true"
+    edition: EDITION_LEGACY
+    , value: "false"
+    edition: EDITION_PROTO3
+    ], feature_support = edition_introduced: EDITION_2023
+    edition_deprecated: EDITION_2023
+    deprecation_warning: "The legacy closed enum behavior in Java is deprecated and is scheduled to be removed in edition 2025.  See go/proto-enum-behavior#java for more information."
+    ];
+    
+    optional Utf8Validation utf8_validation = 2 [retention = RETENTION_RUNTIME, targets = TARGET_TYPE_FIELD, TARGET_TYPE_FILE, edition_defaults = [value: "DEFAULT"
+    edition: EDITION_LEGACY
+    ], feature_support = edition_introduced: EDITION_2023
+    edition_deprecated: EDITION_2024
+    deprecation_warning: "The Java-specific utf8 validation feature is deprecated and is scheduled to be removed in edition 2025.  Utf8 validation behavior should use the global cross-language utf8_validation feature."
+    ];
+    enum Utf8Validation {
+        UTF8_VALIDATION_UNKNOWN = 0;
+        DEFAULT = 1;
+        VERIFY = 2;
+    }
+    
+    optional bool large_enum = 3 [retention = RETENTION_RUNTIME, targets = TARGET_TYPE_ENUM, TARGET_TYPE_FILE, edition_defaults = [value: "false"
+    edition: EDITION_LEGACY
+    ], feature_support = edition_introduced: EDITION_2023
+    ];
+    optional bool use_old_outer_classname_default = 4 [retention = RETENTION_RUNTIME, targets = TARGET_TYPE_FILE, edition_defaults = [value: "true"
+    edition: EDITION_LEGACY
+    , value: "false"
+    edition: EDITION_2024
+    ], feature_support = edition_introduced: EDITION_2024
+    edition_removed: EDITION_2024
+    ];
+    optional NestInFileClassFeature.NestInFileClass nest_in_file_class = 5 [retention = RETENTION_RUNTIME, targets = TARGET_TYPE_MESSAGE, TARGET_TYPE_ENUM, TARGET_TYPE_SERVICE, edition_defaults = [value: "LEGACY"
+    edition: EDITION_LEGACY
+    , value: "NO"
+    edition: EDITION_2024
+    ], feature_support = edition_introduced: EDITION_2024
+    ];
+    
+    reserved 6;
+    
+    message NestInFileClassFeature {
+        reserved 1 to max;
+        
+        enum NestInFileClass {
+            NEST_IN_FILE_CLASS_UNKNOWN = 0;
+            NO = 1;
+            YES = 2;
+            LEGACY = 3 [feature_support = edition_introduced: EDITION_2024
+            edition_removed: EDITION_2024
+            ];
+        }
+    }
+}
+
+extend .proto2.FeatureSet {
+    optional JavaFeatures java = 1001;
+}

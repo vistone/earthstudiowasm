@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package mirth_apps_mirthrender;
+
+import public "geostore/base/proto/feature.proto";
+
+message MapFactsParams {
+    optional geostore.FeatureProto.TypeCategory mapfacts_center_feature_priority = 1;
+    optional geostore.FeatureProto.TypeCategory mapfacts_radius_feature_priority = 2;
+    optional double min_radius_meters = 3;
+    optional double max_radius_meters = 4;
+    optional bool use_geometric_center = 5;
+    optional bool use_highest_point = 6;
+    optional double highest_point_max_radial_fraction = 7;
+    optional double default_heading_degrees = 8;
+    optional bool heading_use_original_center = 9;
+    optional bool include_synthetic_features = 10;
+}

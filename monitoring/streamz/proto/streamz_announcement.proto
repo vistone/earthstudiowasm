@@ -1,0 +1,32 @@
+syntax = "editions";
+
+package monitoring.streamz;
+
+import "third_party/protobuf/cpp_features.proto";
+
+option features = repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+option optimize_for = CODE_SIZE;
+option java_outer_classname = "StreamzAnnouncementProtos";
+option java_package = "com.google.monitoring.streamz.proto";
+
+message StreamzAnnouncement {
+    optional int64 birth_timestamp = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional int64 announcement_timestamp = 6;
+    optional string hostname = 2 [features = field_presence: LEGACY_REQUIRED
+    ];
+    repeated int32 rpcserver_port = 3;
+    optional string root = 4;
+    
+    repeated Label label = 5;
+    message Label {
+        optional string name = 1 [features = field_presence: LEGACY_REQUIRED
+        ];
+        optional string string_value = 2;
+        optional int64 int64_value = 3;
+        optional bool bool_value = 4;
+    }
+}

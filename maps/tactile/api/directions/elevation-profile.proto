@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "maps/tactile/api/directions-common.proto";
+import "maps/tactile/api/shared/directions/elevation-description.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "ElevationProfileProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message ElevationProfile {
+    optional Distance start_altitude = 1;
+    optional Distance end_altitude = 2;
+    optional Distance minimum_altitude = 3;
+    optional Distance maximum_altitude = 4;
+    optional Distance ascent = 5;
+    optional Distance descent = 6;
+    repeated sint32 distance_meters_diff = 7 [packed = true];
+    repeated sint32 altitude_meters_diff = 8 [packed = true];
+    optional bool mostly_flat = 9 [deprecated = true];
+    optional maps_tactile.shared.directions.ElevationDescription elevation_description = 10;
+}

@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package geo.search.map;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSM";
+option java_multiple_files = true;
+option java_package = "com.google.geo.search.map";
+
+message Camera {
+    optional Location location = 1;
+    optional Rotation rotation = 2;
+    optional Size screen_size = 3;
+    optional float field_of_view_y = 4;
+    optional float field_of_view_x = 5;
+}
+
+message Location {
+    optional double longitude = 2;
+    optional double latitude = 3;
+    optional double altitude = 1;
+}
+
+message Rotation {
+    optional float heading = 1;
+    optional float tilt = 2;
+    optional float roll = 3;
+}
+
+message Size {
+    optional int32 width = 1;
+    optional int32 height = 2;
+}

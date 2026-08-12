@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package geo_serving_proto.time;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPTM";
+option java_multiple_files = true;
+option java_outer_classname = "TimeAgoProto";
+option java_package = "com.google.geo.serving.proto.timeago";
+
+message TimeAgo {
+    optional DisplayOption display_option = 1;
+    enum DisplayOption {
+        UNKNOWN_DISPLAY_OPTION = 0;
+        DATE = 1;
+        YEAR = 6;
+        MONTH = 7;
+        WEEK = 2;
+        DAY = 3;
+        HOUR = 4;
+        MINUTE = 5;
+        NOW = 8;
+    }
+    
+    oneof value {
+        string date = 2;
+        int32 time_unit = 3;
+    }
+}

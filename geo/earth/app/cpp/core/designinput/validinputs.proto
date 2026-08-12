@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package earth.designinputvalidation;
+
+message FieldValidRange {
+    optional double min = 1;
+    optional double max = 2;
+    optional bool min_inclusive = 3;
+    optional bool max_inclusive = 4;
+}
+
+message ZoningInputRanges {
+    optional FieldValidRange max_building_coverage_ratio = 1;
+    optional FieldValidRange max_floor_area_ratio = 2;
+    optional FieldValidRange max_height_m = 3;
+    optional FieldValidRange min_open_green_space_ratio = 4;
+    optional FieldValidRange front_yard_setback_m = 5;
+    optional FieldValidRange side_yard_setback_m = 6;
+    optional FieldValidRange rear_yard_setback_m = 7;
+}
+
+message ValidInputRanges {
+    optional ZoningInputRanges zoning = 1;
+}

@@ -1,0 +1,140 @@
+syntax = "proto2";
+
+package maps_tactile.onmap;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTOM";
+option java_multiple_files = true;
+option java_outer_classname = "OnMapImpressionEnumsProto";
+option java_package = "com.google.maps.tactile.onmap";
+
+enum Appearance {
+    UNKNOWN_APPEARANCE = 0;
+    PRIMARY_RESULT = 1;
+    SECONDARY_RESULT = 2;
+    MINOR_RESULT = 3;
+    RELATED_PLACE = 4;
+    AREA_RESULT = 5;
+    NORMAL_RESULT = 6;
+    AD_TIER_1 = 9;
+    AD_TIER_2 = 10;
+    AD_TIER_3 = 11;
+    AD_NOT_RENDERED = 12 [deprecated = true];
+    PROMOTED_OFFER = 13 [deprecated = true];
+    DEPRECATED_14 = 14 [deprecated = true];
+    DEPRECATED_15 = 15 [deprecated = true];
+    DEPRECATED_16 = 16 [deprecated = true];
+    DEPRECATED_17 = 17 [deprecated = true];
+    DEPRECATED_18 = 18 [deprecated = true];
+    PROMOTED_LISTING = 19 [deprecated = true];
+    RELATED_PLACE_SECONDARY = 20;
+    GENERIC_INTERACTIVE = 21;
+    INCIDENT_ROAD_CLOSED = 22;
+    INCIDENT_CRASH = 23;
+    INCIDENT_CONSTRUCTION = 24;
+    INCIDENT_OTHER = 25;
+    INCIDENT_SPEED_TRAP = 35;
+    SPOTLIT_PIN = 26;
+    DEPRECATED_INLINE_AD = 27 [deprecated = true];
+    PROMOTED_FEATURE = 28 [deprecated = true];
+    CHAIN_AD = 29;
+    CHAIN_AD_COUNTERFACTUAL = 30;
+    PROMOTED_POI = 31;
+    LODGING = 32;
+    PICO_PINLET = 33;
+    ANNOTATED = 34 [deprecated = true];
+    BOOSTED = 36;
+    PROMOTED_AGGREGATOR = 37;
+    PROMOTED_MANUFACTURER = 38;
+    PROMOTED_LOGOLESS_FIRST_PARTY = 39;
+    PROMOTED_SHOPPING = 42;
+    PROMOTED_KEYWORD_AD = 43;
+    PROMOTED_TRAVEL_AD = 46;
+    PROMOTED_TRAVEL_AD_LOGOLESS = 47;
+    PROMOTED_TRAVEL_ACTIVITY_AD = 58;
+    STREAMING_SEARCH_RESULT = 40;
+    INJECTED_SEARCH_RESULT = 41;
+    SEARCH_CANVAS_RESULT = 44;
+    BOOSTMAP_RELATED_PLACE = 45;
+    SEARCH_LOCATION = 48;
+    THREE_DIMENSIONAL_PLACE = 49;
+    COMPOUND_PLACE_SUB_POI = 50;
+    MAPS_VISUAL_SEARCH_RESULT = 51;
+    COMPOUND_ACCESS_POINT_LABEL = 52;
+    RECENTLY_VIEWED = 53;
+    ORIENTATION_LANDMARK = 54;
+    MANEUVER_LANDMARK = 59;
+    EXPERIENCE_COLLECTION = 55;
+    SUGGESTED_STOP_PIN = 56;
+    SUGGESTED_STOP_PHOTO_PIN = 57;
+}
+
+enum PersonalAppearance {
+    UNKNOWN_PERSONAL_APPEARANCE = 0;
+    GEO_PORTRAIT = 1;
+    RATED = 2;
+    RECOMMENDED = 3;
+    HOME = 4;
+    WORK = 5;
+    PERSONAL_SEARCH_RESULT = 6;
+    STARRED = 7;
+    CHECKIN = 8;
+    EVENT = 9;
+    HAPTIC_PLACE = 10;
+    HAPTIC_PLACE_LIST = 11;
+    PLACE_LIST_FAVORITES = 12;
+    PLACE_LIST_WANT_TO_GO = 13;
+    PLACE_LIST_JUST_SAVE = 22;
+    PLACE_LIST_CUSTOM = 14;
+    LOCATION_HISTORY = 15;
+    PERSONAL_BOOSTED = 16;
+    RECENTLY_VIEWED_PLACE = 17;
+    EXEMPLAR_PLACE = 18;
+    PLACE_LIST_WISHLIST = 19;
+    MARS_PERSONALIZATION = 20;
+    RECENT_BUNDLES = 21;
+    SUDDENLY_IMPORTANT_ML = 23;
+}
+
+enum Visibility {
+    UNKNOWN_VISIBILITY = 0;
+    COMPLETE = 1;
+    PARTIAL = 2;
+}
+
+enum VisibilityReason {
+    UNKNOWN_REASON = 0;
+    TRUMPED = 1;
+}
+
+enum IncidentProvider {
+    UNKNOWN_PROVIDER = 0;
+    TRAFFICCAST = 1;
+    WAZE = 2;
+    TOMTOM = 3;
+    GT = 4;
+    USER_REPORT = 16;
+}
+
+enum PersonalFeatureProvider {
+    UNKNOWN_PERSONAL_FEATURE_PROVIDER = 0;
+    KANSAS = 1;
+    HAPPYHOUR = 2;
+}
+
+enum LabelContentType {
+    UNKNOWN_LABEL_CONTENT_TYPE = 0;
+    GAS_PRICE = 1;
+    RATING = 2;
+    BRAND_LOGO = 3;
+    BIKE_AVAILABILITY = 4;
+    LODGING_PRICE = 5;
+}
+
+enum LabelContentLocation {
+    UNKNOWN_LABEL_CONTENT_LOCATION = 0;
+    PRIMARY = 1;
+    SECONDARY = 2;
+}

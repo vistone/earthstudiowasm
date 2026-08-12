@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package geo.mobrank.lore.btd;
+
+import "maps/versatile/proto/vector-annotation.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMMAPS";
+option java_outer_classname = "BrowseToDecidePrototypeContentOuterClass";
+option java_package = "com.google.geo.mobrank.lore.btd";
+
+message BrowseToDecidePrototypeContent {
+    optional string image_url = 1;
+    optional string title = 2;
+    optional string video_url = 3;
+    optional bool has_karto = 4;
+}
+
+extend maps_versatile.AnnotationContentProto {
+    optional BrowseToDecidePrototypeContent browse_to_decide_prototype_content = 436283725;
+}

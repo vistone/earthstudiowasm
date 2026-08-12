@@ -1,0 +1,45 @@
+syntax = "proto2";
+
+package logs.proto.maps_transit.api;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "AttributeStatusProto";
+option java_package = "com.google.logs.proto.maps.transit.api";
+
+message LoggedAttributeStatus {
+    optional LoggedAttributeIdentifier id = 1;
+    message LoggedAttributeIdentifier {
+        optional string id = 1;
+    }
+    
+    optional LoggedAttributeSource source = 2;
+    enum LoggedAttributeSource {
+        UNKNOWN_ATTRIBUTE_SOURCE = 0;
+        PREDICTED_BY_UGC = 1;
+        REALTIME_FROM_AGENCY = 2;
+        REALTIME_FROM_UGC = 3;
+        PREDICTED_BY_HULK = 4;
+        PREDICTED_BY_AGENCY_HISTORICAL_REALTIME = 5;
+        STATIC_FROM_AGENCY = 6;
+        STATIC_FROM_OPERATORS = 7;
+    }
+    
+    optional LoggedAttributeValue value = 4;
+    message LoggedAttributeValue {
+        oneof attribute_value {
+            LoggedIntegerValues integer_values = 2;
+        }
+        
+        message LoggedIntegerValue {
+            optional int32 value = 1;
+        }
+        
+        message LoggedIntegerValues {
+            repeated LoggedIntegerValue integer_value = 1;
+        }
+    }
+    
+    reserved 3;
+}

@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package maps_roadtraffic;
+
+option java_package = "com.google.roadtraffic.proto";
+
+message AnnotateIncidentsParameters {
+    optional bool return_jamcidents = 17 [default = false];
+    optional bool return_icon_location = 1 [default = false];
+    optional bool return_is_trusted_road_closure = 10 [default = false];
+    optional bool return_location_polyline = 2 [default = false];
+    
+    optional FeatureIdSelector return_feature_ids = 3 [default = FID_NONE];
+    enum FeatureIdSelector {
+        FID_NONE = 0;
+        FID_ONLY_MATCHING = 1;
+        FID_ALL = 2;
+    }
+    
+    optional string language = 5 [default = "en"];
+    optional bool return_caption_text = 6 [default = false];
+    optional bool return_description_text = 9 [default = false];
+    optional bool return_attribution = 12 [default = false];
+    optional bool return_internal_data = 8 [default = false];
+    optional bool return_internal_routename_annotations = 28 [default = false];
+    optional bool return_along_the_route_icon_location = 7 [default = false];
+    optional bool return_along_the_route_position = 11 [default = false];
+    optional bool return_along_the_route_delay_report = 18 [default = false];
+    optional bool return_along_the_route_location_description = 21 [default = false];
+    optional bool return_along_the_route_overlap_polyline = 27 [default = false];
+    optional bool return_time_to_overlap = 24 [default = false];
+    optional bool return_max_road_priority = 26 [default = false];
+    optional bool return_incident_age = 29 [default = false];
+    optional bool return_suspected_road_closures = 31 [default = false];
+    
+    reserved 13 to 16, 20, 22, 23, 25, 32;
+}

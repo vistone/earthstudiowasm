@@ -1,0 +1,40 @@
+syntax = "proto2";
+
+package maps_tactile.shared.placepreview;
+
+import "geo/serving/proto/attribution/user_attribution.proto";
+import "geo/serving/proto/photos/image_format.proto";
+import "geo/serving/proto/photos/image_key.proto";
+import "geo/serving/proto/photos/photo_entrypoint_type.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/shared/common/geom/geom.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPP";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoPreviewProto";
+option java_package = "com.google.maps.tactile.shared.placepreview";
+
+message PhotoPreview {
+    optional string ved = 1;
+    optional geo_serving_proto.photos.ImageKey image_key = 2;
+    
+    optional PhotoThumbnail photo = 3;
+    message PhotoThumbnail {
+        optional ImageUrlType image_url_type = 1;
+        enum ImageUrlType {
+            UNKNOWN_IMAGE_URL_TYPE = 0;
+            FIFE = 1;
+        }
+        
+        optional string url = 2;
+        optional maps_shared.geom.Size actual_size = 3;
+        optional string caption = 4;
+    }
+    
+    optional geo_serving_proto.photos.ImageFormat image_format = 4;
+    optional geo_serving_proto.photos.PhotoEntrypointType photo_entrypoint_type = 5;
+    optional maps_shared.geom.Camera camera = 6;
+    optional geo_serving_proto.attribution.UserAttribution user_attribution = 7;
+    optional string upload_time_relative_label_text = 8;
+}

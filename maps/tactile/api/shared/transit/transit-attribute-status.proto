@@ -1,0 +1,36 @@
+syntax = "proto2";
+
+package maps_tactile.shared.transit;
+
+import "java/com/google/protobuf/contrib/autoprotocopier/annotations.proto";
+import "maps/tactile/api/shared/transit/transit-attribute-display-info.proto";
+import "maps/tactile/api/shared/transit/transit-attribute-identifier.proto";
+import "maps/tactile/api/shared/transit/transit-attribute-value.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHTR";
+option java_multiple_files = true;
+option java_outer_classname = "TransitAttributeStatusProto";
+option java_package = "com.google.maps.tactile.shared.transit";
+
+message TransitAttributeStatus {
+    optional TransitAttributeIdentifier id = 1;
+    
+    optional AttributeSource source = 2;
+    enum AttributeSource {
+        UNKNOWN_ATTRIBUTE_SOURCE = 0;
+        PREDICTED_BY_UGC = 1;
+        REALTIME_FROM_AGENCY = 2;
+        REALTIME_FROM_UGC = 3;
+        PREDICTED_BY_HULK = 4;
+        PREDICTED_BY_AGENCY_HISTORICAL_REALTIME = 5;
+        STATIC_FROM_AGENCY = 6;
+        STATIC_FROM_OPERATORS = 7;
+    }
+    
+    optional AttributeSource suppressed_source = 6;
+    optional TransitAttributeValue value = 4;
+    optional TransitAttributeDisplayInfo display_info = 5;
+    
+    reserved 3;
+}

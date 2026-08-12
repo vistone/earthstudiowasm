@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message PoseProto {
+    optional int32 index = 1;
+    optional double lat = 2;
+    optional double lng = 3;
+    optional double altitude = 4;
+    optional double yaw = 5;
+    optional double pitch = 6;
+    optional double roll = 7;
+}

@@ -1,0 +1,27 @@
+syntax = "editions";
+
+package geo_serving_proto.directions;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPD";
+option java_multiple_files = true;
+option java_outer_classname = "TravelModeProto";
+option java_package = "com.google.geo.serving.proto.directions";
+
+enum TravelMode {
+    option features = enum_type: CLOSED
+    ;
+    DRIVE = 0;
+    BICYCLE = 1;
+    WALK = 2;
+    TRANSIT = 3;
+    FLY = 4;
+    TWO_WHEELER = 9;
+    MIXED = 6;
+    TAXI = 8;
+    BIKESHARING = 11;
+    TAXICAB = 10;
+}

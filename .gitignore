@@ -1,0 +1,23 @@
+# Earth Studio WASM — Git Ignore
+
+# Archify renderer temp files
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+
+# Build outputs (if any)
+build/
+dist/
+generated/

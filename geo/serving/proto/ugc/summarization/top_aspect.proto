@@ -1,0 +1,60 @@
+syntax = "editions";
+
+package geo_serving_proto.ugc.summarization;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "third_party/java/protobuf/java_features.proto";
+import "third_party/protobuf/cpp_features.proto";
+
+option features = field_presence: EXPLICIT
+enum_type: CLOSED
+;
+option objc_class_prefix = "GSPUGCS";
+option java_multiple_files = true;
+option java_outer_classname = "TopAspectProto";
+option java_package = "com.google.geo.serving.proto.ugc.summarization";
+
+enum TopAspect {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_TOP_ASPECT = 0;
+    ACCESSIBILITY = 1;
+    ACCOMMODATION = 2;
+    ACTIVITY = 3;
+    AMENITY = 4;
+    APPOINTMENT = 5;
+    ATMOSPHERE = 6;
+    CLASS = 7;
+    COMMUNICATION = 8;
+    CONVENIENCE = 9;
+    DRINK = 10;
+    ENVIRONMENT = 11;
+    EVENT = 12;
+    FACILITY = 13;
+    FOOD = 14;
+    FOOD_AND_BEVERAGE = 15;
+    FUNCTION = 16;
+    INFRASTRUCTURE = 17;
+    INSTRUCTOR = 18;
+    LOCATION = 19;
+    MAINTENANCE = 20;
+    MEDICAL_SERVICE = 21;
+    NONE = 22;
+    PAYMENT = 23;
+    PRICE = 24;
+    PRODUCT = 25;
+    SAFETY = 26;
+    SCHOOL = 27;
+    SERVICE = 28;
+    STAFF = 29;
+    TRAIL_ACCESSIBILITY = 30;
+    TRAIL_ACTIVITY = 31;
+    TRAIL_AMENITY = 32;
+    TRAIL_DIFFICULTY = 33;
+    TRAIL_ENVIRONMENT = 34;
+    TRAIL_FEATURE = 35;
+    TRANSPORTATION = 36;
+    VALUE = 37;
+}

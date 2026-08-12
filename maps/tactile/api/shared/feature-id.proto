@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureIdProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message FeatureId {
+    optional fixed64 cell_id = 1 [jstype = JS_STRING];
+    optional fixed64 fprint = 2 [jstype = JS_STRING];
+}

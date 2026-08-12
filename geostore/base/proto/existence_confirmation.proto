@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/data_agent.proto";
+import "geostore/base/proto/datetime.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_multiple_files = true;
+option java_outer_classname = "ExistenceConfirmation";
+option java_package = "com.google.geostore.base.proto";
+
+message ExistenceConfirmationProto {
+    optional DataAgentProto originator = 1;
+    optional DateTimeProto utc_confirmation_time = 2;
+    optional DateTimeProto utc_confirmation_receipt_time = 3;
+}

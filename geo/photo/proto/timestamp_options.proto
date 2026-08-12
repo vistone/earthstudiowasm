@@ -1,0 +1,23 @@
+syntax = "editions";
+
+package geo_photo;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPH";
+option java_multiple_files = true;
+option java_outer_classname = "TimestampOptionsProto";
+option java_package = "com.google.geo.photo";
+
+message TimestampOptions {
+    optional TimestampType timestamp_type = 1 [default = CAPTURE_TIMESTAMP];
+}
+
+enum TimestampType {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_TIMESTAMP = 0;
+    CAPTURE_TIMESTAMP = 1;
+    UPLOAD_TIMESTAMP = 2;
+    LAST_USER_MODIFIED_TIMESTAMP = 3;
+}

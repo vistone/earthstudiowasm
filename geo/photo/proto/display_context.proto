@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "DisplayContextProto";
+option java_package = "com.google.geo.photo";
+
+enum GeoPhotoDisplayContext {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_DISPLAY_CONTEXT = 0;
+    PLACE_SUMMARY = 1;
+    LINEAR_GALLERY_VIEW = 2;
+    SINGLE_IMAGE_CATEGORICAL_VIEW = 3;
+    LINEAR_CATEGORICAL_VIEW = 4;
+    STRICT_CONTEXTUAL_VIEW = 5;
+    MAPS_GUIDE_VIEW = 7;
+    TOPIC_VIEW = 6;
+    RICH_LIST_SERP = 8;
+    RICH_LIST_IMMERSIVE = 9;
+    PLACE_SUMMARY_WITH_FUSED_TOPICS = 10;
+    SUPERCAT = 11;
+    VIDEO_ONLY_VIEW = 12;
+}

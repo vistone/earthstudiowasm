@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/restriction.proto";
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message InternalSegmentProto {
+    repeated RestrictionProto travel_allowance = 1;
+    
+    repeated LaneConnectionReference disallowed_connections = 2;
+    message LaneConnectionReference {
+        optional FeatureIdProto segment = 1;
+        optional int32 to_lane_number = 2;
+        optional int32 from_lane_number = 3;
+        optional uint64 to_lane_id = 4;
+        optional uint64 from_lane_id = 5;
+    }
+    
+    repeated LaneConnectionReference disallowed_primary_connection = 3;
+}

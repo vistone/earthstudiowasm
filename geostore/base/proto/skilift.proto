@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "geostore/base/proto/options.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message SkiLiftProto {
+    optional Type type = 1 [default = TYPE_CHAIR];
+    enum Type {
+        TYPE_ANY = 0;
+        TYPE_SURFACE = 1;
+        TYPE_T_BAR = 17;
+        TYPE_J_BAR = 18;
+        TYPE_ROPE_TOW = 19;
+        TYPE_POMA = 20;
+        TYPE_CARPET = 21;
+        TYPE_FUNICULAR = 22;
+        TYPE_GONDOLA = 2;
+        TYPE_CHAIR = 3;
+        TYPE_AERIAL = 4;
+        TYPE_TRAM = 65;
+    }
+}

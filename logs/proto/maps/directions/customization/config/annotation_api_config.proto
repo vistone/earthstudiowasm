@@ -1,0 +1,34 @@
+syntax = "proto2";
+
+package maps_directions_customization_logs;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message LoggedAnnotationApiConfig {
+    optional string domain = 1;
+    optional string name = 2;
+    
+    oneof annotation_subtype {
+        LoggedSegmentPropertyApiConfig segment_property_api_config = 3;
+    }
+}
+
+message LoggedSegmentPropertyApiConfig {
+    optional string segment_property_id = 1 [deprecated = true];
+    
+    optional LoggedPropertyType property_type = 2;
+    enum LoggedPropertyType {
+        PROPERTY_TYPE_UNSPECIFIED = 0;
+        PROPERTY_TYPE_INT = 1;
+        PROPERTY_TYPE_DOUBLE = 2;
+        PROPERTY_TYPE_BOOL = 3;
+        PROPERTY_TYPE_SCHEDULED_INT = 4;
+        PROPERTY_TYPE_SCHEDULED_DOUBLE = 5;
+        PROPERTY_TYPE_SCHEDULED_BOOL = 6;
+        PROPERTY_TYPE_AFFORDANCE_VECTOR_PROTO = 7 [deprecated = true];
+        PROPERTY_TYPE_STRUCTURED_DATA = 8;
+        PROPERTY_TYPE_BYTES = 9;
+    }
+    
+    optional bool scale_by_segment_traversal_fraction = 3;
+}

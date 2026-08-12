@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package pathfinder;
+
+import "google/type/money.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_outer_classname = "MRPCostFunctionSpecificationProto";
+option java_package = "com.google.maps.pathfinder.client";
+
+message MRPCostFunctionSpecification {
+    optional Type type = 1;
+    enum Type {
+        UNKNOWN_COST_FUNCTION_TYPE = 0;
+        TIME = 1;
+        DISTANCE = 2;
+        RATE_CARD = 3;
+    }
+    
+    optional RateCard rate_card = 2;
+    message RateCard {
+        repeated google.type.Money cost_per_min = 1;
+        repeated google.type.Money cost_per_km = 2;
+        optional bool include_toll_charges = 4;
+    }
+}

@@ -1,0 +1,76 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/datetime.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/segment_portion.proto";
+import "geostore/base/proto/timeschedule.proto";
+import "geostore/base/proto/travel_mode.proto";
+import "geostore/base/proto/vehicle_attribute_filter.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message RoadDisruptionProto {
+    optional CauseProto cause = 1;
+    message CauseProto {
+        oneof cause_id {
+            FeatureIdProto road_disruption_id = 1;
+            string event_mid = 4;
+            CauseCategory cause_category = 10;
+        }
+        
+        enum CauseCategory {
+            CAUSE_CATEGORY_UNSPECIFIED = 0;
+            ROAD_OBSTRUCTION = 1;
+            CRASH = 17;
+            CRISIS = 2;
+            WEATHER = 33;
+            FLOODING = 529;
+            FIRE = 34;
+            PLANNED_EVENT = 3;
+            SPORTS_EVENT = 769;
+            ROUTE_SPORTS_EVENT = 12305;
+            PARADE = 770;
+            CONSTRUCTION = 771;
+            DEMONSTRATION = 772;
+            SEASONAL_CLOSURE = 4;
+        }
+    }
+    
+    optional TimeScheduleProto planned_schedule = 2;
+    
+    optional TimestampedStateProto current_state = 3;
+    message TimestampedStateProto {
+        optional State state = 1;
+        enum State {
+            STATE_UNSPECIFIED = 0;
+            INACTIVE = 1;
+            SUSPECTED_ACTIVE = 2;
+            ACTIVE = 3;
+        }
+        
+        optional DateTimeProto utc_datetime = 2;
+    }
+    
+    optional TimestampedStateProto future_state = 4;
+    optional DateTimeProto schedule_resumption_time = 9;
+    optional DateTimeProto last_active_start_datetime = 5;
+    optional DateTimeProto last_inactive_start_datetime = 6;
+    repeated SegmentPortionProto affected_segment_portions = 7;
+    
+    repeated IntersectionTraversalProto affected_intersection_traversals = 8;
+    message IntersectionTraversalProto {
+        repeated FeatureIdProto from_segment = 1;
+        repeated FeatureIdProto to_segment = 2;
+        optional FeatureIdProto intersection_group = 3;
+    }
+    
+    repeated TravelMode affected_travel_modes = 12;
+    optional VehicleAttributeFilterProto affected_vehicle_filter = 13;
+}

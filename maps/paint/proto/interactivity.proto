@@ -1,0 +1,17 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "location/japan/jartic/serving/trafficlayer/proto/jartic_incident_attribution.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+option java_package = "com.google.maps.paint";
+
+message InteractivityProto {
+    optional string layer_backend_spec = 1;
+    optional string layer_backend_feature_id = 2;
+    optional string mymaps_layer_id = 3;
+    optional location_japan_jartic.JarticIncidentAttribution jartic_incident_attribution = 4;
+}

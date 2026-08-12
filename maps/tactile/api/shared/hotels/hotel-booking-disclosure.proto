@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package maps_tactile.shared.hotels;
+
+import "geo/serving/proto/text/annotated_text.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "webserver/shared/maps/logging/visibility.proto";
+
+option objc_class_prefix = "GMTTSHH";
+option java_multiple_files = true;
+option java_outer_classname = "HotelBookingDisclosureProto";
+option java_package = "com.google.maps.tactile.shared.hotels";
+
+message HotelBookingDisclosure {
+    optional maps_frontend.Visibility visibility = 1;
+    optional int32 ve_type = 2 [default = 0x24685];
+    optional geo_serving_proto.text.AnnotatedText disclosure = 3;
+}

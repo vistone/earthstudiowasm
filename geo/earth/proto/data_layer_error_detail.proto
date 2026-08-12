@@ -1,0 +1,27 @@
+syntax = "editions";
+
+package geo.earth.layers.proto;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.layers";
+
+message DataLayerErrorDetail {
+    optional ErrorType error_type = 1;
+    enum ErrorType {
+        UNKNOWN_ERROR = 0;
+        LAYER_NOT_FOUND = 1;
+        LAYER_UNAVAILABLE = 2;
+        LAYER_REMOVED_FROM_CATALOG = 3;
+        USER_HAS_INSUFFICIENT_ENTITLEMENTS = 4;
+        USER_ASSET_LAYER_DELETED = 5;
+        DOCUMENT_ASSET_LAYER_IN_SHARED_DRIVE = 6;
+        DOCUMENT_ASSET_LAYER_DELETED_OVER_QUOTA = 7;
+        DOCUMENT_ASSET_LAYER_ASSOCIATED_WITH_DIFFERENT_MAP = 8;
+    }
+    
+    optional string error_message = 2;
+}

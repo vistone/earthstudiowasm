@@ -1,0 +1,233 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "geo/mobrank/lore/boq/maps/proto/karto_extended_data.proto";
+import "geo/photo/proto/imagery_coverage_metadata.proto";
+import "geo/serving/proto/omnimaps/omnimaps_data.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "location/japan/jartic/serving/trafficlayer/proto/jartic_incident_attribution.proto";
+import "maps/api/shared/paint/proto/maps_api_metadata.proto";
+import "maps/gmm/api/promoted_pin_ads_common.proto";
+import "maps/gmm/webview/api/common/draw-metadata.proto";
+import "maps/indoor/proto/indoor.proto";
+import "maps/paint/proto/accessibility-metadata.proto";
+import "maps/paint/proto/air-quality-heatmap-metadata.proto";
+import "maps/paint/proto/air-quality-metadata.proto";
+import "maps/paint/proto/annotation-application-info.proto";
+import "maps/paint/proto/batch-logging-instruction.proto";
+import "maps/paint/proto/categorical-search-metadata.proto";
+import "maps/paint/proto/client-vector-tile-ugc-extensions.proto";
+import "maps/paint/proto/client-vector-tile.proto";
+import "maps/paint/proto/feature-selector.proto";
+import "maps/paint/proto/label-density-restriction.proto";
+import "maps/paint/proto/label-density-restrictions.proto";
+import "maps/paint/proto/legendary/legendary.proto";
+import "maps/paint/proto/major-event-metadata.proto";
+import "maps/paint/proto/map-element-id.proto";
+import "maps/paint/proto/maps-metadata-container.proto";
+import "maps/paint/proto/places-list-metadata.proto";
+import "maps/paint/proto/poi-logging-instruction.proto";
+import "maps/paint/proto/promoted-place-logging-metadata.proto";
+import "maps/paint/proto/promoted-place-navigation-logging-metadata.proto";
+import "maps/paint/proto/seasonal-event-metadata.proto";
+import "maps/paint/proto/static-realtime-metadata.proto";
+import "maps/paint/proto/transit-station-entrance-metadata.proto";
+import "maps/paint/proto/visual-element.proto";
+import "maps/roadtraffic/proto/incidentmetadata.proto";
+import "maps/shared/client/callouts/callouts_logging.proto";
+import "maps/shared/mapcore/api/proto/map_actions.proto";
+import "maps/shared/mapcore/labeler/api/client_vector_ops_metadata.proto";
+import "maps/shared/mapcore/labeler/api/label_logging.proto";
+import "maps/shared/mapcore/testing/mctf/proto/metadata.proto";
+import "maps/spotlight/proto/ad-metadata.proto";
+import "maps/spotlight/proto/directions.proto";
+import "maps/spotlight/proto/entity-metadata.proto";
+import "maps/spotlight/proto/hotel-metadata.proto";
+import "maps/spotlight/proto/logging-metadata.proto";
+import "maps/spotlight/proto/spotlight-item-metadata.proto";
+import "maps/tactile/api/shared/place/maps-place-identifier.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_outer_classname = "ClientVectorMetadataProto";
+option java_package = "com.google.maps.paint.client";
+
+message DriveaboutRoadMetadata {
+    optional string name = 1;
+    optional int32 priority = 2;
+    optional int32 attributes = 3;
+    
+    enum Attributes {
+        ATTRIBUTE_TRAVEL_PROHIBITED_FORWARD = 1;
+        ATTRIBUTE_TRAVEL_PROHIBITED_REVERSE = 2;
+        ATTRIBUTE_RAMP = 4;
+        ATTRIBUTE_TUNNEL = 8;
+        ATTRIBUTE_INTERSECTS_NONE = 16;
+        ATTRIBUTE_INTERSECTS_SINGLES_ONLY = 32;
+        ATTRIBUTE_INTERSECTS_SAME_PRI_ONLY = 64;
+    }
+}
+
+message InteractivityMetadata {
+    optional string layer_backend_spec = 1;
+    optional string layer_backend_feature_id = 2;
+    optional geo_serving_proto.omnimaps.OmniMapsData omnimaps_data = 17;
+    optional string geo_asset_id = 9;
+    optional fixed64 cell_id = 3;
+    optional fixed64 fprint = 4;
+    optional string mid = 11 [deprecated = true];
+    optional maps_tactile.shared.place.MapsPlaceIdentifier maps_place_identifier = 20;
+    
+    optional ExperienceType experience_type = 12;
+    enum ExperienceType {
+        UNKNOWN = 0;
+        EVENT = 1;
+        ACTIVITY = 2;
+    }
+    
+    optional string display_name = 5;
+    optional string announcable_display_name = 13;
+    optional bool is_search_result = 6;
+    optional bool is_search_nearby_poi = 16;
+    optional bool feature_detection_priority = 7;
+    optional bool suitable_for_departure_board = 8;
+    optional bool suitable_for_transit_line_page = 10;
+    optional int32 selected_label_representation_tag = 14;
+    optional int32 unhovered_orientation_cue_label_representation_tag = 24;
+    optional int32 infer_display_names_from_representation = 15;
+    optional bool is_unsearchable = 19;
+    optional RenderOpAnnotationTarget annotation_target = 21;
+    optional bool suitable_for_indoor_building_selection = 22;
+    optional location_japan_jartic.JarticIncidentAttribution jartic_incident_attribution = 23;
+    optional .mapcore.Metadata map_actions_metadata = 26;
+    
+    reserved 25;
+}
+
+message ElectricVehicleChargingStationMetadata {
+    repeated ElectricVehicleChargingPort port = 1;
+    message ElectricVehicleChargingPort {
+        optional int32 connector_type = 1;
+        optional float power_kw = 2;
+    }
+}
+
+message MobileMapsApiMetadata {
+    optional string feature_id = 1;
+    
+    optional SdkLabelAnchorMetadata sdk_label_anchor_metadata = 2;
+    message SdkLabelAnchorMetadata {
+        optional float anchor_u = 3;
+        optional float anchor_v = 4;
+        
+        oneof anchor_info {
+            bool is_anchored_to = 1;
+            int64 anchor_to_cvo_id = 2;
+        }
+    }
+}
+
+message SphericalMetadata {
+    optional bool high_curvature_polygon = 1;
+}
+
+message RenderOpDebugInfo {
+    optional string debug_param = 1;
+    optional string country_code = 2;
+    optional string debug_url = 3;
+}
+
+message LiveTileDiffMetadata {
+    optional fixed64 cell_id = 1;
+    optional fixed64 fprint = 2;
+}
+
+message TransitVehicleMetadata {
+    optional string vehicle_token = 1;
+}
+
+message EditMapIconMetadata {
+    optional string icon_id = 1;
+}
+
+message MapActionsMetadata {
+    optional RasterMetadata raster_metadata = 1;
+    message RasterMetadata {
+        optional int32 z_plane = 1;
+        optional int32 sub_pass = 2;
+    }
+    
+    extend .proto2.bridge.MessageSet {
+        optional MapActionsMetadata message_set_extension = 525006022;
+    }
+}
+
+message LabelDrawOrderMetadata {
+    optional bool use_style_z_plane_for_draw_order = 1;
+}
+
+message MetadataExtensions {
+    extend MapsMetadataContainer {
+        optional maps_spotlight.WaypointMetadata waypoint_metadata = 25000000;
+        optional maps_spotlight.AccessPointMetadata access_point_metadata = 25000001;
+        optional maps_spotlight.TripMetadata trip_metadata = 25000002;
+        optional maps_spotlight.AdMetadata ad_metadata = 25000003;
+        optional maps_spotlight.EntityMetadata entity_metadata = 25000004;
+        optional maps_spotlight.HotelMetadata hotel_metadata = 25000005;
+        optional maps_spotlight.SpotlightItemMetadata spotlight_item_metadata = 25000006;
+        optional maps_spotlight.ViaMetadata via_metadata = 25000007;
+        optional maps_roadtraffic.IncidentMetadata incident_metadata = 25000008;
+        optional geo_photo.ImageryCoverageMetadata imagery_metadata = 25000009;
+        optional maps_spotlight.LoggingMetadata logging_metadata = 25000010;
+        optional maps_paint.VisualElementMetadata visual_element_metadata = 25000011;
+        optional maps_paint.PromotedPlaceLoggingMetadata promoted_place_logging_metadata = 25000012;
+        optional maps_paint.PromotedPlaceNavigationLoggingMetadata promoted_place_navigation_logging_metadata = 25000013;
+        optional maps_paint.MajorEventMetadata major_event_metadata = 25000014;
+        optional maps_paint.CategoricalSearchMetadata categorical_search_metadata = 25000015;
+        optional maps_paint.AirQualityMetadata air_quality_metadata = 25000016;
+        optional maps_paint.AccessibilityMetadata accessibility_metadata = 25000017;
+        optional .gmm.PromotedPin promoted_pin = 25000039;
+        optional PoiLoggingInstruction poi_logging_instruction = 25000049;
+        optional MobileMapsApiMetadata mobile_maps_api_metadata = 25000018;
+        optional InteractivityMetadata interactivity_metadata = 25000019;
+        optional .maps.indoor.IndoorRelationProto indoor_relation_metadata = 25000020;
+        optional maps_paint.StaticRealtimeMetadata static_realtime_metadata = 25000021;
+        optional ElectricVehicleChargingStationMetadata ev_station_metadata = 25000022;
+        optional maps_paint.FeatureSelector.FeatureTypeCategory feature_type_category = 25000023;
+        optional maps_paint.LabelDensityRestriction label_density_restriction = 25000024;
+        optional LabelDensityRestrictions label_density_restrictions = 25000025;
+        optional AnnotationApplicationInfo annotation_application_info = 25000026;
+        optional RenderOpDebugInfo render_op_debug_info = 25000027;
+        optional BatchLoggingInstruction batch_logging_instruction = 25000028;
+        optional AnnotationContentExtensions annotation_content_extensions = 25000029;
+        optional .maps.indoor.IndoorInteractiveEntityProto indoor_interactivity_metadata = 25000030;
+        optional .maps.indoor.IndoorBuildingProto indoor_building_metadata = 25000031;
+        optional maps_spotlight.DraggingMetadata dragging_metadata = 25000032;
+        optional maps_spotlight.StepInspectionMetadata step_inspection_metadata = 25000033;
+        optional maps_api.MapsApiMetadataProto maps_api_metadata = 25000034;
+        optional TransitVehicleMetadata transit_vehicle_metadata = 25000040;
+        optional maps_paint.TransitStationEntranceMetadata transit_station_entrance_metadata = 25000041;
+        optional geo.mobrank.lore.KartoExtendedData karto_extended_data = 25000042;
+        optional .mapcore.labeler.LabelInteractivityMetadata label_interactivity_metadata = 25000043;
+        optional maps_paint.AirQualityHeatmapMetadata air_quality_heatmap_metadata = 25000045;
+        optional .mapcore.labeler.PlacedLabelLoggingMetadata placed_label_logging_metadata = 25000046;
+        optional .mapcore.testing.mctf.proto.MctfMetadata mctf_metadata = 25000047;
+        optional LiveTileDiffMetadata live_tilediff_metadata = 25000050;
+        optional .gmm.webview.common.DrawMetadata draw_metadata = 25000052;
+        optional maps_paint.SeasonalEventMetadata seasonal_event_metadata = 25000053;
+        optional ProviderTable copyrights = 25000054;
+        optional PointMetadataProto unaddressed_feature_callout_metadata = 25000055;
+        optional maps_paint.SdkFeatureTypeInfo sdk_feature_type_info = 25000056;
+        optional BatchLoggingInstruction batch_logging_instruction_for_volume = 25000057;
+        optional maps_paint.PlacesListMetadata places_list_metadata = 25000060;
+        optional .mapcore.labeler.CalloutExtraOptions callout_extra_options = 25000062;
+        optional EditMapIconMetadata edit_map_icon_metadata = 25000063;
+        optional MapActionsMetadata map_actions_metadata = 25000064;
+        optional maps_shared_client_callouts.CalloutMetadata callout_metadata = 25000065;
+        optional LabelDrawOrderMetadata label_draw_order_metadata = 25000066;
+        optional MapElementId map_element_id = 25000067;
+    }
+}

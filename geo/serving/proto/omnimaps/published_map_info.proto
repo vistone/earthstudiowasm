@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geo_serving_proto.omnimaps;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPOM";
+option java_multiple_files = true;
+option java_outer_classname = "PublishedMapInfoProto";
+option java_package = "com.google.geo.serving.proto.omnimaps";
+
+message PublishedMapInfo {
+    optional MapType map_type = 1;
+    enum MapType {
+        option features = enum_type: CLOSED
+        ;
+        UNKNOWN_MAP_TYPE = 0;
+        CRISIS_FIRE = 1;
+        AQI = 2;
+        WEATHER = 3;
+        CRISIS_STANDARD = 4;
+    }
+}

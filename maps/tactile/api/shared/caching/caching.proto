@@ -1,0 +1,97 @@
+syntax = "proto2";
+
+package maps_tactile.shared.caching;
+
+import "maps/tactile/api/shared/date-time.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHC";
+option java_multiple_files = true;
+option java_outer_classname = "CachingProto";
+option java_package = "com.google.maps.tactile.shared.caching";
+
+message CacheDirectiveParams {
+    optional bool time_of_day_condition_supported = 1;
+    optional bool search_history_modified_condition_supported = 2;
+    optional bool viewport_overlap_floating_point_ratio_supported = 5;
+    optional bool viewport_zoom_condition_supported = 3;
+}
+
+message CacheDirective {
+    optional uint32 ttl_sec = 1;
+    optional CacheCondition display_condition = 2;
+    optional CacheCondition refetch_condition = 3;
+    optional string cache_key = 4;
+    optional bool disable_persist_across_app_launches = 5;
+}
+
+message CacheCondition {
+    repeated CacheCondition all_of = 1;
+    repeated CacheCondition some_of = 2;
+    repeated CacheCondition none_of = 3;
+    
+    oneof condition {
+        Age age = 4;
+        ViewportOverlap viewport_overlap = 5;
+        ViewportZoom viewport_zoom = 10;
+        UserLocation user_location = 6;
+        TimeOfDay time_of_day = 7;
+        InAppUserDataModification in_app_user_data_modification = 8;
+    }
+    
+    message Age {
+        optional uint32 min_sec = 1;
+        optional uint32 max_sec = 2;
+    }
+    
+    message ViewportOverlap {
+        repeated LatLngRectangle rect = 1;
+        
+        optional Area numerator_area = 2;
+        enum Area {
+            VIEWPORT = 0;
+            RECT = 1;
+            UNION = 2;
+            INTERSECTION = 3;
+        }
+        
+        optional Area denominator_area = 3;
+        optional uint32 min_percent = 4 [deprecated = true];
+        optional uint32 max_percent = 5 [deprecated = true];
+        optional float min_ratio = 6;
+        optional float max_ratio = 7;
+    }
+    
+    message ViewportZoom {
+        optional float min_zoom = 1;
+        optional float max_zoom = 2;
+    }
+    
+    message UserLocation {
+        optional LatLng point = 1;
+        optional uint32 min_distance_meters = 2;
+        optional uint32 max_distance_meters = 3;
+        optional uint32 min_accuracy_meters = 4;
+        optional uint32 max_accuracy_meters = 5;
+    }
+    
+    message DailyTimeRange {
+        optional uint32 start_seconds = 1;
+        optional uint32 end_seconds = 2;
+        repeated DayOfWeek excluded_day = 3;
+    }
+    
+    message TimeOfDay {
+        repeated DailyTimeRange time_range = 1;
+        optional sint32 utc_offset_minutes = 2;
+    }
+    
+    message InAppUserDataModification {
+        optional bool location_history = 1;
+        optional bool saved_place = 2;
+        optional bool alias = 3;
+        optional bool search_history = 4;
+        optional uint32 modification_propagation_seconds = 5;
+    }
+}

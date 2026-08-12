@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geo.transportation.locationsignals;
+
+import "geostore/base/proto/timeschedule.proto";
+import "geostore/base/proto/timezone.proto";
+import "maps/directions/mrp/proto/affordances.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+message AffordanceProto {
+    optional maps.mrp.AffordanceEnums.Class affordance_class = 1;
+    optional AffordanceInfoProto affordance_info = 2;
+}
+
+message AffordanceInfoProto {
+    optional geostore.TimeScheduleProto schedule = 1;
+    optional geostore.TimezoneProto timezone = 2;
+    
+    extensions 1000 to max;
+}
+
+message AffordanceVectorProto {
+    repeated AffordanceProto affordances = 1;
+}

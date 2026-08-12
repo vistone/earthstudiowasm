@@ -1,0 +1,38 @@
+syntax = "editions";
+
+package ads_travel;
+
+import "geo/photo/proto/image_frontend_type.proto";
+import "logs/proto/ads/travel/hotel_annotation.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option java_outer_classname = "HotelPriceDetailsOuterClass";
+option java_package = "com.google.ads.travel";
+
+message HotelPriceDetails {
+    optional string partner_name = 1;
+    optional float price = 2;
+    optional float taxes = 3;
+    optional string currency_string = 5;
+    optional float conversion_rate_to_usd = 6 [default = 1];
+    optional string partner_hotel_id = 7;
+    optional string partner_room_id = 9;
+    optional bool is_owner = 8 [default = false];
+    optional string pos_name = 10;
+    optional uint64 pos_booking_phone_number = 11;
+    optional uint32 discount_percentage = 12;
+    optional string rate_rule_id = 13;
+    optional HotelAnnotationsData annotations_data = 14;
+    optional HotelImageKey image_key = 15;
+}
+
+message HotelAnnotationsData {
+    repeated HotelAnnotation ranked_annotations = 1;
+}
+
+message HotelImageKey {
+    optional geo_photo_service.ImageFrontendType frontend = 1;
+    optional string photo_id = 2;
+}

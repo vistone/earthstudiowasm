@@ -1,0 +1,35 @@
+syntax = "proto2";
+
+package logs;
+
+import "logs/maps/featureid.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOG";
+option java_multiple_files = true;
+option java_outer_classname = "LoggedPlaceProto";
+option java_package = "com.google.common.logging";
+
+message LoggedPlace {
+    optional logs_maps.FeatureIdProto feature_id = 1;
+    optional bool feature_id_scrubbed = 2;
+    optional fixed32 latitude_e6 = 3;
+    optional fixed32 longitude_e6 = 4;
+    
+    optional LoggingContext logging_context = 5 [deprecated = true];
+    enum LoggingContext {
+        LOGGING_CONTEXT_UNSPECIFIED = 0;
+        LOGGING_CONTEXT_VISITED = 1;
+        LOGGING_CONTEXT_NOT_VISITED = 2;
+    }
+}
+
+message LoggedUserPlace {
+    optional logs_maps.FeatureIdProto feature_id = 1;
+    optional bool feature_id_scrubbed = 2;
+    optional fixed32 latitude_e6 = 3;
+    optional fixed32 longitude_e6 = 4;
+    optional bool child_visit = 5 [deprecated = true];
+    optional bool indoor_visit = 7;
+    optional float calibrated_probability = 6;
+}

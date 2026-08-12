@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package maps_tactile.directions;
+
+option objc_class_prefix = "GMTTD";
+option java_multiple_files = true;
+option java_outer_classname = "AddressProto";
+option java_package = "com.google.maps.tactile.directions";
+
+message Address {
+    repeated string line = 1;
+    optional string place_title = 2;
+    optional string single_line_address = 3;
+    optional string succinct_street_address = 4;
+    optional string municipality = 5;
+}

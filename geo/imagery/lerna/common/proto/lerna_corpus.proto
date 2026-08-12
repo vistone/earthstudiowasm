@@ -1,0 +1,22 @@
+syntax = "editions";
+
+package lerna;
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.imagery.lerna.common.proto";
+
+enum LernaCorpus {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN = 0;
+    GENERIC = 1;
+    CBDB = 2;
+    EARTH_ENGINE = 3;
+    MAGRATHEAN = 5 [deprecated = true];
+    SNAPSHOT = 6 [deprecated = true];
+    USV = 7;
+    VELO = 8 [deprecated = true];
+    UGC = 9;
+    FLEETS = 10;
+    EPHEMERAL = 11;
+}

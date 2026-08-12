@@ -1,0 +1,15 @@
+syntax = "editions";
+
+package pathfinder;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+
+enum GeneratorTrafficUsage {
+    GENERATOR_TRAFFIC_USAGE_UNSPECIFIED = 0;
+    GENERATOR_TRAFFIC_USAGE_REQUERY_TOKEN = 1;
+    GENERATOR_TRAFFIC_USAGE_HISTORICAL_SPEEDS = 2;
+    GENERATOR_TRAFFIC_USAGE_REAL_TIME_SPEED_PREDICTIONS = 3;
+}

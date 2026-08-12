@@ -1,0 +1,48 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "knowledge/graph/protomesh/protomesh.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message TransitLineProto {
+    repeated FeatureIdProto agency = 1;
+    
+    optional VehicleTypeCategory vehicle_type = 3 [default = VEHICLE_TYPE_ANY];
+    enum VehicleTypeCategory {
+        VEHICLE_TYPE_ANY = 0;
+        VEHICLE_TYPE_RAIL = 1;
+        VEHICLE_TYPE_METRO_RAIL = 17;
+        VEHICLE_TYPE_SUBWAY = 273;
+        VEHICLE_TYPE_TRAM = 274;
+        VEHICLE_TYPE_MONORAIL = 275;
+        VEHICLE_TYPE_HEAVY_RAIL = 18;
+        VEHICLE_TYPE_COMMUTER_TRAIN = 289;
+        VEHICLE_TYPE_HIGH_SPEED_TRAIN = 290;
+        VEHICLE_TYPE_LONG_DISTANCE_TRAIN = 291;
+        VEHICLE_TYPE_BUS = 2;
+        VEHICLE_TYPE_INTERCITY_BUS = 33;
+        VEHICLE_TYPE_TROLLEYBUS = 34;
+        VEHICLE_TYPE_SHARE_TAXI = 35;
+        VEHICLE_TYPE_FERRY = 3;
+        VEHICLE_TYPE_CABLE_CAR = 4;
+        VEHICLE_TYPE_GONDOLA_LIFT = 65;
+        VEHICLE_TYPE_FUNICULAR = 66;
+        VEHICLE_TYPE_SPECIAL = 5;
+        VEHICLE_TYPE_HORSE_CARRIAGE = 81;
+        VEHICLE_TYPE_AIRPLANE = 6;
+    }
+    
+    optional fixed32 label_background_color = 4;
+    optional fixed32 label_text_color = 5;
+    repeated FeatureIdProto stations = 7;
+    
+    reserved 2, 6;
+}

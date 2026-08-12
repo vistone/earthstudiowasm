@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package maps_roadtraffic;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/name.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "IncidentsRootCause";
+option java_package = "com.google.roadtraffic.proto";
+
+message IncidentRootCause {
+    optional Cause cause = 1 [default = UNKNOWN];
+    enum Cause {
+        UNKNOWN = 0;
+        CONSTRUCTION = 1;
+        CRASH = 2;
+        SEASONAL = 3;
+        EVENT = 4;
+        FIRE = 5;
+        FLOODING = 6;
+        WEATHER = 9;
+        SPORTS = 10;
+        PARADE = 11;
+        CRISIS = 12;
+        DEMONSTRATION = 13;
+    }
+    
+    repeated geostore.NameProto event_name = 2;
+    optional string event_mid = 3;
+    optional geostore.FeatureIdProto restriction_group_id = 4;
+}

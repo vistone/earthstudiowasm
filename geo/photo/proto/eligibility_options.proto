@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = repeated_field_encoding: EXPANDED
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "EligibilityOptionsProto";
+option java_package = "com.google.geo.photo";
+
+message EligibilityOptions {
+    repeated EligibilityType eligibility_types = 1;
+}
+
+enum EligibilityType {
+    option features = enum_type: CLOSED
+    ;
+    UNKNOWN_ELIGIBILITY_TYPE = 0;
+    SPATIAL_ELIGIBLE = 1;
+    FEATURE_ELIGIBLE = 2;
+}

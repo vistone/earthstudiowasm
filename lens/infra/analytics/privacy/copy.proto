@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package lens.infra.analytics;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "net/proto2/proto/descriptor.proto";
+
+message CopyOptions {
+    optional Propagation propagate = 1;
+    enum Propagation {
+        UNSPECIFIED_PROPAGATE_IF_NO_DATAPOL = 0;
+        PROPAGATE = 1;
+        DO_NOT_PROPAGATE = 2;
+    }
+}
+
+extend .proto2.FieldOptions {
+    optional CopyOptions copy = 310451004;
+}
+
+extend .proto2.MessageOptions {
+    optional CopyOptions copy_all_fields = 310451004;
+}

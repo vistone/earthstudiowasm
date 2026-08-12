@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package maps_roadtraffic;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = false;
+option java_outer_classname = "TrafficTravelModeProto";
+option java_package = "com.google.maps.roadtraffic.proto";
+
+enum TravelMode {
+    TRAVEL_MODE_DRIVE = 0;
+    TRAVEL_MODE_TWO_WHEELER = 1;
+    TRAVEL_MODE_HOV = 2;
+    TRAVEL_MODE_TAXICAB = 3;
+    TRAVEL_MODE_BUS = 4;
+    TRAVEL_MODE_MIXED = 5;
+    TRAVEL_MODE_TRUCK = 6;
+    TRAVEL_MODE_UNSPECIFIED = 7;
+}

@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package maps_paint;
+
+import "net/proto2/bridge/proto/message_set.proto";
+
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "LabelDensityRestrictionProto";
+option java_package = "com.google.maps.paint.client";
+
+message LabelDensityRestriction {
+    optional RestrictionGroup restriction_group = 1;
+    enum RestrictionGroup {
+        UNKNOWN = 0;
+        PROMOTED_PIN = 1;
+    }
+    
+    optional int32 limit = 2;
+    
+    extend .proto2.bridge.MessageSet {
+        optional LabelDensityRestriction message_set_extension = 190976051;
+    }
+}

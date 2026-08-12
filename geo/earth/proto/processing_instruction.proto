@@ -1,0 +1,21 @@
+syntax = "editions";
+
+package geo.earth.proto;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/proto/commands.proto";
+import "net/proto2/proto/descriptor.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.proto";
+
+message EarthProcessingInstruction {
+    repeated Instruction instructions = 1;
+}
+
+message Instruction {
+    oneof instruction_type {
+        CreateFeatureTree create_feature_tree = 1;
+    }
+}

@@ -1,0 +1,26 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "privacy/pattributes/annotations/proto_field.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "ExperiencesProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message ExperiencesParams {
+    optional bool include_activities = 2 [deprecated = true];
+    optional bool include_events = 4;
+    optional bool supports_experience_categorical_search = 3 [deprecated = true];
+    optional bool restrict_results_to_input_camera = 5;
+    
+    reserved 1;
+}
+
+message ExperienceClientCapabilities {
+    optional bool supports_suggested_query_set = 1;
+    optional bool supports_experience_categorical_search = 2;
+    optional bool supports_custom_date_filter = 3;
+}

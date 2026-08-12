@@ -1,0 +1,68 @@
+syntax = "proto2";
+
+package maps_transit;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.maps.transit.tripfinder.common";
+
+message CostModelProto {
+    optional double walking_penalty_factor = 1 [default = 1];
+    optional double walking_base_penalty = 2 [default = 0];
+    optional double driving_penalty_factor = 3 [default = 1];
+    optional double driving_base_penalty = 4 [default = 1800];
+    optional double offline_taxi_penalty_factor = 33 [default = 1];
+    optional double offline_taxi_base_penalty = 34 [default = 900];
+    optional double online_taxi_penalty_factor = 35 [default = 1];
+    optional double online_taxi_base_penalty = 36 [default = 1000];
+    optional double cycling_penalty_factor = 37 [default = 1];
+    optional double cycling_base_penalty = 38 [default = 900];
+    optional double two_wheeler_penalty_factor = 39 [default = 1];
+    optional double two_wheeler_base_penalty = 40 [default = 1800];
+    optional double train_penalty_factor = 5 [default = 0];
+    optional double train_base_penalty = 6 [default = 0];
+    optional double tram_penalty_factor = 7 [default = 0];
+    optional double tram_base_penalty = 8 [default = 0];
+    optional double bus_penalty_factor = 9 [default = 0];
+    optional double bus_base_penalty = 10 [default = 0];
+    optional double subway_penalty_factor = 11 [default = 0];
+    optional double subway_base_penalty = 12 [default = 0];
+    optional double ferry_penalty_factor = 13 [default = 0];
+    optional double ferry_base_penalty = 14 [default = 0];
+    optional double other_penalty_factor = 15 [default = 0];
+    optional double other_base_penalty = 16 [default = 0];
+    optional double base_exit_transfer_penalty = 17 [default = 480];
+    optional double preferred_transfer_penalty_factor = 18 [default = 0.625];
+    optional double safe_transfer_penalty_factor = 19 [default = 0.125];
+    optional double timed_transfer_penalty_factor = 20 [default = 1];
+    optional double cross_datasource_penalty_factor = 21 [default = 1.125];
+    optional double walking_serving_penalty_factor = 41 [default = 0];
+    optional double train_serving_penalty_factor = 42 [default = 0];
+    optional double tram_serving_penalty_factor = 43 [default = 0];
+    optional double bus_serving_penalty_factor = 44 [default = 0];
+    optional double subway_serving_penalty_factor = 45 [default = 0];
+    optional double ferry_serving_penalty_factor = 46 [default = 0];
+    optional double other_serving_penalty_factor = 47 [default = 0];
+    optional double base_exit_transfer_serving_penalty = 48 [default = 0];
+    optional double expensive_serving_penalty_factor = 52 [default = 2];
+    optional double station_serving_penalty_factor = 49 [default = 1];
+    optional double line_serving_penalty_factor = 50 [default = 1];
+    optional double fare_serving_penalty_factor = 51 [default = 0];
+    optional double avoided_vehicles_penalty_factor = 22 [default = 3];
+    optional double avoided_vehicles_base_penalty = 23 [default = 300];
+    optional double avoided_transfers_base_penalty = 24 [default = 300];
+    optional double non_requested_entities_penalty_factor = 25 [default = 10];
+    optional double non_requested_entities_base_penalty = 26 [default = 300];
+    optional double inaccessible_entities_base_penalty = 27 [default = 4200];
+    optional double unknown_accessibility_entities_base_penalty = 28 [default = 200];
+    optional double avoided_timeless_modes_penalty_factor = 29 [default = 3];
+    optional double avoided_timeless_modes_base_penalty = 30 [default = 300];
+    optional double min_distance_covered_ratio_for_extra_penalty = 31 [default = 0.4];
+    optional double extra_penalty_multiplier_from_distance_covered_ratio = 32 [default = 10000];
+}
+
+message CostModelWrapperProto {
+    optional CostModelProto cost_model = 1;
+    optional double duration_scale = 2;
+}

@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package geo_photo_venus;
+
+option features = enum_type: CLOSED
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.photo.venus";
+
+enum MediaMigrationPrimaryKeyOption {
+    UNSPECIFIED_PRIMARY_KEY = 0;
+    NEW_KEY_AS_PRIMARY_KEY = 1;
+    OLD_KEY_AS_PRIMARY_KEY = 2;
+}
+
+enum MediaMigrationAlternateKeysOption {
+    UNSPECIFIED_ALTERNATE_KEYS = 0;
+    BOTH_KEYS_IN_ALTERNATE_KEYS = 1;
+}

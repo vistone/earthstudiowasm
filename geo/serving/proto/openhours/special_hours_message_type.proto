@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geo_serving_proto.openhours;
+
+import "java/com/google/apps/jspb/jspb.proto";
+
+option objc_class_prefix = "GSPOPH";
+option java_multiple_files = true;
+option java_outer_classname = "SpecialHoursMessageTypeProto";
+option java_package = "com.google.geo.serving.proto.openhours";
+
+enum SpecialHoursMessageType {
+    UNKNOWN_MESSAGE_TYPE = 0;
+    KNOWN_HOLIDAY_HOURS = 1;
+    HOLIDAY_WARNING = 2;
+}

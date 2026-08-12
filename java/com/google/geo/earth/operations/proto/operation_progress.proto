@@ -1,0 +1,28 @@
+syntax = "editions";
+
+package google.geo.earth.operations;
+
+option java_outer_classname = "OperationProgressOuterClass";
+option java_package = "com.google.geo.earth.operations";
+
+message OperationProgress {
+    oneof progress_type {
+        LinearStepBasedProgress linear_step_based_progress = 1;
+    }
+}
+
+message LinearStepBasedProgress {
+    optional int32 step_number = 1;
+    optional int32 total_steps = 2;
+    
+    oneof step_type {
+        ImportDatasetStep import_dataset_step = 3;
+    }
+}
+
+enum ImportDatasetStep {
+    option features = ;
+    IMPORT_DATASET_STEP_UNSPECIFIED = 0;
+    IMPORT_DATASET_STEP_STARTING_IMPORT = 1;
+    IMPORT_DATASET_STEP_PARSING_DATASET = 2;
+}

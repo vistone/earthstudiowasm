@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+package geo_serving_proto.openhours;
+
+import "geo/serving/proto/openhours/current_status_detail.proto";
+import "geo/serving/proto/openhours/day_hours.proto";
+import "geo/serving/proto/text/annotated_text.proto";
+import "google/type/timeofday.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPOPH";
+option java_multiple_files = true;
+option java_outer_classname = "CurrentDetailsProto";
+option java_package = "com.google.geo.serving.proto.openhours";
+
+message CurrentDetails {
+    optional DayHours day_hours = 1;
+    optional int32 day_hours_open_interval_index = 2;
+    optional CurrentStatusDetail current_status_detail = 3;
+    optional CurrentStatusDetail inferred_current_status_detail = 4;
+    optional geo_serving_proto.text.AnnotatedText open_status_text = 5;
+    optional geo_serving_proto.text.AnnotatedText concise_open_status_text = 9;
+    optional geo_serving_proto.text.AnnotatedText upcoming_status_change = 6 [deprecated = true];
+    optional .google.type.TimeOfDay open_status_expiration_time = 8;
+    
+    reserved 7;
+}

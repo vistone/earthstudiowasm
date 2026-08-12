@@ -1,0 +1,90 @@
+syntax = "editions";
+
+package geo.imagery.karto.proto;
+
+import "geo/imagery/karto/proto/app_options.proto";
+import "geo/imagery/karto/proto/camera_move.proto";
+import "geo/imagery/karto/proto/world_state.proto";
+import "geo/render/mirth/apps/mirthrender/batch/mapfacts_params.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option java_multiple_files = true;
+
+message RenderRequestMetadata {
+    optional int64 render_priority = 1;
+}
+
+message RenderBinaryInfo {
+    optional string rapid_candidate_name = 1;
+    optional int64 build_changelist = 2;
+    optional string build_id = 3;
+    optional string git_commit = 4;
+    optional string gob_commit = 5;
+}
+
+message MovieRequest {
+    optional string place_id = 1;
+    optional string movie_id = 22;
+    
+    optional Output output = 2;
+    message Output {
+        optional string bucket_name = 1;
+        optional string object_name = 2;
+    }
+    
+    optional double duration_seconds = 3 [default = 30];
+    optional int32 frames_per_second = 4 [default = 30];
+    
+    optional ImageSize image_size = 5;
+    message ImageSize {
+        optional int32 width = 1 [default = 1080];
+        optional int32 height = 2 [default = 1920];
+    }
+    
+    optional WorldState world_state = 15;
+    optional AppOptions app_options = 16;
+    
+    optional TilesetParameters tileset_parameters = 6;
+    message TilesetParameters {
+        optional int32 target_screen_space_error = 1 [default = 8];
+        optional float sufficient_screen_space_error = 2 [default = 128];
+        optional bool horizon_cull = 3 [default = true];
+        optional bool enable_frustum_culling = 4 [default = false];
+        optional float outside_frustum_screen_space_error = 5 [default = 256];
+        optional int32 maximum_simultaneous_tile_loads = 6 [default = 1000];
+        optional int32 per_frame_gltf_mesh_load_limit = 12 [default = 0];
+        optional bool use_absolute_transform = 7 [default = true];
+        optional bool unpopping = 8 [default = false];
+        optional float unpopping_duration = 9 [default = 0.5];
+        optional CollisionEnabled collision_enabled = 10 [default = QUERY_ONLY];
+        optional bool use_disk_cache = 11 [default = false];
+    }
+    
+    optional MovieQuality movie_quality = 8 [default = HIGH_QUALITY];
+    enum MovieQuality {
+        UNKNOWN_QUALITY = 0;
+        LOW_QUALITY = 1;
+        HIGH_QUALITY = 2;
+        HIGH_QUALITY_WITH_UI = 3;
+        HIGH_QUALITY_WITH_UI_AND_AUDIO = 4;
+        LOW_QUALITY_WITH_UI = 5;
+        LOW_QUALITY_WITH_UI_AND_AUDIO = 6;
+    }
+    
+    optional bool dynamic_water = 9 [default = true];
+    optional bool calculate_fixed_tiles = 17 [default = false];
+    optional double fixed_tiles_orbit_sample_interval_seconds = 18 [default = 0.25];
+    optional CameraMove camera_move = 21;
+    
+    reserved 7, 10, 11, 12, 13, 14, 19, 20;
+    
+    enum CollisionEnabled {
+        UNKNOWN_COLLISION = 0;
+        NO_COLLISION = 1;
+        QUERY_ONLY = 2;
+        PHYSICS_ONLY = 3;
+        QUERY_AND_PHYSICS = 4;
+    }
+}

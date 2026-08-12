@@ -1,0 +1,95 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/toll_pass_type.proto";
+import "geostore/base/proto/vehicle_emissions_category.proto";
+import "geostore/base/proto/vehicle_type.proto";
+import "geostore/matching/public/feature_pattern.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto.proto1api";
+
+message VehicleAttributeFilterProto {
+    repeated VehicleTypes.VehicleType vehicle_type = 10 [packed = true];
+    repeated WeightComparisonProto vehicle_weight = 1;
+    optional bool has_trailer = 2 [default = false];
+    repeated DimensionComparisonProto vehicle_height = 3;
+    repeated DimensionComparisonProto vehicle_width = 4;
+    repeated DimensionComparisonProto vehicle_length = 5;
+    repeated DimensionComparisonProto trailer_length = 6;
+    repeated CountComparisonProto num_trailers = 7;
+    repeated CountComparisonProto axle_count = 8;
+    
+    repeated HazardousGoodsType hazardous_goods = 9 [packed = true];
+    enum HazardousGoodsType {
+        HAZARDOUS_GOODS_TYPE_UNSPECIFIED = 0;
+        EXPLOSIVES = 1;
+        GASES = 2;
+        FLAMMABLE = 3;
+        COMBUSTIBLE = 4;
+        ORGANIC = 5;
+        POISON = 6;
+        RADIOACTIVE = 7;
+        CORROSIVE = 8;
+        ASPIRATION_HAZARD = 9;
+        ENVIRONMENTAL_HAZARD = 10;
+        OTHER = 11;
+    }
+    
+    repeated VehicleEmissionsCategory vehicle_emissions_category = 11 [packed = true];
+    repeated TollPassType toll_pass = 12 [packed = true];
+}
+
+message WeightComparisonProto {
+    optional ComparisonOperators.ComparisonOperator comparison = 1;
+    optional WeightProto weight_with_unit = 2;
+    optional NumberComparisonOperator comparison_operator = 3;
+}
+
+message WeightProto {
+    optional float weight = 1;
+    
+    optional Unit unit = 2;
+    enum Unit {
+        UNIT_UNKNOWN = 0;
+        METRIC_TON = 1;
+        LONG_TON = 2;
+        SHORT_TON = 3;
+        POUND = 4;
+        KILOGRAM = 5;
+    }
+}
+
+message DimensionComparisonProto {
+    optional NumberComparisonOperator comparison_operator = 1;
+    optional DimensionProto dimension_with_unit = 2;
+}
+
+message DimensionProto {
+    optional float dimension = 1;
+    
+    optional Unit unit = 2;
+    enum Unit {
+        UNIT_UNKNOWN = 0;
+        METERS = 1;
+        FEET = 2;
+    }
+}
+
+message CountComparisonProto {
+    optional NumberComparisonOperator comparison_operator = 1;
+    optional int32 count = 2;
+}
+
+message ComparisonOperators {
+    enum ComparisonOperator {
+        COMPARISONOPERATOR_UNKNOWN = 0;
+        LESS_THAN = 1;
+        GREATER_THAN = 2;
+    }
+}

@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package geo_serving_proto.products;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPR";
+option java_multiple_files = true;
+option java_outer_classname = "AvailabilityProto";
+option java_package = "com.google.geo.serving.proto.products";
+
+enum Availability {
+    UNKNOWN_AVAILABILITY = 0;
+    IN_STOCK = 1;
+    LIMITED = 2;
+    ON_DISPLAY_TO_ORDER = 3;
+    OUT_OF_STOCK_SHIP_TO_STORE = 4;
+}

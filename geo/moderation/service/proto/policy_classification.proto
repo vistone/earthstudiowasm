@@ -1,0 +1,38 @@
+syntax = "proto2";
+
+package geo_moderation;
+
+import "geo/moderation/service/proto/annotation_target.proto";
+import "geo/moderation/service/proto/appealability.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.geo.moderation.proto1api";
+
+message PolicyClassification {
+    optional string policy_id = 3;
+    
+    optional ClassificationType type = 1;
+    enum ClassificationType {
+        UNSPECIFIED_CLASSIFICATION_TYPE = 0;
+        CONFORMANCE = 1;
+        VIOLATION = 2;
+    }
+    
+    repeated PolicyViolation violations = 2;
+    
+    optional Source source = 4;
+    enum Source {
+        UNSPECIFIED_SOURCE = 0;
+        AUTOMATED_SYSTEM = 1;
+        OPERATOR = 2;
+    }
+}
+
+message PolicyViolation {
+    optional string policy_dimension_id = 2;
+    repeated AnnotationTarget target = 3;
+    optional Appealability appealability = 4;
+    
+    reserved 1;
+}

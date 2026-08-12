@@ -1,0 +1,20 @@
+syntax = "editions";
+
+package lerna.panstore;
+
+import "geo/imagery/lerna/common/proto/lerna_corpus.proto";
+import "geo/imagery/lerna/common/proto/lerna_environment.proto";
+
+option features = utf8_validation: NONE
+;
+option java_multiple_files = true;
+option java_package = "com.google.geo.imagery.lerna.panstore";
+
+message PanStoreInstanceProto {
+    optional LernaCorpus corpus = 1;
+    optional LernaEnvironment environment = 2;
+    optional string dev_path = 3;
+    optional string main_silo_name = 4;
+    
+    extensions 100 to max;
+}

@@ -1,0 +1,51 @@
+syntax = "proto2";
+
+package geo_serving_proto.text;
+
+import "geo/serving/proto/color/color_set.proto";
+import "geo/serving/proto/link/link.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_generate_object_format.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPT";
+option java_multiple_files = true;
+option java_outer_classname = "AnnotatedTextProto";
+option java_package = "com.google.geo.serving.proto.text";
+
+message AnnotatedText {
+    optional string raw_text = 1;
+    repeated Span span = 2;
+}
+
+message Span {
+    optional int32 start_index = 1;
+    optional int32 finish_index = 2;
+    optional TextStyle style = 3;
+    optional geo_serving_proto.link.Link link = 4;
+}
+
+message TextStyle {
+    optional FontWeight font_weight = 1;
+    optional geo_serving_proto.color.ColorSet text_color = 2;
+    optional bool underline = 3;
+    optional bool strike_through = 5;
+    optional FontSize font_size = 4;
+}
+
+message FontWeight {
+    optional Value value = 1;
+    enum Value {
+        UNKNOWN_VALUE = 0;
+        THIN = 1;
+        LIGHT = 2;
+        NORMAL = 3;
+        MEDIUM = 4;
+        BOLD = 5;
+        BLACK = 6;
+    }
+}
+
+message FontSize {
+    optional float relative_size = 1;
+}

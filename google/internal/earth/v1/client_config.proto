@@ -1,0 +1,257 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.config;
+
+import "google/internal/earth/v1/shared.proto";
+import "google/protobuf/duration.proto";
+import "google/type/date.proto";
+import "logs/proto/geo/earth/app/earth_log.proto";
+import "maps/paint/proto/paint-parameters.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "wireless/android/privacy/annotations/proto/collection_basis_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.config";
+
+message GetConfigRequest {
+    optional ClientMetadata client_metadata = 1 [deprecated = true];
+    optional float dpi_ratio = 2;
+    optional string renderer_version = 3;
+}
+
+message GetConfigResponse {
+    optional ClientConfig client_config = 1;
+}
+
+message ServiceConfig {
+    optional BaseUrl base_url = 1;
+    message BaseUrl {
+        optional string url = 1;
+        repeated RequestRule request_rules = 2;
+    }
+    
+    optional BaseUrl xd3_base_url = 2;
+}
+
+message ClientConfig {
+    optional EnvironmentConfig environment_config = 1;
+    optional string country_code = 3;
+    optional maps_paint.PaintParameterResponse paint_parameter_response = 4;
+    
+    reserved 2;
+}
+
+message EnvironmentConfig {
+    map<string, ServiceConfig> service_configs = 1;
+    map<string, AbsoluteUrlTemplate> external_links = 2;
+    optional FeatureConfig feature_config = 4;
+    optional PlatformConfig platform_config_android = 5;
+    optional PlatformConfig platform_config_ios = 6;
+    optional PlatformConfig platform_config_web = 7;
+}
+
+message FeatureConfig {
+    optional DocumentConfig document_config = 1;
+    optional SatelliteLayerConfig satellite_layer_config = 2;
+    optional CelestialBodiesConfig celestial_bodies_config = 3;
+    optional VideoRasterLayerConfig video_raster_layer_config = 5 [deprecated = true];
+    optional AnimatedCloudsConfig animated_clouds_config = 6 [deprecated = true];
+    optional NetworkConfig network_config = 7;
+    optional RocktreeConfig rocktree_config = 8;
+    optional DataLayersConfig data_layers_config = 10 [deprecated = true];
+    optional SuggestConfig suggest_config = 11;
+    optional BillingConfig billing_config = 12;
+    optional IndustrySelectorConfig industry_selector_config = 13;
+    optional PhotosConfig photos_config = 14;
+    optional BuiltenvConfig builtenv_config = 15;
+    optional LegacyKmlConfig legacy_kml_config = 16;
+    optional StarterProjectConfig starter_project_config = 17;
+    optional ImageryUpdateRequestConfig imagery_update_request_config = 18;
+    optional ChangeDetectionConfig change_detection_config = 19;
+    optional ImageGeneratorPromoConfig image_generator_promo_config = 20;
+    optional EarthMateConfig earth_mate_config = 21;
+    
+    reserved 4, 9;
+}
+
+message DataLayersConfig {
+    map<string, DataLayer> data_layers = 2;
+    
+    reserved 1;
+}
+
+message SuggestConfig {
+    optional int32 suggest_request_idle_threshold_milliseconds = 1;
+    optional int32 min_characters_for_suggest_request = 2;
+    optional int32 min_projects_for_earth_project_results = 3;
+}
+
+message HatsSurveyConfig {
+    optional string trigger_id = 1;
+    optional .geo.earth.app.EarthEvent.Type event_type = 2;
+    optional int32 event_count = 3 [default = 1];
+}
+
+message PlatformConfig {
+    map<string, HatsSurveyConfig> hats_surveys = 2;
+    
+    reserved 1;
+}
+
+message SatelliteLayerConfig {
+    optional AbsoluteUrlTemplate satellite_raster_db_tile_path = 1;
+}
+
+message AnimatedCloudsConfig {
+    optional AbsoluteUrlTemplate animated_clouds_root_url = 1;
+}
+
+message CelestialBodiesConfig {
+    repeated CelestialBody celestial_bodies = 2;
+}
+
+message DocumentConfig {
+    optional int32 ums_max_concurrent_requests = 1;
+    optional int32 ums_max_requests_per_second = 2;
+    optional string balloon_template_version = 3;
+    optional int32 ums_max_mutations_per_request = 4 [deprecated = true];
+    optional int32 ums_offline_retry_delay_milliseconds = 5;
+    optional int32 ums_auto_reload_base_delay_seconds = 6;
+    optional int32 ums_auto_reload_jitter_seconds = 7;
+    optional int32 max_features_per_document = 8;
+    optional int32 warning_limit_features_per_document = 9;
+    optional int32 max_bulk_edit_feature_size = 10;
+}
+
+message LegacyKmlConfig {
+    optional type.Date legacy_browser_file_migration_deadline = 1;
+}
+
+message VideoRasterLayerConfig {
+    repeated VideoRasterLayer video_raster_layer = 1;
+}
+
+message NetworkConfig {
+    optional TrustedDomainList trusted_domains = 1;
+}
+
+message AbsoluteUrlTemplate {
+    optional string url_template = 1;
+}
+
+message CelestialBody {
+    optional string id = 1;
+    optional string localized_name = 2;
+    optional string rocktree_url = 3;
+    optional string paintfe_layer_id = 4;
+}
+
+message RocktreeConfig {
+    optional int32 epoch_override = 1;
+}
+
+message TrustedDomainList {
+    repeated TrustedDomain trusted_domain = 1;
+    message TrustedDomain {
+        optional string domain_name = 1;
+    }
+    
+    optional bool enabled = 2;
+}
+
+message PaintParameters {
+    optional bytes data = 1;
+}
+
+message BillingConfig {
+    optional string google_cloud_console_url_template = 1;
+    optional bool is_in_preview = 2;
+    optional string purchase_flow_url_upgrade_plan_query_param = 5;
+    optional string professional_purchase_flow_upgrade_query_param_value = 6;
+    optional string professional_advanced_purchase_flow_upgrade_query_param_value = 7;
+    optional string pantheon_backend_override_query_param_key = 8;
+    optional string pantheon_coliseum_override_query_param_value = 9;
+    optional string pantheon_experiments_query_param_key = 10;
+    optional string pantheon_experiment_earth_billing_enabled_query_param_value = 11;
+    optional string pantheon_debug_panel_enabled_query_param_key = 12;
+    optional string pantheon_debug_panel_enabled_query_param_value = 13;
+    optional int32 startup_event_by_plan_delay_seconds = 14;
+    optional type.Date ga_date = 15;
+    optional int32 promo_header_max_projects = 16;
+    
+    reserved 3, 4;
+}
+
+message BuiltenvConfig {
+    optional SiteAreaLimits site_area_limits = 1;
+    message SiteAreaLimits {
+        optional double capability_standard_max_site_area_sq_m = 1;
+        optional double capability_professional_max_site_area_sq_m = 2;
+        optional double capability_professional_advanced_max_site_area_sq_m = 3;
+    }
+    
+    optional DesignLimits design_limits_display_only = 2;
+    message DesignLimits {
+        optional int32 capability_standard_max_designs_per_thirty_days_display_only = 1;
+        optional int32 capability_professional_max_designs_per_thirty_days_display_only = 2;
+        optional int32 capability_professional_advanced_max_designs_per_thirty_days_display_only = 3;
+    }
+}
+
+message IndustrySelectorConfig {
+    optional protobuf.Duration show_call_to_action_delay_duration = 1;
+    optional protobuf.Duration show_call_to_action_after_completion_duration = 2;
+    optional protobuf.Duration show_call_to_action_after_dismissal_min_duration = 3;
+    optional int32 show_call_to_action_backoff_rate = 4;
+    optional protobuf.Duration show_call_to_action_after_dismissal_max_duration = 5;
+    optional bool user_settings_promo_card_enabled = 6;
+}
+
+message PhotosConfig {
+    optional string gps_streetview_product_id = 1;
+    optional string gps_photos_product_id = 2;
+}
+
+message StarterProjectConfig {
+    optional string starter_project_map_id = 1;
+    optional string starter_project_resource_key = 2;
+    optional int32 max_projects = 3;
+    optional string localized_copied_starter_project_title = 4;
+    optional string localized_starter_project_title = 5;
+    optional string localized_starter_project_description = 6;
+    optional string localized_cta_button_text = 7;
+    optional string localized_success_toast_message = 8;
+    optional string localized_failure_toast_message = 9;
+}
+
+message ImageryUpdateRequestConfig {
+    optional AbsoluteUrlTemplate mtw_external_url = 1;
+    map<int32, string> supported_imagery_types = 2;
+    optional double max_request_area_sq_m = 3;
+}
+
+message ChangeDetectionConfig {
+    optional int32 min_year = 1;
+    optional int32 max_year = 2;
+}
+
+message ImageGeneratorPromoConfig {
+    map<string, PromoItem> promo_items = 1;
+    
+    message PromoItem {
+        optional string image_url = 1;
+    }
+}
+
+message EarthMateConfig {
+    optional int32 max_create_features_count = 1 [default = 500];
+    optional int32 max_features_to_process = 2 [default = 1000];
+}
+
+enum ImageryType {
+    IMAGERY_TYPE_UNKNOWN = 0;
+    IMAGERY_TYPE_SATELLITE = 1;
+    IMAGERY_TYPE_AERIAL = 2;
+}

@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+package geo_serving_proto.directions;
+
+import "frameworks/client/data/data_annotation.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPD";
+option java_multiple_files = true;
+option java_outer_classname = "TimeProto";
+option java_package = "com.google.geo.serving.proto.directions";
+
+message Time {
+    optional int64 utc_seconds = 1;
+    optional string time_zone = 2;
+    optional string formatted_value = 3;
+    optional int32 time_zone_offset_seconds = 4;
+    optional int64 rounded_utc_seconds = 5;
+}

@@ -1,0 +1,115 @@
+syntax = "proto2";
+
+package maps_tactile;
+
+import "gws/mothership/mothership_options.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "logs/proto/searchbox/searchbox_stats.proto";
+import "maps/shared/common/geom/geom.proto";
+import "maps/tactile/api/ads-params.proto";
+import "maps/tactile/api/camera-options.proto";
+import "maps/tactile/api/directions-common.proto";
+import "maps/tactile/api/logging-params.proto";
+import "maps/tactile/api/paint-description-options.proto";
+import "maps/tactile/api/request-context.proto";
+import "maps/tactile/api/shared/directions/directions-client-stats.proto";
+import "maps/tactile/api/shared/directions/directions-constants.proto";
+import "maps/tactile/api/shared/maps-activity-persistence-keys.proto";
+import "maps/tactile/api/shared/promoted-pin-ads.proto";
+import "maps/tactile/api/url-options.proto";
+import "net/proto2/contrib/output_source_markup/options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTT";
+option java_multiple_files = true;
+option java_outer_classname = "DirectionsRequestProto";
+option java_package = "com.google.maps.tactile";
+
+message DirectionsRequest {
+    repeated maps_tactile.directions.WaypointQuery waypoint = 1;
+    optional PaintDescriptionOptions paint_description_options = 47;
+    optional maps_shared.geom.Camera input_camera = 3;
+    optional CameraOptions camera_options = 20;
+    optional int32 trip_index = 4;
+    optional maps_tactile.directions.Options options = 6;
+    optional maps_tactile.directions.Distance.Units distance_units = 7 [default = REGIONAL];
+    optional maps_tactile.directions.SpotlightOptions spotlight_options = 8;
+    optional UrlOptions url_options = 26;
+    repeated maps_tactile.directions.ViaPoint via_point = 9;
+    optional maps_tactile.shared.directions.TransitPatternMatchingMode transit_pattern_matching_mode = 30;
+    optional string saved_trip_id = 38;
+    optional bytes transit_route_start_specifier = 32;
+    optional bool route_from_transit_station = 37;
+    optional bool disable_pertile_data = 12;
+    optional int32 pertile_preferred_major_epoch = 40;
+    optional LoggingParams logging_params = 15;
+    repeated DirectionsWaypointSearchboxStats directions_waypoint_searchbox_stats = 34;
+    optional bool include_traffic_data = 16 [default = false];
+    optional UpdateRouteParams update_route_params = 19;
+    optional int32 original_server_time = 23;
+    optional bool allow_alias_resolution = 25 [default = true];
+    optional bool supports_alias_setting = 27 [default = false];
+    optional PersistenceKeys persistence_keys = 28;
+    optional AdsParams ads_params = 39;
+    optional maps_tactile.shared.PromotedPinAdsRequestOptions promoted_pin_ads_request_options = 45;
+    optional string local_query_intent_params_token = 48;
+    
+    optional DirectionsRequestLoggingParams directions_logging_params = 41;
+    message DirectionsRequestLoggingParams {
+        optional int32 trip_version = 1;
+        optional int32 traffic_version = 2;
+        optional string extended_session_id = 3;
+        optional bool third_party = 4;
+        optional bool logging_enabled = 5 [default = true];
+        optional bool enable_mixing_and_ranking_logging = 8;
+        
+        optional RequestSource request_source = 6;
+        enum RequestSource {
+            UNKNOWN_REQUEST_SOURCE = 0;
+            GMM = 1;
+        }
+        
+        optional string request_id = 7;
+    }
+    
+    optional maps_tactile.shared.directions.DirectionsClientStats directions_client_stats = 43;
+    optional RequestContext request_context = 49;
+    optional string xsrf_token = 50;
+    optional bytes askmaps_directions_token = 51;
+    optional bytes injected_alternate_token = 52;
+    
+    oneof preferred_transit_pattern_token_type {
+        string preferred_transit_pattern = 13 [deprecated = true];
+        bytes preferred_transit_pattern_token = 31;
+        UnspecifiedTransitPattern unspecified_transit_pattern = 33;
+    }
+    
+    extensions 1001;
+    
+    reserved 1000, 2, 5, 10, 11, 14, 17, 18, 21, 22, 24, 29, 35, 36, 42, 46;
+    
+    enum UnspecifiedTransitPattern {
+        UNKNOWN_TRANSIT_PATTERN = 0;
+        BEST_TRANSIT_PATTERN = 1;
+    }
+}
+
+message UpdateRouteParams {
+    optional UpdateType update_type = 1 [default = UNKNOWN];
+    enum UpdateType {
+        UNKNOWN = 1;
+        REROUTE_FROM_NEW_LOCATION = 2;
+        REROUTE_AND_ALTERNATES_FROM_NEW_LOCATION = 5;
+        DEPRECATED_TRAFFIC_UPDATE = 3 [deprecated = true];
+        DEPRECATED_TRAFFIC_UPDATE_AND_BETTER_TRIP = 4 [deprecated = true];
+        DEPRECATED_TRAFFIC_UPDATE_AND_ALTERNATES_AND_BETTER_TRIP = 6 [deprecated = true];
+        TRIP_UPDATE_AND_ALTERNATES = 7;
+        OFFLINE_TRIP_UPDATE_AND_ALTERNATES = 8;
+    }
+}
+
+message DirectionsWaypointSearchboxStats {
+    optional int32 waypoint_index = 1;
+    optional bool did_trigger_search = 3 [default = false];
+    optional logs_proto_searchbox.SearchboxStats searchbox_stats = 2;
+}

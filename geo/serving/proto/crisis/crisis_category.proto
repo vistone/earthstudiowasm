@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package geo_serving_proto.crisis;
+
+import "java/com/google/apps/jspb/jspb.proto";
+
+option objc_class_prefix = "GSPCR";
+option java_multiple_files = true;
+option java_outer_classname = "CrisisCategoryProto";
+option java_package = "com.google.geo.serving.proto.crisis";
+
+enum CrisisCategory {
+    UNKNOWN_CRISIS_TYPE = 0;
+    ATTACK = 1;
+    AVALANCHE = 2;
+    BOMBING = 3;
+    BUSHFIRE = 4;
+    CONFLAGRATION = 5;
+    CYCLONE = 6;
+    EARTHQUAKE = 7;
+    EXPLOSION = 8;
+    FIRE = 32;
+    FLOOD = 9;
+    FROST = 10;
+    HAIL = 11;
+    HURRICANE = 12;
+    INCIDENT = 30;
+    LANDSLIDE = 13;
+    PANDEMIC = 31;
+    POWER_OUTAGE = 14;
+    RAIN = 15;
+    SHOOTING = 16;
+    SNOW = 17;
+    SUPER_TYPHOON = 18;
+    THUNDERSTORM = 19;
+    TORNADO = 20;
+    TROPICAL_CYCLONE = 21;
+    TROPICAL_STORM = 22;
+    TSUNAMI = 23;
+    TYPHOON = 24;
+    VEHICLE_RAMMING_ATTACK = 25;
+    VOLCANO = 26;
+    WILDFIRE = 27;
+    WIND = 28;
+    WINTER_STORM = 29;
+}

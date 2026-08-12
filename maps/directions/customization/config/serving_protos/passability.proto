@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package maps_directions_customization;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+enum Passability {
+    PASSABILITY_UNSPECIFIED = 0;
+    PASSABILITY_PASSABLE = 1;
+    PASSABILITY_IMPASSABLE = 2;
+}

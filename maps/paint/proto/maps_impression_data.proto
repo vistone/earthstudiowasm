@@ -1,0 +1,24 @@
+syntax = "editions";
+
+package maps_paint;
+
+import "logs/proto/maps/tactile/on-map-impression.proto";
+import "logs/proto/visual_element/disruptions-impression-data.proto";
+import "logs/proto/visual_element/logged_place.proto";
+import "logs/proto/visual_element/place_list_data.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMP";
+option java_multiple_files = true;
+option java_outer_classname = "MapsImpressionDataProto";
+option java_package = "com.google.maps.paint";
+
+message MapsImpressionData {
+    optional logs.LoggedPlace place = 1;
+    optional logs_tactile.OnMapImpression on_map_impression = 2;
+    optional logs.PlaceListData place_list_data = 6;
+    optional int32 ve_subtype = 68;
+    optional logs.DisruptionsImpressionData disruptions_impression_data = 72;
+}

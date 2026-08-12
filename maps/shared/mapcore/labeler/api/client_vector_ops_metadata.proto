@@ -1,0 +1,181 @@
+syntax = "editions";
+
+package mapcore.labeler;
+
+import "geo/serving/proto/photos/image_key.proto";
+import "maps/paint/proto/client-vector-label.proto";
+import "maps/paint/proto/client-vector-tile.proto";
+import "maps/shared/common/geom/geom.proto";
+import "maps/tactile/api/shared/alias.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GMRL";
+option java_outer_classname = "ClientVectorOpsMetadata";
+option java_package = "com.google.maps.shared.labeler";
+
+message FriendLabelMetadata {
+    optional bool is_cluster = 1;
+    optional uint64 cluster_id = 2;
+    optional string sharer_id = 3;
+}
+
+message PersonalPlaceMetadata {
+    optional bool is_star = 1;
+    optional maps_tactile.shared.AliasType alias_type = 2;
+    optional int64 alias_sub_id = 3;
+    optional uint32 sticker_id = 4;
+    optional string name = 5;
+    optional maps_shared.geom.Location location = 6;
+}
+
+message PlacemarkMetadata {
+    optional bool is_selected = 1;
+    optional uint32 waypoint_source = 2;
+    optional int64 saved_parking_timestamp_ms = 3;
+    optional int64 saved_parking_expiration_timestamp_ms = 4;
+    optional bool saved_parking_has_high_accuracy = 5;
+    optional bool is_visibility_repressed = 6;
+    optional maps_shared.geom.Location coordinate = 7;
+    optional bool is_details_resolved = 8;
+    optional string promoted_places_clicked_url_string = 9 [deprecated = true];
+}
+
+message MyMapsMetadata {
+    optional string layer_backend_spec = 1;
+    optional string layer_backend_feature_id = 2;
+    optional string geo_asset_id = 3;
+}
+
+message ClickableAreaMetadata {
+    optional uint64 fprint = 1;
+    optional bool suitable_for_indoor_building_selection = 2;
+}
+
+message StreetViewLineMetadata {
+    optional string gps_continuation_token = 1;
+    optional int32 preference = 2;
+}
+
+message StreetViewPhotosphereDotMetadata {
+    optional geo_serving_proto.photos.ImageKey image_key = 1;
+}
+
+message TransitLineMetadata {
+    optional string feature_id = 1;
+}
+
+message TransitStationMetadata {
+    optional fixed64 fprint = 1;
+    optional fixed64 cell_id = 2;
+}
+
+message LabelBucket {
+    optional string bucket_id_deprecated = 1 [deprecated = true];
+    optional int32 bucket_id = 2;
+}
+
+message PolylineTraversal {
+    repeated int32 line_vertex_coords = 1;
+}
+
+message TranslationAnimation {
+    optional bool apply_translation_animation = 1;
+    optional PolylineTraversal polyline_traversal = 2;
+    optional int32 animation_duration_ms = 3 [default = 1000];
+    optional fixed64 animation_id = 4;
+    optional float bearing_offset_from_polyline = 5;
+    optional bool apply_rotation_animation = 6;
+}
+
+message LabelInteractivityMetadata {
+    optional bool is_search_result = 6;
+    optional bool is_navigation_poi = 7;
+    optional bool is_psm = 8 [deprecated = true];
+    optional bool is_splatted = 9 [deprecated = true];
+    optional LabelBucket label_bucket = 11;
+    optional bool instantly_fade = 12;
+    optional string geo_asset_id = 13;
+    optional bool is_primary_invisible_hack_for_beck = 14;
+    optional bool use_google_map_pick_handler = 15;
+    optional bool is_injected_hotel = 20;
+    optional bool render_while_offscreen = 23;
+    optional bool is_injected_from_ar = 24;
+    optional bool is_landmark = 25;
+    optional bool is_route_fixture = 26;
+    optional bool is_placeholder = 27;
+    optional uint64 placeholder_id = 36;
+    optional bool is_sdk_info_window = 28;
+    optional bool is_recommended_entrance = 30;
+    optional int32 representation_tag = 31;
+    optional bool is_selected_transit_vehicle = 32;
+    optional TranslationAnimation translation_animation = 33;
+    optional bool is_non_interactive = 39;
+    
+    oneof feature {
+        bool is_destination_refinement = 1;
+        PlacemarkMetadata placemark_metadata = 2;
+        FriendLabelMetadata friend_label_metadata = 4;
+        PersonalPlaceMetadata personal_place_metadata = 5;
+        bool is_from_spotlight = 10;
+        bool is_transit_vehicle = 16;
+        bool is_injected_persistent_place = 17;
+        bool is_visual_explore_cluster = 18;
+        bool is_bikesharing_vehicle = 19;
+        bool is_recently_viewed = 21;
+        bool is_blue_dot_callout = 22;
+        TransitStationMetadata transit_station_metadata = 35;
+        uint64 polyline_traversal_sprite_id = 37;
+        bool is_street_view_point_of_view = 38;
+        bool is_ar_walking_circle_label = 40;
+    }
+    
+    reserved 3, 29, 34;
+}
+
+message MultiPositionOptions {
+    repeated LabelPositionOptions secondary_group_positions = 1;
+}
+
+message LabelPositionOptions {
+    optional maps_paint_client.LabelRenderOp.TiePointPosition tie_point = 1 [default = CENTER_LEFT_TO_CENTER_RIGHT];
+    optional maps_paint_client.LabelGroup.Justification justification = 2 [default = LEFT_JUSTIFY];
+}
+
+message CalloutExtraOptions {
+    optional float caret_corner_padding_dp = 1;
+    optional CalloutStyleOverrides style_overrides = 2;
+    optional bool draw_over_placemarks = 3;
+}
+
+message CalloutStyleOverrides {
+    optional int32 text_size_override = 1;
+    optional int32 text_flags_override = 2;
+}
+
+message TertiaryLabel {
+    optional maps_paint_client.LabelGroup label = 1;
+    repeated LabelPositionOptions label_group_positions = 2;
+    optional sint32 inter_group_padding = 3;
+}
+
+message LabelModificationOptions {
+    optional float opacity_factor = 1;
+    optional sint32 anchor_offset_override_x = 2;
+    optional sint32 anchor_offset_override_y = 3;
+}
+
+extend maps_paint_client.LabelRenderOp {
+    optional LabelInteractivityMetadata interactivity_metadata = 399787940;
+    optional CalloutExtraOptions callout_extra_options = 399787941;
+    optional int32 visual_element_type = 399787942;
+    optional MultiPositionOptions multi_position_options = 399787943;
+    optional int32 render_order_tiebreaker = 399787944;
+    optional TertiaryLabel tertiary_label = 399787945 [deprecated = true];
+    optional bool sdk_injected = 399787946;
+    optional LabelModificationOptions label_modification_options = 399787947;
+}
+
+extend maps_paint_client.LineRenderOp {
+    optional float distance_along_line = 399787946;
+}

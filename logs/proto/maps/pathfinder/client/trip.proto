@@ -1,0 +1,118 @@
+syntax = "proto2";
+
+package logs.proto.maps.pathfinder.client;
+
+import "google/protobuf/timestamp.proto";
+import "logs/proto/maps/directions/customization/config/decorations/summary_decoration.proto";
+import "logs/proto/maps/pathfinder/client/cost-model-options.proto";
+import "logs/proto/maps/pathfinder/client/mrp-selector-info.proto";
+import "logs/proto/maps/pathfinder/client/step.proto";
+import "logs/proto/maps/pathfinder/client/waypoint.proto";
+import "logs/proto/maps/transit/api/connection.proto";
+import "logs/proto/maps/transit/api/output_time.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "TripProto";
+option java_package = "com.google.logs.proto.maps.pathfinder.client";
+
+message LoggedSnappedWaypoint {
+    optional LoggedLocation location = 1;
+}
+
+message LoggedTimingSummary {
+    optional maps_transit.api.LoggedOutputTime departure_time = 1;
+    optional maps_transit.api.LoggedOutputTime arrival_time = 2;
+    optional int32 duration_seconds = 4;
+    optional int32 optimistic_duration_seconds = 5;
+    optional int32 expected_duration_seconds = 6;
+    optional int32 expected_periodicity_seconds = 7;
+    optional int32 realtime_duration_of_static_best_trip_seconds = 8;
+    optional bool prefer_periodicity = 9;
+    repeated maps_transit.api.LoggedOutputTime upcoming_trip_departure_time = 10;
+    optional double distance_in_meters = 11;
+    
+    reserved 3;
+}
+
+message LoggedTrip {
+    repeated LoggedPath path = 1;
+    optional LoggedCostModelOptions cost_model_options = 3;
+    optional LoggedTimingSummary timing_summary = 8;
+    optional bool is_reconstructed_from_requery_token = 15;
+    optional maps_transit.api.LoggedConnection transit_connection = 18;
+    optional bool route_contains_dynamic_closure = 21;
+    optional double route_distance_on_dynamic_closures_meters = 37;
+    repeated LoggedMRPSelectorInfo mrp_selector_info = 22;
+    optional string trip_id = 28;
+    optional LoggedCyclingSummary cycling_summary = 31;
+    optional LoggedElevationProfile elevation_profile = 32;
+    repeated LoggedPolylineDecoration polyline_decoration = 33;
+    repeated maps_rdp_logs.LoggedSummaryDecoration summary_decoration = 35;
+}
+
+message LoggedPath {
+    repeated LoggedPathLabel label_compared_to_tripset = 19;
+    repeated maps_rdp_logs.LoggedSummaryDecoration summary_decoration = 28;
+}
+
+message LoggedPathLabel {
+    optional Type type = 1;
+    enum Type {
+        TYPE_UNKNOWN = 0;
+        TYPE_TOLLS_YES = 1;
+        TYPE_TOLLS_NO = 2;
+        TYPE_TRAFFIC_CONGESTION_MORE = 3;
+        TYPE_TRAFFIC_CONGESTION_LESS = 4;
+        TYPE_TRAFFIC_CONGESTION_SIMILAR = 12;
+        TYPE_TRAFFIC_CONGESTION_EVEN_LESS = 13;
+        TYPE_TRAFFIC_CONGESTION_EVEN_MORE = 14;
+        TYPE_LESS_FUEL_CONSUMPTION = 5;
+        TYPE_FASTEST = 6;
+        TYPE_MORE_BIKE_LANES = 7;
+        TYPE_LESS_HIGHWAYS = 8;
+        TYPE_LESS_STEEP_HILLS = 9;
+        TYPE_LESS_TURNS = 10;
+        TYPE_BEST = 11;
+    }
+    
+    optional string text = 2;
+    optional bool needs_icon = 3;
+}
+
+message LoggedPolylineDecoration {
+    optional PolylineDecorationIdentifier identifier = 7;
+    message PolylineDecorationIdentifier {
+        optional string config = 1;
+        optional string decoration_id = 2;
+    }
+    
+    optional LoggedPolylineLocation location = 3;
+    message LoggedPolylineLocation {
+        optional int32 starting_offset_m = 1;
+        optional int32 length_m = 2;
+    }
+    
+    optional LoggedPolylineDecorationMetadata decoration_metadata = 8;
+    message LoggedPolylineDecorationMetadata {
+        oneof value {
+            int64 int_value = 1;
+            double double_value = 2;
+        }
+    }
+    
+    optional DEPRECATED_LoggedPolylineDecorationMetadata metadata = 4;
+    
+    reserved 1;
+}
+
+message DEPRECATED_LoggedPolylineDecorationData {
+    oneof decoration_metadata {
+        string data = 1;
+        google.protobuf.Timestamp expiration_time = 2;
+    }
+}
+
+message DEPRECATED_LoggedPolylineDecorationMetadata {
+    map<string, DEPRECATED_LoggedPolylineDecorationData> data_configs = 1;
+}

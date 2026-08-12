@@ -1,0 +1,74 @@
+syntax = "proto2";
+
+package earth.solardesigninput;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+import "geo/earth/app/cpp/core/protos/design_input_manager.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.android.apps.earth.solardesigninput";
+
+message SolarUserInputs {
+    optional double roof_cost_currency_per_w = 1;
+    optional double parking_lot_cost_currency_per_w = 2;
+    optional double electricity_rate_currency_per_kwh = 3;
+    optional double electricity_rate_escalator_ratio_per_year = 4;
+    
+    optional NetMeteringPreference net_metering_preference = 5;
+    enum NetMeteringPreference {
+        NET_METERING_PREFERENCE_UNSPECIFIED = 0;
+        NET_METERING_PREFERENCE_SELL_EXCESS = 1;
+        NET_METERING_PREFERENCE_NOT_APPLICABLE = 2;
+        NET_METERING_PREFERENCE_SELL_ALL = 3;
+    }
+    
+    optional double debt_fraction_ratio = 6;
+    optional double loan_rate_ratio = 7;
+    optional double building_roof_monthly_lease_currency_per_w = 8;
+    optional double parking_lot_monthly_lease_currency_per_w = 9;
+    optional double lease_rate_escalator_ratio_per_year = 10;
+    optional double power_purchase_agreement_currency_per_kwh = 11;
+    optional double power_purchase_agreement_rate_escalator_ratio_per_year = 12;
+    optional double electricity_annual_usage_kwh = 13;
+    optional double fuel_annual_usage_therms = 14;
+}
+
+message ParcelInput {
+    optional string parcel_id = 1;
+    optional string display_name = 2;
+    optional double area_sq_m = 3;
+    optional double perimeter_m = 4;
+}
+
+message LicenseConfig {
+    optional designinput.MaxSiteAreaState max_site_area_state = 1;
+    optional double max_site_area_sq_m = 2;
+    optional string mobile_see_plans_url = 3;
+}
+
+message SolarDesignInputViewModelState {
+    optional designinput.GenerateDesignsRequestState generate_designs_request_state = 1;
+    repeated bytes s2_encoded_geometry = 2;
+    optional bool can_generate_designs = 3;
+    optional SolarUserInputs solar_user_inputs = 4;
+    optional string solar_learn_more_url = 5;
+    optional StartWithNewDraftRequestState discard_state = 6;
+    optional bool has_draft = 7;
+    repeated ParcelInput parcel_inputs = 9;
+    optional LicenseConfig license_config = 10;
+    
+    oneof event_type {
+        StartWithNewDraftRequestState show_discard_state_snack_bar_event = 8;
+    }
+}
+
+enum StartWithNewDraftRequestState {
+    START_WITH_NEW_DRAFT_REQUEST_STATE_UNSPECIFIED = 0;
+    START_WITH_NEW_DRAFT_REQUEST_STATE_DISCARD_PENDING = 1;
+    START_WITH_NEW_DRAFT_REQUEST_STATE_SUCCESS = 2;
+    START_WITH_NEW_DRAFT_REQUEST_STATE_DISCARD_FAILURE = 3;
+    START_WITH_NEW_DRAFT_REQUEST_STATE_CREATE_FAILURE = 4;
+    START_WITH_NEW_DRAFT_REQUEST_STATE_CREATE_PENDING = 5;
+}

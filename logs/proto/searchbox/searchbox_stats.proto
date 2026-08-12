@@ -1,0 +1,950 @@
+syntax = "proto2";
+
+package logs_proto_searchbox;
+
+import "google/api/inclusion.proto";
+import "google/protobuf/timestamp.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "lens/infra/analytics/privacy/copy.proto";
+import "logs/proto/searchbox/action_info.proto";
+import "logs/proto/searchbox/searchbox_stats_group.proto";
+import "logs/proto/searchbox/smart_compose_stats.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "searchbox/protos/aim/tools.proto";
+import "searchbox/protos/log_enums.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LOGSB";
+option java_outer_classname = "SearchboxStatsProtos";
+option java_package = "com.google.common.logging.proto1api";
+
+message SearchboxStats {
+    repeated GroupInfo group_infos = 103;
+    message GroupInfo {
+        optional uint32 groups_set_index = 1;
+        optional uint32 side_type = 2;
+        optional uint32 why_this_result_reason = 3;
+    }
+    
+    optional ValidationStatus validation_status = 1 [default = NO_STATUS];
+    enum ValidationStatus {
+        NO_STATUS = 0;
+        INVALID = 3;
+        VALID = 4;
+        DEPRECATED_EXEMPTED = 1;
+        DEPRECATED_INCOMPLETE = 2;
+    }
+    
+    optional ParameterValidationStatus parameter_validation_status = 29;
+    enum ParameterValidationStatus {
+        VALID_PARAMETERS = 1;
+        INCOMPLETE_PARAMETERS = 2;
+        INVALID_PARAMETERS = 3;
+    }
+    
+    optional SignatureValidationStatus signature_validation_status = 30;
+    enum SignatureValidationStatus {
+        VALID_SIGNATURE = 1;
+        INVALID_SIGNATURE = 2;
+        EXEMPTED = 3;
+    }
+    
+    optional uint32 release_number = 32;
+    optional string client_name = 2;
+    optional string request_identifier = 33;
+    
+    optional SearchMethod search_method = 23 [default = UNSET];
+    enum SearchMethod {
+        ABANDONMENT = 22;
+        DELETION = 33;
+        INSPIRE = 25;
+        INSPIRE_ABANDONMENT = 32;
+        PEEKABOO = 26;
+        CLICKED_SUGGESTION = 1;
+        CUE_CARDS_IMPRESSION = 21;
+        DELETE_KEY = 2;
+        ENHANCEMENT = 31;
+        ACTION = 34;
+        ENTER_KEY = 3;
+        SHIFT_ENTER_KEY = 4;
+        ESCAPE_KEY = 5;
+        FEELING_LUCKY_ARROW_KEY = 6;
+        FEELING_LUCKY_BUTTON = 7;
+        FEELING_LUCKY_BUTTON_INLINE = 8;
+        FEELING_LUCKY_LINK = 9;
+        MATCHBOX = 29;
+        MATCHBOX_ABANDONMENT = 30;
+        PREFETCH = 10;
+        PREFETCH_QUERY = 27;
+        PREFETCH_SUGGESTION = 28;
+        SCROLL = 11;
+        SEARCH_ANYWAY_LINK = 16;
+        SEARCH_BUTTON = 12;
+        SEARCH_BUTTON_INLINE = 13;
+        SEARCH_FOR_QUERY_SUGGESTION = 23;
+        SECONDARY_BUTTON_INLINE = 14;
+        SOUND_RECOGNITION = 35;
+        SPEECH_RECOGNITION = 15;
+        SPEECH2_CLICK = 17;
+        SPEECH2_FINAL_RESULT = 18;
+        SPEECH2_IDLE_TIMEOUT = 19;
+        SPEECH2_RESTORE = 20;
+        SEARCH_OLDER_ITEMS = 24;
+        VISUAL_SEARCH = 36;
+        UNSET = 0;
+        AI_SEARCH_BUTTON = 37;
+        AI_SEARCH_SUGGEST_CHIP = 38;
+    }
+    
+    repeated InputMethod input_methods = 31;
+    enum InputMethod {
+        KEYBOARD = 1;
+        PASTE = 2;
+        ON_SCREEN_KEYBOARD = 3;
+        IME = 4;
+        QUERY_BUILDER = 5;
+        SPEECH = 6;
+        HANDWRITING = 7;
+        TAB = 8;
+        GESTURE_DECODING_DYM_QUERY_BUILDER = 9;
+        LENS_CAMERA = 10;
+        SMART_COMPOSE = 11;
+    }
+    
+    optional ExperimentInfo suggest_experiment_info = 3;
+    message ExperimentInfo {
+        optional string id = 1;
+        optional bool triggered = 2;
+        optional int32 experiment_triggered = 3;
+        
+        enum ExperimentTriggeredStages {
+            TRIGGERED_AT_FINAL = 1;
+            TRIGGERED_BEFORE_FINAL = 2;
+        }
+    }
+    
+    optional string original_query = 4;
+    optional uint32 original_query_length = 77;
+    optional uint32 query_length_at_session_start = 78;
+    optional uint32 number_of_lines = 111;
+    optional string query_prefix_for_displayed_suggestions = 41;
+    
+    optional SuggestionInfo assisted_query_info = 5;
+    message SuggestionInfo {
+        optional int32 index = 1 [default = -1];
+        optional uint32 type = 2;
+        repeated uint32 subtypes = 3;
+        optional int32 relevance = 4;
+        
+        optional SuggestionSource source = 5;
+        enum SuggestionSource {
+            NONE = 0;
+            COMPLETE_SERVER = 1;
+            CONTENT_PROVIDERS = 2;
+            ICING = 3;
+            SSB_CONTEXT = 4;
+            NOW_PROMO = 5;
+            DEVICE_UNDO_REWRITE = 6;
+            DISCOVERABILITY = 7;
+            NEXT_APP_PREDICTION = 8;
+            WAHLBERG_PROMO = 9;
+            IPA = 10;
+            IPA_SUGGEST = 11;
+            BUFFERING = 12;
+            BRAIN = 13;
+            WEB_SERVICE_WORKER = 14;
+            CLIPBOARD = 15;
+            RECENTS = 16;
+            EXPLORE = 17;
+            YOUTUBE_REFINEMENT = 18;
+            PIXEL_LAUNCHER = 19;
+            IGSA_OFFLINE_PERSONALIZED_SUGGESTION_CACHE = 20;
+            IGSA_SUGGEST_2G = 21;
+            SUGGEST_2G_LITE = 22;
+            ON_DEVICE_HISTORY = 23;
+            FOLLOW_WORLD_CUP_PROMO = 24;
+            GELLER = 25;
+            MOSAIC_ON_DEVICE_SUGGEST = 26;
+            APP_ACTIONS = 27;
+            ASSISTANT_SUGGEST = 28;
+            ONE_SEARCH_ON_DEVICE = 29;
+            TABS = 30;
+            DELUXE_SEARCHBOX_CHIPS = 31;
+            ANDROID_CONTACTS_PROVIDER = 32;
+            LENS_CONTEXTUAL = 33;
+            PLAY_STORE = 34;
+            ANDROID_SYSTEM_SETTINGS = 35;
+            SOURCE_CONTROL = 36;
+            APP_INTEGRATION_PLATFORM = 37;
+            RECENT_ACTIVITY = 38;
+            LENS_QUERY_FORMULATION = 40 [deprecated = true];
+            KEYWORDS_BASED_COMPLEX_QUERY = 41;
+            RETRY_OFFLINE = 42;
+            ANDROID_APP_SEARCH = 43;
+            HISTORY_OFF = 44;
+        }
+        
+        optional int32 vasco_suggestion_type = 6 [deprecated = true];
+        optional int32 action_index = 7 [default = -1];
+        repeated logs.proto.searchbox.ActionInfo action_info = 8;
+        
+        optional ActionSource action_source = 9;
+        enum ActionSource {
+            UNKNOWN_SOURCE = 0;
+            ICING_ACTION_SOURCE = 1;
+            CP2_ACTION_SOURCE = 2;
+            COMPLETE_SERVER_SOURCE = 3;
+            IPA_CONTACT_SOURCE = 4;
+        }
+        
+        optional IcingRankingSignals icing_ranking_signals = 10;
+        optional SliceInfo slice_info = 11;
+        optional uint32 pips_index_id = 12;
+        optional uint32 cs_original_index = 19;
+        optional string entity_mid = 13;
+        optional string entity_feature_id = 21;
+        optional int32 new_onboarding_suggestion_index = 14;
+        optional IcingIndexableInfo icing_indexable_info = 15;
+        optional string title = 16;
+        optional string url = 17;
+        optional uint32 entity_distance_km = 18;
+        optional PixelLauncherInfo pixel_launcher_info = 20;
+        optional uint32 groups_set_index = 27;
+        
+        optional TabType tab_type = 28;
+        enum TabType {
+            TAB_TYPE_UNSPECIFIED = 0;
+            SRP_TAB = 1;
+            THIRD_PARTY_TAB = 2;
+        }
+        
+        optional ToastSuggestionRankingSignals toast_suggestion_ranking_signals = 29;
+        optional OnDeviceContactSuggestionRankingSignals on_device_contact_suggestion_ranking_signals = 30;
+    }
+    
+    repeated SuggestionInfo available_suggestions = 6;
+    
+    repeated RenderedSuggestionsInfo rendered_suggestions = 69;
+    message RenderedSuggestionsInfo {
+        optional string query_prefix = 1;
+        repeated SuggestionInfo displayed_suggestions = 2;
+    }
+    
+    repeated SuggestionInfo previous_suggestions = 40;
+    optional bool zero_prefix_enabled = 38;
+    
+    optional IpaStats ipa_stats = 55;
+    message IpaStats {
+        optional int32 query_length_when_cache_filled = 1 [default = -1];
+        optional RoundTripTimeStats round_trip_time_stats = 2;
+        optional bool load_empty_persistent_cache = 3;
+        optional int32 load_persistent_cache_msec = 4;
+        repeated IpaRenderTimeStats render_time_stats = 5;
+        optional int32 elapsed_time_since_last_modified_contact_file = 6 [default = -1];
+        optional int32 contact_cache_size = 7;
+        optional int32 contact_cache_hit_count = 8;
+        optional int32 contact_cache_miss_count = 9;
+        optional int32 contact_action_expand_icon_tap_count = 10 [deprecated = true];
+        optional int32 contact_action_collapse_icon_tap_count = 11 [deprecated = true];
+        optional int32 contact_actions_cp2_cursor_empty_count = 12;
+        optional int32 zero_contact_methods_from_cp2_count = 13;
+        optional int32 lookup_key_not_found_contact_methods_suggest_count = 14;
+        optional int32 youtube_video_filtered_out_count = 15;
+        optional int32 merge_nav_app_suggest_count = 16;
+        optional int32 contact_actions_by_name_cp2_cursor_empty_count = 17 [deprecated = true];
+        optional int32 zero_contact_methods_by_name_from_cp2_count = 18 [deprecated = true];
+        optional int32 mdh_youtube_duration_msec = 19;
+        
+        optional MdhYoutubeSource mdh_youtube_source = 20;
+        enum MdhYoutubeSource {
+            UNKNOWN_SOURCE = 0;
+            IN_MEMORY = 1;
+            FROM_PREF = 2;
+            OFFLINE = 3;
+            FROM_MDH = 4;
+            FROM_MDH_FAIL = 5;
+            OFFLINE_FAILED = 6;
+        }
+        
+        optional CorporaDiffStats contacts_corpora_diff_stats = 21;
+        message CorporaDiffStats {
+            optional int32 new_more_than_old_count = 1;
+            optional int32 old_more_than_new_count = 2;
+            optional int32 new_and_old_same_count = 3;
+            optional int32 old_more_than_zero_new_count = 4;
+            optional int32 new_more_than_zero_old_count = 5;
+            optional int32 new_and_old_same_zero_count = 6;
+            optional int32 new_contact_refresh_status = 7;
+            optional int64 new_contact_refresh_elapsed_time_ms = 8;
+        }
+        
+        optional CorporaDiffStats apps_corpora_diff_stats = 22;
+        repeated uint64 icing_suggest_clicked_timestamp = 23;
+        optional bool is_youtube_data_cache_fresh = 24;
+        optional int32 youtube_deletion_data_state = 25;
+    }
+    
+    optional uint32 num_zero_prefix_suggestions_shown = 37;
+    optional uint32 num_srp_on_focus_suggestions_shown = 98;
+    optional uint32 zero_prefix_response_age_sec = 56;
+    optional uint32 zero_prefix_request_location_data_age_sec = 58;
+    
+    optional HyperLocalSuggestStats hyper_local_suggest_stats = 59 [deprecated = true];
+    message HyperLocalSuggestStats {
+        optional uint32 zero_prefix_response_age_ms = 1;
+        optional uint32 zero_prefix_request_location_data_age_ms = 2;
+    }
+    
+    optional uint32 browsable_category_selected = 53 [deprecated = true];
+    optional uint32 current_browsable_category = 54 [deprecated = true];
+    optional bool unstable_connection = 7;
+    optional uint32 session_number = 8;
+    optional uint32 session_duration_msec = 9;
+    optional uint32 first_edit_time_msec = 10;
+    optional uint32 last_edit_time_msec = 11;
+    optional uint32 last_clear_time_msec = 126;
+    optional uint32 last_query_build_time_msec = 22;
+    optional uint32 last_prompt_expansion_time_msec = 127 [deprecated = true];
+    optional uint32 fetcher_request_count = 12;
+    
+    optional CacheConfig cache_config = 28;
+    message CacheConfig {
+        optional bool internal_cache_enabled = 1;
+        optional bool absence_based_response_generator_enabled = 2;
+        optional bool consensus_based_response_generator_enabled = 3;
+    }
+    
+    optional uint32 internal_cache_hit_count = 14;
+    optional uint32 external_cache_hit_count = 24 [deprecated = true];
+    optional uint32 generated_response_count = 15;
+    optional uint32 generated_response_impression_count = 16;
+    optional uint32 connection_request_count = 13;
+    optional uint32 connection_rejected_request_count = 25;
+    optional uint32 connection_response_count = 17;
+    optional uint32 out_of_sync_response_count = 18;
+    optional uint32 max_round_trip_time_msec = 19;
+    optional uint32 total_round_trip_time_msec = 20;
+    optional uint32 zero_prefix_round_trip_time_msec = 52;
+    optional string compressed_round_trip_histogram = 21;
+    optional uint32 abandoned_request_count = 34;
+    optional uint32 rendered_response_count = 35;
+    optional uint32 when_server_fetched_rendered_response_count = 117 [deprecated = true];
+    optional uint32 startup_init_time_msec = 50;
+    optional uint32 startup_rendered_response_time_msec = 51;
+    optional string rendered_response_time_histogram = 114;
+    optional string when_server_fetched_rendered_response_time_msec_histogram = 118;
+    optional string after_request_fulfilled_response_render_time_msec_histogram = 120;
+    optional uint32 total_rendered_response_time_msec = 36;
+    optional uint32 when_server_fetched_total_rendered_response_time_msec = 119;
+    optional uint32 after_request_fulfilled_total_rendered_response_time_msec = 121;
+    optional uint32 total_response_size_bytes = 116;
+    optional uint32 cancelled_fetch_short_timeout_count = 44;
+    optional uint32 cancelled_fetch_medium_timeout_count = 45;
+    optional uint32 cancelled_fetch_long_timeout_count = 46;
+    optional uint32 cancelled_fetch_final_timeout_count = 47;
+    optional uint32 total_icing_global_query_results = 66;
+    optional uint32 total_icing_global_query_requests = 67;
+    optional uint32 icing_global_query_max_round_trip_time_msec = 70;
+    optional uint32 icing_global_query_total_round_trip_time_msec = 71;
+    optional string icing_global_query_compressed_round_trip_histogram = 72;
+    optional uint32 high_confidence_icing_result_count = 48;
+    optional uint32 total_wait_for_high_confidence_icing_result_msec = 49;
+    optional uint32 icing_connection_initialization_time_msec = 84;
+    optional uint32 cached_images_count = 62;
+    optional uint32 network_images_count = 63;
+    optional uint32 network_images_total_loading_time_msec = 64;
+    optional string experiment_stats = 26 [deprecated = true];
+    
+    repeated ExperimentStatsV2 experiment_stats_v2 = 60;
+    message ExperimentStatsV2 {
+        optional StatType type = 1;
+        enum StatType {
+            QUERY_BUILDER_CHIPS_TAP_COUNT = 1;
+            IS_GOOGLE_KEYBOARD_USED = 2;
+            KEYBOARD_PREDICTION_CLICKED_OR_AUTO_COMMIT_COUNT = 3;
+            KEYBOARD_TYPING_SUGGESTION_CLICK_COUNT = 4;
+            KEYBOARD_GESTURE_SUGGESTION_CLICK_COUNT = 5;
+            KEYBOARD_RECORRECTION_CLICK_COUNT = 6;
+            KEYBOARD_RECAPITALIZATION_CLICK_COUNT = 7;
+            QUERY_BUILDER_CHIPS_SAVED_CHARS = 8;
+            ELIGIBLE_FOR_ONBOARDING = 9;
+            ENTITY_CACHED_IMAGE_COUNT = 10;
+            ENTITY_NETWORK_IMAGE_COUNT = 11;
+            ENTITY_NETWORK_IMAGE_TOTAL_LOADING_TIME = 12;
+            NUMBER_OF_DELETED_CHARACTERS = 13;
+            CLEAR_BUTTON_TAP_COUNT = 14;
+            CHIPS_DELETED_CHARACTERS = 15;
+            ELIGIBLE_VASCO_TASK = 16;
+            QUERY_BUILDER_ARROW_ICON_TAP_COUNT = 17;
+            QUERY_BUILDER_ARROW_ICON_SAVED_CHARS = 18;
+            ZERO_PREFIX_CHIPS_TAPPED = 19;
+            ENTITY_UNAVAILABLE_IMAGE_COUNT = 20;
+            IMAGE_CAROUSEL_EXPAND_ICON_TAP_COUNT = 21;
+            IMAGE_CAROUSEL_COLLAPSE_ICON_TAP_COUNT = 22;
+            HAS_HYPERLOCAL_SUGGEST = 26;
+            WORLDCUP_PROMO_IMPRESSION_COUNT = 27;
+            WORLDCUP_PROMO_INTEREST_LEVEL = 28;
+            ANSWERS_CALL_ACTION_SHOWN_COUNT = 29;
+            ANSWERS_CALL_ACTION_CLICK_COUNT = 30;
+            SLICE_REGISTER_CALLBACK_MS = 31;
+            SLICE_BIND_SLICE_MS = 32;
+            SLICE_SET_SLICE_MS = 33;
+            LOCAL_ENTITY_ADDRESS_LINE_COUNT = 34;
+            MLB_IMPRESSION_COUNT = 35;
+            DEVICE_STORAGE_LOW = 37;
+            WIDGET_CLICKED_WITH_HINT_SHOWN = 38;
+            ZERO_TYPING_SUGGEST_TRIGGERED = 51;
+            MANAGE_ACTIVITY_BUTTON_TAP_COUNT = 52;
+            MANAGE_ACTIVITY_BUTTON_IMPRESSION_COUNT = 53;
+            SHOPPING_SRP_ON_FOCUS_TRIGGERED = 54;
+            ON_FOCUS_WEB_TYPE = 55;
+            TIMES_ZP_RENDERED = 56;
+            TRENDS_DISABLED = 57;
+            CLIPBOARD_SUGGEST_TRIGGERED = 58;
+            SCREENSHOT_SUGGEST_TRIGGERED = 59;
+            ORACLE_PEOPLE_REFINEMENTS_AVAILABLE = 60;
+            SIGN_IN_ICC_DISMISS_IMPRESSION_COUNT = 72;
+            SIGN_IN_ICC_DISMISS_CLICK_COUNT = 73;
+            OFFLINE_SUGGEST_TRIGGERED = 74;
+            CONTEXTUAL_SUGGEST_OMNIBOX_EXPERIMENT = 104;
+            OFFLINE_PSUGGEST_TRIGGERED = 101;
+            LOW_NETWORK_CONDITION_TRIGGERED = 102;
+            LOW_NETWORK_OFFLINE_SUGGEST_TRIGGERED = 103;
+            SPYW_ICC_DISMISS_IMPRESSION_COUNT = 75;
+            SPYW_ICC_DISMISS_CLICK_COUNT = 76;
+            ON_FOCUS_IN_FLIGHT_PREFETCH = 77;
+            ENTITY_PREVIEW_VIEW_MORE_CLICKED = 78;
+            SOURCE_CONTROL_MENU_TAP_COUNT = 81;
+            SOURCE_CONTROL_MENU_SETTINGS_BUTTON_TAP_COUNT = 82;
+            SOURCE_CONTROL_MENU_ABOUT_BUTTON_TAP_COUNT = 83;
+            SOURCE_CONTROL_DIALOG_SETTINGS_BUTTON_TAP_COUNT = 84;
+            SOURCE_CONTROL_DIALOG_ACKNOWLEDGE_BUTTON_TAP_COUNT = 85;
+            SOURCE_CONTROL_SUGGESTION_IMPRESSION_REPORTED = 86;
+            SOURCE_CONTROL_SUGGESTION_ACKNOWLEDGE_BUTTON_TAP_COUNT = 87;
+            SOURCE_CONTROL_SUGGESTION_SETTINGS_BUTTON_TAP_COUNT = 88;
+            SOURCE_CONTROL_SETTING_VALUE = 89;
+            APP_STRIP_RICH_SUGGEST_COTRIGGERED = 90;
+            EXPERIMENT_TRIGGERED_WITH_APP_STRIP = 91;
+            EXPERIMENT_TRIGGERED_WITHOUT_APP_STRIP = 92;
+            CS_COUNTERFACTUAL_EXP_TRIGGERED_WITH_APP_STRIP = 93;
+            CS_COUNTERFACTUAL_EXP_TRIGGERED_WITHOUT_APP_STRIP = 94;
+            STEADY_STATE_OMNIBOX_POSITION = 95;
+            SCROLL_AWARENESS_IMPRESSION_COUNT = 96;
+            SCROLL_AWARENESS_TAP_COUNT = 97;
+            SEE_MORE_IMPRESSION_COUNT = 98;
+            SEE_MORE_TAP_COUNT = 99;
+            SEE_MORE_TRIGGER_COUNT = 100;
+            HOUR_OF_DAY = 10000;
+            TRIGGERED_PROACTIVE_ZPS_SOURCE = 10001;
+            VASCO_PS_TASK_ID = 10003;
+            NUM_PSUGGEST_FROM_PSUGGEST_REPLY = 10004;
+            ONBOARDING_STATUS = 10005;
+            PTREND_CLASSIFICATION = 10006;
+            DOMINANT_VE_TYPE = 10007;
+            TRENDS_ENTITY_IMAGE_TRIGGERED = 10008;
+            PIPS_ARBITRARY_EXP_STAT = 10009;
+            ENTITY_ABANDONMENT_SUGGEST_MENU = 10010;
+            PCTR_MODEL_TRIGGERED = 10012;
+            TRIGGERED_TRENDS_IN_PSUGGEST = 10013;
+            ALL_COMPLETIONS_BAD_IN_ON_FOCUS = 10014;
+            GS_LCRP_MISMATCHING_AQS = 10015 [deprecated = true];
+            GS_LCRP_MATCHING_AQS = 10016 [deprecated = true];
+            GS_LCRP_MISSING = 10017 [deprecated = true];
+            SRP_DATA_ACQUISITION_EXP_STATS = 10018;
+            RICH_SUGGEST_EXPERIMENT_TRIGGERED = 10019;
+            RICH_ANSWER_AND_TWIDDLER_TRIGGERED = 10020;
+            LENS_PSUGGEST_TRIGGERED = 10021;
+            PROMPT_SUGGEST_TRIGGERED = 10023;
+            PROMPT_SUGGEST_TRIGGERED_ZP = 10024;
+            PROMPT_SUGGEST_TRIGGERED_ON_FOCUS = 10025;
+            PROMPT_SUGGEST_TRIGGERED_PREFIX = 10026;
+            DEPRECATED_ELIGIBLE_FOR_MULTILINGUAL = 23 [deprecated = true];
+            DEPRECATED_MULTILINGUAL_PROMO_SEARCH_SETTINGS_LAUNCHED = 24 [deprecated = true];
+            DEPRECATED_MULTILINGUAL_PROMO_DISMISSED = 25 [deprecated = true];
+            DEPRECATED_PROACTIVE_ZP_IMPRESSION_COUNT = 36 [deprecated = true];
+            DEPRECATED_DELETE_ICON_TAP_COUNT = 39 [deprecated = true];
+            DEPRECATED_DELETE_ICON_TAP_CONFIRM_COUNT = 40 [deprecated = true];
+            DEPRECATED_DELETE_LONG_CLICK_COUNT = 41 [deprecated = true];
+            DEPRECATED_DELETE_LONG_CLICK_CONFIRM_COUNT = 42 [deprecated = true];
+            DEPRECATED_DELETE_ZERO_PREFIX_ICON_TAP_COUNT = 43 [deprecated = true];
+            DEPRECATED_DELETE_ZERO_PREFIX_ICON_TAP_CONFIRM_COUNT = 44 [deprecated = true];
+            DEPRECATED_DELETE_TYPED_QUERY_ICON_TAP_COUNT = 45 [deprecated = true];
+            DEPRECATED_DELETE_TYPED_QUERY_ICON_TAP_CONFIRM_COUNT = 46 [deprecated = true];
+            DEPRECATED_DELETE_ZERO_PREFIX_LONG_CLICK_COUNT = 47 [deprecated = true];
+            DEPRECATED_DELETE_ZERO_PREFIX_LONG_CLICK_CONFIRM_COUNT = 48 [deprecated = true];
+            DEPRECATED_DELETE_TYPED_QUERY_LONG_CLICK_COUNT = 49 [deprecated = true];
+            DEPRECATED_DELETE_TYPED_QUERY_LONG_CLICK_CONFIRM_COUNT = 50 [deprecated = true];
+            DEPRECATED_PERSISTENT_ZP_CACHE_HIT = 79 [deprecated = true];
+            DEPRECATED_MODIFIED_ZP_CACHE_HIT = 80 [deprecated = true];
+            DEPRECATED_USER_ENTITY_INTEREST_COUNT = 10002 [deprecated = true];
+            DEPRECATED_OPA_SUGGESTION_TRIGGERED = 10011 [deprecated = true];
+            DEPRECATED_MATH_SOLVER_PROMO_TRIGGERED = 10022 [deprecated = true];
+        }
+        
+        optional int32 type_int = 4;
+        optional string string_value = 2;
+        optional int32 int_value = 3;
+    }
+    
+    optional uint64 client_experiment_triggered_flags = 74;
+    
+    optional QueryConfirmationStats query_confirmation_stats = 27;
+    message QueryConfirmationStats {
+        optional bool triggered = 1;
+        optional uint32 unwarned_query_revisions_upon_highlight = 2;
+        optional uint32 blacklisted_query_attempts = 3;
+        optional uint32 displayed_warnings = 4;
+        optional uint32 scrubbed_queries = 5;
+        optional uint32 dropped_warnings_by_query_revision = 6;
+    }
+    
+    optional SingleSearchboxContext context = 39 [default = NO_CONTEXT, deprecated = true];
+    enum SingleSearchboxContext {
+        NO_CONTEXT = 0;
+        GEL = 1;
+        GSA = 2;
+        GMM = 3;
+        CHROME = 4;
+    }
+    
+    optional string session_id = 42;
+    optional bool offline_triggered = 43;
+    
+    repeated QueryBuilderTap query_builder_taps = 57;
+    message QueryBuilderTap {
+        repeated uint32 subtypes = 1;
+        optional uint32 saved_chars = 2;
+        optional int32 index = 3 [default = -1];
+        optional uint32 type = 4;
+        
+        optional QueryBuilderType query_builder_type = 5;
+        enum QueryBuilderType {
+            QUERY_BUILDER_TYPE_UNSPECIFIED = 0;
+            QUERY_BUILDER_TYPE_QUERY_BUILDER_ICON = 1;
+            QUERY_BUILDER_TYPE_PROMPT_EXPANSION_SUGGESTION = 2;
+            QUERY_BUILDER_TYPE_CREATIVE_IMAGE_SUGGESTION = 3;
+        }
+        
+        optional int32 added_chars = 6;
+    }
+    
+    repeated PromptExpansionTap prompt_expansion_taps = 123 [deprecated = true];
+    message PromptExpansionTap {
+        repeated uint32 subtypes = 1;
+        optional int32 index = 2 [default = -1];
+        optional uint32 prompt_query_length = 3;
+        
+        reserved 4;
+    }
+    
+    optional VascoStats vasco_stats = 65;
+    message VascoStats {
+        optional int32 task_id = 1;
+        optional int32 task_type = 2;
+        optional int64 profiling_inference_timestamp_micros = 3;
+        optional int64 first_event_timestamp_micros = 4;
+        optional int64 last_event_timestamp_micros = 5;
+        optional int32 offline_triggering_model_id = 6;
+        optional int32 offline_recommendation_model_id = 7;
+    }
+    
+    optional ActionStats action_stats = 68;
+    message ActionStats {
+        optional uint32 request_failed_count = 1;
+        optional uint32 result_not_relevant_count = 2;
+        optional uint32 result_not_rendered_count = 3;
+        optional uint32 avg_request_time_msec = 4;
+        optional uint32 avg_rendering_time_msec = 5;
+    }
+    
+    optional EditEventStats edit_event_stats = 73;
+    message EditEventStats {
+        optional uint32 keyboard_character_count = 1;
+        optional uint32 suggest_scroll_count = 3;
+        optional uint32 paste_count = 4;
+        
+        reserved 2;
+    }
+    
+    optional OnDeviceSuggestionSuppressionStats suggestion_suppression_stats = 75;
+    message OnDeviceSuggestionSuppressionStats {
+        optional int32 num_suppress_by_type_requests = 1;
+        optional int32 num_suppress_by_type_fullfilled = 2;
+        optional int32 num_suppressed_by_type = 3;
+        optional int32 num_suppress_by_server_on_device_deduping_requests = 4;
+        optional int32 num_suppress_by_server_on_device_deduping_fullfilled = 5;
+        optional int32 num_suppressed_by_server_on_device_deduping = 6;
+    }
+    
+    optional SuggestKeyboardDismissStats suggest_keyboard_dismiss_stats = 76;
+    message SuggestKeyboardDismissStats {
+        optional bool dismiss_in_0p = 1;
+        optional bool dismiss_before_done_typing = 2;
+        optional bool dismiss_after_done_typing = 3;
+    }
+    
+    repeated SuggestionCount suggestion_counts = 79;
+    message SuggestionCount {
+        optional uint32 type = 1;
+        repeated uint32 subtypes = 2;
+        optional string compressed_histogram = 3;
+    }
+    
+    optional SuggestScrollEventStats suggest_scroll_event_stats = 80;
+    message SuggestScrollEventStats {
+        optional bool user_scroll_in_zero_prefix = 1;
+        optional bool user_scroll_to_bottom_in_zero_prefix = 2;
+        optional bool view_scrollable_in_zero_prefix = 3;
+        optional int32 scroll_view_height = 4;
+        optional bool user_scroll_in_typed_query = 5;
+        optional int32 deepest_scrolled_zp_suggestion_index = 6;
+    }
+    
+    optional ErrorStats error_stats = 81;
+    message ErrorStats {
+        optional ErrorStat icing_global_query_timeout = 1;
+        message ErrorStat {
+            optional int32 count = 1;
+        }
+        
+        optional ErrorStat icing_connection_failure = 2;
+    }
+    
+    optional fixed64 pips_request_id = 82;
+    repeated fixed64 gws_event_id_hash = 94;
+    
+    repeated MoreButtonClickInfo more_button_click_info = 83 [deprecated = true];
+    message MoreButtonClickInfo {
+        optional int32 suggestion_group_id = 1;
+        optional int32 number_of_initially_displayed_suggestions = 2;
+        optional int32 number_of_additionally_displayed_suggestions = 3;
+    }
+    
+    repeated ServerIcingAnswerComparisonInfo server_icing_answer_comparison_info = 87;
+    message ServerIcingAnswerComparisonInfo {
+        optional bool is_match = 1;
+        optional int64 time_in_cache = 2;
+        optional int32 answer_type = 3;
+    }
+    
+    optional AnswerSuggestionStats answer_suggestion_stats = 85;
+    message AnswerSuggestionStats {
+        optional int32 changed_answer_query_count = 1;
+    }
+    
+    optional DoodleStats doodle_stats = 86;
+    message DoodleStats {
+        optional bool is_tap_target_google_logo = 1;
+        optional bool is_doodle_enabled = 2;
+        optional int32 num_doodle_loops = 3;
+        optional bool is_doodle_setting_disabled = 4;
+    }
+    
+    optional bool fp204_for_action_click_failed = 88 [deprecated = true];
+    optional int64 server_response_timestamp = 89;
+    
+    repeated SuggestionInteraction suggestion_interactions = 90;
+    message SuggestionInteraction {
+        optional string query_prefix = 2;
+        
+        oneof action {
+            SliceAction slice_action = 1;
+        }
+    }
+    
+    repeated SliceImpression slice_impressions = 91;
+    message SliceImpression {
+        optional string source_package = 1;
+        optional int32 slice_type = 2;
+        optional int64 time_to_load_ms = 3;
+        optional string slice_uri = 4;
+        optional string slice_title = 5;
+        optional int64 time_to_set_slice_ms = 6;
+        optional bool rendered = 7;
+    }
+    
+    optional bool swipe_up_home_enabled = 92;
+    
+    optional UntimelyResponseSuppression untimely_response_suppression = 93 [deprecated = true];
+    message UntimelyResponseSuppression {
+        option deprecated = true;
+        repeated UntimelySuggestion untimely_suggestions = 1;
+        optional int32 total_available_suggestions = 2;
+    }
+    
+    optional MapsSuggestAdsStats maps_suggest_ads_stats = 95;
+    message MapsSuggestAdsStats {
+        optional bool ad_shown = 1;
+        optional bool ad_available_in_counterfactual = 2;
+    }
+    
+    optional SuggestEntryPoint suggest_entry_point = 96;
+    enum SuggestEntryPoint {
+        UNKNOWN = 0;
+        AGA_WIDGET = 1;
+        AGA_HOME_SCREEN = 2;
+        AGA_SEARCH_TAB = 3;
+        AGA_SEARCH_RESULTS = 4;
+        AGA_INCOGNITO = 5;
+        AGA_PIXEL_LAUNCHER = 6;
+        AGA_PIXEL_ALL_APPS_ENTRY = 7;
+        COLLECTIONS = 8;
+        ONE_SEARCH_QSB = 9;
+        ONE_SEARCH_ALL_APPS = 10;
+        ONE_SEARCH_UNKNOWN = 11;
+        VOICE_SEARCH = 12;
+        GOOGLE_APP_BROWSER = 13 [deprecated = true];
+        SRP_BACKPRESS = 14;
+        IGA_HOME_SCREEN = 15;
+        IGA_NEW_TAB_PAGE = 16;
+        IGA_LENS_EXIT = 17;
+        OMNI_ZERO_STATE = 18;
+        OMNI_TEXT_SEARCH_RESULTS = 19;
+        OMNI_VISUAL_SEARCH_RESULTS = 20;
+        OMNI_OCR_TEXT_SEARCH_RESULTS = 21;
+        IGA_SRP_ON_FOCUS = 22;
+        IGA_CONTENT_ON_FOCUS = 23;
+        ANDROID_SEARCH_XR = 24;
+        AGA_AMBIENT = 25;
+        IGA_AMBIENT = 26;
+        IGA_PIH_TRAY = 27;
+        LENS_QUERY_FORMULATION = 28;
+        VIDEO_VIEWER = 29;
+        AGA_CHROME = 30;
+        AGA_EMBER = 31 [deprecated = true];
+        AGA_LUMI_CHIP = 32 [deprecated = true];
+        AGA_EMBER_NATIVE = 33;
+        AGA_AIM_ZERO_STATE = 34;
+        IGA_AIM_ZERO_STATE = 35;
+        AGA_AIM_FOLLOW_UP = 36;
+        IGA_AIM_FOLLOW_UP = 37;
+        AGA_AIM_IN_LENS = 38;
+        IGA_AIM_IN_LENS = 39;
+        LENS_SRP_HEADER = 40;
+        AGA_SD_NATIVE_CAPPUCCINO = 41;
+        LENS_IMAGE_GENERATION_PROMPT_LIBRARY = 42;
+        LENS_IMAGE_GENERATION_LVF_SUGGESTION = 43;
+    }
+    
+    optional .searchbox.protos.OnFocusEventType on_focus_event_type = 97;
+    repeated .searchbox.protos.QueryFeatureType query_feature_type = 99 [packed = true];
+    optional string search_query = 100;
+    
+    optional RoundTripTimeStats tapas_round_trip_stats = 101;
+    message RoundTripTimeStats {
+        optional uint32 cancelled_response_count = 1;
+        optional uint32 max_round_trip_time_msec = 2;
+        optional uint32 total_round_trip_time_msec = 3;
+        optional string compressed_round_trip_histogram = 4;
+        optional uint32 success_response_count = 5;
+        optional uint32 failed_response_count = 6;
+        optional uint32 timeout_response_count = 7;
+    }
+    
+    optional RoundTripTimeStats suggestion_fetch_round_trip_stats = 102;
+    
+    repeated QueryComposerTapEvent deprecated_query_composer_stats = 104 [deprecated = true];
+    message QueryComposerTapEvent {
+        optional uint32 deprecated_chips_count = 1 [deprecated = true];
+        repeated SuggestionInfo available_chips = 14;
+        optional uint32 selected_chip_index = 2;
+        optional uint32 characters_saved = 3 [deprecated = true];
+        
+        optional ChipTapMode deprecated_mode = 4 [deprecated = true];
+        enum ChipTapMode {
+            option deprecated = true;
+            CHIP_TAP_MODE_UNSPECIFIED = 0;
+            COMPLETE_WORD = 1;
+            APPEND_NEXT_WORD = 2;
+        }
+        
+        optional uint32 type = 5 [deprecated = true];
+        repeated uint32 subtypes = 6 [packed = true, deprecated = true];
+        optional uint32 chip_length = 7;
+        optional string chip_text = 8 [deprecated = true];
+        optional uint32 query_builder_info_type = 9;
+        optional uint32 group_index = 10 [deprecated = true];
+        optional string group_label = 11 [deprecated = true];
+        
+        optional ChipToggleMode chip_toggle_from = 12;
+        enum ChipToggleMode {
+            CHIP_TOGGLE_MODE_UNSPECIFIED = 0;
+            CHIP_TOGGLE_MODE_DEFAULT = 1;
+            CHIP_TOGGLE_MODE_IMAGES = 2;
+            CHIP_TOGGLE_MODE_SHOPPING = 3;
+        }
+        
+        optional ChipToggleMode chip_toggle_to = 13;
+    }
+    
+    repeated QueryComposerData query_composer_data = 105;
+    message QueryComposerData {
+        optional uint32 chips_count = 1 [deprecated = true];
+        repeated SuggestionInfo previous_chips = 10;
+        optional QueryComposerTapEvent tap_event = 2;
+        optional uint32 original_query_length = 3 [deprecated = true];
+        
+        optional ChipEventMode chip_event_mode = 4 [deprecated = true];
+        enum ChipEventMode {
+            option deprecated = true;
+            CHIP_EVENT_MODE_UNSPECIFIED = 0;
+            CHIP_DISPLAY = 1;
+            CHIP_TAP = 2;
+        }
+        
+        optional uint32 total_chips_count = 5 [deprecated = true];
+        optional uint32 displayed_chips_count = 6 [deprecated = true];
+        optional uint32 duration_in_ms = 7 [deprecated = true];
+        
+        optional IMEConversion ime_conversion = 8 [deprecated = true];
+        message IMEConversion {
+            option deprecated = true;
+            optional string previous_query_text = 1;
+            optional string current_query_text = 2;
+        }
+        
+        repeated ChipGroupData chip_groups = 9 [deprecated = true];
+        message ChipGroupData {
+            option deprecated = true;
+            optional uint32 total_chips_count = 1;
+            optional uint32 displayed_chips_count = 2;
+            optional string group_label = 3;
+        }
+    }
+    
+    repeated QueryComposerData grouped_query_composer_data = 110 [deprecated = true];
+    optional string original_query_before_first_chip_tap = 106;
+    optional bool query_composer_response_received = 107;
+    optional bool search_button_with_query_composer_tapped = 108;
+    
+    repeated TabSuggestV2DarkStudyData tab_suggest_v2_dark_study_data = 109 [deprecated = true];
+    message TabSuggestV2DarkStudyData {
+        option deprecated = true;
+        optional uint32 original_query_length = 1;
+        optional uint32 url_full_match_count = 2;
+        optional uint32 url_host_match_count = 3;
+        optional uint32 url_host_and_path_match_count = 4;
+        optional uint32 title_full_match_count = 5;
+    }
+    
+    optional bool is_query_composer_enabled = 112;
+    
+    optional QueryParameter query_parameter = 113;
+    message QueryParameter {
+        optional string original_tbm = 1;
+        optional string original_udm = 2;
+        optional string tbm = 3;
+        optional string udm = 4;
+    }
+    
+    optional Modality modality = 115;
+    enum Modality {
+        MODALITY_UNSPECIFIED = 0;
+        MODALITY_TEXT = 1;
+        MODALITY_TEXT_PLUS_IMAGE = 2;
+        MODALITY_TEXT_PLUS_VIDEO = 3;
+        MODALITY_WEB_PAGE_URL = 4;
+        MODALITY_PDF = 5;
+        MODALITY_DISCOVER_CARD = 6;
+    }
+    
+    optional .searchbox.aim.ToolMode tool_mode = 124;
+    optional logs.proto.searchbox.SearchboxStatsGroup searchbox_stats_group = 122;
+    optional SmartComposeStats smart_compose_stats = 125;
+    optional bool is_proxima_http = 128;
+    
+    message IcingRankingSignals {
+        optional double score = 1;
+        optional uint32 last_used_timestamp_secs = 2;
+        optional uint32 created_timestamp_secs = 3;
+        optional uint32 num_usage_reports = 4;
+        optional uint32 num_usage_reports_agsa = 5;
+    }
+    
+    message ToastSuggestionRankingSignals {
+        optional int32 normalized_score = 1;
+        optional int32 group_score = 2;
+        optional int32 group_number = 3;
+        optional int32 group_index = 4;
+        optional int32 suggestion_index_in_group = 5;
+    }
+    
+    message OnDeviceContactSuggestionRankingSignals {
+        optional bool is_starred_contact = 1;
+        optional int32 time_since_last_call_min = 2;
+        optional int32 total_call_count = 3;
+        optional int32 time_since_last_sms_min = 4;
+        optional int32 total_sms_count = 5;
+        optional int32 shortcut_rank = 6;
+        optional .google.protobuf.Timestamp shortcut_last_changed_timestamp = 7;
+    }
+    
+    message PixelLauncherInfo {
+        optional string package_name = 1;
+    }
+    
+    message IcingIndexableInfo {
+        optional string package_name = 1;
+        optional string icing_corpus_name = 2;
+        optional string uri = 3;
+    }
+    
+    message SliceInfo {
+        optional SliceLoadingType slice_loading_type = 1;
+        enum SliceLoadingType {
+            LOADING_UNKNOWN = 0;
+            LOADING_DYNAMIC = 1;
+            LOADING_STATIC = 2;
+        }
+        
+        optional SliceDisplayMode slice_display_mode = 2;
+        enum SliceDisplayMode {
+            DISPLAY_UNKNOWN = 0;
+            DISPLAY_SMALL = 1;
+            DISPLAY_LARGE = 2;
+        }
+        
+        optional string package_id = 3;
+        optional bool refresh_button_clicked = 4;
+        optional bool user_interacted = 5;
+        optional int32 time_until_refresh_ms = 6;
+        optional int32 time_to_load_ms = 7;
+    }
+    
+    message IpaRenderTimeStats {
+        optional bool zero_prefix = 1;
+        optional bool cold_start = 2;
+        optional bool full_request = 3;
+        optional uint32 response_rendered_count = 4;
+        optional uint32 response_rendered_total_time_msec = 5;
+    }
+    
+    message SliceAction {
+        optional string package_name = 1;
+        optional bool is_large_mode = 2;
+        optional int32 action_type = 3;
+        optional int32 row_type = 4;
+        optional int32 row_index = 5;
+        optional int32 slice_type = 6;
+        optional string slice_uri = 7;
+        optional string slice_title = 8;
+        optional string icing_corpus_name = 9;
+    }
+    
+    message UntimelySuggestion {
+        option deprecated = true;
+        optional uint32 suggest_type = 1;
+        repeated uint32 suggest_subtypes = 2;
+        optional int64 time_off = 3;
+    }
+    
+    enum OmniboxPosition {
+        UNKNOWN_POSITION = 0;
+        TOP_POSITION = 1;
+        BOTTOM_POSITION = 2;
+    }
+    
+    extend .proto2.bridge.MessageSet {
+        optional SearchboxStats message_set_extension = 135293861;
+    }
+}

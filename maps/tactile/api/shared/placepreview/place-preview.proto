@@ -1,0 +1,90 @@
+syntax = "proto2";
+
+package maps_tactile.shared.placepreview;
+
+import "geo/serving/proto/address/address.proto";
+import "geo/serving/proto/openhours/open_hours.proto";
+import "geo/serving/proto/phonenumber/phone_number.proto";
+import "geo/serving/proto/scalableattributes/scalableattributes.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/shared/geometry.proto";
+import "maps/tactile/api/shared/map-label.proto";
+import "maps/tactile/api/shared/place/cost-details.proto";
+import "maps/tactile/api/shared/place/map-rendering-data.proto";
+import "maps/tactile/api/shared/place/maps-place-identifier.proto";
+import "maps/tactile/api/shared/place/regional-relation-info.proto";
+import "maps/tactile/api/shared/placepreview/additional-cuisine-info.proto";
+import "maps/tactile/api/shared/placepreview/photo-preview.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHPP";
+option java_multiple_files = true;
+option java_outer_classname = "PlacePreviewProto";
+option java_package = "com.google.maps.tactile.shared.placepreview";
+
+message PlacePreview {
+    optional string ved = 1;
+    optional string place_id = 2;
+    optional string feature_id = 3;
+    optional string knowledge_graph_mid = 14;
+    optional maps_tactile.shared.place.MapsPlaceIdentifier maps_place_identifier = 24;
+    optional LatLng lat_lng = 4;
+    optional string title = 5;
+    optional string local_language_title = 22;
+    optional string single_line_address = 6;
+    optional geo_serving_proto.address.Address address = 25;
+    
+    optional GeocodeInfo geocode_info = 23;
+    message GeocodeInfo {
+        optional bool is_geocoded_address = 1;
+    }
+    
+    repeated PhotoPreview photo = 7;
+    optional float num_rating_stars = 8;
+    
+    optional CostInfo cost_info = 16;
+    message CostInfo {
+        optional string cost = 1;
+        optional string cost_suffix = 2;
+        optional string cost_label_for_a11y = 5;
+        optional maps_tactile.shared.place.CostFormat cost_format = 3;
+        repeated maps_tactile.shared.place.CostFormat available_format = 4;
+    }
+    
+    optional int32 review_count = 9;
+    optional string formatted_review_count = 29;
+    
+    repeated CategoryInfo category = 10;
+    message CategoryInfo {
+        optional string category_name = 1;
+        optional string gcid = 2;
+    }
+    
+    optional OpenStatus open_status = 11;
+    enum OpenStatus {
+        UNKNOWN_OPEN_STATUS = 0;
+        OPEN = 1;
+        PERMANENTLY_CLOSED = 2;
+        TEMPORARILY_CLOSED = 3;
+    }
+    
+    optional geo_serving_proto.openhours.OpenHours open_hours_info = 19;
+    optional string timezone_id = 21;
+    optional MapLabel map_label = 13;
+    optional maps_tactile.shared.place.MapRenderingData map_rendering_data = 20;
+    optional string neighborhood = 15;
+    optional geo_serving_proto.phonenumber.PhoneNumber phone_number = 17;
+    
+    optional PlaceTypeIcon place_type_icon = 18;
+    message PlaceTypeIcon {
+        optional string light_mode_url = 1;
+        optional string dark_mode_url = 2;
+    }
+    
+    optional maps_tactile.shared.place.RegionalRelationInfo regional_relation_info = 26;
+    optional geo_serving_proto.scalableattributes.ScalableAttributeContainer scalable_attribute_container = 27;
+    optional AdditionalCuisineInfo additional_cuisine_info = 28;
+    
+    extensions 12;
+}

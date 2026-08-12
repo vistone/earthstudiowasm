@@ -1,0 +1,128 @@
+syntax = "proto2";
+
+package freebase;
+
+import "google/api/inclusion.proto";
+import "knowledge/graph/schema/storage/format/options.proto";
+import "logs/proto/logs_annotations/logs_annotations.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "quality/ranklab/io/proto/proto_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "storage/graph/bfg/proto/bfg_data.proto";
+
+option java_outer_classname = "TopicTable";
+option java_package = "com.google.freebase";
+
+message Topic {
+    optional Id id = 1;
+    repeated PropertyValue property_value = 2;
+    
+    extensions 10000 to max;
+    
+    extend .proto2.bridge.MessageSet {
+        optional Topic message_set_extension = 17018692;
+    }
+}
+
+message Id {
+    optional string mid = 1;
+    optional string id = 2;
+    
+    extensions 10000 to max;
+}
+
+message PropertyValue {
+    optional Id property = 1;
+    repeated Value value = 2;
+    optional int64 total_value_count = 3;
+    
+    optional ValueStatus value_status = 4;
+    enum ValueStatus {
+        HAS_UNKNOWN_VALUE = 1;
+        HAS_NO_VALUE = 2;
+    }
+    
+    extend .proto2.bridge.MessageSet {
+        optional PropertyValue message_set_extension = 115225276;
+    }
+}
+
+message LatLong {
+    optional float lat_deg = 1;
+    optional float long_deg = 2;
+}
+
+message Measurement {
+    optional float magnitude = 1;
+    
+    repeated Unit unit = 2;
+    message Unit {
+        optional int32 power = 2 [default = 1];
+        optional Id unit = 3;
+        optional string unit_mid = 1 [deprecated = true];
+    }
+}
+
+message Value {
+    optional Type type = 2 [default = TYPE_NULL];
+    enum Type {
+        TYPE_NULL = 0;
+        TYPE_ID = 1;
+        TYPE_TEXT = 2;
+        TYPE_ENUM = 3;
+        TYPE_KEY = 4;
+        TYPE_URI = 5;
+        TYPE_DATETIME = 6;
+        TYPE_BOOL = 7;
+        TYPE_INT = 8;
+        TYPE_FLOAT = 9;
+        TYPE_COMPOUND = 10;
+        TYPE_PROTO = 11;
+        TYPE_EXTENSION = 16;
+        TYPE_NESTED_STRUCT = 17;
+        TYPE_SEMANTIC_REFERENCE = 18;
+        TYPE_LAT_LONG = 14;
+        TYPE_MEASUREMENT = 15;
+        TYPE_HAS_VALUE = 12;
+        TYPE_HAS_NO_VALUE = 13;
+    }
+    
+    optional Id id_value = 3;
+    optional string string_value = 4;
+    optional bool bool_value = 5;
+    optional int64 int_value = 6;
+    optional double float_value = 7;
+    optional string lang = 8;
+    optional Topic compound_value = 9;
+    optional string timestamp = 10 [deprecated = true];
+    optional int64 timestamp_usec = 18;
+    optional string display_value = 11;
+    optional string display_lang = 12;
+    optional bytes raw_value = 13;
+    optional NestedStruct nested_struct = 23;
+    optional string expected_proto = 14;
+    repeated storage_graph_bfg.Triple.Provenance provenance = 15;
+    repeated storage_graph_bfg.Triple.Provenance deletion_provenance = 22;
+    optional uint64 index = 1 [deprecated = true];
+    optional LatLong lat_long_value = 16 [deprecated = true];
+    optional Measurement measurement_value = 17 [deprecated = true];
+    optional Citation citation = 19 [deprecated = true];
+    repeated uint64 subgraph_id = 21 [deprecated = true];
+    
+    extensions 10000 to 524999999, 525000000 to max;
+}
+
+message Citation {
+    optional string dataset = 1;
+    optional string project = 2;
+    optional string provider = 3;
+    optional string statement = 4;
+    optional string uri = 5;
+    optional bool is_attribution_required = 6;
+}
+
+message NestedStruct {
+    repeated PropertyValue property_value = 1;
+    
+    extensions 10000 to max;
+}

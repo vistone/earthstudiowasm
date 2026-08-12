@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package i18n.localization;
+
+import "google/api/inclusion.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "LocalizedText";
+
+message LocalizedTextProto {
+    optional string text = 1;
+    optional string language = 2;
+}
+
+message LocalizedTextSetProto {
+    repeated LocalizedTextProto localized_text = 1;
+}

@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/internal/rightsstatus.proto";
+import "geostore/base/proto/options.proto";
+import "geostore/base/proto/trustsignals.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto.internal";
+
+message InternalFeatureProto {
+    optional TrustSignalsProto trust = 4;
+    optional RightsStatusProto rights_status = 12;
+    optional string polygon_shape_id = 13;
+    optional string water_removed_polygon_shape_id = 14;
+    optional string self_polygon_shape_id = 15;
+    optional string rest_of_world_polygon_shape_id = 16;
+    
+    reserved 1, 2, 3, 5, 6, 7, 8, 9, 10, 11;
+}

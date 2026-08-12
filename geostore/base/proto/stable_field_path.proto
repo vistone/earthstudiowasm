@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message StableFieldPathProto {
+    repeated StableFieldSelector field_path = 1;
+    message StableFieldSelector {
+        optional int32 field_num = 1;
+        optional string version_token = 2;
+    }
+}

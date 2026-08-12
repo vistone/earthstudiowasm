@@ -1,0 +1,18 @@
+syntax = "editions";
+
+package travel.frontend.common.proto;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.travel.frontend.common.proto";
+
+enum EntityType {
+    option features = enum_type: CLOSED
+    ;
+    ENTITY_TYPE_UNKNOWN = 0;
+    HOTEL = 1;
+    VACATION_RENTAL = 2;
+    RESULT_GROUP = 3;
+    POI = 4;
+}

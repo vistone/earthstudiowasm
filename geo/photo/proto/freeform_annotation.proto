@@ -1,0 +1,43 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/image_key.proto";
+import "i18n/localization/proto/localized_text.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "FreeformAnnotationProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message FreeformAnnotationProperty {
+    optional i18n.localization.LocalizedTextProto attribute = 1;
+    optional i18n.localization.LocalizedTextProto value = 2;
+    optional string link_url = 3;
+}
+
+message FreeformAnnotationSource {
+    optional i18n.localization.LocalizedTextProto name = 1;
+    optional i18n.localization.LocalizedTextProto url = 2;
+}
+
+message RelatedPhoto {
+    optional ImageKey image_key = 1;
+    optional i18n.localization.LocalizedTextProto title = 2;
+}
+
+message FreeformAnnotation {
+    optional i18n.localization.LocalizedTextProto title = 1;
+    optional i18n.localization.LocalizedTextProto subtitle = 7;
+    optional i18n.localization.LocalizedTextProto description = 2;
+    repeated FreeformAnnotationProperty properties = 3;
+    optional string thumbnail_url = 4;
+    optional string link_url = 5;
+    optional string image_link_url = 6;
+    optional FreeformAnnotationSource source = 8;
+    optional string world_object_id = 9;
+    optional RelatedPhoto related_photo = 10;
+}

@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/featureid.proto";
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option cc_enable_arenas = true;
+option java_package = "com.google.geostore.base.proto";
+
+message IntersectionGroupProto {
+    repeated FeatureIdProto intersection = 1;
+    
+    optional GroupType group_type = 2 [default = GROUP_ARTIFACT];
+    enum GroupType {
+        GROUP_ARTIFACT = 1;
+        GROUP_LOGICAL = 2;
+    }
+    
+    repeated FeatureIdProto child_group = 3;
+    optional FeatureIdProto parent_group = 4;
+}

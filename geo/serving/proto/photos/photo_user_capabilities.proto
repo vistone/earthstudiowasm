@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package geo_serving_proto.photos;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPPH";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoUserCapabilitiesProto";
+option java_package = "com.google.geo.serving.proto.photos";
+
+message PhotoUserCapabilities {
+    optional bool can_delete = 1;
+    optional bool can_report = 2;
+}

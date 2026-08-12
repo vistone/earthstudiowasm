@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.user;
+
+import "google/internal/earth/v1/shared.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "wireless/android/privacy/annotations/proto/collection_basis_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.user";
+
+message GetUserRequest {
+    optional ClientMetadata client_metadata = 1 [deprecated = true];
+    optional int32 retry = 2;
+}
+
+message GetUserResponse {
+    optional string focus_obfuscated_gaia_id = 1;
+    optional string session_identifier = 2;
+    optional string display_name = 3;
+    optional string photo_url = 4;
+    optional bool drive_enabled = 5 [default = true];
+    optional string email = 6;
+    optional bool earth_enabled = 7 [default = true];
+    optional bool mymaps_enabled = 8 [default = true];
+    
+    reserved 9;
+}

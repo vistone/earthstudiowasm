@@ -1,0 +1,45 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "VideoPreviewProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message VideoPreview {
+    optional int64 duration_ms = 1;
+    repeated VideoStream streams = 2;
+    optional double frames_per_second = 3;
+    optional string video_codec = 4;
+    optional string audio_codec = 5;
+    optional string viper_cid = 6 [deprecated = true];
+}
+
+message VideoStream {
+    optional Protocol protocol = 5;
+    enum Protocol {
+        UNKNOWN_PROTOCOL = 0;
+        PROGRESSIVE = 1;
+        DASH = 2;
+        HLS = 3;
+    }
+    
+    optional int32 format_id = 1;
+    optional int32 stream_width = 2;
+    optional int32 stream_height = 3;
+    optional string url = 4;
+    
+    optional ServingBackend serving_backend = 6;
+    enum ServingBackend {
+        UNKNOWN_SERVING_BACKEND = 0;
+        CONTRIB_SERVICE = 1;
+        PHOTOS = 2;
+    }
+}

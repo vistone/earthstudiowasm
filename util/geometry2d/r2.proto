@@ -1,0 +1,36 @@
+syntax = "editions";
+
+package geometry2d;
+
+import "java/com/google/apps/jspb/jspb.proto";
+
+message R2PointProto {
+    optional double x = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional double y = 2 [features = field_presence: LEGACY_REQUIRED
+    ];
+}
+
+message R2PolylineProto {
+    repeated R2PointProto point = 1;
+}
+
+message R2PolygonProto {
+    repeated R2PolylineProto loop = 1;
+}
+
+message R2BoundingBoxProto {
+    optional R2PointProto lo = 1 [features = field_presence: LEGACY_REQUIRED
+    ];
+    optional R2PointProto hi = 2 [features = field_presence: LEGACY_REQUIRED
+    ];
+}
+
+message R2TransformerProto {
+    optional double a = 1 [default = 1];
+    optional double b = 2 [default = 0];
+    optional double c = 3 [default = 0];
+    optional double d = 4 [default = 1];
+    optional double e = 5 [default = 0];
+    optional double f = 6 [default = 0];
+}

@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package geostore;
+
+import "geostore/base/proto/options.proto";
+import "google/api/inclusion.proto";
+
+option objc_class_prefix = "GS";
+option java_multiple_files = true;
+option java_package = "com.google.geostore.base.proto";
+
+message VehicleTypes {
+    enum VehicleType {
+        UNKNOWN = 0;
+        ANY = 1;
+        CAR = 2;
+        MOTORCYCLE = 3;
+        TRUCK = 4;
+        BUS = 5;
+    }
+}

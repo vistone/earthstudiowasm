@@ -1,0 +1,44 @@
+syntax = "proto2";
+
+package google.internal.earth.v1.knowledge;
+
+import "geo/earth/proto/renderable-entity.proto";
+import "google/internal/earth/v1/shared.proto";
+import "net/proto2/contrib/validator/annotations.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+import "wireless/android/privacy/annotations/proto/collection_basis_annotations.proto";
+
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.internal.earth.v1.knowledge";
+
+message GetKnowledgeCardRequest {
+    optional ClientMetadata client_metadata = 1 [deprecated = true];
+    optional LatLngWithQuery lat_lng_with_query = 4;
+    repeated string map_sizes = 6;
+    optional bool cardset = 7;
+    optional bool enable_spotlit = 8 [deprecated = true];
+    
+    oneof location {
+        string mid = 2;
+        string fid = 3;
+    }
+}
+
+message GetKnowledgeCardForRandomLocationRequest {
+    optional ClientMetadata client_metadata = 1 [deprecated = true];
+    repeated string map_sizes = 2;
+    optional bool cardset = 3;
+    optional bool enable_spotlit = 4 [deprecated = true];
+}
+
+message GetKnowledgeCardResponse {
+    optional earth_knowledge.RenderableEntity renderable_entity = 1;
+    
+    reserved 2, 3;
+}
+
+message LatLngWithQuery {
+    optional LatitudeLongitude lat_lng = 1;
+    optional string query = 2;
+}

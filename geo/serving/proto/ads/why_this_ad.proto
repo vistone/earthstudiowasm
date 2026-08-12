@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+package geo_serving_proto.ads;
+
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GSPADS";
+option java_multiple_files = true;
+option java_outer_classname = "WhyThisAdProto";
+option java_package = "com.google.geo.serving.proto.ads";
+
+message WhyThisAd {
+    optional string domain_id = 1;
+    optional string reason = 2 [deprecated = true];
+    
+    repeated WhyThisAdReason wta_reason = 4;
+    message WhyThisAdReason {
+        optional string reason = 1;
+        optional string learn_more_url = 2;
+    }
+    
+    optional bool disable_ad_blocking = 3;
+    optional string user_ads_settings_url = 5;
+    optional string title = 6;
+    optional string open_ads_settings_confirmation_message = 7;
+}

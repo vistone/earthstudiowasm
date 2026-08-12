@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package earth.state.derivedstate;
+
+import "devtools/staticanalysis/pipeline/analyzers/proto_best_practices/proto/optouts.proto";
+
+option features = utf8_validation: NONE
+;
+option objc_class_prefix = "RTH";
+option java_multiple_files = true;
+option java_package = "com.google.geo.earth.app.common.presenters.stateurl.derived";
+
+message TimeMachineDerivedState {
+    optional bool enabled = 1;
+    optional bool expanded = 2;
+    optional string selected_date = 3;
+    optional bool is_timelapse_available = 4;
+    optional bool is_timelapse_enabled = 5;
+}

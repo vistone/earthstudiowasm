@@ -1,0 +1,68 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "i18n/localization/proto/localized_text.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "java/com/google/apps/jspb/jspb_disable_randomization.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "LocationProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message LocationInfo {
+    optional LatLng lat_lng = 1;
+    optional Elevation elevation = 2;
+    optional Rotation orientation = 3;
+    optional Level level = 4;
+    optional string country_code = 5;
+}
+
+message LatLng {
+    optional double lat = 3;
+    optional double lng = 4;
+    optional Planet planet = 5 [default = EARTH, deprecated = true];
+}
+
+message LatLngRectangle {
+    optional LatLng lo = 3;
+    optional LatLng hi = 4;
+    optional Planet planet = 5 [default = EARTH, deprecated = true];
+}
+
+message MercatorTile {
+    optional int32 x = 1;
+    optional int32 y = 2;
+    optional int32 zoom = 3;
+}
+
+message Elevation {
+    optional float elevation_meters_above_egm96 = 1;
+    optional float elevation_meters_above_ground = 2;
+    optional float elevation_meters_above_wgs84 = 3;
+}
+
+message Rotation {
+    optional float heading = 1;
+    optional float tilt = 2 [default = 90];
+    optional float roll = 3;
+}
+
+message Level {
+    optional uint64 streetview_level_id = 1;
+    optional float ordinal = 2;
+    optional i18n.localization.LocalizedTextProto level_name = 3;
+    optional i18n.localization.LocalizedTextProto level_name_abbreviation = 4;
+}
+
+enum Planet {
+    UNKNOWN_PLANET = 0;
+    EARTH = 1;
+    MOON = 2;
+    MARS = 3;
+    ISS = 4;
+    MERCURY = 5;
+    VENUS = 6;
+}

@@ -1,0 +1,152 @@
+syntax = "editions";
+
+package maps_paint_client;
+
+import "geo/mobrank/lore/boq/maps/recservice/scorer/browse_to_decide_prototype/browse_to_decide_prototype_content.proto";
+import "geo/photo/proto/imagery_coverage_metadata.proto";
+import "maps/api/shared/paint/proto/maps_api_metadata.proto";
+import "maps/indoor/proto/indoor.proto";
+import "maps/paint/proto/accessibility-metadata.proto";
+import "maps/paint/proto/air-quality-metadata.proto";
+import "maps/paint/proto/annotation-application-info.proto";
+import "maps/paint/proto/batch-logging-instruction.proto";
+import "maps/paint/proto/categorical-search-metadata.proto";
+import "maps/paint/proto/client-vector-label.proto";
+import "maps/paint/proto/client-vector-metadata.proto";
+import "maps/paint/proto/client-vector-tile.proto";
+import "maps/paint/proto/feature-selector.proto";
+import "maps/paint/proto/label-density-restriction.proto";
+import "maps/paint/proto/label-density-restrictions.proto";
+import "maps/paint/proto/major-event-metadata.proto";
+import "maps/paint/proto/promoted-place-logging-metadata.proto";
+import "maps/paint/proto/promoted-place-navigation-logging-metadata.proto";
+import "maps/paint/proto/static-realtime-metadata.proto";
+import "maps/paint/proto/transit-station-entrance-metadata.proto";
+import "maps/paint/proto/visual-element.proto";
+import "maps/roadtraffic/proto/incidentmetadata.proto";
+import "maps/shared/mapcore/api/proto/extensions/draw_pass_override.proto";
+import "maps/spotlight/proto/ad-metadata.proto";
+import "maps/spotlight/proto/directions.proto";
+import "maps/spotlight/proto/entity-metadata.proto";
+import "maps/spotlight/proto/hotel-metadata.proto";
+import "maps/spotlight/proto/logging-metadata.proto";
+import "maps/spotlight/proto/report-a-problem-metadata.proto";
+import "maps/spotlight/proto/spotlight-item-metadata.proto";
+import "net/proto2/contrib/js_proto/public/field_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_outer_classname = "ClientVectorTileExtensions";
+option java_package = "com.google.maps.paint.client";
+
+extend AreaRenderOp {
+    optional InteractivityMetadata interactivity_metadata_for_area = 53863091;
+    optional .maps.indoor.IndoorBuildingProto indoor_building_metadata = 32819068;
+    optional .maps.indoor.IndoorRelationProto indoor_relation_metadata = 42466818;
+    optional .maps.indoor.IndoorInteractiveEntityProto indoor_interactivity_metadata = 52617685;
+    optional bool is_indoor_level_background = 69077470;
+    optional maps_spotlight.LoggingMetadata logging_metadata_for_area = 40154408;
+    optional maps_spotlight.EntityMetadata entity_metadata_for_area = 30096869;
+    optional maps_paint.FeatureSelector.FeatureTypeCategory feature_type_category_for_area = 116878127;
+    optional geo_photo.ImageryCoverageMetadata imagery_metadata_for_area = 51650189;
+    optional SphericalMetadata spherical_metadata = 177034656;
+    optional RenderOpDebugInfo area_render_op_debug_info = 216564156;
+    optional maps_api.MapsApiMetadataProto maps_api_metadata_for_area = 343593479;
+    optional BatchLoggingInstruction batch_logging_instruction_for_area = 343593480;
+}
+
+extend PointRenderOp {
+    optional InteractivityMetadata interactivity_metadata_for_point = 491381901;
+    optional maps_api.MapsApiMetadataProto maps_api_metadata_for_point = 491381902;
+}
+
+extend LineRenderOp {
+    optional maps_spotlight.TripMetadata trip_metadata_for_line = 28517612;
+    optional maps_spotlight.DraggingMetadata dragging_metadata = 48343962;
+    optional maps_spotlight.StepInspectionMetadata step_inspection_metadata = 49095464;
+    optional maps_spotlight.EntityMetadata entity_metadata_for_line = 30096869;
+    optional maps_spotlight.ReportAProblemMetadata report_a_problem_metadata = 132080860;
+    optional geo_photo.ImageryCoverageMetadata imagery_metadata_for_line = 51650189;
+    optional DriveaboutRoadMetadata road_metadata = 49156371;
+    optional maps_paint.FeatureSelector.FeatureTypeCategory feature_type_category_for_line = 116878127;
+    optional InteractivityMetadata interactivity_metadata_for_line = 53863091;
+    optional RenderOpDebugInfo line_render_op_debug_info = 216564156;
+    optional maps_api.MapsApiMetadataProto maps_api_metadata_for_line = 376862676;
+    optional BatchLoggingInstruction batch_logging_instruction_for_line = 376862677;
+}
+
+extend LabelRenderOp {
+    optional maps_spotlight.WaypointMetadata waypoint_metadata = 30929027;
+    optional maps_spotlight.AccessPointMetadata access_point_metadata = 66786615;
+    optional maps_spotlight.TripMetadata trip_metadata_for_label = 28517612;
+    optional maps_spotlight.AdMetadata ad_metadata = 30511227;
+    optional maps_spotlight.EntityMetadata entity_metadata_for_label = 30096869;
+    optional maps_spotlight.HotelMetadata hotel_metadata_for_label = 172661375;
+    optional maps_spotlight.SpotlightItemMetadata spotlight_item_metadata = 33356690;
+    optional maps_spotlight.ViaMetadata via_metadata = 40251317;
+    optional maps_roadtraffic.IncidentMetadata incident_metadata = 43229016;
+    optional geo_photo.ImageryCoverageMetadata imagery_metadata = 51650189;
+    optional maps_paint.TransitStationEntranceMetadata transit_station_entrance_metadata = 525000000;
+    optional maps_spotlight.LoggingMetadata logging_metadata_for_label = 40154408;
+    optional maps_paint.VisualElementMetadata visual_element_metadata = 60681369;
+    optional maps_paint.PromotedPlaceLoggingMetadata promoted_place_logging_metadata = 135491995;
+    optional maps_paint.PromotedPlaceNavigationLoggingMetadata promoted_place_navigation_logging_metadata = 375119803;
+    optional maps_paint.MajorEventMetadata major_event_metadata = 137907910;
+    optional maps_paint.CategoricalSearchMetadata categorical_search_metadata = 253079038;
+    optional maps_paint.AirQualityMetadata air_quality_metadata = 346648032;
+    optional maps_paint.AccessibilityMetadata accessibility_metadata = 448352827;
+    optional MobileMapsApiMetadata mobile_maps_api_metadata = 140063746;
+    optional InteractivityMetadata interactivity_metadata_for_label = 53863091;
+    optional .maps.indoor.IndoorRelationProto indoor_relation_label_metadata = 42466818;
+    optional maps_paint.StaticRealtimeMetadata static_realtime_metadata = 145321205;
+    optional ElectricVehicleChargingStationMetadata ev_station_metadata = 252725312;
+    optional maps_paint.FeatureSelector.FeatureTypeCategory feature_type_category_for_label = 116878127;
+    optional maps_paint.LabelDensityRestriction label_density_restriction = 190976051;
+    optional LabelDensityRestrictions label_density_restrictions = 282806283;
+    optional AnnotationApplicationInfo annotation_application_info = 212656839;
+    optional RenderOpDebugInfo label_render_op_debug_info = 216564156;
+    optional BatchLoggingInstruction batch_logging_instruction = 379780825;
+    optional AnnotationContentExtensions annotation_content_extensions = 436262924;
+}
+
+extend VolumeRenderOp {
+    optional InteractivityMetadata interactivity_metadata_for_volume = 53863091;
+    optional bool has_indoor_content = 36512758 [deprecated = true];
+    optional .maps.indoor.IndoorBuildingProto indoor_building_volume_metadata = 85448653;
+    optional maps_paint.FeatureSelector.FeatureTypeCategory feature_type_category_for_volume = 116878127;
+    optional RenderOpDebugInfo volume_render_op_debug_info = 216564156;
+    optional BatchLoggingInstruction batch_logging_instruction_for_volume = 474430528;
+    optional maps_api.MapsApiMetadataProto maps_api_metadata_for_volume = 474430529;
+}
+
+extend AnnotationContentExtensions {
+    optional geo.mobrank.lore.btd.BrowseToDecidePrototypeContent browse_to_decide_prototype_content = 436262924;
+}
+
+extend InstanceModelRenderOp {
+    optional InteractivityMetadata interactivity_metadata_for_instance_model = 514511905;
+}
+
+extend GltfRenderOp {
+    optional InteractivityMetadata interactivity_metadata_for_gltf_op = 516553663;
+}
+
+extend GltfRenderOpGroup {
+    optional .mapcore.DrawPassOverride draw_pass_override = 25000001;
+}
+
+extend AreaRenderOpGroup {
+    optional .mapcore.DrawPassOverride draw_pass_override_for_area_group = 25000001;
+}
+
+extend LineRenderOpGroup {
+    optional .mapcore.DrawPassOverride draw_pass_override_for_line_group = 25000001;
+}
+
+extend RasterRenderOpGroup {
+    optional .mapcore.DrawPassOverride draw_pass_override_for_raster_group = 25000001;
+}
+
+extend InstanceModelRenderOpGroup {
+    optional .mapcore.DrawPassOverride draw_pass_override_for_instance_model_group = 25000000;
+}

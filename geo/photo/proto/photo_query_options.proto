@@ -1,0 +1,122 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/client_capabilities.proto";
+import "geo/photo/proto/contextual_semantic_intent_options.proto";
+import "geo/photo/proto/display_context.proto";
+import "geo/photo/proto/eligibility_options.proto";
+import "geo/photo/proto/entry_point_options.proto";
+import "geo/photo/proto/full_size_fife_url_options.proto";
+import "geo/photo/proto/localization_context.proto";
+import "geo/photo/proto/photo_filter_options.proto";
+import "geo/photo/proto/photo_search_criterion.proto";
+import "geo/photo/proto/pinning_client.proto";
+import "geo/photo/proto/ranking_client.proto";
+import "geo/photo/proto/ranking_options.proto";
+import "geo/photo/proto/thumbnail_options.proto";
+import "google/protobuf/timestamp.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+repeated_field_encoding: EXPANDED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "PhotoQueryOptionsProto";
+option java_package = "com.google.geo.photo";
+
+message SuperrootPhotoQueryOptions {
+    optional PhotoQueryOptions latlng_query_options = 1;
+    optional PhotoQueryOptionList feature_query_option_list = 2;
+    optional PhotoQueryOptions rich_search_query_options = 3;
+    
+    extend .proto2.bridge.MessageSet {
+        optional SuperrootPhotoQueryOptions message_set_extension = 412125987;
+    }
+}
+
+message PhotoQueryOptionList {
+    repeated PhotoQueryOptions options = 1;
+    optional bool allow_duplicate_photo = 2 [default = true];
+    optional RankingClient ranking_client = 3;
+}
+
+message PhotoQueryOptions {
+    optional GeoPhotoDisplayContext display_context = 15 [default = UNKNOWN_DISPLAY_CONTEXT];
+    optional PhotoFilterOptions filter_options = 1;
+    optional EntryPointOptions entry_point_options = 13 [deprecated = true];
+    optional ContextualSemanticIntentOptions contextual_semantic_intent_options = 21;
+    optional LocalizationContext localization_context = 2;
+    optional LayoutOptions layout_options = 3;
+    optional ContinuationOptions continuation_options = 4;
+    optional ClientCapabilities client_capabilities = 11;
+    optional geo_photo.RankingOptions ranking_options = 9;
+    optional bool retrieve_text_label = 10 [default = false];
+    optional FailoverOption failover_option = 12;
+    optional bool retrieve_focus_attribution = 14 [default = false, deprecated = true];
+    optional .proto2.bridge.MessageSet info = 8 [deprecated = true];
+    optional string query_option_tag = 16;
+    optional int32 query_option_priority = 17;
+    repeated GeoPhotoDisplayContext applicable_in_display_context = 18;
+    optional SelectByBatch select_by = 20;
+    optional EligibilityOptions eligibility_options = 22 [deprecated = true];
+    optional CoverImageOptions cover_image_options = 23 [deprecated = true];
+    optional SpannerStalenessOptions spanner_staleness_options = 24;
+    optional ConsistencyOptions consistency_options = 25;
+    
+    reserved 5, 7, 19;
+}
+
+message LayoutOptions {
+    optional FullSizeFifeUrlOptions full_size_fife_url_options = 4 [deprecated = true];
+    optional bool include_crop_bytes = 6;
+    
+    oneof thumbnail_creation_methods {
+        ThumbnailOptions thumbnail_options = 2;
+        bool include_creation_metadata = 5 [default = false];
+    }
+}
+
+message FailoverOption {
+    optional FailoverType failover_type = 1 [default = STREETVIEW_PANO];
+    enum FailoverType {
+        UNKNOWN = 0;
+        STREETVIEW_PANO = 1;
+    }
+    
+    optional bool allow_failover_to_closest = 2 [default = false];
+}
+
+message ContinuationOptions {
+    optional int32 num_images = 1 [deprecated = true];
+    optional int32 page_size = 3 [default = 100];
+    optional string continuation_token = 2;
+}
+
+message CoverImageOptions {
+    optional CoverImageRanking cover_image_ranking = 1 [default = TRADITIONAL_RANKING];
+    enum CoverImageRanking {
+        UNKNOWN = 0;
+        TRADITIONAL_RANKING = 1;
+        PINNED_IMAGE_FIRST = 2;
+    }
+    
+    optional int32 selected_by_operator_expiration_days = 2 [default = 180];
+    optional PinningClient pinning_client = 3;
+}
+
+message SpannerStalenessOptions {
+    optional Staleness staleness = 1;
+    enum Staleness {
+        UNKNOWN_STALENESS = 0;
+        NORMAL_STALENESS = 1;
+        ZERO_STALENESS = 2;
+    }
+}
+
+message ConsistencyOptions {
+    optional google.protobuf.Timestamp exact_read_timestamp = 1;
+}

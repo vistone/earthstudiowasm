@@ -1,0 +1,16 @@
+syntax = "proto2";
+
+package maps_tactile.shared.directions;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSHD";
+option java_multiple_files = true;
+option java_outer_classname = "MonetaryCostProto";
+option java_package = "com.google.maps.tactile.shared.directions";
+
+message MonetaryCost {
+    optional double amount = 1;
+    optional string formatted_value = 2;
+    optional string currency_code = 3;
+}

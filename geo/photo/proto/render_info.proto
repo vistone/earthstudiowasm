@@ -1,0 +1,125 @@
+syntax = "editions";
+
+package geo_photo_service;
+
+import "geo/photo/proto/image_format.proto";
+import "geo/photo/proto/image_frontend_type.proto";
+import "geo/photo/proto/image_size.proto";
+import "geo/photo/proto/location.proto";
+import "geo/photo/proto/tour_format.proto";
+import "geo/photo/proto/video_preview.proto";
+import "geo/photo/proto/volumetric_image_format.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GPS";
+option java_multiple_files = true;
+option java_outer_classname = "RenderInfoProto";
+option java_package = "com.google.geo.photo.proto1api";
+
+message RenderInfo {
+    optional ImageFrontendType frontend = 1;
+    optional string image_id = 10;
+    optional ImageFormat image_format = 2;
+    optional ImageSize original_image_size = 3;
+    optional TileInfo tile_info = 4;
+    optional PanoramaParameters panorama = 5;
+    optional TourParameters tour = 8;
+    optional PhotoParameters photo = 9;
+    optional VideoPreview video = 11;
+    optional VolumetricImageParameters volumetric_image = 12;
+    
+    reserved 6, 7;
+}
+
+message TileInfo {
+    repeated ZoomLevel zoom_level = 1;
+    message ZoomLevel {
+        optional ImageSize size = 1;
+    }
+    
+    optional ImageSize tile_size = 2;
+    
+    optional Origin origin = 3 [default = TOP_LEFT];
+    enum Origin {
+        UNKNOWN_ORIGIN = 0;
+        TOP_LEFT = 1;
+        TOP_RIGHT = 2;
+        BOTTOM_RIGHT = 3;
+        BOTTOM_LEFT = 4;
+    }
+}
+
+message PanoramaParameters {
+    optional ImageSize equirectangular_size = 1;
+    optional ImageSize equirectangular_offset = 2;
+}
+
+message LatLngElevation {
+    optional LatLng lat_lng = 1;
+    optional double elevation_meters_above_wgs84 = 3;
+}
+
+message TourParameters {
+    optional TourFormat tour_format = 1;
+    
+    repeated RenderingSystem rendering_system_preference = 2 [deprecated = true];
+    message RenderingSystem {
+        optional RenderingSystemType type = 1;
+    }
+    
+    repeated RenderingMode rendering_mode_preference = 3;
+    message RenderingMode {
+        oneof rendering_mode {
+            PixelStreamingParameters web_pixel_streaming_parameters = 1;
+            ImpressNativeRenderingParameters impress_native_parameters = 2;
+        }
+    }
+    
+    message InjectedPin {
+        optional LatLngElevation location = 1;
+        optional string text = 2;
+        optional string feature_id = 3;
+        optional bool is_route_preview_destination = 4 [deprecated = true];
+    }
+    
+    message PixelStreamingParameters {
+        optional string stream_url = 1;
+    }
+    
+    message ImpressNativeRenderingParameters {
+        optional ImmersiveViewPlaceParameters immersive_view_place_parameters = 4;
+        message ImmersiveViewPlaceParameters {
+            optional LatLngElevation camera_position = 1;
+            optional LatLngElevation orbit_origin = 2;
+            optional float native_places_camera_bounds_radius_meters = 3;
+            optional InjectedPin selected_pin = 4;
+        }
+        
+        optional WaterRenderingType water_rendering_type = 5;
+        enum WaterRenderingType {
+            UNKNOWN_WATER_RENDERING_TYPE = 0;
+            NONE = 1;
+            MESH_ANNOTATION = 2;
+        }
+        
+        optional float field_of_view_y_degrees = 6;
+    }
+    
+    enum RenderingSystemType {
+        UNKNOWN_RENDERING_SYSTEM_TYPE = 0;
+        WEB_PIXEL_STREAMING = 1;
+        IMPRESS_NATIVE = 2;
+    }
+}
+
+message VolumetricImageParameters {
+    optional VolumetricImageFormat volumetric_image_format = 1;
+}
+
+message PhotoParameters {
+    optional string fife_content_url_path = 1;
+}

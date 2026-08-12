@@ -1,0 +1,14 @@
+syntax = "editions";
+
+package logs_tactile;
+
+import "maps/tactile/api/shared/directions/directions-client-stats.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "com.google.common.logging.tactile";
+
+message LoggedDirectionsClientStats {
+    optional maps_tactile.shared.directions.DirectionsClientStats.DirectionsClient directions_client = 1;
+    optional maps_tactile.shared.directions.DirectionsClientStats.DirectionsContext directions_context = 2;
+}

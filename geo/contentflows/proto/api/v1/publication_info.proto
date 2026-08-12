@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package geo_contentflows;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "PublicationInfoProto";
+option java_package = "com.google.geo.contentflows.proto1api";
+
+message PublicationInformation {
+    optional PublicationStatus publication_status = 1;
+    enum PublicationStatus {
+        UNKNOWN_PUBLICATION_STATUS = 0;
+        PUBLISHED = 1;
+        UNPUBLISHED = 2;
+    }
+}

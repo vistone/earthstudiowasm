@@ -1,0 +1,39 @@
+syntax = "proto2";
+
+package geo_photo_service;
+
+import "geostore/base/proto/point.proto";
+import "net/proto2/bridge/proto/message_set.proto";
+import "search/context/contextgeneration/context_atom_container.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GPS";
+option java_multiple_files = false;
+option java_outer_classname = "SuperrootParamsProto";
+option java_package = "com.google.geo.photo";
+
+message SuperrootParams {
+    optional bool send_rpc_to_geo_photo_search = 1 [default = true, deprecated = true];
+    optional bool replace_snippets = 2 [default = true, deprecated = true];
+    optional bool replace_viewcodes = 3 [default = true, deprecated = true];
+    optional bool always_clear_existing = 4 [default = true, deprecated = true];
+    optional bool allow_multiple_photos_for_categorical = 9 [deprecated = true];
+    repeated string experiment_id = 6;
+    optional string product_id = 7;
+    
+    optional PhotoLocation photo_location = 8;
+    message PhotoLocation {
+        optional geostore.PointProto point = 1;
+        optional double radius_meters = 2;
+    }
+    
+    reserved 5;
+    
+    extend .proto2.bridge.MessageSet {
+        optional SuperrootParams message_set_extension = 66536501;
+    }
+    
+    extend search.context.contextgeneration.ContextAtomContainer {
+        optional SuperrootParams geo_photo_service_superroot_params = 189;
+    }
+}

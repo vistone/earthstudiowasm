@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package maps_paint_client;
+
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMPC";
+option java_multiple_files = true;
+option java_package = "com.google.maps.paint.client";
+
+message Coord2Proto {
+    required float x = 1;
+    required float y = 2;
+}
+
+message Coord3Proto {
+    required float x = 1;
+    required float y = 2;
+    required float z = 3;
+}
+
+message Point2List {
+    repeated Coord2Proto point = 1;
+}
+
+message Point3List {
+    repeated Coord3Proto point = 1;
+}
+
+message QuantizedUnitNormal {
+    required int32 azimuth = 1;
+    required int32 elevation = 2;
+}

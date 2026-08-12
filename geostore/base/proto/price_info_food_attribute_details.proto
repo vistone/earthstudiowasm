@@ -1,0 +1,105 @@
+syntax = "proto2";
+
+package geostore;
+
+import "google/api/inclusion.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GS";
+option java_package = "com.google.geostore.base.proto";
+
+message PriceInfoFoodNutritionFacts {
+    optional CaloriesFact calories = 1;
+    message CaloriesFact {
+        optional int32 lower_amount = 1;
+        optional int32 upper_amount = 2;
+        optional EnergyUnit unit = 3;
+    }
+    
+    optional NutritionFact total_fat = 2;
+    message NutritionFact {
+        optional double lower_amount = 1;
+        optional double upper_amount = 2;
+        optional MassUnit unit = 3;
+    }
+    
+    optional NutritionFact cholesterol = 3;
+    optional NutritionFact sodium = 4;
+    optional NutritionFact total_carbohydrate = 5;
+    optional NutritionFact protein = 6;
+    
+    enum EnergyUnit {
+        UNDEFINED_ENERGY_UNIT = 0;
+        CALORIE = 1;
+        JOULE = 2;
+    }
+    
+    enum MassUnit {
+        UNDEFINED_MASS_UNIT = 0;
+        GRAM = 1;
+        MILLIGRAM = 2;
+    }
+}
+
+enum PriceInfoFoodCuisine {
+    CUISINE_UNDEFINED = 0;
+    FAST_FOOD = 1;
+    AMERICAN = 2;
+    JAPANESE = 3;
+    BREAK_FAST = 4;
+    PIZZA = 5;
+    HAMBURGER = 6;
+    ITALIAN = 7;
+    SEAFOOD = 8;
+    FAMILY = 9;
+    MEXICAN = 10;
+    CHINESE = 11;
+    VEGETARIAN = 12;
+    SUSHI = 13;
+    CHICKEN = 14;
+    INDIAN = 15;
+    ASIAN = 16;
+    MEDITERRANEAN = 17;
+    FRENCH = 18;
+    BRUNCH = 19;
+    KOREAN = 20;
+    THAI = 21;
+    SPANISH = 22;
+    VIETNAMESE = 23;
+    LATIN_AMERICAN = 24;
+    INDONESIAN = 25;
+    GREEK = 26;
+    GERMAN = 27;
+    TURKISH = 28;
+    BRAZILIAN = 29;
+    PAKISTANI = 30;
+    OTHER_CUISINE = 99;
+}
+
+enum PriceInfoFoodPreparationMethod {
+    METHOD_UNDEFINED = 0;
+    BAKED = 1;
+    BOILED = 2;
+    BLANCHED = 3;
+    BRAISED = 4;
+    CODDLED = 5;
+    PRESSURE_COOKED = 6;
+    SIMMERED = 7;
+    STEAMED = 8;
+    STEEPED = 9;
+    GRILLED = 10;
+    FRIED = 11;
+    PAN_FRIED = 12;
+    STIR_FRIED = 13;
+    SAUTEED = 14;
+    ROASTED = 15;
+    BARBECUED = 16;
+    SEARED = 17;
+    SMOKED = 18;
+    FERMENTED = 19;
+    MARINATED = 20;
+    PICKLED = 21;
+    BASTED = 22;
+    KNEADED = 23;
+    OTHER_METHOD = 99;
+}

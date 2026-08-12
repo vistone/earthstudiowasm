@@ -1,0 +1,19 @@
+syntax = "editions";
+
+package pathfinder;
+
+import "logs/proto/logs_annotations/logs_annotations.proto";
+
+option java_multiple_files = true;
+option java_outer_classname = "RouteTypeOuterClass";
+
+enum RouteType {
+    option features = enum_type: CLOSED
+    ;
+    ROUTE_TYPE_UNKNOWN = 0;
+    ROUTE_TYPE_MAIN = 1;
+    ROUTE_TYPE_ALTERNATE = 2;
+    ROUTE_TYPE_INTERNAL = 3;
+    ROUTE_TYPE_REQUERY = 4;
+    ROUTE_TYPE_RISK_AVERSE = 5 [deprecated = true];
+}

@@ -1,0 +1,69 @@
+syntax = "proto2";
+
+package maps_tactile.shared;
+
+import "maps/logs/logging/ve_logging_options.proto";
+import "maps/tactile/api/shared/parking-enums.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option objc_class_prefix = "GMTTSH";
+option java_multiple_files = true;
+option java_outer_classname = "ParkingProto";
+option java_package = "com.google.maps.tactile.shared";
+
+message Parking {
+    optional ParkingPresence parking_presence = 1 [default = UNKNOWN_PARKING_PRESENCE];
+    enum ParkingPresence {
+        UNKNOWN_PARKING_PRESENCE = 0;
+        NONE = 1;
+        HAS_PARKING = 2;
+    }
+    
+    optional ParkingType parking_type = 5 [default = UNKNOWN_PARKING_TYPE];
+    enum ParkingType {
+        UNKNOWN_PARKING_TYPE = 0;
+        DEDICATED = 1;
+        INDEPENDENT_LOT = 2;
+    }
+    
+    repeated ParkingOption parking_option = 3;
+    optional uint32 walking_time_seconds = 4;
+    optional ParkingAvailability availability = 6;
+    optional string ei = 7 [deprecated = true];
+    optional string ved = 8;
+    
+    reserved 2;
+}
+
+message ParkingOption {
+    optional ParkingOptionType parking_option_type = 1 [default = STANDARD];
+    enum ParkingOptionType {
+        UNKNOWN_PARKING_TYPE = 0;
+        STANDARD = 1;
+        VALET = 2;
+        PERMIT = 3;
+    }
+    
+    optional VehicleType vehicle_type = 2 [default = ANY];
+    enum VehicleType {
+        UNKNOWN_VEHICLE_TYPE = 0;
+        ANY = 1;
+        CAR = 2;
+        MOTORCYCLE = 3;
+        OVERSIZED = 4;
+    }
+    
+    optional PaymentType payment_type = 3 [default = UNKNOWN_PAYMENT_TYPE];
+    enum PaymentType {
+        UNKNOWN_PAYMENT_TYPE = 0;
+        FREE = 1;
+        PAYMENT_REQUIRED = 2;
+    }
+    
+    reserved 4;
+}
+
+message ParkingAvailability {
+    optional ParkingAvailabilityCategory parking_availability_category = 1 [default = UNKNOWN_PARKING_AVAILABILITY_CATEGORY];
+    optional ParkingPredictionType prediction_type = 2 [default = UNKNOWN_PARKING_PREDICTION_TYPE];
+}

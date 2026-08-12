@@ -1,0 +1,102 @@
+syntax = "editions";
+
+package geo_serving_proto.intents;
+
+import "geo/serving/proto/address/address.proto";
+import "geo/serving/proto/crisis/crisis_category.proto";
+import "geo/serving/proto/link/link.proto";
+import "geo/serving/proto/omnimaps/omnimaps_data.proto";
+import "java/com/google/apps/jspb/jspb.proto";
+import "maps/logs/logging/ve_logging_options.proto";
+import "storage/datapol/annotations/proto/semantic_annotations.proto";
+
+option features = enum_type: CLOSED
+utf8_validation: NONE
+;
+option objc_class_prefix = "GSPIN";
+option java_multiple_files = true;
+option java_outer_classname = "ActionIntentProto";
+option java_package = "com.google.geo.serving.proto.intents";
+
+message ActionIntent {
+    optional int32 ve_type = 3 [default = 0x1d3fe];
+    optional string ved = 4;
+    
+    oneof intent {
+        geo_serving_proto.link.Link link_intent = 1;
+        CrisisIntent crisis_intent = 2;
+        OmniMapsIntent omni_maps_intent = 5;
+        ReviewsTabIntent reviews_tab_intent = 6;
+        PlaceIntent place_intent = 7;
+        OfflineMapsIntent offline_maps_intent = 8;
+        AddressIntent address_intent = 9;
+        ListIntent list_intent = 10;
+        MapsGuideIntent maps_guide_intent = 11;
+        StreetViewIntent street_view_intent = 12;
+    }
+    
+    message CrisisIntent {
+        optional string crisis_mid = 1;
+        optional geo_serving_proto.crisis.CrisisCategory category = 2;
+    }
+    
+    message OmniMapsIntent {
+        optional geo_serving_proto.omnimaps.OmniMapsData omni_maps_data = 1;
+    }
+    
+    message ReviewsTabIntent {
+        optional string feature_id = 1;
+        optional string review_id = 2;
+        optional string filter_text = 3;
+    }
+    
+    message PlaceIntent {
+        optional IntentType type = 1;
+        enum IntentType {
+            UNKNOWN_INTENT_TYPE = 0;
+            SUGGEST_AN_EDIT_POI = 1;
+            SUGGEST_EDIT_PAGE = 3;
+            BUSINESS_CHAT = 2;
+        }
+        
+        optional int32 edit_page_type_id = 2;
+    }
+    
+    message OfflineMapsIntent {
+        optional IntentType type = 1;
+        enum IntentType {
+            UNKNOWN_INTENT_TYPE = 0;
+            NEW_REGIONAL_MAP = 1;
+        }
+    }
+    
+    message AddressIntent {
+        optional IntentType type = 1;
+        enum IntentType {
+            UNKNOWN_INTENT_TYPE = 0;
+            FIX_AN_ADDRESS = 1;
+        }
+        
+        optional geo_serving_proto.address.Address address = 2;
+    }
+    
+    message ListIntent {
+        optional string list_id = 1;
+    }
+    
+    message MapsGuideIntent {
+        optional IntentType type = 1;
+        enum IntentType {
+            UNKNOWN_INTENT_TYPE = 0;
+            OPEN_LANDING_PAGE = 1;
+        }
+    }
+    
+    message StreetViewIntent {
+        optional IntentType type = 1;
+        enum IntentType {
+            UNKNOWN_INTENT_TYPE = 0;
+            OPEN_FEELING_LUCKY = 1;
+        }
+    }
+}
