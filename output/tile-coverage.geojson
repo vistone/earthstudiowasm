@@ -1,0 +1,777 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          5
+        ]
+      },
+      "properties": {
+        "s2_path": "02",
+        "epoch": "1013",
+        "size_bytes": 11991,
+        "level": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          5
+        ]
+      },
+      "properties": {
+        "s2_path": "03",
+        "epoch": "1013",
+        "size_bytes": 13969,
+        "level": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          5
+        ]
+      },
+      "properties": {
+        "s2_path": "12",
+        "epoch": "1013",
+        "size_bytes": 13436,
+        "level": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14,
+          5
+        ]
+      },
+      "properties": {
+        "s2_path": "13",
+        "epoch": "1013",
+        "size_bytes": 14638,
+        "level": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12,
+          5
+        ]
+      },
+      "properties": {
+        "s2_path": "20",
+        "epoch": "1013",
+        "size_bytes": 14605,
+        "level": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          6
+        ]
+      },
+      "properties": {
+        "s2_path": "21",
+        "epoch": "1013",
+        "size_bytes": 16470,
+        "level": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          6
+        ]
+      },
+      "properties": {
+        "s2_path": "30",
+        "epoch": "1013",
+        "size_bytes": 17626,
+        "level": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          6
+        ]
+      },
+      "properties": {
+        "s2_path": "31",
+        "epoch": "1013",
+        "size_bytes": 15182,
+        "level": 2
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14,
+          6
+        ]
+      },
+      "properties": {
+        "s2_path": "024",
+        "epoch": "1013",
+        "size_bytes": 10150,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12,
+          6
+        ]
+      },
+      "properties": {
+        "s2_path": "027",
+        "epoch": "1013",
+        "size_bytes": 11018,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          7
+        ]
+      },
+      "properties": {
+        "s2_path": "034",
+        "epoch": "1013",
+        "size_bytes": 11519,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          7
+        ]
+      },
+      "properties": {
+        "s2_path": "036",
+        "epoch": "1013",
+        "size_bytes": 13751,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          7
+        ]
+      },
+      "properties": {
+        "s2_path": "037",
+        "epoch": "1013",
+        "size_bytes": 12845,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14,
+          7
+        ]
+      },
+      "properties": {
+        "s2_path": "124",
+        "epoch": "1013",
+        "size_bytes": 10314,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12,
+          7
+        ]
+      },
+      "properties": {
+        "s2_path": "126",
+        "epoch": "1013",
+        "size_bytes": 13844,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          8
+        ]
+      },
+      "properties": {
+        "s2_path": "127",
+        "epoch": "1013",
+        "size_bytes": 12644,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          8
+        ]
+      },
+      "properties": {
+        "s2_path": "134",
+        "epoch": "1013",
+        "size_bytes": 10373,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          8
+        ]
+      },
+      "properties": {
+        "s2_path": "136",
+        "epoch": "1013",
+        "size_bytes": 14128,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14,
+          8
+        ]
+      },
+      "properties": {
+        "s2_path": "205",
+        "epoch": "1013",
+        "size_bytes": 13759,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12,
+          8
+        ]
+      },
+      "properties": {
+        "s2_path": "206",
+        "epoch": "1013",
+        "size_bytes": 13788,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          9
+        ]
+      },
+      "properties": {
+        "s2_path": "214",
+        "epoch": "1013",
+        "size_bytes": 14142,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          9
+        ]
+      },
+      "properties": {
+        "s2_path": "215",
+        "epoch": "1013",
+        "size_bytes": 13829,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          9
+        ]
+      },
+      "properties": {
+        "s2_path": "216",
+        "epoch": "1013",
+        "size_bytes": 15067,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14,
+          9
+        ]
+      },
+      "properties": {
+        "s2_path": "304",
+        "epoch": "1013",
+        "size_bytes": 18338,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12,
+          9
+        ]
+      },
+      "properties": {
+        "s2_path": "305",
+        "epoch": "1013",
+        "size_bytes": 17239,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          10
+        ]
+      },
+      "properties": {
+        "s2_path": "306",
+        "epoch": "1013",
+        "size_bytes": 12930,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          10
+        ]
+      },
+      "properties": {
+        "s2_path": "314",
+        "epoch": "1013",
+        "size_bytes": 16743,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          10
+        ]
+      },
+      "properties": {
+        "s2_path": "316",
+        "epoch": "1013",
+        "size_bytes": 12110,
+        "level": 3
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14,
+          10
+        ]
+      },
+      "properties": {
+        "s2_path": "0240",
+        "epoch": "1005",
+        "size_bytes": 9911,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12,
+          10
+        ]
+      },
+      "properties": {
+        "s2_path": "0243",
+        "epoch": "1005",
+        "size_bytes": 9943,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          11
+        ]
+      },
+      "properties": {
+        "s2_path": "0340",
+        "epoch": "1005",
+        "size_bytes": 9755,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          11
+        ]
+      },
+      "properties": {
+        "s2_path": "0342",
+        "epoch": "1005",
+        "size_bytes": 12785,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          11
+        ]
+      },
+      "properties": {
+        "s2_path": "0343",
+        "epoch": "1005",
+        "size_bytes": 11860,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14,
+          11
+        ]
+      },
+      "properties": {
+        "s2_path": "1240",
+        "epoch": "1005",
+        "size_bytes": 8523,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12,
+          11
+        ]
+      },
+      "properties": {
+        "s2_path": "1242",
+        "epoch": "1005",
+        "size_bytes": 11687,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          12
+        ]
+      },
+      "properties": {
+        "s2_path": "1243",
+        "epoch": "1005",
+        "size_bytes": 10825,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          12
+        ]
+      },
+      "properties": {
+        "s2_path": "1340",
+        "epoch": "1008",
+        "size_bytes": 8965,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          12
+        ]
+      },
+      "properties": {
+        "s2_path": "1342",
+        "epoch": "1008",
+        "size_bytes": 10895,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14,
+          12
+        ]
+      },
+      "properties": {
+        "s2_path": "2061",
+        "epoch": "1005",
+        "size_bytes": 14982,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12,
+          12
+        ]
+      },
+      "properties": {
+        "s2_path": "2062",
+        "epoch": "1005",
+        "size_bytes": 13056,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          13
+        ]
+      },
+      "properties": {
+        "s2_path": "2160",
+        "epoch": "1005",
+        "size_bytes": 13706,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          13
+        ]
+      },
+      "properties": {
+        "s2_path": "2161",
+        "epoch": "1005",
+        "size_bytes": 12277,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          13
+        ]
+      },
+      "properties": {
+        "s2_path": "2162",
+        "epoch": "1005",
+        "size_bytes": 15105,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -14,
+          13
+        ]
+      },
+      "properties": {
+        "s2_path": "3060",
+        "epoch": "1005",
+        "size_bytes": 14502,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -12,
+          13
+        ]
+      },
+      "properties": {
+        "s2_path": "3061",
+        "epoch": "1005",
+        "size_bytes": 13831,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -20,
+          14
+        ]
+      },
+      "properties": {
+        "s2_path": "3062",
+        "epoch": "1005",
+        "size_bytes": 11149,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -18,
+          14
+        ]
+      },
+      "properties": {
+        "s2_path": "3160",
+        "epoch": "1008",
+        "size_bytes": 13265,
+        "level": 4
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -16,
+          14
+        ]
+      },
+      "properties": {
+        "s2_path": "3162",
+        "epoch": "1008",
+        "size_bytes": 10282,
+        "level": 4
+      }
+    }
+  ],
+  "_note": "S2 cell approximate positions. Exact boundaries require S2 library (s2geometry.io)",
+  "_proto_mapping": {
+    "source": "kh.google.com/rt/earth/NodeData (proto in maps/paint/proto/)"
+  }
+}

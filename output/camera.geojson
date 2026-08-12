@@ -1,0 +1,33 @@
+{
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -74.006,
+      40.7128
+    ]
+  },
+  "properties": {
+    "camera_type": "LookAt",
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "altitude": 5000,
+    "heading": 45,
+    "tilt": 30,
+    "roll": 0,
+    "fov_y": 35,
+    "animation": "CAMERA_ANIMATION_FLY",
+    "presentation": "PRESENTATION_MODE_CINEMATIC"
+  },
+  "_proto_mapping": {
+    "source": [
+      "geo/earth/proto/geometry.proto",
+      "geo/earth/proto/commands.proto"
+    ],
+    "messages": [
+      "Camera",
+      "FlyToCamera",
+      "LookAt"
+    ]
+  }
+}

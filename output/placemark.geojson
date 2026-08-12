@@ -1,0 +1,89 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.2945,
+          48.8584,
+          324
+        ]
+      },
+      "properties": {}
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -74,
+            40.7,
+            0
+          ],
+          [
+            -73.9,
+            40.8,
+            0
+          ]
+        ]
+      },
+      "properties": {}
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -74,
+              40.7,
+              0
+            ],
+            [
+              -74,
+              40.8,
+              0
+            ],
+            [
+              -73.9,
+              40.8,
+              0
+            ],
+            [
+              -73.9,
+              40.7,
+              0
+            ],
+            [
+              -74,
+              40.7,
+              0
+            ]
+          ]
+        ]
+      },
+      "properties": {}
+    }
+  ],
+  "_proto_mapping": {
+    "source": "geo/earth/proto/contentcreation/content_editing_model.proto",
+    "messages": {
+      "Placemark": [
+        "Geometry geometry = 2;",
+        "Model model = 3;",
+        "TrackSet track_set = 4;"
+      ],
+      "Point": [
+        "optional LatLng position = 1;",
+        "optional double altitude = 5;",
+        "optional AltitudeMode altitude_mode = 3 [default = CLAMP_TO_GROUND];",
+        "optional bool extrude = 4 [default = false];",
+        "optional int32 geometry_index = 6;"
+      ]
+    }
+  }
+}

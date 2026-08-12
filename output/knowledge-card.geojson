@@ -1,0 +1,84 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -74.006,
+          40.7128
+        ]
+      },
+      "properties": {
+        "title": "New York City",
+        "description": [
+          "Most populous city in the United States"
+        ],
+        "feature_id": "0x89c24fa5d33f083b:0xc80b8f06e177fe62",
+        "camera": {
+          "latitude": 40.7128,
+          "longitude": -74.006,
+          "altitude": 5000,
+          "heading": 0,
+          "tilt": 45,
+          "range": 10000
+        }
+      }
+    }
+  ],
+  "_proto_mapping": {
+    "source": "geo/earth/proto/renderable-entity.proto",
+    "field_map": {
+      "1": {
+        "name": "title",
+        "type": "string"
+      },
+      "2": {
+        "name": "known_for",
+        "type": "string"
+      },
+      "3": {
+        "name": "description",
+        "type": "string[]"
+      },
+      "8": {
+        "name": "mid",
+        "type": "string"
+      },
+      "9": {
+        "name": "lat_lon",
+        "type": "LatLon"
+      },
+      "13": {
+        "name": "bounding_box",
+        "type": "BoundingBox"
+      },
+      "15": {
+        "name": "address_line",
+        "type": "string[]"
+      },
+      "16": {
+        "name": "camera",
+        "type": "Camera"
+      },
+      "17": {
+        "name": "feature_id",
+        "type": "string"
+      },
+      "19": {
+        "name": "phone_number",
+        "type": "string[]"
+      },
+      "21": {
+        "name": "website",
+        "type": "Website"
+      },
+      "26": {
+        "name": "maps_url",
+        "type": "string"
+      }
+    },
+    "note": "Each Feature.properties maps 1:1 to RenderableEntity proto fields"
+  }
+}
