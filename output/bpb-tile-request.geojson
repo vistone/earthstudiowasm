@@ -1,0 +1,106 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "tile-bbox",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0,
+              -85.0511287798066
+            ],
+            [
+              90,
+              -85.0511287798066
+            ],
+            [
+              90,
+              -66.51326044311186
+            ],
+            [
+              0,
+              -66.51326044311186
+            ],
+            [
+              0,
+              -85.0511287798066
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "type": "tile_bounding_box",
+        "zoom": 2,
+        "x": 2,
+        "y": 3,
+        "area_km2": "~25,000,000 km² (zoom 2)"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "tile-center",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          45,
+          -75.78219461145923
+        ]
+      },
+      "properties": {
+        "type": "tile_center",
+        "zoom": 2
+      }
+    }
+  ],
+  "metadata": {
+    "source": "www.google.com/maps/vt/proto?bpb=...",
+    "proto_type": "MapsTileRequest (reverse-engineered from wire format)",
+    "decoded_fields": {
+      "tile_coords": {
+        "x": 2,
+        "y": 3,
+        "zoom": 2
+      },
+      "map_state": {
+        "viewport_zoom": 0,
+        "map_style_key": "m",
+        "request_token": 790999999,
+        "active_layer": {
+          "layer_id": "ndl",
+          "version": "1",
+          "name": "Normal Daylight"
+        }
+      },
+      "client_context": {
+        "language": "en-US",
+        "country": "US",
+        "app_platform": 3,
+        "app_platform_name": "Google Earth Web",
+        "map_style_config": {
+          "operation": "set",
+          "style_name": "RoadmapSatellite",
+          "style_id": 68
+        }
+      },
+      "pixel_ratio": 1,
+      "feature_flags": {
+        "use_webgl_rendering": true,
+        "disable_3d_buildings": false,
+        "enable_traffic_layer": true,
+        "enable_transit_layer": true,
+        "indoor_map_enabled": 4,
+        "enable_bicycling_layer": true,
+        "enable_satellite_hybrid": true,
+        "enable_terrain_view": true,
+        "high_dpi_tiles": true
+      },
+      "trailer_bytes": "e98eb416",
+      "trailer_uint32": 380931817
+    },
+    "request_url": "https://www.google.com/maps/vt/proto?bpb=CgsKBggCEAMYAsoBABIVCAASAW0Yv-eW-QIiCAoDbmRsEgExGioSBWVuLVVTGgJVUygDYhsIRBIXCgNzZXQSEFJvYWRtYXBTYXRlbGxpdGUgATIZKAFYALgCAdgCAeACBOgCAbgDAdADAdgFAboBBOmOtBY&token=95292",
+    "response_sample": "captured_data/maps-vt-tile.bin (812 bytes, ClientVectorTile proto)"
+  }
+}
