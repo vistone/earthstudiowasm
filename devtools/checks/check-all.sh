@@ -26,11 +26,12 @@ echo "════════════════════════�
 # ── Helper: is this file added/modified by us? ──
 is_ours() {
     local f="$1"
-    # Check if file was added or modified after the initial commit
-    if git --no-pager log --oneline "$INITIAL_COMMIT..HEAD" -- "$f" 2>/dev/null | grep -q .; then
-        return 0  # yes, we touched it
+    # A file is "ours" only if its CURRENT content DIFFERS from the initial commit.
+    # Files that were touched and reverted are still Google official.
+    if git --no-pager diff --quiet "$INITIAL_COMMIT" -- "$f" 2>/dev/null; then
+        return 1  # identical to initial commit → Google official
     fi
-    return 1  # no, it's Google official
+    return 0  # different from initial → we changed it
 }
 
 # ═══════════════════════════════════════════
