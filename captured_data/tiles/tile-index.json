@@ -1,0 +1,814 @@
+[
+  {
+    "nodeId": "13",
+    "epoch": "1013",
+    "size": 14638,
+    "textures": [
+      {
+        "file": "tile_13_tex0.jpg",
+        "size": 8550,
+        "offset": 3672
+      }
+    ],
+    "vertexCount": 128,
+    "indexCount": 0,
+    "vertexSample": [
+      -1.5308936619369762e-18,
+      -6.834892272949219,
+      -1.5308938687321293e-18
+    ]
+  },
+  {
+    "nodeId": "21",
+    "epoch": "1013",
+    "size": 16470,
+    "textures": [
+      {
+        "file": "tile_21_tex0.jpg",
+        "size": 10445,
+        "offset": 3645
+      }
+    ],
+    "vertexCount": 128,
+    "indexCount": 0,
+    "vertexSample": [
+      -1.5308936619369762e-18,
+      6.834892272949219,
+      -1.530893455141823e-18
+    ]
+  },
+  {
+    "nodeId": "31",
+    "epoch": "1013",
+    "size": 15182,
+    "textures": [
+      {
+        "file": "tile_31_tex0.jpg",
+        "size": 9096,
+        "offset": 3677
+      }
+    ],
+    "vertexCount": 128,
+    "indexCount": 42,
+    "vertexSample": [
+      -1.5308936619369762e-18,
+      -6.834892272949219,
+      -1.5308938687321293e-18
+    ]
+  },
+  {
+    "nodeId": "30",
+    "epoch": "1013",
+    "size": 17626,
+    "textures": [
+      {
+        "file": "tile_30_tex0.jpg",
+        "size": 11612,
+        "offset": 3635
+      }
+    ],
+    "vertexCount": 128,
+    "indexCount": 42,
+    "vertexSample": [
+      -1.5308936619369762e-18,
+      6.834892272949219,
+      -1.530893455141823e-18
+    ]
+  },
+  {
+    "nodeId": "02",
+    "epoch": "1013",
+    "size": 11991,
+    "textures": [
+      {
+        "file": "tile_02_tex0.jpg",
+        "size": 5956,
+        "offset": 3643
+      }
+    ],
+    "vertexCount": 128,
+    "indexCount": 0,
+    "vertexSample": [
+      -1.5308936619369762e-18,
+      -6.834892272949219,
+      -1.5308938687321293e-18
+    ]
+  },
+  {
+    "nodeId": "20",
+    "epoch": "1013",
+    "size": 14605,
+    "textures": [
+      {
+        "file": "tile_20_tex0.jpg",
+        "size": 8566,
+        "offset": 3653
+      }
+    ],
+    "vertexCount": 128,
+    "indexCount": 0,
+    "vertexSample": [
+      -1.5308936619369762e-18,
+      -6.834892272949219,
+      -1.5308938687321293e-18
+    ]
+  },
+  {
+    "nodeId": "12",
+    "epoch": "1013",
+    "size": 13436,
+    "textures": [
+      {
+        "file": "tile_12_tex0.jpg",
+        "size": 7366,
+        "offset": 3661
+      }
+    ],
+    "vertexCount": 128,
+    "indexCount": 0,
+    "vertexSample": [
+      -1.5308936619369762e-18,
+      6.834892272949219,
+      -1.530893455141823e-18
+    ]
+  },
+  {
+    "nodeId": "03",
+    "epoch": "1013",
+    "size": 13969,
+    "textures": [
+      {
+        "file": "tile_03_tex0.jpg",
+        "size": 7892,
+        "offset": 3668
+      }
+    ],
+    "vertexCount": 128,
+    "indexCount": 42,
+    "vertexSample": [
+      -1.5308936619369762e-18,
+      6.834892272949219,
+      -1.530893455141823e-18
+    ]
+  },
+  {
+    "nodeId": "034",
+    "epoch": "1013",
+    "size": 11519,
+    "textures": [
+      {
+        "file": "tile_034_tex0.jpg",
+        "size": 7329,
+        "offset": 2447
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "306",
+    "epoch": "1013",
+    "size": 12930,
+    "textures": [
+      {
+        "file": "tile_306_tex0.jpg",
+        "size": 8669,
+        "offset": 2501
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "206",
+    "epoch": "1013",
+    "size": 13788,
+    "textures": [
+      {
+        "file": "tile_206_tex0.jpg",
+        "size": 9713,
+        "offset": 2385
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      -3.6015625,
+      0
+    ]
+  },
+  {
+    "nodeId": "316",
+    "epoch": "1013",
+    "size": 12110,
+    "textures": [
+      {
+        "file": "tile_316_tex0.jpg",
+        "size": 7818,
+        "offset": 2525
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "124",
+    "epoch": "1013",
+    "size": 10314,
+    "textures": [
+      {
+        "file": "tile_124_tex0.jpg",
+        "size": 6176,
+        "offset": 2415
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "nodeId": "024",
+    "epoch": "1013",
+    "size": 10150,
+    "textures": [
+      {
+        "file": "tile_024_tex0.jpg",
+        "size": 5996,
+        "offset": 2439
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      -3.6015625,
+      0
+    ]
+  },
+  {
+    "nodeId": "216",
+    "epoch": "1013",
+    "size": 15067,
+    "textures": [
+      {
+        "file": "tile_216_tex0.jpg",
+        "size": 10877,
+        "offset": 2467
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      -3.3515625,
+      0
+    ]
+  },
+  {
+    "nodeId": "134",
+    "epoch": "1013",
+    "size": 10373,
+    "textures": [
+      {
+        "file": "tile_134_tex0.jpg",
+        "size": 6348,
+        "offset": 2349
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      3.3515625,
+      0
+    ]
+  },
+  {
+    "nodeId": "215",
+    "epoch": "1013",
+    "size": 13829,
+    "textures": [
+      {
+        "file": "tile_215_tex0.jpg",
+        "size": 8683,
+        "offset": 3068
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 0,
+    "vertexSample": [
+      0,
+      -3.1015625,
+      0
+    ]
+  },
+  {
+    "nodeId": "037",
+    "epoch": "1013",
+    "size": 12845,
+    "textures": [
+      {
+        "file": "tile_037_tex0.jpg",
+        "size": 7224,
+        "offset": 3381
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 42
+  },
+  {
+    "nodeId": "126",
+    "epoch": "1013",
+    "size": 13844,
+    "textures": [
+      {
+        "file": "tile_126_tex0.jpg",
+        "size": 8520,
+        "offset": 3177
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 0,
+    "vertexSample": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "nodeId": "304",
+    "epoch": "1013",
+    "size": 18338,
+    "textures": [
+      {
+        "file": "tile_304_tex0.jpg",
+        "size": 13065,
+        "offset": 3155
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 42
+  },
+  {
+    "nodeId": "214",
+    "epoch": "1013",
+    "size": 14142,
+    "textures": [
+      {
+        "file": "tile_214_tex0.jpg",
+        "size": 8694,
+        "offset": 3268
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 0,
+    "vertexSample": [
+      0,
+      -3.3515625,
+      0
+    ]
+  },
+  {
+    "nodeId": "036",
+    "epoch": "1013",
+    "size": 13751,
+    "textures": [
+      {
+        "file": "tile_036_tex0.jpg",
+        "size": 8473,
+        "offset": 3136
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 42
+  },
+  {
+    "nodeId": "127",
+    "epoch": "1013",
+    "size": 12644,
+    "textures": [
+      {
+        "file": "tile_127_tex0.jpg",
+        "size": 7274,
+        "offset": 3193
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 0,
+    "vertexSample": [
+      0,
+      3.1015625,
+      0
+    ]
+  },
+  {
+    "nodeId": "305",
+    "epoch": "1013",
+    "size": 17239,
+    "textures": [
+      {
+        "file": "tile_305_tex0.jpg",
+        "size": 12115,
+        "offset": 3074
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 42
+  },
+  {
+    "nodeId": "205",
+    "epoch": "1013",
+    "size": 13759,
+    "textures": [
+      {
+        "file": "tile_205_tex0.jpg",
+        "size": 8731,
+        "offset": 2988
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 0,
+    "vertexSample": [
+      0,
+      -3.513671875,
+      0
+    ]
+  },
+  {
+    "nodeId": "027",
+    "epoch": "1013",
+    "size": 11018,
+    "textures": [
+      {
+        "file": "tile_027_tex0.jpg",
+        "size": 5666,
+        "offset": 3190
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 0,
+    "vertexSample": [
+      0,
+      -3.513671875,
+      0
+    ]
+  },
+  {
+    "nodeId": "136",
+    "epoch": "1013",
+    "size": 14128,
+    "textures": [
+      {
+        "file": "tile_136_tex0.jpg",
+        "size": 8860,
+        "offset": 3137
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 0,
+    "vertexSample": [
+      0,
+      3.3515625,
+      0
+    ]
+  },
+  {
+    "nodeId": "314",
+    "epoch": "1013",
+    "size": 16743,
+    "textures": [
+      {
+        "file": "tile_314_tex0.jpg",
+        "size": 11396,
+        "offset": 3213
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 42
+  },
+  {
+    "nodeId": "0343",
+    "epoch": "1005",
+    "size": 11860,
+    "textures": [
+      {
+        "file": "tile_0343_tex0.jpg",
+        "size": 7728,
+        "offset": 2459
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 0,
+    "vertexSample": [
+      0,
+      -3.1015625,
+      0
+    ]
+  },
+  {
+    "nodeId": "2161",
+    "epoch": "1005",
+    "size": 12277,
+    "textures": [
+      {
+        "file": "tile_2161_tex0.jpg",
+        "size": 8073,
+        "offset": 2485
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 42
+  },
+  {
+    "nodeId": "1242",
+    "epoch": "1005",
+    "size": 11687,
+    "textures": [
+      {
+        "file": "tile_1242_tex0.jpg",
+        "size": 7556,
+        "offset": 2458
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 0,
+    "vertexSample": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "nodeId": "3060",
+    "epoch": "1005",
+    "size": 14502,
+    "textures": [
+      {
+        "file": "tile_3060_tex0.jpg",
+        "size": 10294,
+        "offset": 2501
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 42
+  },
+  {
+    "nodeId": "2160",
+    "epoch": "1005",
+    "size": 13706,
+    "textures": [
+      {
+        "file": "tile_2160_tex0.jpg",
+        "size": 9448,
+        "offset": 2523
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "0342",
+    "epoch": "1005",
+    "size": 12785,
+    "textures": [
+      {
+        "file": "tile_0342_tex0.jpg",
+        "size": 8735,
+        "offset": 2406
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      -3.3515625,
+      0
+    ]
+  },
+  {
+    "nodeId": "0340",
+    "epoch": "1005",
+    "size": 9755,
+    "textures": [
+      {
+        "file": "tile_0340_tex0.jpg",
+        "size": 6074,
+        "offset": 2166
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      -3.3515625,
+      0
+    ]
+  },
+  {
+    "nodeId": "3062",
+    "epoch": "1005",
+    "size": 11149,
+    "textures": [
+      {
+        "file": "tile_3062_tex0.jpg",
+        "size": 7355,
+        "offset": 2240
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "2162",
+    "epoch": "1005",
+    "size": 15105,
+    "textures": [
+      {
+        "file": "tile_2162_tex0.jpg",
+        "size": 11348,
+        "offset": 2214
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "1240",
+    "epoch": "1005",
+    "size": 8523,
+    "textures": [
+      {
+        "file": "tile_1240_tex0.jpg",
+        "size": 4974,
+        "offset": 2072
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "nodeId": "3061",
+    "epoch": "1005",
+    "size": 13831,
+    "textures": [
+      {
+        "file": "tile_3061_tex0.jpg",
+        "size": 9706,
+        "offset": 2440
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "1243",
+    "epoch": "1005",
+    "size": 10825,
+    "textures": [
+      {
+        "file": "tile_1243_tex0.jpg",
+        "size": 6704,
+        "offset": 2457
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      3.1015625,
+      0
+    ]
+  },
+  {
+    "nodeId": "0240",
+    "epoch": "1005",
+    "size": 9911,
+    "textures": [
+      {
+        "file": "tile_0240_tex0.jpg",
+        "size": 6198,
+        "offset": 2183
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "2062",
+    "epoch": "1005",
+    "size": 13056,
+    "textures": [
+      {
+        "file": "tile_2062_tex0.jpg",
+        "size": 9303,
+        "offset": 2214
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "3162",
+    "epoch": "1008",
+    "size": 10282,
+    "textures": [
+      {
+        "file": "tile_3162_tex0.jpg",
+        "size": 6512,
+        "offset": 2225
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "1340",
+    "epoch": "1008",
+    "size": 8965,
+    "textures": [
+      {
+        "file": "tile_1340_tex0.jpg",
+        "size": 5186,
+        "offset": 2222
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      3.3515625,
+      0
+    ]
+  },
+  {
+    "nodeId": "2061",
+    "epoch": "1005",
+    "size": 14982,
+    "textures": [
+      {
+        "file": "tile_2061_tex0.jpg",
+        "size": 10802,
+        "offset": 2472
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "0243",
+    "epoch": "1005",
+    "size": 9943,
+    "textures": [
+      {
+        "file": "tile_0243_tex0.jpg",
+        "size": 5821,
+        "offset": 2457
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  },
+  {
+    "nodeId": "1342",
+    "epoch": "1008",
+    "size": 10895,
+    "textures": [
+      {
+        "file": "tile_1342_tex0.jpg",
+        "size": 6812,
+        "offset": 2430
+      }
+    ],
+    "vertexCount": 48,
+    "indexCount": 128,
+    "vertexSample": [
+      0,
+      3.3515625,
+      0
+    ]
+  },
+  {
+    "nodeId": "3160",
+    "epoch": "1008",
+    "size": 13265,
+    "textures": [
+      {
+        "file": "tile_3160_tex0.jpg",
+        "size": 8990,
+        "offset": 2536
+      }
+    ],
+    "vertexCount": 0,
+    "indexCount": 128
+  }
+]
